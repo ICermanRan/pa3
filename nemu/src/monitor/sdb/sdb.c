@@ -63,8 +63,18 @@ static int cmd_s(char *args) {
 
 
 static int cmd_info(char *args) {
-	void isa_reg_display(void);
-	printf("this is info\n");
+		/* extract the first argument */
+
+	char *arg = strtok(args, " ");//arg = "info"
+	while (arg)
+	{
+		printf("%s", arg);
+		arg = strtok(NULL, " ");
+	}
+	
+	
+	
+    void isa_reg_display();
 	
 	return 0;
 }
