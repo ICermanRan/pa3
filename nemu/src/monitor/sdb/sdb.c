@@ -66,13 +66,13 @@ static int cmd_info(char *args) {
 		/* extract the first argument */
 
 	char *arg = strtok(args, " ");//arg = "info"
-	while (arg == NULL)
+/*	while (arg == NULL)
 	{
-		printf("%s\n", arg);
+		//printf("%s\n", arg);
 		arg = strtok(arg, " ");
 	}
-	
-	
+*/	
+	printf("%s", arg);
 	if(*arg == 'r')
 		isa_reg_display();
 	else
