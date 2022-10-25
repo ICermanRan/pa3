@@ -61,12 +61,12 @@ static int cmd_s(char *args) {
 }
 */
 
-/*
+
 static int cmd_info(char *args) {
 	void isa_reg_display(void);
 	return 0;
 }
-*/
+
 
 /*
 static int cmd_x(char *args) {
@@ -85,7 +85,7 @@ static struct {
 	
   /* TODO: Add more commands */
 //  { "si", "Step", cmd_s},
-//  { "info", "printf message", cmd_info},
+  { "info", "printf message", cmd_info},
 //  { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
   //{ "p", "eval the expr", cmd_p},
   //{ "w", "set the watchpoint", cmd_w},
