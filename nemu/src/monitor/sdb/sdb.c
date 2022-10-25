@@ -68,13 +68,14 @@ static int cmd_info(char *args) {
 	char *arg = strtok(args, " ");//arg = "info"
 	while (arg != NULL)
 	{
-		printf("%s ", arg);
+		//printf("%s", arg);
 		arg = strtok(NULL, " ");
 	}
 	
-	
-	
-    void isa_reg_display();
+	if(*arg == 'r')
+		isa_reg_display();
+	else
+		printf("Unknown command '%s'\n", arg);
 	
 	return 0;
 }
