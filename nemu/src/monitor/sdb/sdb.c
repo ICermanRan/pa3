@@ -69,7 +69,7 @@ static int cmd_info(char *args) {
 	while (arg != NULL)
 	{
 		printf("%s\n", arg);
-		arg = strtok(NULL, " ");
+		arg = strtok(arg, " ");
 	}
 	
 	printf("%s", arg);
