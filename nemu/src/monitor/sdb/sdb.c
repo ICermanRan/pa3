@@ -64,6 +64,8 @@ static int cmd_s(char *args) {
 
 static int cmd_info(char *args) {
 	void isa_reg_display(void);
+	printf("this is info");
+	
 	return 0;
 }
 
