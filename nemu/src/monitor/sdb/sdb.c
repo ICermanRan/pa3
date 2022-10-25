@@ -54,6 +54,24 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+/*
+static int cmd_s(char *args) {
+	execute();
+	return 0;
+}
+*/
+
+static int cmd_info(char *args) {
+	void isa_reg_display(void);
+	return 0;
+}
+
+/*
+static int cmd_x(char *args) {
+	
+}
+*/
+
 static struct {
   const char *name;
   const char *description;
@@ -62,9 +80,14 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+	
   /* TODO: Add more commands */
-
+//  { "si", "Step", cmd_s},
+  { "info", "printf message", cmd_info},
+//  { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
+  //{ "p", "eval the expr", cmd_p},
+  //{ "w", "set the watchpoint", cmd_w},
+  //{ "d", "delet the watchpoint", cmd_d},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
