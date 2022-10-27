@@ -61,8 +61,9 @@ static int cmd_s(char *args) {
   char *arg = strtok(args, " ");//N = times
   int N;
   N = atoi(arg);//turn %s to %d
+  printf("%s", arg);
 
-  if(arg == NULL )
+  if(arg == NULL)
     cpu_exec(1);
   else
     cpu_exec(N);
