@@ -64,10 +64,7 @@ static int cmd_s(char *args) {
   //printf("%s", arg);
 
   if(arg == NULL)
-    {
-    printf("%c", 'a');
     cpu_exec(1);
-    }
   else
     cpu_exec(N);
 
