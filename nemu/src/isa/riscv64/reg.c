@@ -25,11 +25,11 @@ const char *regs[] = {
 
 void isa_reg_display() {
 	int i;
-	//const char *temp = NULL;
+	const char *temp = NULL;
 	for(i = 0; i < 32; i++)
 	{
-		//temp = regs[i];
-		printf("reg %p ,value = %ld\n",&cpu.gpr[i], cpu.gpr[i]);
+		temp = regs[i];
+		printf("reg %s = %p ,value = %ld\n", temp,&cpu.gpr[i], cpu.gpr[i]);
 	}
 
 }
