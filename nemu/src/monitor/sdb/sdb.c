@@ -57,21 +57,15 @@ static int cmd_help(char *args);
 
 static int cmd_s(char *args) {
 	/* extract the first argument */
-  char *N = strtok(args, " ");//N = times
- // int *N = strtok(args, " ");//N = times
-  int a;
-  a = atoi(N);
-  printf("%s, %p\n", N, N);
+  char *arg = strtok(args, " ");//N = times
+  int N;
+  N = atoi(arg);//turn %s to %d
 
-	
-  printf("%d\n", a);
-   /*if(*arg == 'r')
-		isa_reg_display();
-	else
-		printf("Unknown command '%s'\n", arg);
-  
-  execute();
-*/
+  if(arg == NULL )
+    cpu_exec(1);
+  else
+    cpu_exec(N);
+
 	return 0;
 }
 
