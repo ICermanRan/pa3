@@ -57,15 +57,15 @@ static int cmd_help(char *args);
 
 static int cmd_s(char *args) {
 	/* extract the first argument */
-  char *arg = strtok(args, " ");
+  char *N = strtok(args, " ");//N = times
  // int *N = strtok(args, " ");//N = times
-  printf("%s, %p\n", arg, arg);
- // printf("%d", N);
-//	char *arg = strtok(args, " ");//arg = "si"
+  int a;
+  a = atoi(N);
+  printf("%s, %p\n", N, N);
 
-//	printf("%s\n", arg);
 	
-/*  if(*arg == 'r')
+  printf("%d\n", a);
+   /*if(*arg == 'r')
 		isa_reg_display();
 	else
 		printf("Unknown command '%s'\n", arg);
