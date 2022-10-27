@@ -65,7 +65,7 @@ static int cmd_s(char *args) {
 static int cmd_info(char *args) {
 		/* extract the first argument */
 
-	char *arg = strtok(args, " ");//arg = "info"
+	char *arg = strtok(args, " ");//arg = "r"
 /*	while (arg == NULL)
 	{
 		//printf("%s\n", arg);
