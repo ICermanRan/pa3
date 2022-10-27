@@ -30,11 +30,11 @@ void isa_reg_display() {
 	printf("%s = %p %d\n", regs[2],  (&regs[2]), *(&regs[2]));
 	*/
 	int i;
-	const char *temp = NULL;
+	//const char *temp = NULL;
 	for(i = 0; i < 32; i++)
 	{
-		temp = regs[i];
-		printf("%s = %p %d\n", temp, temp, *temp);
+		//temp = regs[i];
+		printf("reg = %p ,value = %ld\n", &cpu.gpr[i], cpu.gpr[i]);
 	}
 
 }
