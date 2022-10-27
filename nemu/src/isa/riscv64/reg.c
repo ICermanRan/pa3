@@ -34,7 +34,7 @@ void isa_reg_display() {
 	for(i = 0; i < 32; i++)
 	{
 		//temp = regs[i];
-		printf("reg = %p ,value = %ld\n", &cpu.gpr[i], cpu.gpr[i]);
+		printf("reg %p ,value = %ld\n",&cpu.gpr[i], cpu.gpr[i]);
 	}
 
 }
