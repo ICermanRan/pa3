@@ -29,7 +29,7 @@ void isa_reg_display() {
 	for(i = 0; i < 32; i++)
 	{
 		temp = regs[i];
-		printf("reg %s = %p ,value = %ld\n", temp,&cpu.gpr[i], cpu.gpr[i]);
+		printf("reg %s ,value = %ld\n", temp, cpu.gpr[i]);
 	}
 
 }
