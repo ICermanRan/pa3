@@ -59,7 +59,7 @@ static int cmd_s(char *args) {
 	/* extract the first argument */
   char *arg = strtok(args, " ");
  // int *N = strtok(args, " ");//N = times
-  printf("%s\n", arg);
+  printf("%s, %p\n", arg, arg);
  // printf("%d", N);
 //	char *arg = strtok(args, " ");//arg = "si"
 
