@@ -24,9 +24,20 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-	printf("%s = %p\n", regs[0],  (&regs[0]));
-	printf("%s = %p\n", regs[1],  (&regs[1]));
-	printf("%s = %p\n", regs[2],  (&regs[2]));
+	/*
+	printf("%s = %p %d\n", regs[0],  (&regs[0]), *(&regs[0]));
+	printf("%s = %p %d\n", regs[1],  (&regs[1]), *(&regs[1]));
+	printf("%s = %p %d\n", regs[2],  (&regs[2]), *(&regs[2]));
+	*/
+	int i;
+	const char *temp = NULL;
+	for(i = 0; i < 32; i++)
+	{
+		temp = regs[i];
+		puts(temp);
+		printf("%p\n", temp);
+	}
+
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
