@@ -72,7 +72,7 @@ static int cmd_info(char *args) {
 		arg = strtok(arg, " ");
 	}
 */	
-	printf("%s\n", arg);
+//	printf("%s\n", arg);
 	if(*arg == 'r')
 		isa_reg_display();
 	else
