@@ -54,12 +54,27 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
-/*
+
 static int cmd_s(char *args) {
-	execute();
+	/* extract the first argument */
+  char *arg = strtok(args, " ");
+ // int *N = strtok(args, " ");//N = times
+  printf("%s", arg);
+ // printf("%d", N);
+//	char *arg = strtok(args, " ");//arg = "si"
+
+//	printf("%s\n", arg);
+	
+/*  if(*arg == 'r')
+		isa_reg_display();
+	else
+		printf("Unknown command '%s'\n", arg);
+  
+  execute();
+*/
 	return 0;
 }
-*/
+
 
 
 static int cmd_info(char *args) {
@@ -99,7 +114,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 	
   /* TODO: Add more commands */
-//  { "si", "Step", cmd_s},
+  { "si", "Step", cmd_s},
   { "info", "printf message", cmd_info},
 //  { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
   //{ "p", "eval the expr", cmd_p},
