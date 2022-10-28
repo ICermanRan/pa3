@@ -93,14 +93,18 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
 	/* extract the first argument */
   char *arg = NULL; //定义分割出来的每个字符串
+  char *arg1 = NULL;
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
-	
-  while (arg != 0)
+	printf("%s\n", arg);
+  
+ /* while (arg != 0)
   {
     printf("%s\n", arg);
     arg = strtok(NULL, ",");  // 之后的每一次分割只需将第一个参数换成NULL即可
   }
-  
+ */ 
+  arg1 = strtok(NULL, ",");
+  printf("%s\n", arg1);
   
 
 
