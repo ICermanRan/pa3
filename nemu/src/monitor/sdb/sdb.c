@@ -105,8 +105,26 @@ static int cmd_x(char *args) {
   printf("%d\n", i);
    
   arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
-  printf("%s\n", arg1);
-  base_addr = atoi(arg1);
+  char arr[50] = {0};
+  int a = 0;
+  while(*arg1 != '\0')
+    {
+        arr[a] = *arg1;
+        a++;
+        arg1++;
+    }
+   
+  arr[a] = '\0';
+  int n = strlen(arr);
+  int b;
+  char arry[n-2];
+    for(b = 0; b <= n-2; b++)
+    {
+        arry[b] = arr[b+2];
+
+    }
+
+  base_addr = atoi(arry);
   printf("%x\n", base_addr);
  /*
   for(j = 0; j < i; j++)
