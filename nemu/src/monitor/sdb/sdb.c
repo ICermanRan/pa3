@@ -98,10 +98,10 @@ static int cmd_x(char *args) {
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
 	printf("%s\n", arg);
    
-  arg1 = strtok(NULL, ",");
+  arg1 = strtok(NULL, " ");
   printf("%s\n", arg1);
   
-  arg2 = strtok(NULL, ",");
+  arg2 = strtok(NULL, " ");
   printf("%s\n", arg2);
 
 
