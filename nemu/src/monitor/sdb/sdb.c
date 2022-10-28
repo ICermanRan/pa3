@@ -104,7 +104,7 @@ static int cmd_x(char *args) {
   i = atoi(arg);
   printf("%d\n", i);
    
-  arg1 = strtok(NULL, "x");//往后的调用则将参数s设置成NULL
+  arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
   printf("%s\n", arg1);
   base_addr = atoi(arg1);
   printf("%x\n", base_addr);
