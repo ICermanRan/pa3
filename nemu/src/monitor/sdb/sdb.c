@@ -96,7 +96,7 @@ static int cmd_x(char *args) {
   char *arg1 = NULL;
 
   int len;
- // int addr;
+  int addr;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
 	printf("%s\n", arg);
@@ -105,9 +105,9 @@ static int cmd_x(char *args) {
    
   arg1 = strtok(NULL, " ");//往后的调用则将参数s设置成NULL
   printf("%s\n", arg1);
-  printf("%d\n", *arg1);
+  sscanf(arg1, "%d", &addr);
   //addr = atoi(arg1);
-  //printf("%d\n", addr);
+  printf("%d\n", addr);
   
 
 
