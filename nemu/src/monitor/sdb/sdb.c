@@ -98,7 +98,7 @@ static int cmd_x(char *args) {
   int i;
   uint16_t base_addr;
  // int value,j;
- // uint16_t word_size = 0x00000008;
+ // uint8_t word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
@@ -121,7 +121,6 @@ static int cmd_x(char *args) {
     for(b = 0; b <= n-2; b++)
     {
         arry[b] = arr[b+2];
-
     }
 
   base_addr = atoi(arry);//分离出起始地址int类型
