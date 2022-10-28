@@ -125,7 +125,7 @@ static int cmd_x(char *args) {
     }
 
   base_addr = atoi(arry);
-  printf("%x\n", base_addr);
+  printf("%d\n", base_addr);
  /*
   for(j = 0; j < i; j++)
   {
