@@ -97,8 +97,8 @@ static int cmd_x(char *args) {
 
   int i;
   int base_addr;
- // int value,j;
- // int word_size = 0x00000008;
+  int value,j;
+  int word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
@@ -126,13 +126,13 @@ static int cmd_x(char *args) {
 
   base_addr = atoi(arry);
   printf("%d\n", base_addr);
- /*
+ 
   for(j = 0; j < i; j++)
   {
     value = vaddr_read(base_addr + j*word_size, word_size);
     printf("%d\n", value);
   }
-*/ 
+ 
 
   return 0;
 }
