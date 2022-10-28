@@ -101,7 +101,6 @@ static int cmd_x(char *args) {
  // int word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
-	printf("%s\n", arg);
   i = atoi(arg);
   printf("%d\n", i);
    
