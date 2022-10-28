@@ -94,15 +94,19 @@ static int cmd_x(char *args) {
 	/* extract the first argument */
   char *arg = NULL; //定义分割出来的每个字符串
   char *arg1 = NULL;
-  char *arg2 = NULL;
+
+  int len,addr;
+ 
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
 	printf("%s\n", arg);
+  len = atoi(arg);
+  printf("%d\n", len);
    
-  arg1 = strtok(NULL, " ");
+  arg1 = strtok(NULL, " ");//往后的调用则将参数s设置成NULL
   printf("%s\n", arg1);
+  addr = atoi(arg1);
+  printf("%d\n", addr);
   
-  arg2 = strtok(NULL, " ");
-  printf("%s\n", arg2);
 
 
   return 0;
