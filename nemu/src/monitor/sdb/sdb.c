@@ -95,21 +95,26 @@ static int cmd_x(char *args) {
   char *arg = NULL; //定义分割出来的每个字符串
   char *arg1 = NULL;
 
-  int len;
-  int addr;
+  int i;
+  int base_addr;
+ // int value,j;
+ // int word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
 	printf("%s\n", arg);
-  len = atoi(arg);
-  printf("%d\n", len);
+  i = atoi(arg);
+  printf("%d\n", i);
    
   arg1 = strtok(NULL, " ");//往后的调用则将参数s设置成NULL
-  printf("%s\n", arg1);
-  sscanf(arg1, "%d", &addr);
-  //addr = atoi(arg1);
-  printf("%d\n", addr);
-  
-
+  base_addr = atoi(arg1);
+  printf("%d\n", base_addr);
+ /*
+  for(j = 0; j < i; j++)
+  {
+    value = vaddr_read(base_addr + j*word_size, word_size);
+    printf("%d\n", value);
+  }
+*/ 
 
   return 0;
 }
