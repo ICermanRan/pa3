@@ -93,12 +93,17 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
 	/* extract the first argument */
 
-	char *arg = strtok(args, " ");
+	
+  char *arg;
+  arg = strtok(args, " ");
+  while(arg == NULL)
+  {
 	printf("%s\n", arg);
+  }
 
-  char *addr = strtok(arg, " ");
+ /* char *addr = strtok(arg, " ");
 	printf("%s\n", addr);
-
+*/
 
   return 0;
 }
