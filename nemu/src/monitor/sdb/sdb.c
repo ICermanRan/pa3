@@ -89,11 +89,20 @@ static int cmd_info(char *args) {
 }
 
 
-/*
+
 static int cmd_x(char *args) {
-	
+	/* extract the first argument */
+
+	char *arg = strtok(args, " ");
+	printf("%s\n", arg);
+
+  char *addr = strtok(arg, " ");
+	printf("%s\n", addr);
+
+
+  return 0;
 }
-*/
+
 
 static struct {
   const char *name;
@@ -107,7 +116,7 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Step", cmd_s},
   { "info", "printf message", cmd_info},
-//  { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
+  { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
   //{ "p", "eval the expr", cmd_p},
   //{ "w", "set the watchpoint", cmd_w},
   //{ "d", "delet the watchpoint", cmd_d},
