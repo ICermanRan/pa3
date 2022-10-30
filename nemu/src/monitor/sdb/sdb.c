@@ -102,10 +102,10 @@ static int cmd_x(char *args) {
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
-  printf("%d\n", i);
+  printf("len = %d\n", i);
    
   arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
-  printf("%s\n", arg1);
+  printf("char base_addr = %s\n", arg1);
 
 
   char arr[100];
