@@ -97,9 +97,11 @@ static int cmd_x(char *args) {
 
   int i;
   long long base_addr;
+ // long long offset_addr;
   int j;
   long long value;
-  uint8_t word_size = 0x02;
+  int len = 0x01;
+  int offset_len = 0x01;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
@@ -147,13 +149,18 @@ static int cmd_x(char *args) {
 
    base_addr = sum;//分离出起始地址int类型
    printf("base_addr = %#llx\n", base_addr);
-
+/*
   for(j = 0; j < i; j++)
   {
-    value = vaddr_read(base_addr + j*word_size, word_size);
+    value = vaddr_read(base_addr + j*offset_addr, len);
     printf("%#llx\n", value);
   }
- 
+*/
+  for(j = 0; j < i; j++)
+  {
+    value = vaddr_read(base_addr, len+j*offset_len);
+    printf("%#llx\n", value);
+  }
 
   return 0;
 }
