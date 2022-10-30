@@ -96,9 +96,9 @@ static int cmd_x(char *args) {
   char *arg1 = NULL;
 
   int i;
-  long long base_addr;
-  int value,j;
-  uint8_t word_size = 0x00000008;
+ // long long base_addr;
+ // int value,j;
+ // uint8_t word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
@@ -107,7 +107,7 @@ static int cmd_x(char *args) {
   arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
   printf("%s", arg1);
 
-
+/*
   char arr[50];
   int a = 0;
 
@@ -143,7 +143,7 @@ static int cmd_x(char *args) {
     printf("%d\n", value);
   }
  
-
+*/
   return 0;
 }
 
