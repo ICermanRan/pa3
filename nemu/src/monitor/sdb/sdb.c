@@ -97,7 +97,7 @@ static int cmd_x(char *args) {
 
   int i;
   long long base_addr;
-  long long offset_addr = 0x01;
+  // long long offset_addr = 0x01;
   int j;
   long long value;
   int len = 0x01;
@@ -150,19 +150,17 @@ static int cmd_x(char *args) {
    base_addr = sum;//分离出起始地址int类型
    printf("base_addr = %#llx\n", base_addr);
 
-  for(j = 0; j < i; j++)
+  /* for(j = 0; j < i; j++)
   {
     value = vaddr_read(base_addr + j*offset_addr, len);
     printf("%#llx\n", value);
-  }
-
-  
- /*  for(j = 0; j < i; j++)
-  {
-    value = vaddr_read(base_addr, len+j*offset_len);
-    printf("%#llx\n", value);
   } */
 
+ for(j = 0; j < i; j++)
+  {
+    value = vaddr_read(base_addr, len+j);
+    printf("%#llx\n", value);
+  } 
   return 0;
 }
 
