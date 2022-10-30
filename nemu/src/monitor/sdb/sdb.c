@@ -98,7 +98,7 @@ static int cmd_x(char *args) {
   int i;
   long long base_addr;
   int j;
-  uint64_t value;
+  long long value;
   uint8_t word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
@@ -151,7 +151,7 @@ static int cmd_x(char *args) {
   for(j = 0; j < i; j++)
   {
     value = vaddr_read(base_addr + j*word_size, word_size);
-    printf("%ld\n", value);
+    printf("%#llx\n", value);
   }
  
 
