@@ -132,7 +132,7 @@ static int cmd_x(char *args) {
         printf("%d, b = %d\n", num[b-2], b);
     } //用ASCII码值做计算，得到的值正好为对应的数字
 
-   printf("b = %d", b);
+   printf("b = %d\n", b);
   
   long m = 1;
   long long sum = 0; 
