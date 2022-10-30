@@ -99,7 +99,7 @@ static int cmd_x(char *args) {
   long long base_addr;
   int j;
   long long value;
-  uint8_t word_size = 0x08;
+  uint8_t word_size = 0x02;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
