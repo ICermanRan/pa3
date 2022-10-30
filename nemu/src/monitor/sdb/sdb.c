@@ -118,7 +118,7 @@ static int cmd_x(char *args) {
         arg1++;
     }
 
-  int b = 0;
+  int b;
   int num[100];
     for(b = 2; arr[i] != '\0'; b++)
     {
@@ -139,7 +139,7 @@ static int cmd_x(char *args) {
 
    base_addr = sum;//分离出起始地址int类型
    printf("%#x\n", base_addr);
-   
+
   for(j = 0; j < i; j++)
   {
     value = vaddr_read(base_addr + j*word_size, word_size);
