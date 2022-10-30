@@ -105,9 +105,9 @@ static int cmd_x(char *args) {
   printf("%d\n", i);
    
   arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
-  printf("%s", arg1);
+  printf("%s\n", arg1);
 
-/*
+
   char arr[50];
   int a = 0;
 
@@ -117,8 +117,8 @@ static int cmd_x(char *args) {
         a++;
         arg1++;
     }
-   
-  int b;
+  puts(arr);
+ /* int b;
   int num[100];
     for(b = 2; arr[i] != '\0'; b++)
     {
