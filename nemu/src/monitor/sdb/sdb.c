@@ -96,7 +96,7 @@ static int cmd_x(char *args) {
   char *arg1 = NULL;
 
   int i;
- // int base_addr;
+  int base_addr;
  // int value,j;
  // uint8_t word_size = 0x00000008;
  
@@ -128,7 +128,7 @@ static int cmd_x(char *args) {
     } ////用ASCII码值做计算，得到的值正好为对应的数字
 
     
- /* 
+  
   long m = 1;
   long long sum = 0; 
   int c;
@@ -140,7 +140,7 @@ static int cmd_x(char *args) {
 
    base_addr = sum;//分离出起始地址int类型
    printf("%#x\n", base_addr);
-
+/*
   for(j = 0; j < i; j++)
   {
     value = vaddr_read(base_addr + j*word_size, word_size);
