@@ -119,10 +119,10 @@ static int cmd_x(char *args) {
     }
 
   int b;
-  int y = strlen(arr);//这里的长度还包括了最后的'\0'
+  int y = strlen(arr);
   printf("y = %d\n", y);
-  int num[y-2];
-    for(b = 2; b <= y-2; b++)
+  int num[y-3];//数组存储数量=y-2
+    for(b = 2; b <= y-1; b++)
     {
         if((arr[b] >= 48) && (arr[b] <= 57))
           num[b-2] = arr[b] - '0';
