@@ -123,8 +123,13 @@ static int cmd_x(char *args) {
   int num[y-2];
     for(b = 2; b <= y-2; b++)
     {
-        num[b-2] = arr[b] - '0';
+        if((arr[b] >= 48) && (arr[b] <= 57))
+          num[b-2] = arr[b] - '0';
+        else if((arr[b] >= 97) && (arr[b] <= 102))
+          num[b-2] = arr[b] - 87;
+        
         printf("%d, b = %d\n", num[b-2], b);
+    
     } //用ASCII码值做计算，得到的值正好为对应的数字
 
     
