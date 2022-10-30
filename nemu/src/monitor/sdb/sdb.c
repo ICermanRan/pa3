@@ -153,8 +153,9 @@ static int cmd_x(char *args) {
 
   for(j = 0; j < i; j++)
   {
-    value = vaddr_read(base_addr + 2*j*offset_addr, len);
-    printf("%#lx\n", value);
+    value = vaddr_read(base_addr + j*offset_addr, len);
+    // printf("%#lx\n", value);
+    printf("%#016lx\n", value);
   }
 
   return 0;
