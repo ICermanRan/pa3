@@ -124,7 +124,7 @@ static int cmd_x(char *args) {
   //int y = strlen(arr);
   //printf("y = %d\n", y);
   int num[a];//数组存储数量=y-2
-    for(b = 2; b <= a; b++)
+    for(b = 2; b <= a-1; b++)
     {
         if((arr[b] >= 48) && (arr[b] <= 57))
           num[b-2] = arr[b] - '0';
