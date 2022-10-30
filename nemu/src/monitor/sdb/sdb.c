@@ -99,7 +99,7 @@ static int cmd_x(char *args) {
   long long base_addr;
   long long offset_addr = 0x01;
   int j;
-  long long value;
+  long  value;
   int len = 4;//1: return *(uint8_t  *)addr;
               // 2: return *(uint16_t *)addr;
               // 4: return *(uint32_t *)addr;
@@ -153,8 +153,8 @@ static int cmd_x(char *args) {
 
   for(j = 0; j < i; j++)
   {
-    value = vaddr_read(base_addr + j*offset_addr, len);
-    printf("%llx\n", value);
+    value = vaddr_read(base_addr + 2*j*offset_addr, len);
+    printf("%#lx\n", value);
   }
 
   return 0;
