@@ -119,9 +119,8 @@ static int cmd_x(char *args) {
     }
 
   int b;
-  int y = strlen(arr);
-  int num[y-1];
-    printf("y-1= %d\n", y);
+  int y = strlen(arr);//这里的长度还包括了最后的'\0'
+  int num[y-2];
     for(b = 2; b <= y-2; b++)
     {
         num[b-2] = arr[b] - '0';
