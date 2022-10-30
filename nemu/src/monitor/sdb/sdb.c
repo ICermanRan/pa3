@@ -96,7 +96,7 @@ static int cmd_x(char *args) {
   char *arg1 = NULL;
 
   int i;
-  int base_addr;
+  long long base_addr;
  // int value,j;
  // uint8_t word_size = 0x00000008;
  
@@ -139,7 +139,7 @@ static int cmd_x(char *args) {
     }
 
    base_addr = sum;//分离出起始地址int类型
-   printf("%#x\n", base_addr);
+   printf("%#llx\n", base_addr);
 /*
   for(j = 0; j < i; j++)
   {
