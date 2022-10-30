@@ -121,7 +121,7 @@ static int cmd_x(char *args) {
   int b;
   int y = strlen(arr);
   int num[y-1];
-    printf("y-1= %d\n", y-1);
+    printf("y-1= %d\n", y);
     for(b = 2; b <= y-1; b++)
     {
         num[b-2] = arr[b] - '0';
