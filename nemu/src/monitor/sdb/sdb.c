@@ -100,12 +100,11 @@ static int cmd_x(char *args) {
  // long long offset_addr = 0x01;
   int j;
   long long value;
-  int len;
+  int len = 4;
   // int offset_len = 0x01;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
-  len = i;
   printf("len = %d\n", i);
    
   arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
