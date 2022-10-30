@@ -117,6 +117,8 @@ static int cmd_x(char *args) {
         a++;
         arg1++;
     }
+  printf("a = %d",a);
+
 
   int b;
   int y = strlen(arr);
