@@ -96,9 +96,9 @@ static int cmd_x(char *args) {
   char *arg1 = NULL;
 
   int i;
- // uint16_t base_addr;
- // int value,j;
- // uint8_t word_size = 0x00000008;
+  long long base_addr;
+  int value,j;
+  uint8_t word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
@@ -108,8 +108,9 @@ static int cmd_x(char *args) {
   printf("%s", arg1);
 
 
- /* char arr[50] = {0};
+  char arr[50];
   int a = 0;
+
   while(*arg1 != '\0')
     {
         arr[a] = *arg1;
@@ -117,24 +118,31 @@ static int cmd_x(char *args) {
         arg1++;
     }
    
-  arr[a] = '\0';
-  int n = strlen(arr);
   int b;
-  char arry[n-2];
-    for(b = 0; b <= n-2; b++)
+  int num[100];
+    for(b = 2; arr[i] != '\0'; b++)
     {
-        arry[b] = arr[b+2];
+        num[b-2] = arr[b] - 48;
+    } ////用ASCII码值做计算，得到的值正好为对应的数字
+  
+  long m = 1;
+  long long sum = 0; 
+  int c;
+    for(c = b-3; c >=0; c--)
+    {
+      sum += num[c]*m;
+      m *= 16;
     }
- */
- // base_addr = atoi(arry);//分离出起始地址int类型
- // printf("%n", base_addr);
- /*
+
+   base_addr = sum;//分离出起始地址int类型
+   printf("%#llx\n", base_addr);
+ 
   for(j = 0; j < i; j++)
   {
     value = vaddr_read(base_addr + j*word_size, word_size);
     printf("%d\n", value);
   }
- */
+ 
 
   return 0;
 }
