@@ -155,8 +155,8 @@ static int cmd_x(char *args) {
   {
     //value = vaddr_read(base_addr + j*offset_addr, len);
     value = paddr_read(base_addr + j*offset_addr, len);
-    printf("%#llx\n", base_addr + j*offset_addr);
-    printf("%#010lx\n", value);
+    printf("addr = %#llx ", base_addr + j*offset_addr);
+    printf("value = %#010lx\n", value);
   }
 
   return 0;
