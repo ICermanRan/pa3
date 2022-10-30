@@ -97,8 +97,8 @@ static int cmd_x(char *args) {
 
   int i;
   long long base_addr;
- // int value,j;
- // uint8_t word_size = 0x00000008;
+  int value,j;
+  uint8_t word_size = 0x00000008;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
@@ -129,7 +129,6 @@ static int cmd_x(char *args) {
           num[b-2] = arr[b] - 87;
         
         printf("%d, b = %d\n", num[b-2], b);
-    
     } //用ASCII码值做计算，得到的值正好为对应的数字
 
     
@@ -146,14 +145,14 @@ static int cmd_x(char *args) {
 
    base_addr = sum;//分离出起始地址int类型
    printf("%#llx\n", base_addr);
-/*
+
   for(j = 0; j < i; j++)
   {
     value = vaddr_read(base_addr + j*word_size, word_size);
     printf("%d\n", value);
   }
  
-*/
+
   return 0;
 }
 
