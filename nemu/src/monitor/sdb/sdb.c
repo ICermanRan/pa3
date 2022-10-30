@@ -120,6 +120,7 @@ static int cmd_x(char *args) {
 
   int b;
   int y = strlen(arr);//这里的长度还包括了最后的'\0'
+  printf("%d", y);
   int num[y-2];
     for(b = 2; b <= y-2; b++)
     {
