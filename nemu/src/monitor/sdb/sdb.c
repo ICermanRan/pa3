@@ -100,14 +100,16 @@ static int cmd_x(char *args) {
   long long offset_addr = 0x01;
   int j;
   long long value;
-  int len = 4;
+  int len = 4;//1: return *(uint8_t  *)addr;
+              // 2: return *(uint16_t *)addr;
+              // 4: return *(uint32_t *)addr;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
-  printf("len = %d\n", i);
+  //printf(" = %d\n", i);
    
   arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
-  printf("char base_addr = %s\n", arg1);
+  //printf("char base_addr = %s\n", arg1);
 
 
   char arr[100];
