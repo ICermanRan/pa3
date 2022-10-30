@@ -117,14 +117,14 @@ static int cmd_x(char *args) {
         a++;
         arg1++;
     }
-  printf("a = %d",a);
+  printf("a = %d\n",a);
 
 
   int b;
-  int y = strlen(arr);
-  printf("y = %d\n", y);
-  int num[y-3];//数组存储数量=y-2
-    for(b = 2; b <= y-1; b++)
+  //int y = strlen(arr);
+  //printf("y = %d\n", y);
+  int num[a];//数组存储数量=y-2
+    for(b = 2; b <= a-3; b++)
     {
         if((arr[b] >= 48) && (arr[b] <= 57))
           num[b-2] = arr[b] - '0';
