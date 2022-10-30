@@ -119,7 +119,8 @@ static int cmd_x(char *args) {
     }
 
   int b;
-  int num[100];
+  int y = strlen(arr);
+  int num[y];
     for(b = 2; arr[i] != '\0'; b++)
     {
         num[b-2] = arr[b] - 48;
