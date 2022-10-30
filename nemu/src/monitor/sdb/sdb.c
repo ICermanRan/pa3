@@ -117,10 +117,10 @@ static int cmd_x(char *args) {
         a++;
         arg1++;
     }
-  puts(arr);
 
   int b;
   int y = strlen(arr);
+  printf("%d\n", y);
   int num[y];
     for(b = 2; arr[i] != '\0'; b++)
     {
