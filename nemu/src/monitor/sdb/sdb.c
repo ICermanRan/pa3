@@ -96,7 +96,7 @@ static int cmd_x(char *args) {
   char *arg1 = NULL;
 
   int i;
-  uint16_t base_addr;
+ // uint16_t base_addr;
  // int value,j;
  // uint8_t word_size = 0x00000008;
  
@@ -105,7 +105,10 @@ static int cmd_x(char *args) {
   printf("%d\n", i);
    
   arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
-  char arr[50] = {0};
+  printf("%s", arg1);
+
+
+ /* char arr[50] = {0};
   int a = 0;
   while(*arg1 != '\0')
     {
@@ -122,9 +125,9 @@ static int cmd_x(char *args) {
     {
         arry[b] = arr[b+2];
     }
-
-  base_addr = atoi(arry);//分离出起始地址int类型
-  printf("%x\n", base_addr);
+ */
+ // base_addr = atoi(arry);//分离出起始地址int类型
+ // printf("%n", base_addr);
  /*
   for(j = 0; j < i; j++)
   {
