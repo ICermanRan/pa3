@@ -100,7 +100,7 @@ static int cmd_x(char *args) {
   long long offset_addr = 0x01;
   int j;
   long  value;
-  int len = 4;//1: return *(uint8_t  *)addr;
+  int len = 2;//1: return *(uint8_t  *)addr;
               // 2: return *(uint16_t *)addr;
               // 4: return *(uint32_t *)addr;
  
