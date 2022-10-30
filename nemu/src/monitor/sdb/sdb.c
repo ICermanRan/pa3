@@ -139,7 +139,7 @@ static int cmd_x(char *args) {
   int c;
     for(c = b-3; c >=0; c--)
     {
-      printf("c=%d ,sum = %lld, m = %ld\n", c,sum, m);
+    //  printf("c=%d ,sum = %lld, m = %ld\n", c,sum, m);
       sum += num[c]*m;
       m *= 16;
     }
