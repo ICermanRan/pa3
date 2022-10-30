@@ -128,7 +128,7 @@ static int cmd_x(char *args) {
         else if((arr[b] >= 97) && (arr[b] <= 102))
           num[b-2] = arr[b] - 87;
         
-       // printf("%d, b = %d\n", num[b-2], b);
+        printf("%d, b = %d\n", num[b-2], b);
     } //用ASCII码值做计算，得到的值正好为对应的数字
 
     
@@ -138,7 +138,7 @@ static int cmd_x(char *args) {
   int c;
     for(c = b-3; c >=0; c--)
     {
-      //printf("c=%d ,sum = %lld, m = %ld\n", c,sum, m);
+      printf("c=%d ,sum = %lld, m = %ld\n", c,sum, m);
       sum += num[c]*m;
       m *= 16;
     }
