@@ -140,6 +140,7 @@ static int cmd_x(char *args) {
 
    base_addr = sum;//分离出起始地址int类型
    printf("%#llx\n", base_addr);
+   printf("%lld\n", base_addr);
 /*
   for(j = 0; j < i; j++)
   {
