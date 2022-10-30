@@ -132,7 +132,7 @@ static int cmd_x(char *args) {
   long m = 1;
   long long sum = 0; 
   int c;
-    for(c = b-3; c >=0; c--)
+    for(c = b-2; c >=0; c--)
     {
       sum += num[c]*m;
       m *= 16;
