@@ -108,7 +108,7 @@ static int cmd_x(char *args) {
   printf("%s\n", arg1);
 
 
-  char arr[50];
+  char arr[100];
   int a = 0;
 
   while(*arg1 != '\0')
