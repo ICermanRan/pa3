@@ -97,11 +97,10 @@ static int cmd_x(char *args) {
 
   int i;
   long long base_addr;
-  long long offset_addr = 0x01;
+  long long offset_addr = 0x80;
   int j;
   long long value;
   int len = 4;
-  // int offset_len = 0x01;
  
   arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
   i = atoi(arg);
