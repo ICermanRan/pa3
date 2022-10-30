@@ -121,9 +121,9 @@ static int cmd_x(char *args) {
   int b;
   int y = strlen(arr);
   int num[y-1];
-    for(b = 2; arr[i] != '\0'; b++)
+    for(b = 2; b <= y-1; b++)
     {
-        num[b-2] = arr[b] - 48;
+        num[b-2] = arr[b] - '0';
         printf("%d\n", num[b-2]);
     } ////用ASCII码值做计算，得到的值正好为对应的数字
 
