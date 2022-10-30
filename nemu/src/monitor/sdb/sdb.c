@@ -134,9 +134,9 @@ static int cmd_x(char *args) {
   int c;
     for(c = b-2; c >=0; c--)
     {
+      printf("c=%d ,sum = %lld, m = %ld\n", c,sum, m);
       sum += num[c]*m;
       m *= 16;
-      printf("c=%d ,sum = %lld, m = %ld\n", c,sum, m);
     }
 
    base_addr = sum;//分离出起始地址int类型
