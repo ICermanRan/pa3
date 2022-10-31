@@ -24,7 +24,7 @@ enum {
   TK_NOTYPE = 256, TK_EQ,
 
   /* TODO: Add more token types */
-
+  TK_num = 255
 };
 
 static struct rule {
@@ -35,7 +35,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-
+  {"[0-9]", TK_num},
   {" +", TK_NOTYPE},    // spaces(空格串)
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
