@@ -35,6 +35,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
+  {"\\/", '/'},          //minus
   {"\\*", '*'},          //multiply
   {"[0-9]", TK_num},    //number 0-9
   {" +", TK_NOTYPE},    // spaces(空格串)
