@@ -163,9 +163,9 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
-  char *arg = NULL; //定义分割出来的数学表达式
-  arg = strtok(args, " ");
-  printf("%s", arg);
+ // char *arg = NULL; //定义分割出来的数学表达式
+ // arg = strtok(args, " ");
+  printf("%s", args);
 //	init_regex();
   return 0;
 }
