@@ -36,7 +36,7 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
+  {" +", TK_NOTYPE},    // spaces(空格串)
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
 };
