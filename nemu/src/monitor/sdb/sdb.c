@@ -162,6 +162,10 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args) {
+	init_regex();
+  return 0;
+}
 
 static struct {
   const char *name;
@@ -176,7 +180,7 @@ static struct {
   { "si", "Step", cmd_s},
   { "info", "printf message", cmd_info},
   { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
-  //{ "p", "eval the expr", cmd_p},
+  { "p", "eval the expr", cmd_p},
   //{ "w", "set the watchpoint", cmd_w},
   //{ "d", "delet the watchpoint", cmd_d},
 };
