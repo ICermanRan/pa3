@@ -20,6 +20,7 @@
 #include "sdb.h"
 
 
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -163,10 +164,12 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
- // char *arg = NULL; //定义分割出来的数学表达式
- // arg = strtok(args, " ");
-  printf("%s\n", args);
-//	init_regex();
+  _Bool * success = NULL;
+
+  printf("%s\n", args);//数学表达式以字符串存在args里
+  expr(args,success);
+
+
   return 0;
 }
 
