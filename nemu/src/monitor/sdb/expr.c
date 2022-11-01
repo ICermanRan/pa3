@@ -108,7 +108,7 @@ static bool make_token(char *e) {
          */
           int j;
         switch (rules[i].token_type) {
-          case '(': 
+          case  40: 
                     for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
@@ -117,7 +117,7 @@ static bool make_token(char *e) {
                         strcpy(tokens[position].str,rules[i].regex);
                     }
                       printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
-          case ')':  
+          case 41:  
                    for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
@@ -127,7 +127,7 @@ static bool make_token(char *e) {
                     }
                     printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
 
-          case '/':  
+          case 47:  
                    for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
