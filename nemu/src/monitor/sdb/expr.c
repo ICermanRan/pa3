@@ -81,7 +81,7 @@ static bool make_token(char *e) {
   regmatch_t pmatch;//存放匹配文本串位置信息
 
   nr_token = 0;
-
+  printf("NR_REGEX = %d", NR_REGEX);
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
