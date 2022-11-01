@@ -35,8 +35,8 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {"\\)", ')'},          //right brackets
   {"\\(", '('},          //left brackets
+  {"\\)", ')'},          //right brackets
   {"\\/", '/'},          //minus
   {"\\*", '*'},          //multiply
   {"[0-9]", TK_num},    //number 0-9
@@ -92,6 +92,7 @@ static bool make_token(char *e) {
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
+        printf("i = %d, rules[i] = %s",  i, rules[i].regex);
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -100,7 +101,7 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          //case '(':  Token.type =   ;
+          //case '(':  tokens;
           default: TODO();
         }
 
