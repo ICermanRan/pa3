@@ -114,7 +114,7 @@ static bool make_token(char *e) {
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
-                      printf(" tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
+                      printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
           case ')':  
                    for(j = 0; j < 2; j++)
                     {
@@ -123,7 +123,7 @@ static bool make_token(char *e) {
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
-                    printf(" tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
+                    printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
 
           case '/':  
                    for(j = 0; j < 2; j++)
