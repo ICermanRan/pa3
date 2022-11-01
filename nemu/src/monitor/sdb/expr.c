@@ -35,7 +35,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {"/[a-zA-Z0-9_-]+/", '('},          //left brackets,   token_type == 40
+  {"/(/", '('},          //left brackets,   token_type == 40
   {"\\)", ')'},          //right brackets,  token_type == 41
   {"\\/", '/'},          //minus,           token_type == 47
   {"\\*", '*'},          //multiply,        token_type == 42
