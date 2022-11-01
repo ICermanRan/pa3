@@ -99,6 +99,8 @@ static bool make_token(char *e) {
 
         position += substr_len;
         printf("position = %d\n", position);
+        printf("position = %d\n", rules[i].token_type);
+
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
