@@ -94,6 +94,7 @@ static bool make_token(char *e) {
 
         printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
         nr_token++;
+        printf("nr_token = %d\n", nr_token);
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -135,7 +136,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
- // TODO();
+  TODO();
 
   return 0;
 }
