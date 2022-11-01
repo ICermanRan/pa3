@@ -166,7 +166,7 @@ static int cmd_x(char *args) {
 static int cmd_p(char *args) {
   _Bool * success = NULL;
 
-  printf("%s\n", args);//数学表达式以字符串存在args里
+  //printf("%s\n", args);//数学表达式以字符串存在args里
   expr(args,success);
 
 
