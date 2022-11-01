@@ -149,8 +149,8 @@ static bool make_token(char *e) {
   int c;
   for(c = 0; c <= position; c++)
   {
-     printf("tokens[c].type = %d c = %d\n", tokens[c].type, c);
-     printf("tokens[c].str = %s\n", tokens[c].str);
+     printf("outloop： tokens[c].type = %d c = %d\n", tokens[c].type, c);
+     printf("outloop： tokens[c].str = %s\n", tokens[c].str);
   }
 
   return true;
