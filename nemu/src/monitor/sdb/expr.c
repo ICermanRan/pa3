@@ -136,7 +136,7 @@ static bool make_token(char *e) {
   }
 
   int c;
-  for(c = 0; c < position; c++)
+  for(c = 0; c <= position; c++)
   {
      printf("tokens[c].type = %d\n", tokens[c].type);
      printf("tokens[c].str = %s\n", tokens[c].str);
@@ -153,7 +153,8 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
- // TODO();
+ // TODO(); 记得取消注释！！！
+
 
   return 0;
 }
