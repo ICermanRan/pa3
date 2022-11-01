@@ -35,14 +35,14 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {"\\(", '('},          //left brackets
-  {"\\)", ')'},          //right brackets
-  {"\\/", '/'},          //minus
-  {"\\*", '*'},          //multiply
+  {"\\(", '('},          //left brackets,   token_type == 40
+  {"\\)", ')'},          //right brackets,  token_type == 41
+  {"\\/", '/'},          //minus,           token_type == 47
+  {"\\*", '*'},          //multiply,        token_type == 42
   {"[0-9]", TK_num},    //number 0-9
-  {"\\-", '-'},         // reduce
+  {"\\-", '-'},         // reduce,          token_type == 45         
   {" +", TK_NOTYPE},    // spaces(空格串)
-  {"\\+", '+'},         // plus
+  {"\\+", '+'},         // plus,            token_type == 43   
   {"==", TK_EQ},        // equal
 };
 
@@ -93,15 +93,24 @@ static bool make_token(char *e) {
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
+        nr_token++;
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+          int j;
         switch (rules[i].token_type) {
-          //case '(':  tokens;
+          case '(': 
+                    for(j = 0; j < 2; j++)
+                    {
+                      if(j == 0)
+                        tokens[position].type =  '(';
+                      else if(j == 1)
+                        strcpy(tokens[position].str,rules[i].regex);
+                    }
+         // case ')':  tokens[position] = { ')', rules[i].regex } ;
           default: TODO();
         }
 
