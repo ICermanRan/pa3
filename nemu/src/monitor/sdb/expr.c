@@ -132,7 +132,8 @@ static bool make_token(char *e) {
                         tokens[position].type =  47;
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
-                    }         
+                    } 
+                    printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);        
          // default: TODO();
         }
       
