@@ -35,8 +35,8 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {"(", '('},          //left brackets,   token_type == 40
-  {")", ')'},          //right brackets,  token_type == 41
+  {"^($", '('},          //left brackets,   token_type == 40
+  {"\\)", ')'},          //right brackets,  token_type == 41
   {"\\/", '/'},          //minus,           token_type == 47
   {"\\*", '*'},          //multiply,        token_type == 42
   {"/[0-9]", TK_num},       //number 0-9
