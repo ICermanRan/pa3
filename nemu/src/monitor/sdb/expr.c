@@ -136,7 +136,7 @@ static bool make_token(char *e) {
                         strcpy(tokens[position].str,rules[i].regex);
                     } 
                     printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);        
-          default: TODO();
+          //default: TODO();
         }
       
         break;
