@@ -122,6 +122,15 @@ static bool make_token(char *e) {
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
+
+          case '/':  
+                   for(j = 0; j < 2; j++)
+                    {
+                      if(j == 0)
+                        tokens[position].type =  47;
+                      else if(j == 1)
+                        strcpy(tokens[position].str,rules[i].regex);
+                    }         
          // default: TODO();
         }
       
