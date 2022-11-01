@@ -95,7 +95,7 @@ static bool make_token(char *e) {
 
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
         nr_token++;
-        printf("nr_token = %d\n", nr_token);
+      //  printf("nr_token = %d\n", nr_token);
 
         position += substr_len;
       //  printf("position = %d\n", position);
