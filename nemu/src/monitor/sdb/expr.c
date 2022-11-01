@@ -117,7 +117,7 @@ static bool make_token(char *e) {
          // case ')':  tokens[position] = { ')', rules[i].regex } ;
           default: TODO();
         }
-
+         printf("e[position] = %d\n",e[position]);
         break;
       }
     }
