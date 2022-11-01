@@ -80,6 +80,7 @@ static bool make_token(char *e) {
   int i;
   regmatch_t pmatch;//存放匹配文本串位置信息
 
+  puts(e);
   nr_token = 0;
   while (e[position] != '\0') {
     /* Try all rules one by one. */
