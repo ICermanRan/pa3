@@ -40,8 +40,9 @@ static struct rule {
   {"\\/", '/'},          //minus,           token_type == 47
   {"\\*", '*'},          //multiply,        token_type == 42
   {"^[A-Z]+$", TK_num},       //number 0-9
-  {"\\-", '-'},         // reduce,          token_type == 45         
-  {" +", TK_NOTYPE},    // plus,            token_type == 43   
+  {"\\-", '-'},         // reduce,          token_type == 45 
+  {"++", '+'},         // plus,            token_type == 43        
+  {" +", TK_NOTYPE},    // spaces(空格串)              
   {"==", TK_EQ},        // equal
 };
 
