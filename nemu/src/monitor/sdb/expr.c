@@ -35,13 +35,13 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {"\\(", '('},          //left brackets,   token_type == 40
+  {"\(", '('},          //left brackets,   token_type == 40
   {"\\)", ')'},          //right brackets,  token_type == 41
   {"\\/", '/'},          //minus,           token_type == 47
   {"\\*", '*'},          //multiply,        token_type == 42
-  {"^[A-Z]+$", TK_num},       //number 0-9
+  {"^[A-Z]+$", TK_num},  //number 0-9
   {"\\-", '-'},         // reduce,          token_type == 45 
-  {"++", '+'},         // plus,            token_type == 43        
+  {"\\+", '+'},         // plus,            token_type == 43        
   {" +", TK_NOTYPE},    // spaces(空格串)              
   {"==", TK_EQ},        // equal
 };
