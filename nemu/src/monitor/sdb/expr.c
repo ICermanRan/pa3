@@ -40,6 +40,7 @@ static struct rule {
   {"\\/", '/'},          //minus
   {"\\*", '*'},          //multiply
   {"[0-9]", TK_num},    //number 0-9
+  {"\\-", '-'},         // reduce
   {" +", TK_NOTYPE},    // spaces(空格串)
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
@@ -99,6 +100,7 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
+          //case '(':  Token.type =   ;
           default: TODO();
         }
 
