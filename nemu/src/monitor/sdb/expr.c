@@ -202,7 +202,7 @@ static bool make_token(char *e) {
   int c;
   for(c = 0; c <= position; c++)
   {
-     printf("outloop： tokens[%d].type = %d\n", c, tokens[c].type);
+     printf("outloop： tokens[%d].type = %d ", c, tokens[c].type);
      printf("outloop： tokens[%d].str = %s\n", c,tokens[c].str);
   }
 
