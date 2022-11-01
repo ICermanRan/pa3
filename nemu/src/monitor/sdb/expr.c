@@ -114,7 +114,14 @@ static bool make_token(char *e) {
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
-         // case ')':  tokens[position] = { ')', rules[i].regex } ;
+          case ')':  
+                   for(j = 0; j < 2; j++)
+                    {
+                      if(j == 0)
+                        tokens[position].type =  ')';
+                      else if(j == 1)
+                        strcpy(tokens[position].str,rules[i].regex);
+                    }
          // default: TODO();
         }
       
@@ -126,6 +133,13 @@ static bool make_token(char *e) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
+  }
+
+  int c;
+  for(c = 0; c < position; c++)
+  {
+     printf("tokens[c].type = %d", tokens[c].type);
+     printf("tokens[c].str = %s", tokens[c].str);
   }
 
   return true;
