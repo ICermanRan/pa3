@@ -80,7 +80,7 @@ static bool make_token(char *e) {
   int i;
   regmatch_t pmatch;//存放匹配文本串位置信息
 
-  printf("e = %s\n", e);
+  //printf("e = %s\n", e);
   nr_token = 0;
   while (e[position] != '\0') {
      printf("e[position] = %d\n",e[position]);
@@ -98,7 +98,7 @@ static bool make_token(char *e) {
         printf("nr_token = %d\n", nr_token);
 
         position += substr_len;
-        printf("position = %d\n", position);
+       // printf("position = %d\n", position);
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
