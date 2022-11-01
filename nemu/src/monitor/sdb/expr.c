@@ -39,7 +39,7 @@ static struct rule {
   {"\\)", ')'},          //right brackets,  token_type == 41
   {"\\/", '/'},          //minus,           token_type == 47
   {"\\*", '*'},          //multiply,        token_type == 42
-  {"[0-9]", TK_num},       //number 0-9
+  {"^[A-Z]+$", TK_num},       //number 0-9
   {"\\-", '-'},         // reduce,          token_type == 45         
   {" +", TK_NOTYPE},    // plus,            token_type == 43   
   {"==", TK_EQ},        // equal
