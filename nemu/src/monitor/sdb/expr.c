@@ -25,7 +25,7 @@ enum {
 
   /* TODO: Add more token types */
   TK_num = 255
-};
+}; //枚举类型，标识符的作用范围是全局的
 
 static struct rule {
   const char *regex;
@@ -35,8 +35,8 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {"\\(", 40},          //left brackets,   token_type == 40
-  {"\\)", 41},          //right brackets,  token_type == 41
+  {"\\(", '('},          //left brackets,   token_type == 40
+  {"\\)", ')'},          //right brackets,  token_type == 41
   {"\\/", '/'},          //minus,           token_type == 47
   {"\\*", '*'},          //multiply,        token_type == 42
   {"[0-9]", TK_num},    //number 0-9
@@ -108,7 +108,7 @@ static bool make_token(char *e) {
          */
           int j;
         switch (rules[i].token_type) {
-          case  40: 
+          case  '(': 
                     for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
@@ -116,9 +116,10 @@ static bool make_token(char *e) {
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
-                      printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
+                      // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                       break;
-          case 41:  
+
+          case ')':  
                    for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
@@ -126,9 +127,10 @@ static bool make_token(char *e) {
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
-                    printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
-                      break;
-          case 47:  
+                    // printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
+                    break;
+
+          case '/':  
                    for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
@@ -136,8 +138,53 @@ static bool make_token(char *e) {
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     } 
-                    printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
+
+          case '*':  
+                   for(j = 0; j < 2; j++)
+                    {
+                      if(j == 0)
+                        tokens[position].type =  42;
+                      else if(j == 1)
+                        strcpy(tokens[position].str,rules[i].regex);
+                    } 
+                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                    break;
+
+          case '+':  
+                   for(j = 0; j < 2; j++)
+                    {
+                      if(j == 0)
+                        tokens[position].type =  43;
+                      else if(j == 1)
+                        strcpy(tokens[position].str,rules[i].regex);
+                    } 
+                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                    break;
+
+          case '-':  
+                   for(j = 0; j < 2; j++)
+                    {
+                      if(j == 0)
+                        tokens[position].type =  45;
+                      else if(j == 1)
+                        strcpy(tokens[position].str,rules[i].regex);
+                    } 
+                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                    break;
+
+          case TK_num:  
+                   for(j = 0; j < 2; j++)
+                    {
+                      if(j == 0)
+                        tokens[position].type =  TK_num;
+                      else if(j == 1)
+                        strcpy(tokens[position].str,rules[i].regex);
+                    } 
+                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                    break;
+
 
           //default: TODO();
         }
@@ -162,6 +209,18 @@ static bool make_token(char *e) {
   return true;
 }
 
+/* void store_c (int tokens_type, int position, char arr) 
+{
+  int j;
+   for(j = 0; j < 2; j++)
+      {
+        if(j == 0)
+          tokens[position].type =  tokens_type;
+        else if(j == 1)
+           strcpy(tokens[position].str, arr);
+       } 
+  return 0;
+} */
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
