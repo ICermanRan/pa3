@@ -110,7 +110,7 @@ static bool make_token(char *e) {
                     for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
-                        tokens[position].type =  '(';
+                        tokens[position].type =  40;
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
@@ -118,7 +118,7 @@ static bool make_token(char *e) {
                    for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
-                        tokens[position].type =  ')';
+                        tokens[position].type =  41;
                       else if(j == 1)
                         strcpy(tokens[position].str,rules[i].regex);
                     }
