@@ -156,8 +156,10 @@ static bool make_token(char *e) {
                     if(substr_len > 33)
                       strncpy(tokens[position].str, substr_start,32); //避免输入过长，导致缓冲区溢出
                     else
+                     {
                       strncpy(tokens[position].str, substr_start,substr_len); 
-                   // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                      printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                     }
                    break;
 
 
