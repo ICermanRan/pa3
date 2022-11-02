@@ -39,8 +39,8 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-   // {"^[0-9]*[1-9][0-9]*$", TK_num}, // number
-    {"[0-9]", TK_num}, // number
+    {"(^[0-9]|[1-9][0-9]+)$ ", TK_num}, // number
+   // {"[0-9]", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
@@ -91,7 +91,9 @@ static bool make_token(char *e) {
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo;
+        int substr_len = pmatch.rm_eo; //存放匹配字符串长度
+
+
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
@@ -111,86 +113,49 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-          int j;
+ 
         switch (rules[i].token_type) {
           case  '(': 
-                    for(j = 0; j < 2; j++)
-                    {
-                      if(j == 0)
-                        tokens[position].type =  40;
-                      else if(j == 1)
-                        strncpy(tokens[position].str, substr_start,1);
-                        //tokens
-                    }
-                      // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
-                      break;
+                    tokens[position].type =  40;
+                    strncpy(tokens[position].str, substr_start, substr_len);
+                    // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
+                    break;
 
-          case ')':  
-                   for(j = 0; j < 2; j++)
-                    {
-                      if(j == 0)
-                        tokens[position].type =  41;
-                      else if(j == 1)
-                        strncpy(tokens[position].str,substr_start,1);
-                    }
+          case ')': 
+                    tokens[position].type =  41;
+                    strncpy(tokens[position].str,substr_start,substr_len);
                     // printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
           case '/':  
-                   for(j = 0; j < 2; j++)
-                    {
-                      if(j == 0)
-                        tokens[position].type =  47;
-                      else if(j == 1)
-                        strncpy(tokens[position].str, substr_start,1);
-                    } 
+                    tokens[position].type =  47;
+                    strncpy(tokens[position].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '*':  
-                   for(j = 0; j < 2; j++)
-                    {
-                      if(j == 0)
-                        tokens[position].type =  42;
-                      else if(j == 1)
-                        strncpy(tokens[position].str, substr_start,1);
-                    } 
+                    tokens[position].type =  42;
+                    strncpy(tokens[position].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '+':  
-                   for(j = 0; j < 2; j++)
-                    {
-                      if(j == 0)
-                        tokens[position].type =  43;
-                      else if(j == 1)
-                        strncpy(tokens[position].str, substr_start,1);
-                    } 
+                    tokens[position].type =  43;
+                    strncpy(tokens[position].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '-':  
-                   for(j = 0; j < 2; j++)
-                    {
-                      if(j == 0)
-                        tokens[position].type =  45;
-                      else if(j == 1)
-                        strncpy(tokens[position].str, substr_start,1);
-                    } 
-                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
-                    break;
+                   tokens[position].type =  45;
+                   strncpy(tokens[position].str, substr_start,substr_len);
+                   // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                   break;
 
           case TK_num:  
-                    //int n = 0;
-                    for(j = 0; j < 2; j++)
-                    {
-                      if(j == 0)
-                        tokens[position].type =  TK_num;
-                      else if(j == 1)
-                        strncpy(tokens[position].str, substr_start,substr_len);
-                    } 
-                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
-                    break;
+                   tokens[position].type =  TK_num;
+                   strncpy(tokens[position].str, substr_start,substr_len); 
+                   // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                   break;
 
 
           //default: TODO();
