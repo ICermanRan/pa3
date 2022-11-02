@@ -160,7 +160,7 @@ static bool make_token(char *e) {
                       position = position-substr_len;
                       printf("for num no store: position = %d\n", position); 
                       tokens[position].type =  TK_num;
-                      strncpy(tokens[position-substr_len].str, substr_start,substr_len); 
+                      strncpy(tokens[position].str, substr_start,substr_len); 
                       printf("for num have store: position = %d\n", position); 
                       position++; 
                      }
