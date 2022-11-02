@@ -157,7 +157,7 @@ static bool make_token(char *e) {
                    break;
 
           case TK_num:  
-                    position += substr_len;
+                   // position += substr_len;
                   //  num_substr_len +=  substr_len;
                     printf("num_substr_len = %d\n", num_substr_len); 
                     if(substr_len > 33)
