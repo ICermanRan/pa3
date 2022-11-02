@@ -32,18 +32,18 @@ static struct rule {
   int token_type;
 } rules[] = {
 
-  /* TODO: Add more rules.
-   * Pay attention to the precedence level of different rules.
-   */
-  {"\(", '('},          //left brackets,   token_type == 40
-  {"\\)", ')'},          //right brackets,  token_type == 41
-  {"\\/", '/'},          //minus,           token_type == 47
-  {"\\*", '*'},          //multiply,        token_type == 42
-  {"^[A-Z]+$", TK_num},  //number 0-9
-  {"\\-", '-'},         // reduce,          token_type == 45 
-  {"\\+", '+'},         // plus,            token_type == 43        
-  {" +", TK_NOTYPE},    // spaces(空格串)              
-  {"==", TK_EQ},        // equal
+    /* TODO: Add more rules.
+     * Pay attention to the precedence level of different rules.
+     */
+    {"\\(", '('},          // left brackets,   token_type == 40
+    {"\\)", ')'},         // right brackets,  token_type == 41
+    {"\\/", '/'},         // minus,           token_type == 47
+    {"\\*", '*'},         // multiply,        token_type == 42
+    {"^[0-9]$", TK_num}, // number 0-9
+    {"\\-", '-'},         // reduce,          token_type == 45
+    {"([+-])", '+'},         // plus,            token_type == 43
+    {" +", TK_NOTYPE},    // spaces(空格串)
+    {"==", TK_EQ},        // equal
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
@@ -59,7 +59,9 @@ void init_regex() {
   int ret;
 
   for (i = 0; i < NR_REGEX; i ++) {
-    ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+    ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED); //编译正则表达式regcomp(),执行成功返回0
+    //printf("&re[i] = %s",re.);
+                                                         //&re[i]一个结构体数据类型，用来存放编译后的正则表达式
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
       panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
@@ -84,6 +86,7 @@ static bool make_token(char *e) {
   nr_token = 0;
   while (e[position] != '\0') {
     // printf("e[position] = %d\n",e[position]);
+   
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
@@ -92,7 +95,7 @@ static bool make_token(char *e) {
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
-
+          printf("substr_start = %s", substr_start);
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
         nr_token++;
       //  printf("nr_token = %d\n", nr_token);
@@ -114,7 +117,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  40;
                       else if(j == 1)
-                        strcpy(tokens[position].str,rules[i].regex);
+                        strcpy(tokens[position].str, rules[i].regex);
                     }
                       // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                       break;
