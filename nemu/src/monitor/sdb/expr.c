@@ -117,19 +117,19 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case  '(': 
                     tokens[position].type =  40;
-                    strncpy(tokens[position].str, substr_start, substr_len);
+                    strncpy(tokens[position-1].str, substr_start, substr_len);
                     // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
           case ')': 
                     tokens[position].type =  41;
-                    strncpy(tokens[position].str,substr_start,substr_len);
+                    strncpy(tokens[position-1].str,substr_start,substr_len);
                     // printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
           case '/':  
                     tokens[position].type =  47;
-                    strncpy(tokens[position].str, substr_start,substr_len);
+                    strncpy(tokens[position-1].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
