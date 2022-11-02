@@ -84,6 +84,7 @@ int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放�
 static bool make_token(char *e) {
   int position = 0;
   int i;
+  int token_addr = 0;
   regmatch_t pmatch;//存放匹配文本串位置信息
 
   //printf("e = %s\n", e);
@@ -107,7 +108,7 @@ static bool make_token(char *e) {
         // printf("nr_token = %d\n", nr_token);
 
 
-        //position += substr_len;
+        position += substr_len;
         printf("position = %d\n", position);
       //  printf("rules[i].token_type = %d\n", rules[i].token_type);
 
@@ -119,9 +120,9 @@ static bool make_token(char *e) {
  
         switch (rules[i].token_type) {
           case  '(': 
-                    position += substr_len;
-                    tokens[position-num_substr_len-1].type =  40;
-                    strncpy(tokens[position-num_substr_len-1].str, substr_start, substr_len);
+                    //position += substr_len;
+                    tokens[token_addr].type =  40;
+                    strncpy(tokens[token_addr].str, substr_start, substr_len);
                     // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
@@ -156,18 +157,21 @@ static bool make_token(char *e) {
                    break;
 
           case TK_num:  
-                    num_substr_len +=  substr_len;
+                    position += substr_len;
+                  //  num_substr_len +=  substr_len;
                     printf("num_substr_len = %d\n", num_substr_len); 
                     if(substr_len > 33)
-                      strncpy(tokens[position-32+1].str, substr_start,32); //避免输入过长，导致缓冲区溢出
+                     {
+                      tokens[token_addr].type =  TK_num;
+                      strncpy(tokens[token_addr].str, substr_start,32); //避免输入过长，导致缓冲区溢出
+                     }
                     else
                      {
-                      position = position-substr_len;
-                      printf("for num no store: position = %d\n", position); 
-                      tokens[position].type =  TK_num;
-                      strncpy(tokens[position].str, substr_start,substr_len); 
-                      position += substr_len; 
-                      printf("for num have store: position = %d\n", position);
+                     // num_addr = position-substr_len;
+                     // printf("for num no store: num_addr = %d\n", num_addr); 
+                      tokens[token_addr].type =  TK_num;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                     // printf("for num have store: num_addr = %d\n", num_addr);
                      }
                    break;
           
@@ -187,6 +191,7 @@ static bool make_token(char *e) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
+      token_addr++;
   }
 
   int c;
