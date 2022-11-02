@@ -98,11 +98,11 @@ static bool make_token(char *e) {
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
         
-        printf("match char = %.*s\n", substr_len,substr_start);
+        // printf("match char = %.*s\n", substr_len,substr_start);
 
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
         nr_token++; //每次匹配成功一个字符就自加1
-        printf("nr_token = %d\n", nr_token);
+        // printf("nr_token = %d\n", nr_token);
 
         position += substr_len;
       //  printf("position = %d\n", position);
