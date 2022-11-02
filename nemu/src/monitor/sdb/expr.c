@@ -157,7 +157,7 @@ static bool make_token(char *e) {
                       strncpy(tokens[position-32+1].str, substr_start,32); //避免输入过长，导致缓冲区溢出
                     else
                      {
-                      //position = position-substr_len+1;
+                      position = position-substr_len+1;
                       strncpy(tokens[position-substr_len+1].str, substr_start,substr_len); 
                       printf("for num: position = %d\n", position); 
                      }
