@@ -35,7 +35,7 @@ static struct rule {
     /* TODO: Add more rules.
      * Pay attention to the precedence level of different rules.
      */
-    {"showPlayer[(]'(.*?)", '('},          // left brackets,   token_type == 40
+    {"\\(", '('},          // left brackets,   token_type == 40
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
@@ -118,7 +118,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  40;
                       else if(j == 1)
-                        strcpy(tokens[position].str, substr_start);
+                        strncpy(tokens[position].str, substr_start,1);
                         //tokens
                     }
                       // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
