@@ -39,8 +39,8 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-    {"^[0-9]*[1-9][0-9]*$", TK_num}, // number
-   // {"[0-9]", TK_num}, // number
+   // {"^[0-9]*[1-9][0-9]*$", TK_num}, // number
+    {"[0-9]", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
@@ -187,15 +187,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  TK_num;
                       else if(j == 1)
-                        {
-                          if(tokens[position+1].type ==  TK_num)
-                            {
-                            substr_len = substr_len + 1;
-                            printf("substr_len = %d", substr_len);
-                            }
-                          else  
-                            strncpy(tokens[position].str, substr_start,substr_len);
-                        }
+                        strncpy(tokens[position].str, substr_start,substr_len);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
