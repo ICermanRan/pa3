@@ -188,11 +188,12 @@ static bool make_token(char *e) {
                         tokens[position].type =  TK_num;
                       else if(j == 1)
                         {
-                        if(tokens[position+1].type ==  TK_num)
+                          if(tokens[position+1].type ==  TK_num)
                             {
                             substr_len = substr_len + 1;
                             printf("substr_len = %d", substr_len);
                             }
+                          else  
                             strncpy(tokens[position].str, substr_start,substr_len);
                         }
                     } 
