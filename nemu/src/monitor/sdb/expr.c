@@ -120,7 +120,7 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case  '(': 
                     tokens[position-num_substr_len].type =  40;
-                    strncpy(tokens[position-1+num_substr_len].str, substr_start, substr_len);
+                    strncpy(tokens[position-num_substr_len].str, substr_start, substr_len);
                     // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
