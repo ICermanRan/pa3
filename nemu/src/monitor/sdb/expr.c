@@ -39,7 +39,7 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-    {"[0-9]", TK_num}, // number 0-9
+    {"^-?[1-9]*$", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"([+-])", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
@@ -119,6 +119,7 @@ static bool make_token(char *e) {
                         tokens[position].type =  40;
                       else if(j == 1)
                         strcpy(tokens[position].str, substr_start);
+                        //tokens
                     }
                       // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                       break;
