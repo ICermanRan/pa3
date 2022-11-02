@@ -109,7 +109,7 @@ static bool make_token(char *e) {
 
 
         position += substr_len;
-        printf("position = %d\n", position);
+       // printf("position = %d\n", position);
       //  printf("rules[i].token_type = %d\n", rules[i].token_type);
 
 
