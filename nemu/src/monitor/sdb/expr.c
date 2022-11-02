@@ -35,7 +35,7 @@ static struct rule {
     /* TODO: Add more rules.
      * Pay attention to the precedence level of different rules.
      */
-    {"\\(", '('},          // left brackets,   token_type == 40
+    {"showPlayer[(]'(.*?)", '('},          // left brackets,   token_type == 40
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
@@ -96,7 +96,6 @@ static bool make_token(char *e) {
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
         
         printf("match char = %.*s\n", substr_len,substr_start);
-        printf("match addr = %d\n", *substr_start);
 
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
         nr_token++;
