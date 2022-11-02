@@ -78,6 +78,9 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
+int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
+
+
 static bool make_token(char *e) {
   int position = 0;
   int i;
@@ -93,9 +96,6 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo; //存放匹配字符串长度
 
-    //    int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
-
-
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
@@ -106,12 +106,6 @@ static bool make_token(char *e) {
         nr_token++; //每次匹配成功一个字符就自加1
         // printf("nr_token = %d\n", nr_token);
 
-       /*  if(rules[i].regex = "[1-9][0-9]*")
-          num_substr_len +=  substr_len;
-        else
-          num_substr_len = num_substr_len;
-    
-         printf("num_substr_len = %d\n", num_substr_len); */
 
         position += substr_len;
         printf("position = %d\n", position);
@@ -125,8 +119,8 @@ static bool make_token(char *e) {
  
         switch (rules[i].token_type) {
           case  '(': 
-                    tokens[position-1].type =  40;
-                    strncpy(tokens[position-1].str, substr_start, substr_len);
+                    tokens[position-1+num_substr_len].type =  40;
+                    strncpy(tokens[position-1+num_substr_len].str, substr_start, substr_len);
                     // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
@@ -161,7 +155,8 @@ static bool make_token(char *e) {
                    break;
 
           case TK_num:  
-                   
+                    num_substr_len +=  substr_len;
+                    printf("num_substr_len = %d\n", num_substr_len); 
                     if(substr_len > 33)
                       strncpy(tokens[position-32+1].str, substr_start,32); //避免输入过长，导致缓冲区溢出
                     else
@@ -170,8 +165,8 @@ static bool make_token(char *e) {
                       printf("for num no store: position = %d\n", position); 
                       tokens[position].type =  TK_num;
                       strncpy(tokens[position].str, substr_start,substr_len); 
-                      printf("for num have store: position = %d\n", position); 
-                      position++; 
+                      position += substr_len; 
+                      printf("for num have store: position = %d\n", position);
                      }
                    break;
 
