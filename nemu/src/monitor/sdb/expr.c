@@ -169,6 +169,10 @@ static bool make_token(char *e) {
                       printf("for num have store: position = %d\n", position);
                      }
                    break;
+          
+          case TK_NOTYPE:
+                   // position += substr_len;
+                    break;
 
 
           //default: TODO();
