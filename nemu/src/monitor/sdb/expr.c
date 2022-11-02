@@ -105,7 +105,7 @@ static bool make_token(char *e) {
         // printf("nr_token = %d\n", nr_token);
 
         position += substr_len;
-      //  printf("position = %d\n", position);
+        printf("position = %d\n", position);
       //  printf("rules[i].token_type = %d\n", rules[i].token_type);
 
 
@@ -159,7 +159,7 @@ static bool make_token(char *e) {
                      {
                       position = position-substr_len+1;
                       strncpy(tokens[position-substr_len+1].str, substr_start,substr_len); 
-                      //printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                      printf("for num: position = %d\n", position); 
                      }
                    break;
 
