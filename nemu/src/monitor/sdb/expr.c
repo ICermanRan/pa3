@@ -116,38 +116,38 @@ static bool make_token(char *e) {
  
         switch (rules[i].token_type) {
           case  '(': 
-                    tokens[position].type =  40;
+                    tokens[position-1].type =  40;
                     strncpy(tokens[position-1].str, substr_start, substr_len);
                     // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
           case ')': 
-                    tokens[position].type =  41;
+                    tokens[position-1].type =  41;
                     strncpy(tokens[position-1].str,substr_start,substr_len);
                     // printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
           case '/':  
-                    tokens[position].type =  47;
+                    tokens[position-1].type =  47;
                     strncpy(tokens[position-1].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '*':  
-                    tokens[position].type =  42;
-                    strncpy(tokens[position].str, substr_start,substr_len);
+                    tokens[position-1].type =  42;
+                    strncpy(tokens[position-1].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '+':  
-                    tokens[position].type =  43;
-                    strncpy(tokens[position].str, substr_start,substr_len);
+                    tokens[position-1].type =  43;
+                    strncpy(tokens[position-1].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '-':  
-                   tokens[position].type =  45;
-                   strncpy(tokens[position].str, substr_start,substr_len);
+                   tokens[position-1].type =  45;
+                   strncpy(tokens[position-1].str, substr_start,substr_len);
                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                    break;
 
