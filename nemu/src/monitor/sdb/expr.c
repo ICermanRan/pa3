@@ -93,7 +93,7 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
         
-        printf("substr_start = %.s", substr_start);
+        printf("substr_start = %.s\n", substr_start);
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
         
