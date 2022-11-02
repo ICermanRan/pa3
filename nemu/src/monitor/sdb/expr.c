@@ -119,47 +119,43 @@ static bool make_token(char *e) {
          */
  
         switch (rules[i].token_type) {
-          case  '(': 
-                    //position += substr_len;
+          case  '(':
                     tokens[token_addr].type =  40;
                     strncpy(tokens[token_addr].str, substr_start, substr_len);
                     // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
           case ')': 
-                    tokens[position-1].type =  41;
-                    strncpy(tokens[position-1].str,substr_start,substr_len);
+                    tokens[token_addr].type =  41;
+                    strncpy(tokens[token_addr].str,substr_start,substr_len);
                     // printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
           case '/':  
-                    tokens[position-1].type =  47;
-                    strncpy(tokens[position-1].str, substr_start,substr_len);
+                    tokens[token_addr].type =  47;
+                    strncpy(tokens[token_addr].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '*':  
-                    tokens[position-1].type =  42;
-                    strncpy(tokens[position-1].str, substr_start,substr_len);
+                    tokens[token_addr].type =  42;
+                    strncpy(tokens[token_addr].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '+':  
-                    tokens[position-1].type =  43;
-                    strncpy(tokens[position-1].str, substr_start,substr_len);
+                    tokens[token_addr].type =  43;
+                    strncpy(tokens[token_addr].str, substr_start,substr_len);
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
           case '-':  
-                   tokens[position-1].type =  45;
-                   strncpy(tokens[position-1].str, substr_start,substr_len);
+                   tokens[token_addr].type =  45;
+                   strncpy(tokens[token_addr].str, substr_start,substr_len);
                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                    break;
 
           case TK_num:  
-                   // position += substr_len;
-                  //  num_substr_len +=  substr_len;
-                  //  printf("num_substr_len = %d\n", num_substr_len); 
                     if(substr_len > 33)
                      {
                       tokens[token_addr].type =  TK_num;
@@ -167,11 +163,8 @@ static bool make_token(char *e) {
                      }
                     else
                      {
-                     // num_addr = position-substr_len;
-                     // printf("for num no store: num_addr = %d\n", num_addr); 
                       tokens[token_addr].type =  TK_num;
                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
-                     // printf("for num have store: num_addr = %d\n", num_addr);
                      }
                    break;
           
