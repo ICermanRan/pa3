@@ -78,7 +78,7 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
-int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
+//int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
 
 
 static bool make_token(char *e) {
@@ -159,7 +159,7 @@ static bool make_token(char *e) {
           case TK_num:  
                    // position += substr_len;
                   //  num_substr_len +=  substr_len;
-                    printf("num_substr_len = %d\n", num_substr_len); 
+                  //  printf("num_substr_len = %d\n", num_substr_len); 
                     if(substr_len > 33)
                      {
                       tokens[token_addr].type =  TK_num;
