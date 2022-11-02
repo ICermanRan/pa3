@@ -153,7 +153,10 @@ static bool make_token(char *e) {
 
           case TK_num:  
                    tokens[position].type =  TK_num;
-                   strncpy(tokens[position].str, substr_start,substr_len); 
+                    if(substr_len > 33)
+                      strncpy(tokens[position].str, substr_start,32); 
+                    else
+                      strncpy(tokens[position].str, substr_start,substr_len); 
                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                    break;
 
