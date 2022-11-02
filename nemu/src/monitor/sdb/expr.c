@@ -130,7 +130,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  41;
                       else if(j == 1)
-                        strcpy(tokens[position].str,substr_start);
+                        strncpy(tokens[position].str,substr_start,1);
                     }
                     // printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
@@ -141,7 +141,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  47;
                       else if(j == 1)
-                        strcpy(tokens[position].str, substr_start);
+                        strncpy(tokens[position].str, substr_start,1);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -152,7 +152,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  42;
                       else if(j == 1)
-                        strcpy(tokens[position].str, substr_start);
+                        strncpy(tokens[position].str, substr_start,1);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -163,7 +163,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  43;
                       else if(j == 1)
-                        strcpy(tokens[position].str, substr_start);
+                        strncpy(tokens[position].str, substr_start,1);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -174,7 +174,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  45;
                       else if(j == 1)
-                        strcpy(tokens[position].str, substr_start);
+                        strncpy(tokens[position].str, substr_start,1);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -185,7 +185,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  TK_num;
                       else if(j == 1)
-                        strcpy(tokens[position].str, substr_start);
+                        strncpy(tokens[position].str, substr_start,1);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
