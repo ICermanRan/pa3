@@ -93,6 +93,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo; //存放匹配字符串长度
 
+    //    int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
+
 
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
@@ -103,6 +105,13 @@ static bool make_token(char *e) {
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
         nr_token++; //每次匹配成功一个字符就自加1
         // printf("nr_token = %d\n", nr_token);
+
+       /*  if(rules[i].regex = "[1-9][0-9]*")
+          num_substr_len +=  substr_len;
+        else
+          num_substr_len = num_substr_len;
+    
+         printf("num_substr_len = %d\n", num_substr_len); */
 
         position += substr_len;
         printf("position = %d\n", position);
