@@ -39,8 +39,7 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-    //{"^-?[1-9]*$", TK_num}, // number
-    {"[0-9]", TK_num}, // number
+    {"^-?[1-9]*$", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
@@ -99,8 +98,8 @@ static bool make_token(char *e) {
         printf("match char = %.*s\n", substr_len,substr_start);
 
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
-        nr_token++;
-      //  printf("nr_token = %d\n", nr_token);
+        nr_token++; //每次匹配成功一个字符就自加1
+        printf("nr_token = %d\n", nr_token);
 
         position += substr_len;
       //  printf("position = %d\n", position);
@@ -181,12 +180,15 @@ static bool make_token(char *e) {
                     break;
 
           case TK_num:  
-                   for(j = 0; j < 2; j++)
+                    //int n = 0;
+                    for(j = 0; j < 2; j++)
                     {
                       if(j == 0)
                         tokens[position].type =  TK_num;
                       else if(j == 1)
-                        strncpy(tokens[position].str, substr_start,1);
+                        //if(tokens[position+1].type ==  TK_num)
+                          strncpy(tokens[position].str, substr_start,1);
+                       
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
