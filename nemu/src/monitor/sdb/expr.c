@@ -41,7 +41,7 @@ static struct rule {
     {"\\*", '*'},         // multiply,        token_type == 42
     {"^-?[1-9]*$", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
-    {"([+-])", '+'},         // plus,            token_type == 43
+    {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
     {"==", TK_EQ},        // equal
 };
