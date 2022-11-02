@@ -95,7 +95,7 @@ static bool make_token(char *e) {
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
-          printf("substr_start = %s\n", substr_start);
+        
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
         nr_token++;
       //  printf("nr_token = %d\n", nr_token);
@@ -117,7 +117,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  40;
                       else if(j == 1)
-                        strcpy(tokens[position].str, rules[i].regex);
+                        strcpy(tokens[position].str, substr_start);
                     }
                       // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                       break;
@@ -128,7 +128,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  41;
                       else if(j == 1)
-                        strcpy(tokens[position].str,rules[i].regex);
+                        strcpy(tokens[position].str,substr_start);
                     }
                     // printf("for right: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
@@ -139,7 +139,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  47;
                       else if(j == 1)
-                        strcpy(tokens[position].str,rules[i].regex);
+                        strcpy(tokens[position].str, substr_start);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -150,7 +150,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  42;
                       else if(j == 1)
-                        strcpy(tokens[position].str,rules[i].regex);
+                        strcpy(tokens[position].str, substr_start);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -161,7 +161,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  43;
                       else if(j == 1)
-                        strcpy(tokens[position].str,rules[i].regex);
+                        strcpy(tokens[position].str, substr_start);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -172,7 +172,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  45;
                       else if(j == 1)
-                        strcpy(tokens[position].str,rules[i].regex);
+                        strcpy(tokens[position].str, substr_start);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
@@ -183,7 +183,7 @@ static bool make_token(char *e) {
                       if(j == 0)
                         tokens[position].type =  TK_num;
                       else if(j == 1)
-                        strcpy(tokens[position].str,rules[i].regex);
+                        strcpy(tokens[position].str, substr_start);
                     } 
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
