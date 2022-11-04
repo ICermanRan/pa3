@@ -291,7 +291,7 @@ static bool check_parentheses(int p, int q)
   
   a = tokens[p].type;
   b = tokens[q].type;
-  printf("a = %d, b = %d\n", a,b);
+  printf("%s = %d, %s = %d\n", tokens[p].str, a, tokens[q].str,b);
  
   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
     condition_1 = 1;      
