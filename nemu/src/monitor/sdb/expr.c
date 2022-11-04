@@ -199,7 +199,7 @@ static bool make_token(char *e) {
      printf("tokens[%d].str = %s\n", c,tokens[c].str);
   }
 
-   token_addrs = token_addr;
+   token_addrs = token_addr-1;
    eval(0,token_addrs);
   
   return true;
