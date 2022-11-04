@@ -89,7 +89,7 @@ static int nr_token __attribute__((used))  = 0;
 static bool make_token(char *e) {
   int position = 0;
   int i;
-  int value;
+  u_int32_t value;
  
   regmatch_t pmatch;//存放匹配文本串位置信息
 
