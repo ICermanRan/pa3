@@ -89,6 +89,7 @@ static int nr_token __attribute__((used))  = 0;
 static bool make_token(char *e) {
   int position = 0;
   int i;
+  int value;
  
   regmatch_t pmatch;//存放匹配文本串位置信息
 
@@ -200,8 +201,8 @@ static bool make_token(char *e) {
   }
 
    token_addrs = token_addr-1;
-   eval(0,token_addrs);
-  
+   value = eval(0,token_addrs);
+   printf("value = %d", value);
   return true;
 } 
 
@@ -278,43 +279,43 @@ word_t expr(char *e, bool *success) {
 //static int calc(int a, char op, int b);
 
 //判断表达式是否被一对匹配的括号包围着, 同时检查表达式的左右括号是否匹配
-// static bool check_parentheses(int p, int q);//函数声明
+static bool check_parentheses(int p, int q);//函数声明
 
-// static bool check_parentheses(int p, int q)
-// {
-//   int a,b;
-//   int l = 0, r = 0;//l记录左括号出现次数，r记录右括号出现次数
-//   int condition_1,condition_2;
-//   int result;//result = 1,两个条件都满足，返回true；反之，则返回fall
-//   int i;
+static bool check_parentheses(int p, int q)
+{
+  int a,b;
+  int l = 0, r = 0;//l记录左括号出现次数，r记录右括号出现次数
+  int condition_1,condition_2;
+  //int result;//result = 1,两个条件都满足，返回true；反之，则返回fall
+  int i;
   
-//   a = tokens[p].type;
-//   b = tokens[q].type;
+  a = tokens[p].type;
+  b = tokens[q].type;
  
-//   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
-//     condition_1 = 1;      
-//   else 
-//     condition_1 = 0;
+  if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
+    condition_1 = 1;      
+  else 
+    condition_1 = 0;
   
   
-//   for(i = p; i <= q; i++)
-//   {
-//     if(tokens[i].str == '(')
-//       l = l + 1;
-//     else if (tokens[i].str == ')')
-//       r = r + 1;
-//   } 
+  for(i = p; i <= q; i++)
+  {
+    if(tokens[i].type == '(')
+      l = l + 1;
+    else if (tokens[i].type == ')')
+      r = r + 1;
+  } 
   
-//   if(l == r)    //判断表达式的左右括号是否匹配
-//     condition_2 = 1;    
-//   else
-//     condition_2 = 0;
+  if(l == r)    //判断表达式的左右括号是否匹配
+    condition_2 = 1;    
+  else
+    condition_2 = 0;
 
-//   if((condition_1 = 1) && (condition_2 = 1;))
-//     return true;  //都满足，返回true
-//   else
-//     return false; //否则，返回false
-// }
+  if((condition_1 = 1) && (condition_2 = 1))
+    return true;  //都满足，返回true
+  else
+    return false; //否则，返回false
+}
   
  
 //寻找算数表达式的主运算符，返回它在tokens表达式中的addr
@@ -403,40 +404,54 @@ word_t expr(char *e, bool *success) {
 //eval函数 
 static int eval(int p, int q)  //p=开始位置，q=结束位置
  {
-  int main_addr;
-  main_addr = main_op(token_addrs);
-  printf("the position of 主运算符%s in the token expression: %d\n", tokens[main_addr].str, main_addr);
+  int op;
+  int op_type;
+  int val1,val2;
+  u_int32_t value_num;
+  
+  op = main_op(token_addrs);//返回的是op在tokens数组中的位置
+  op_type = tokens[op].type;
+ // printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
 
-//   if (p > q) {
-//     /* Bad expression */
-//   }
-//   else if (p == q) {
-//     /* Single token.  BNF:<expr> ::= <number>    # 一个数是表达式
-//      * For now this token should be a number.
-//      * Return the value of the number.
-//      */
-//   }
-//   else if (check_parentheses(p, q) == true) {
-//     /* 
-//       BNF:| "(" <expr> ")"     # 在表达式两边加个括号也是表达式
-//      *The expression is surrounded by a matched pair of parentheses.
-//      * If that is the case, just throw away the parentheses.
-//      */
-//     return eval(p + 1, q - 1);
-//   }
-//   else {
-//    op = the position of 主运算符 in the token expression;
-//     val1 = eval(p, op - 1);
-//     val2 = eval(op + 1, q);
+  if (p > q)
+   {
+     printf("It's a Bad expression");
+     assert(0);
+   }  
+  else if (p == q)
+   {
+    /* Single token.  BNF:<expr> ::= <number>    # 一个数是表达式
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+    printf("It's a number"); 
+    value_num = atoi(tokens[p].str); 
+    return value_num;   
+   }
+  else if (check_parentheses(p, q) == true) 
+  {
+    /* 
+      BNF:| "(" <expr> ")"     # 在表达式两边加个括号也是表达式
+     *The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    if((tokens[p].type == '(') && (tokens[q].type == '('))
+      return eval(p + 1, q - 1);
+  }
+  else {
+  // op = the position of 主运算符 in the token expression;
+   printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
+    val1 = eval(p, op - 1);
+    val2 = eval(op + 1, q);
 
-//     switch (op_type) {
-//       case '+': return val1 + val2;
-//       case '-': return val1 - val2;
-//       case '*': return val1 * val2;
-//       case '/': return val1 / val2;
-//       default: assert(0);
-//     }
-//   }
+    switch (op_type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
   return 0;
  } 
 
