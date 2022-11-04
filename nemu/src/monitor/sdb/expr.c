@@ -329,7 +329,7 @@ word_t expr(char *e, bool *success) {
 
   for(j = tokens_addr; j >= 0; j--)
   {
-    printf("j = %d\n", j);
+    //printf("j = %d\n", j);
     cnt1 = 0;
     for(i = j; i >= 0; i--)
     {
