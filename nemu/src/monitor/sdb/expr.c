@@ -294,9 +294,9 @@ static bool check_parentheses(int p, int q)
   printf("%s = %d, %s = %d\n", tokens[p].str, a, tokens[q].str,b);
  
   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
-    condition_1 = 1;      
+    condition_1 = 1;//被括号包围    
   else 
-    condition_1 = 0;
+    condition_1 = 0;//没被括号包围
   
   
   for(i = p; i <= q; i++)
@@ -307,6 +307,8 @@ static bool check_parentheses(int p, int q)
       r = r + 1;
   } 
   
+  printf("l = %d, r = %d\n", l, r);
+
   if(l == r)    //判断表达式的左右括号是否匹配
     condition_2 = 1;    
   else
@@ -380,7 +382,7 @@ static bool check_parentheses(int p, int q)
 
     if(cnt2 == 0) //不被括号包围，开始找符号
     {
-        switch (tokens[j].type) //算符匹配+-
+        switch (tokens[j].type) //算符匹配*/
         {  
           case '*':
           case '/':
