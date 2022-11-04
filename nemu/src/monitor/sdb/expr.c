@@ -352,6 +352,8 @@ word_t expr(char *e, bool *success) {
     }
   }
 
+  printf("stop_1 = %d\n", stop_1);
+
   if(stop_1 == 0)//未找到+-，重新开始遍历
   { 
     for(j = tokens_addr; j >= 0; j--)
@@ -380,6 +382,7 @@ word_t expr(char *e, bool *success) {
     }
   }
 
+  printf("stop_2 = %d\n", stop_2);
   if((stop_2 == 0) && (stop_1 == 0))
     assert(0);//未找到主运算符，程序中止
 
