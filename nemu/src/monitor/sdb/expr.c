@@ -437,17 +437,18 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      *The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
+    printf("begin to solve 括号\n");
     if((tokens[p].type == '(') && (tokens[q].type == '('))
     //  return result = eval(p + 1, q - 1);
     result = eval(p + 1, q - 1);
   }
   else {
   // op = the position of 主运算符 in the token expression;
-   printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
+  // printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
+    printf("开始求值");
     val1 = eval(p, op - 1);
     val2 = eval(op + 1, q);
-
-    switch (op_type) {
+      switch (op_type) {
       case '+': return result = val1 + val2;
       case '-': return result = val1 - val2;
       case '*': return result = val1 * val2;
