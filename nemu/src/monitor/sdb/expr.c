@@ -202,7 +202,7 @@ static bool make_token(char *e) {
 
    token_addrs = token_addr-1;
    value = eval(0,token_addrs);
-   printf("value = %d", value);
+   printf("value = %d\n", value);
   return true;
 } 
 
@@ -407,7 +407,8 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
   int op;
   int op_type;
   int val1,val2;
-  u_int32_t value_num;
+  u_int32_t result = 0;
+  u_int32_t value_num;//数字字符转为数值
   
   op = main_op(token_addrs);//返回的是op在tokens数组中的位置
   op_type = tokens[op].type;
@@ -415,7 +416,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
 
   if (p > q)
    {
-     printf("It's a Bad expression");
+     printf("It's a Bad expression\n");
      assert(0);
    }  
   else if (p == q)
@@ -424,9 +425,10 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      * For now this token should be a number.
      * Return the value of the number.
      */
-    printf("It's a number"); 
+    printf("It's a number\n"); 
     value_num = atoi(tokens[p].str); 
-    return value_num;   
+    //return result = value_num;   
+     result = value_num;
    }
   else if (check_parentheses(p, q) == true) 
   {
@@ -436,7 +438,8 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      * If that is the case, just throw away the parentheses.
      */
     if((tokens[p].type == '(') && (tokens[q].type == '('))
-      return eval(p + 1, q - 1);
+    //  return result = eval(p + 1, q - 1);
+    result = eval(p + 1, q - 1);
   }
   else {
   // op = the position of 主运算符 in the token expression;
@@ -445,14 +448,14 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
     val2 = eval(op + 1, q);
 
     switch (op_type) {
-      case '+': return val1 + val2;
-      case '-': return val1 - val2;
-      case '*': return val1 * val2;
-      case '/': return val1 / val2;
+      case '+': return result = val1 + val2;
+      case '-': return result = val1 - val2;
+      case '*': return result = val1 * val2;
+      case '/': return result = val1 / val2;
       default: assert(0);
     }
   }
-  return 0;
+  return result;
  } 
 
 
