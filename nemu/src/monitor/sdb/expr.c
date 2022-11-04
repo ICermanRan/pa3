@@ -412,7 +412,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
   
   op = main_op(token_addrs);//返回的是op在tokens数组中的位置
   op_type = tokens[op].type;
-  printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
+  printf("the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
 
   if (p > q)
    {
