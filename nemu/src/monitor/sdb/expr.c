@@ -329,12 +329,16 @@ word_t expr(char *e, bool *success) {
 
   for(j = tokens_addr; j >= 0; j--)
   {
+    printf("j = %d\n", j);
+
     for(i = j; i >= 0; i--)
     {
       if(tokens[i].type == '(')
         cnt1 = cnt1 + 1;
       else if(tokens[i].type == ')')
         cnt1 = cnt1 - 1;
+
+      printf("cnt1 = %d\n", cnt1);
     } //确认当前位置向左遍历，括号是否配对
 
     if(cnt1 == 0) //不被括号包围，开始找符号
