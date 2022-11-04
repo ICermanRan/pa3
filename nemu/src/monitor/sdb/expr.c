@@ -80,11 +80,13 @@ static int nr_token __attribute__((used))  = 0;
 
 //int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
 
+ int token_addr = 0;//全局变量，记录tokens数组元素用了多少个
+ int token_addrs;
 
 static bool make_token(char *e) {
   int position = 0;
   int i;
-  int token_addr = 0;
+ 
   regmatch_t pmatch;//存放匹配文本串位置信息
 
   //printf("e = %s\n", e);
@@ -194,31 +196,237 @@ static bool make_token(char *e) {
      printf("tokens[%d].str = %s\n", c,tokens[c].str);
   }
 
+  // token_addrs = token_addr;
+ //  eval(0,token_addrs);
+  
   return true;
-}
+} 
 
-/* void store_c (int tokens_type, int position, char arr) 
-{
-  int j;
-   for(j = 0; j < 2; j++)
-      {
-        if(j == 0)
-          tokens[position].type =  tokens_type;
-        else if(j == 1)
-           strcpy(tokens[position].str, arr);
-       } 
-  return 0;
-} */
+
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
-
   /* TODO: Insert codes to evaluate the expression. */
- // TODO(); 记得取消注释！！！
-
-
+ // TODO();// 记得取消注释！！
   return 0;
 }
+
+  
+
+
+//  find the most right and lowest operator in the str
+//  @return -1 if no any operators in the str; or
+//  the index of the operator sepeicified in the str
+//  static int findop(const char *str);
+ 
+//  static int findop(const char *str)
+// { 
+// 	int i;
+// 	int ret = -1;
+// 	int lowestoprank = -1;
+// 	for (i = strlen(str) - 1; i >= 0; i--) {
+// 		int rank = oprank(str[i]);
+// 		if (rank == 0) {
+// 			ret = i;
+// 			break;
+// 		}
+// 		if (rank == 3 && oprank(str[i - 1]) > 0) rank = 1;
+// 		else if (rank > lowestoprank) {
+// 			ret = i;
+// 			lowestoprank = rank;
+// 			if (str[i - 1] == ')') break;
+// 		}
+// 	}
+// 	return ret;
+//}
+//  return the rank of the operator
+//  @return -1 if the char ch is not an operator; or
+//  the rank listed as 1 for * and /, 2 for + and -
+// static int oprank(char ch);
+
+// static int oprank(char ch)
+// {
+// 	if (ch == '+' || ch == '-') return 3;
+// 	else if (ch == '*' || ch == '/') return 2;
+// 	else if (ch == ')') return 0;
+// 	else return -1;
+// }
+ 
+//  convert a string into a number.
+//  The string should consist of all digits.
+//  @return the converted number
+// static int str2int(const char *str);
+
+// static int str2int(const char *str)
+// {
+// 	int i;
+// 	int ret = 0;
+// 	for (i = 0; i < strlen(str); i++) ret = ret * 10 + CH2DEC(str[i]);
+// 	return ret;
+// }
+ 
+//  calculate a op b.
+//  It supports +-*/ as the op.
+//  @return the result of a op b
+//static int calc(int a, char op, int b);
+
+//判断表达式是否被一对匹配的括号包围着, 同时检查表达式的左右括号是否匹配
+// static bool check_parentheses(int p, int q);//函数声明
+
+// static bool check_parentheses(int p, int q)
+// {
+//   int a,b;
+//   int l = 0, r = 0;//l记录左括号出现次数，r记录右括号出现次数
+//   int condition_1,condition_2;
+//   int result;//result = 1,两个条件都满足，返回true；反之，则返回fall
+//   int i;
+  
+//   a = tokens[p].type;
+//   b = tokens[q].type;
+ 
+//   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
+//     condition_1 = 1;      
+//   else 
+//     condition_1 = 0;
+  
+  
+//   for(i = p; i <= q; i++)
+//   {
+//     if(tokens[i].str == '(')
+//       l = l + 1;
+//     else if (tokens[i].str == ')')
+//       r = r + 1;
+//   } 
+  
+//   if(l == r)    //判断表达式的左右括号是否匹配
+//     condition_2 = 1;    
+//   else
+//     condition_2 = 0;
+
+//   if((condition_1 = 1) && (condition_2 = 1;))
+//     return true;  //都满足，返回true
+//   else
+//     return false; //否则，返回false
+// }
+  
+ 
+//寻找算数表达式的主运算符，返回它在tokens表达式中的addr
+//  static int main_op(int tokens_addr);//独属形参tokens_addr
+
+//  static int main_op(int tokens_addr)
+//  {
+//   int j;
+//   int i;
+//   int cnt1 = 0,cnt2 = 0;
+//   int stop_1 = 0,stop_2 = 0;
+//   int main_addr = 0;
+
+
+//   for(j = tokens_addr; j >= 0; j--)
+//   {
+//     for(i = j; i >= 0; i--)
+//     {
+//       if(tokens[i].type == '(')
+//         cnt1 = cnt1 + 1;
+//       else if(tokens[i].type == ')')
+//         cnt1 = cnt1 - 1;
+//     } //确认当前位置向左遍历，括号是否配对
+
+//     if(cnt1 == 0) //不被括号包围，开始找符号
+//     {
+//         switch (tokens[j].type) //算符匹配+-
+//         {  
+//           case '+':
+//           case '-':
+//                   main_addr = j;
+//                   stop_1 = 1;//表示已找到主运算符+-，无需再遍历
+//                   break;
+//           default :
+//                   break;
+//         } 
+//     }
+//   }
+
+//   if(stop_1 == 0)//未找到+-，重新开始遍历
+//   { 
+//     for(j = tokens_addr; j >= 0; j--)
+//     {
+//       for(i = j; i >= 0; i--)
+//      {
+//         if(tokens[i].type == '(')
+//           cnt2 = cnt2 + 1;
+//         else if(tokens[i].type == ')')
+//           cnt2 = cnt2 - 1;
+//      } //确认当前位置向左遍历，括号是否配对
+
+//     if(cnt2 == 0) //不被括号包围，开始找符号
+//     {
+//         switch (tokens[j].type) //算符匹配+-
+//         {  
+//           case '*':
+//           case '/':
+//                   main_addr = j;
+//                   stop_2 = 1;//表示已找到主运算符*/，无需再遍历
+//                   break;
+//           default :
+//                   break;
+//         } 
+//     }
+//     }
+//   }
+
+//   if((stop_2 == 0) && (stop_1 == 0))
+//     assert(0);//未找到主运算符，程序中止
+
+
+//   return main_addr;
+//  }
+
+//eval函数
+//   int eval(int p, int q); //函数声明
+ 
+//   int eval(int p, int q)  //p=开始位置，q=结束位置
+//  {
+//   int main_addr;
+//   main_addr = main_op(token_addrs);
+//   printf("the position of 主运算符%s in the token expression: %d", tokens[main_addr].str, main_addr);
+
+//   if (p > q) {
+//     /* Bad expression */
+//   }
+//   else if (p == q) {
+//     /* Single token.  BNF:<expr> ::= <number>    # 一个数是表达式
+//      * For now this token should be a number.
+//      * Return the value of the number.
+//      */
+//   }
+//   else if (check_parentheses(p, q) == true) {
+//     /* 
+//       BNF:| "(" <expr> ")"     # 在表达式两边加个括号也是表达式
+//      *The expression is surrounded by a matched pair of parentheses.
+//      * If that is the case, just throw away the parentheses.
+//      */
+//     return eval(p + 1, q - 1);
+//   }
+//   else {
+//    op = the position of 主运算符 in the token expression;
+//     val1 = eval(p, op - 1);
+//     val2 = eval(op + 1, q);
+
+//     switch (op_type) {
+//       case '+': return val1 + val2;
+//       case '-': return val1 - val2;
+//       case '*': return val1 * val2;
+//       case '/': return val1 / val2;
+//       default: assert(0);
+//     }
+//   }
+//   return 0;
+//  } 
+
+
+
+

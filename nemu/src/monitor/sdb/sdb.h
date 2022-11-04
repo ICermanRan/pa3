@@ -20,6 +20,8 @@
 
 word_t expr(char *e, bool *success);
 
+int eval(int p, int q);
+
 word_t vaddr_read(vaddr_t addr, int len);//声明vaddr_read
 word_t paddr_read(paddr_t addr, int len);
 
