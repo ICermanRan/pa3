@@ -83,6 +83,9 @@ static int nr_token __attribute__((used))  = 0;
  int token_addr = 0;//全局变量，记录tokens数组元素用了多少个
  int token_addrs;
 
+ static int eval(int p, int q); //函数声明
+ static int main_op(int tokens_addr);//独属形参tokens_addr
+
 static bool make_token(char *e) {
   int position = 0;
   int i;
@@ -196,8 +199,8 @@ static bool make_token(char *e) {
      printf("tokens[%d].str = %s\n", c,tokens[c].str);
   }
 
-  // token_addrs = token_addr;
- //  eval(0,token_addrs);
+   token_addrs = token_addr;
+   eval(0,token_addrs);
   
   return true;
 } 
@@ -209,6 +212,7 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+
   /* TODO: Insert codes to evaluate the expression. */
  // TODO();// 记得取消注释！！
   return 0;
@@ -314,85 +318,85 @@ word_t expr(char *e, bool *success) {
   
  
 //寻找算数表达式的主运算符，返回它在tokens表达式中的addr
-//  static int main_op(int tokens_addr);//独属形参tokens_addr
+ static int main_op(int tokens_addr);//独属形参tokens_addr
 
-//  static int main_op(int tokens_addr)
-//  {
-//   int j;
-//   int i;
-//   int cnt1 = 0,cnt2 = 0;
-//   int stop_1 = 0,stop_2 = 0;
-//   int main_addr = 0;
-
-
-//   for(j = tokens_addr; j >= 0; j--)
-//   {
-//     for(i = j; i >= 0; i--)
-//     {
-//       if(tokens[i].type == '(')
-//         cnt1 = cnt1 + 1;
-//       else if(tokens[i].type == ')')
-//         cnt1 = cnt1 - 1;
-//     } //确认当前位置向左遍历，括号是否配对
-
-//     if(cnt1 == 0) //不被括号包围，开始找符号
-//     {
-//         switch (tokens[j].type) //算符匹配+-
-//         {  
-//           case '+':
-//           case '-':
-//                   main_addr = j;
-//                   stop_1 = 1;//表示已找到主运算符+-，无需再遍历
-//                   break;
-//           default :
-//                   break;
-//         } 
-//     }
-//   }
-
-//   if(stop_1 == 0)//未找到+-，重新开始遍历
-//   { 
-//     for(j = tokens_addr; j >= 0; j--)
-//     {
-//       for(i = j; i >= 0; i--)
-//      {
-//         if(tokens[i].type == '(')
-//           cnt2 = cnt2 + 1;
-//         else if(tokens[i].type == ')')
-//           cnt2 = cnt2 - 1;
-//      } //确认当前位置向左遍历，括号是否配对
-
-//     if(cnt2 == 0) //不被括号包围，开始找符号
-//     {
-//         switch (tokens[j].type) //算符匹配+-
-//         {  
-//           case '*':
-//           case '/':
-//                   main_addr = j;
-//                   stop_2 = 1;//表示已找到主运算符*/，无需再遍历
-//                   break;
-//           default :
-//                   break;
-//         } 
-//     }
-//     }
-//   }
-
-//   if((stop_2 == 0) && (stop_1 == 0))
-//     assert(0);//未找到主运算符，程序中止
+ static int main_op(int tokens_addr)
+ {
+  int j;
+  int i;
+  int cnt1 = 0,cnt2 = 0;
+  int stop_1 = 0,stop_2 = 0;
+  int main_addr = 0;
 
 
-//   return main_addr;
-//  }
+  for(j = tokens_addr; j >= 0; j--)
+  {
+    for(i = j; i >= 0; i--)
+    {
+      if(tokens[i].type == '(')
+        cnt1 = cnt1 + 1;
+      else if(tokens[i].type == ')')
+        cnt1 = cnt1 - 1;
+    } //确认当前位置向左遍历，括号是否配对
+
+    if(cnt1 == 0) //不被括号包围，开始找符号
+    {
+        switch (tokens[j].type) //算符匹配+-
+        {  
+          case '+':
+          case '-':
+                  main_addr = j;
+                  stop_1 = 1;//表示已找到主运算符+-，无需再遍历
+                  break;
+          default :
+                  break;
+        } 
+    }
+  }
+
+  if(stop_1 == 0)//未找到+-，重新开始遍历
+  { 
+    for(j = tokens_addr; j >= 0; j--)
+    {
+      for(i = j; i >= 0; i--)
+     {
+        if(tokens[i].type == '(')
+          cnt2 = cnt2 + 1;
+        else if(tokens[i].type == ')')
+          cnt2 = cnt2 - 1;
+     } //确认当前位置向左遍历，括号是否配对
+
+    if(cnt2 == 0) //不被括号包围，开始找符号
+    {
+        switch (tokens[j].type) //算符匹配+-
+        {  
+          case '*':
+          case '/':
+                  main_addr = j;
+                  stop_2 = 1;//表示已找到主运算符*/，无需再遍历
+                  break;
+          default :
+                  break;
+        } 
+    }
+    }
+  }
+
+  if((stop_2 == 0) && (stop_1 == 0))
+    assert(0);//未找到主运算符，程序中止
+
+
+  return main_addr;
+ }
 
 //eval函数
-//   int eval(int p, int q); //函数声明
+static int eval(int p, int q); //函数声明
  
-//   int eval(int p, int q)  //p=开始位置，q=结束位置
-//  {
-//   int main_addr;
-//   main_addr = main_op(token_addrs);
-//   printf("the position of 主运算符%s in the token expression: %d", tokens[main_addr].str, main_addr);
+static int eval(int p, int q)  //p=开始位置，q=结束位置
+ {
+  int main_addr;
+  main_addr = main_op(token_addrs);
+  printf("the position of 主运算符%s in the token expression: %d", tokens[main_addr].str, main_addr);
 
 //   if (p > q) {
 //     /* Bad expression */
@@ -424,8 +428,8 @@ word_t expr(char *e, bool *success) {
 //       default: assert(0);
 //     }
 //   }
-//   return 0;
-//  } 
+  return 0;
+ } 
 
 
 
