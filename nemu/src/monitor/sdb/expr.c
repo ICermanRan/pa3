@@ -19,6 +19,8 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <stdio.h>
+#include <string.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
@@ -85,6 +87,10 @@ static int nr_token __attribute__((used))  = 0;
 
  static int eval(int p, int q); //函数声明
  static int main_op(int tokens_addr);//独属形参tokens_addr
+ static bool check_parentheses(int p, int q);//括号配对及正确性函数声明
+ char push(char bracket);//压栈操作函数
+ void pop();		//出栈操作函数
+
 
 static bool make_token(char *e) {
   int position = 0;
@@ -273,51 +279,107 @@ word_t expr(char *e, bool *success) {
 // 	return ret;
 // }
  
-//  calculate a op b.
-//  It supports +-*/ as the op.
-//  @return the result of a op b
-//static int calc(int a, char op, int b);
+char *top; //指针，指向栈顶的
+
+char push(char bracket)		//压栈操作函数
+{
+	top = top+1;
+	return *(top) = bracket;
+}
+
+void pop()			//出栈操作函数，待会匹配的时候，调用这个函数把匹配的两个括号弹出 
+{
+	top = top-2;
+}
 
 //判断表达式是否被一对匹配的括号包围着, 同时检查表达式的左右括号是否匹配
-static bool check_parentheses(int p, int q);//函数声明
 
 static bool check_parentheses(int p, int q)
 {
   int a,b;
-  int l = 0, r = 0;//l记录左括号出现次数，r记录右括号出现次数
   int condition_1,condition_2;
-  //int result;//result = 1,两个条件都满足，返回true；反之，则返回fall
-  int i;
+  int i,k;
+  int j=0;
+  char array[32];//数组，将tokens数组中的括号按顺序存放入其中
+  char stack[32];//数组，用来做栈的空间 
+  int stack_length;
+  bool logic = true;
   
   a = tokens[p].type;
   b = tokens[q].type;
-  printf("%s = %d, %s = %d\n", tokens[p].str, a, tokens[q].str,b);
+ // printf("%s = %d, %s = %d\n", tokens[p].str, a, tokens[q].str,b);
  
   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
     condition_1 = 1;//被括号包围    
   else 
     condition_1 = 0;//没被括号包围
   
-  
   for(i = p; i <= q; i++)
   {
-    if(tokens[i].type == '(')
-      l = l + 1;
-    else if (tokens[i].type == ')')
-      r = r + 1;
-  } 
+    if((tokens[i].type == '(') || (tokens[i].type == ')'))
+      {
+        array[j] = *tokens[i].str;//将tokens数组中的括号按顺序存放入其中
+        j++;
+      }
+  }
   
-  printf("l = %d, r = %d\n", l, r);
+  stack_length = strlen(array);//计算数组里的括号个数，待会控制for轮次的时候用
 
-  if(l == r)    //判断表达式的左右括号是否匹配
-    condition_2 = 1;    
+  for(k = 0; k < stack_length; k++)
+  {
+    push(array[k]);//先把数组里的括号压入栈里
+
+    if(array[k] == ']')//如果压入的是']'号
+    {
+      if(*(top-1) == '[')//就在当前位置往下一个单位判断有没有'['号，如果有，就弹出栈 
+      {
+        pop();
+      }
+    }
+
+    if(array[k] == ')')//如果压入的是')'号
+    {
+      if(*(top-1) == '(')//就在当前位置往下一个单位判断有没有'('号，如果有，就弹出栈 
+      {
+        pop();//必须先入栈的是左括号，后入栈的是右括号才能配对
+      }
+    }
+
+    if(array[k] == '}')//如果压入的是')'号
+    {
+      if(*(top-1) == '{')//就在当前位置往下一个单位判断有没有'('号，如果有，就弹出栈 
+      {
+        pop();//必须先入栈的是左括号，后入栈的是右括号才能配对
+      }
+    }
+  }
+  
+  if(top == stack-1)
+  {
+    printf("括号匹配");
+    condition_2 = 1;
+  }
   else
+  {
+    printf("括号不匹配");
     condition_2 = 0;
+  }
+  
+  
+  if((condition_1 == 1) && (condition_2 == 1))
+    {
+    return logic = true;  //被括号包围且左右匹配，返回true
+    }
+  else if((condition_1 == 0) && (condition_2 == 1))
+    {
+    return logic = false;  //未被括号包围但左右匹配，返回false
+    }
+  else if((condition_1 == 1) && (condition_2 == 0))
+    {
+    return  logic = false;
+    }
 
-  if((condition_1 = 1) && (condition_2 = 1))
-    return true;  //都满足，返回true
-  else
-    return false; //否则，返回false
+    return logic;
 }
   
  
