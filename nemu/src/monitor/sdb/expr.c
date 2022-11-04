@@ -333,7 +333,7 @@ word_t expr(char *e, bool *success) {
     cnt1 = 0;
     for(i = j; i >= 0; i--)
     {
-      printf("tokens[i].type = %d\n", tokens[i].type);
+      //printf("tokens[i].type = %d\n", tokens[i].type);
       if(tokens[i].type == '(')
         cnt1 = cnt1 + 1;
       else if(tokens[i].type == ')')
@@ -341,7 +341,7 @@ word_t expr(char *e, bool *success) {
       else 
         cnt1 = cnt1;
 
-      printf("cnt1 = %d\n", cnt1);
+      //printf("cnt1 = %d\n", cnt1);
     } //确认当前位置向左遍历，括号是否配对
 
     if(cnt1 == 0) //不被括号包围，开始找符号
@@ -359,7 +359,7 @@ word_t expr(char *e, bool *success) {
     }
   }
 
-  printf("stop_1 = %d\n", stop_1);
+  //printf("stop_1 = %d\n", stop_1);
 
   if(stop_1 == 0)//未找到+-，重新开始遍历
   { 
@@ -392,7 +392,7 @@ word_t expr(char *e, bool *success) {
     }
   }
 
-  printf("stop_2 = %d\n", stop_2);
+  //printf("stop_2 = %d\n", stop_2);
   if((stop_2 == 0) && (stop_1 == 0))
     assert(0);//未找到主运算符，程序中止
 
