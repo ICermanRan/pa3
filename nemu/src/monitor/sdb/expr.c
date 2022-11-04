@@ -318,8 +318,6 @@ word_t expr(char *e, bool *success) {
   
  
 //寻找算数表达式的主运算符，返回它在tokens表达式中的addr
- static int main_op(int tokens_addr);//独属形参tokens_addr
-
  static int main_op(int tokens_addr)
  {
   int j;
@@ -389,14 +387,12 @@ word_t expr(char *e, bool *success) {
   return main_addr;
  }
 
-//eval函数
-static int eval(int p, int q); //函数声明
- 
+//eval函数 
 static int eval(int p, int q)  //p=开始位置，q=结束位置
  {
   int main_addr;
   main_addr = main_op(token_addrs);
-  printf("the position of 主运算符%s in the token expression: %d", tokens[main_addr].str, main_addr);
+  printf("the position of 主运算符%s in the token expression: %d\n", tokens[main_addr].str, main_addr);
 
 //   if (p > q) {
 //     /* Bad expression */
