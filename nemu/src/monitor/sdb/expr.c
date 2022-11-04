@@ -333,6 +333,7 @@ word_t expr(char *e, bool *success) {
 
     for(i = j; i >= 0; i--)
     {
+      printf("tokens[i].type = %d\n", tokens[i].type);
       if(tokens[i].type == '(')
         cnt1 = cnt1 + 1;
       else if(tokens[i].type == ')')
