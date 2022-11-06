@@ -496,6 +496,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     if((tokens[p].type == '(') && (tokens[q].type == '('))
     //  return result = eval(p + 1, q - 1);
     result = eval(p + 1, q - 1);
+    return result;
   }
   else {
   // op = the position of 主运算符 in the token expression;
