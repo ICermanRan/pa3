@@ -455,7 +455,8 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
   u_int32_t result = 0;
   u_int32_t value_num;//数字字符转为数值
   
-  op = main_op(token_addrs);//返回的是op在tokens数组中的位置
+  //op = main_op(token_addrs);//返回的是op在tokens数组中的位置
+  op = main_op(q);
   op_type = tokens[op].type;
   printf("1、刚进入eval,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
   printf("刚进入时,p = %d, q = %d\n", p, q);
