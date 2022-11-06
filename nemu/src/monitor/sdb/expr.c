@@ -248,7 +248,7 @@ static bool check_parentheses(int p, int q)
   a = tokens[p].type;
   b = tokens[q].type;
   printf("进入括号配对函数\n");
-  printf("传入的p = %d ,传入的q = %d", p, q);
+  printf("传入的p = %d ,传入的q = %d\n", p, q);
  // printf("%s = %d, %s = %d\n", tokens[p].str, a, tokens[q].str,b);
  
   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
@@ -259,6 +259,7 @@ static bool check_parentheses(int p, int q)
   
   for(i = p; i <= q; i++)
     {
+      printf("tokens[i].str = %s\n",tokens[i].str);
       if((tokens[i].type == '('))
             cnt_l++;
       if((tokens[i].type == ')'))
