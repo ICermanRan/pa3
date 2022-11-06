@@ -378,7 +378,7 @@ static bool check_parentheses(int p, int q)
   {
     //printf("j = %d\n", j);
     cnt1 = 0;
-    for(i = j; i >= 0; i--)
+    for(i = j; i >= p; i--)
     {
       //printf("tokens[i].type = %d\n", tokens[i].type);
       if(tokens[i].type == '(')
@@ -391,7 +391,6 @@ static bool check_parentheses(int p, int q)
       //printf("cnt1 = %d\n", cnt1);
     } //确认当前位置向左遍历，括号是否配对
 
-    printf("cnt1 = %d", cnt1);
     if(cnt1 == 0) //不被括号包围，开始找符号
     {
         switch (tokens[j].type) //算符匹配+-
@@ -414,7 +413,7 @@ static bool check_parentheses(int p, int q)
     for(j = q; j >= p; j--)
     {
       cnt2 = 0;
-      for(i = j; i >= 0; i--)
+      for(i = j; i >= p; i--)
      {
         if(tokens[i].type == '(')
           cnt2 = cnt2 + 1;
