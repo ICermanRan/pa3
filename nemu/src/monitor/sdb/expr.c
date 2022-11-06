@@ -268,7 +268,7 @@ static bool check_parentheses(int p, int q)
       // printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
       if(cnt_l < cnt_r)
       {
-       printf("括号不配对,程序中止");
+      //  printf("括号不配对,程序中止");
        condition_2 = 0;//在任意位置，左括号个数比右括号小，必定不匹配
       // assert(0);
       // logic2 = false;
