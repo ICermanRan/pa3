@@ -391,14 +391,12 @@ static bool check_parentheses(int p, int q)
       //printf("cnt1 = %d\n", cnt1);
     } //确认当前位置向左遍历，括号是否配对
 
+    printf("cnt1 = %d", cnt1);
     if(cnt1 == 0) //不被括号包围，开始找符号
     {
         switch (tokens[j].type) //算符匹配+-
         {  
           case '+':
-                  main_addr = j;
-                  stop_1 = 1;//表示已找到主运算符+-，无需再遍历
-                  break;
           case '-':
                   main_addr = j;
                   stop_1 = 1;//表示已找到主运算符+-，无需再遍历
