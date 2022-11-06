@@ -279,7 +279,7 @@ word_t expr(char *e, bool *success) {
 // 	return ret;
 // }
  
-char *top; //指针，指向栈顶的
+char *top = NULL; //指针，指向栈顶的
 
 char push(char bracket)		//压栈操作函数
 {
