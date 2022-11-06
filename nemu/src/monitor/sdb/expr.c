@@ -422,6 +422,9 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   // op_type = tokens[op].type;
  // printf("1、刚进入eval,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
   printf("进入eval,p = %d, q = %d\n", p, q);
+  op = main_op(p,q);
+  op_type = tokens[op].type;
+  printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
 
   if (p > q)
    {
@@ -450,17 +453,15 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      * If that is the case, just throw away the parentheses.
      */
     printf("3、begin to solve 括号\n");
-    //if((tokens[p].type == '(') && (tokens[q].type == '('))
-    //  return result = eval(p + 1, q - 1);
     result = eval(p + 1, q - 1);
     return result;
   }
   else {
   // op = the position of 主运算符 in the token expression;
   // printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
-    op = main_op(p,q);
-    op_type = tokens[op].type;
-    printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+    // op = main_op(p,q);
+    // op_type = tokens[op].type;
+    // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     
     printf("开始求值\n");
     val1 = eval(p, op - 1);
