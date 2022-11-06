@@ -347,7 +347,7 @@ static bool check_parentheses(int p, int q)
   //   condition_2 = 0;
   // }
   
-  printf("condition_1 = %d,condition_2 =%d\n", condition_1,condition_2);
+  printf("condition_1 = %d,condition_2 = %d\n", condition_1,condition_2);
   
   if((condition_1 == 1) && (condition_2 == 1))
     return logic1 = true;  //被括号包围且左右匹配，返回true
@@ -461,7 +461,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
 
   if (p > q)
    {
-     printf("p > q,It's a Bad expression\n");
+     printf("p = %d, q = %d,p > q,It's a Bad expression\n",p ,q);
      assert(0);
    }  
   else if (p == q)
@@ -473,6 +473,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
    // Log("enter the It's a number\n");
     printf("2、判断为:It's a number\n"); 
     value_num = atoi(tokens[p].str); 
+    printf("value_num = %d" , value_num);
     //return result = value_num;   
      result = value_num;
    }
