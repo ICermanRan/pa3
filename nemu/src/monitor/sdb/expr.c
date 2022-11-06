@@ -234,21 +234,6 @@ word_t expr(char *e, bool *success,int p, int q) {
   
 
 
- 
-// char *top = NULL; //指针，指向栈顶的
-
-// char push(char bracket)		//压栈操作函数
-// {
-// 	top = top+1;
-// 	return *(top) = bracket;
-// }
-
-// void pop()			//出栈操作函数，待会匹配的时候，调用这个函数把匹配的两个括号弹出 
-// {
-// 	top = top-2;
-// }
-
-
 //判断表达式是否被一对匹配的括号包围着, 同时检查表达式的左右括号是否匹配
 
 static bool check_parentheses(int p, int q)
@@ -257,10 +242,6 @@ static bool check_parentheses(int p, int q)
   int condition_1 = 0, condition_2 = 0;
   int i;
   int cnt_l = 0,cnt_r = 0;//左右括号计数器
-//  int j=0;
-// char array[32];//数组，将tokens数组中的括号按顺序存放入其中
-//  char stack[32];//数组，用来做栈的空间 
-//  int stack_length;
   bool logic1 = true;
 
   
@@ -285,6 +266,7 @@ static bool check_parentheses(int p, int q)
       //printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
       if(cnt_l < cnt_r)
       {
+       printf("括号不配对,程序中止");
        condition_2 = 0;//在任意位置，左括号个数比右括号小，必定不匹配
        assert(0);
       // logic2 = false;
@@ -419,9 +401,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   //printf("token_addrs = %d, q = %d\n", token_addrs, q);
   //op = main_op(token_addrs);//返回的是op在tokens数组中的位置
   printf("进入eval,p = %d, q = %d\n", p, q);
-  // op = main_op(p,q);
-  // op_type = tokens[op].type;
-  // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+  //check_parentheses(p, q);
 
   if (p > q)
    {
@@ -450,6 +430,23 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      * If that is the case, just throw away the parentheses.
      */
     printf("3、begin to solve 括号\n");
+    if(check_parentheses(p+1,q-1) == false)
+    {
+      op = main_op(p,q);
+      op_type = tokens[op].type;
+      printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+      printf("开始求值\n");
+      val1 = eval(p, op - 1);
+      val2 = eval(op + 1, q);
+      switch (op_type) {
+      case '+': return result = val1 + val2;
+      case '-': return result = val1 - val2;
+      case '*': return result = val1 * val2;
+      case '/': return result = val1 / val2;
+      default: assert(0);
+    }
+    }
+    
     result = eval(p + 1, q - 1);
     return result;
   }
@@ -457,7 +454,6 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     op = main_op(p,q);
     op_type = tokens[op].type;
     printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-    
     printf("开始求值\n");
     val1 = eval(p, op - 1);
     val2 = eval(op + 1, q);
