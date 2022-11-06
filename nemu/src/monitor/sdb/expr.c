@@ -434,8 +434,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     {
       op = main_op(p,q);
       op_type = tokens[op].type;
-      printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-      printf("开始求值\n");
+      printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
       val1 = eval(p, op - 1);
       val2 = eval(op + 1, q);
       switch (op_type) {
@@ -446,7 +445,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       default: assert(0);
     }
     }
-    
+
     result = eval(p + 1, q - 1);
     return result;
   }
