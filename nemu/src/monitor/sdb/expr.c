@@ -483,6 +483,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     printf("value_num = %d\n" , value_num);
     //return result = value_num;   
      result = value_num;
+     return result;
    }
   else if (check_parentheses(p, q) == true) 
   {
