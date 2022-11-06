@@ -347,7 +347,6 @@ static bool check_parentheses(int p, int q)
   //   condition_2 = 0;
   // }
   
-  printf("condition_1 = %d,condition_2 = %d\n", condition_1,condition_2);
   
   if((condition_1 == 1) && (condition_2 == 1))
   {
