@@ -448,14 +448,17 @@ static bool check_parentheses(int p, int q)
  }
 
 //eval函数 
-static int eval(int p, int q)  //p=开始位置，q=结束位置
+static int eval(int start, int end)  //p=开始位置，q=结束位置
  {
   int op;
   int op_type;
   int val1,val2;
+  int p,q;
   u_int32_t result = 0;
   u_int32_t value_num;//数字字符转为数值
   
+  p = start;
+  q = end;
   //printf("token_addrs = %d, q = %d\n", token_addrs, q);
   //op = main_op(token_addrs);//返回的是op在tokens数组中的位置
   // op = main_op(q);
