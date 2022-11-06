@@ -347,7 +347,7 @@ static bool check_parentheses(int p, int q)
   //   condition_2 = 0;
   // }
   
-  printf("condition_1 = %d,condition_2 =%d", condition_1,condition_2);
+  printf("condition_1 = %d,condition_2 =%d\n", condition_1,condition_2);
   
   if((condition_1 == 1) && (condition_2 == 1))
     return logic1 = true;  //被括号包围且左右匹配，返回true
