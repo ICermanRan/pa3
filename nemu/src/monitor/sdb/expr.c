@@ -282,7 +282,7 @@ static bool check_parentheses(int p, int q)
       if((tokens[i].type == ')'))
             cnt_r++;
 
-      printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
+      //printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
       if(cnt_l < cnt_r)
       {
        condition_2 = 0;//在任意位置，左括号个数比右括号小，必定不匹配
