@@ -350,11 +350,18 @@ static bool check_parentheses(int p, int q)
   printf("condition_1 = %d,condition_2 = %d\n", condition_1,condition_2);
   
   if((condition_1 == 1) && (condition_2 == 1))
+  {
+    printf("condition_1 = %d,condition_2 = %d\n", condition_1,condition_2);
+    printf("被括号包围且左右匹配，返回true");
     return logic1 = true;  //被括号包围且左右匹配，返回true
-    
+  } 
   if((condition_1 == 0) && (condition_2 == 1))
+  {
+    printf("condition_1 = %d,condition_2 = %d\n", condition_1,condition_2);
+    printf("未被括号包围但左右匹配，返回false");
     return logic1 = false;  //未被括号包围但左右匹配，返回false
-
+  }
+    
   if(condition_2 == 0)
     logic2 = false;
 
