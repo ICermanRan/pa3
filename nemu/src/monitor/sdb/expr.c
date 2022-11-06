@@ -371,8 +371,8 @@ static bool check_parentheses(int p, int q)
   int cnt1,cnt2;
   int stop_1 = 0,stop_2 = 0;
   int main_addr = 0;
-  //int tokens_addr = q;
-
+ 
+  printf("进入main_op，p = %d, q = %d\n", p ,q);
 
   for(j = q; j >= p; j--)
   {
