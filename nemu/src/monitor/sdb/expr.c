@@ -87,7 +87,7 @@ static int nr_token __attribute__((used))  = 0;
  bool logic2 = true;//全局变量，用于判断输入的表达式括号是否匹配，不匹配则false给expr函数
 
  static int eval(int p, int q); //函数声明
- static int main_op(int tokens_addr);//独属形参tokens_addr
+static int main_op(int p, int q);//独属形参tokens_addr
  static bool check_parentheses(int p, int q);//括号配对及正确性函数声明
  //char push(char bracket);//压栈操作函数
  //void pop();		//出栈操作函数
@@ -364,17 +364,17 @@ static bool check_parentheses(int p, int q)
   
  
 //寻找算数表达式的主运算符，返回它在tokens表达式中的addr
- static int main_op(int q)
+ static int main_op(int p, int q)
  {
   int j;
   int i;
   int cnt1,cnt2;
   int stop_1 = 0,stop_2 = 0;
   int main_addr = 0;
-  int tokens_addr = q;
+  //int tokens_addr = q;
 
 
-  for(j = tokens_addr; j >= 0; j--)
+  for(j = q; j >= p; j--)
   {
     //printf("j = %d\n", j);
     cnt1 = 0;
@@ -410,7 +410,7 @@ static bool check_parentheses(int p, int q)
 
   if(stop_1 == 0)//未找到+-，重新开始遍历
   { 
-    for(j = tokens_addr; j >= 0; j--)
+    for(j = q; j >= p; j--)
     {
       cnt2 = 0;
       for(i = j; i >= 0; i--)
@@ -499,7 +499,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   else {
   // op = the position of 主运算符 in the token expression;
   // printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
-    op = main_op(q);
+    op = main_op(p,q);
     op_type = tokens[op].type;
     printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     
