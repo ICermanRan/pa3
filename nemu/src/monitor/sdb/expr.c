@@ -270,6 +270,7 @@ static bool check_parentheses(int p, int q)
       {
       //  printf("括号不配对,程序中止");
        condition_2 = 0;//在任意位置，左括号个数比右括号小，必定不匹配
+       return logic2 = 0;
       // assert(0);
       // logic2 = false;
       }
@@ -296,8 +297,6 @@ static bool check_parentheses(int p, int q)
     return logic1 = false;  //未被括号包围但左右匹配，返回false
   }
     
-  if(condition_2 == 0)
-    logic2 = false;
 
   
   return logic1;
