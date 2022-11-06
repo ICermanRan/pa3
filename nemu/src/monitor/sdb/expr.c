@@ -418,13 +418,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   q = end;
   //printf("token_addrs = %d, q = %d\n", token_addrs, q);
   //op = main_op(token_addrs);//返回的是op在tokens数组中的位置
-  // op = main_op(q);
-  // op_type = tokens[op].type;
- // printf("1、刚进入eval,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
   printf("进入eval,p = %d, q = %d\n", p, q);
-  op = main_op(p,q);
-  op_type = tokens[op].type;
-  printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+  // op = main_op(p,q);
+  // op_type = tokens[op].type;
+  // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
 
   if (p > q)
    {
@@ -457,11 +454,9 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     return result;
   }
   else {
-  // op = the position of 主运算符 in the token expression;
-  // printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
-    // op = main_op(p,q);
-    // op_type = tokens[op].type;
-    // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+    op = main_op(p,q);
+    op_type = tokens[op].type;
+    printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     
     printf("开始求值\n");
     val1 = eval(p, op - 1);
