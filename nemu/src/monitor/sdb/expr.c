@@ -317,9 +317,14 @@ static bool check_parentheses(int p, int q)
   
   for(i = p; i <= q; i++)
   {
-    if((tokens[i].type == '(') || (tokens[i].type == ')'))
+    if((tokens[i].type == '(') )
       {
-        array[j] = *tokens[i].str;//将tokens数组中的括号按顺序存放入其中
+        array[j] = '(';//将tokens数组中的括号按顺序存放入其中
+        j++;
+      }
+    else if((tokens[i].type == ')'))
+      {
+        array[j] = ')';//将tokens数组中的括号按顺序存放入其中
         j++;
       }
   }
