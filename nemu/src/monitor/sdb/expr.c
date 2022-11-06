@@ -364,13 +364,14 @@ static bool check_parentheses(int p, int q)
   
  
 //寻找算数表达式的主运算符，返回它在tokens表达式中的addr
- static int main_op(int tokens_addr)
+ static int main_op(int q)
  {
   int j;
   int i;
   int cnt1,cnt2;
   int stop_1 = 0,stop_2 = 0;
   int main_addr = 0;
+  int tokens_addr = q;
 
 
   for(j = tokens_addr; j >= 0; j--)
@@ -456,8 +457,8 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
   u_int32_t value_num;//数字字符转为数值
   
   printf("token_addrs = %d, q = %d\n", token_addrs, q);
-  op = main_op(token_addrs);//返回的是op在tokens数组中的位置
-  //op = main_op(q);
+  //op = main_op(token_addrs);//返回的是op在tokens数组中的位置
+  op = main_op(q);
   op_type = tokens[op].type;
   printf("1、刚进入eval,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
   printf("刚进入时,p = %d, q = %d\n", p, q);
