@@ -493,7 +493,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      * If that is the case, just throw away the parentheses.
      */
     printf("3、begin to solve 括号\n");
-    if((tokens[p].type == '(') && (tokens[q].type == '('))
+    //if((tokens[p].type == '(') && (tokens[q].type == '('))
     //  return result = eval(p + 1, q - 1);
     result = eval(p + 1, q - 1);
     return result;
