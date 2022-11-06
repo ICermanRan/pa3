@@ -473,7 +473,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
    // Log("enter the It's a number\n");
     printf("2、判断为:It's a number\n"); 
     value_num = atoi(tokens[p].str); 
-    printf("value_num = %d" , value_num);
+    printf("value_num = %d\n" , value_num);
     //return result = value_num;   
      result = value_num;
    }
