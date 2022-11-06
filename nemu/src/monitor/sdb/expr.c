@@ -228,56 +228,6 @@ word_t expr(char *e, bool *success) {
   
 
 
-//  find the most right and lowest operator in the str
-//  @return -1 if no any operators in the str; or
-//  the index of the operator sepeicified in the str
-//  static int findop(const char *str);
- 
-//  static int findop(const char *str)
-// { 
-// 	int i;
-// 	int ret = -1;
-// 	int lowestoprank = -1;
-// 	for (i = strlen(str) - 1; i >= 0; i--) {
-// 		int rank = oprank(str[i]);
-// 		if (rank == 0) {
-// 			ret = i;
-// 			break;
-// 		}
-// 		if (rank == 3 && oprank(str[i - 1]) > 0) rank = 1;
-// 		else if (rank > lowestoprank) {
-// 			ret = i;
-// 			lowestoprank = rank;
-// 			if (str[i - 1] == ')') break;
-// 		}
-// 	}
-// 	return ret;
-//}
-//  return the rank of the operator
-//  @return -1 if the char ch is not an operator; or
-//  the rank listed as 1 for * and /, 2 for + and -
-// static int oprank(char ch);
-
-// static int oprank(char ch)
-// {
-// 	if (ch == '+' || ch == '-') return 3;
-// 	else if (ch == '*' || ch == '/') return 2;
-// 	else if (ch == ')') return 0;
-// 	else return -1;
-// }
- 
-//  convert a string into a number.
-//  The string should consist of all digits.
-//  @return the converted number
-// static int str2int(const char *str);
-
-// static int str2int(const char *str)
-// {
-// 	int i;
-// 	int ret = 0;
-// 	for (i = 0; i < strlen(str); i++) ret = ret * 10 + CH2DEC(str[i]);
-// 	return ret;
-// }
  
 char *top = NULL; //指针，指向栈顶的
 
@@ -509,6 +459,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      *The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
+    Log("enter the It's a number\n");
     printf("begin to solve 括号\n");
     if((tokens[p].type == '(') && (tokens[q].type == '('))
     //  return result = eval(p + 1, q - 1);
