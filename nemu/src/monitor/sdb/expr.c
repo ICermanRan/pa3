@@ -396,6 +396,9 @@ static bool check_parentheses(int p, int q)
         switch (tokens[j].type) //算符匹配+-
         {  
           case '+':
+                  main_addr = j;
+                  stop_1 = 1;//表示已找到主运算符+-，无需再遍历
+                  break;
           case '-':
                   main_addr = j;
                   stop_1 = 1;//表示已找到主运算符+-，无需再遍历
