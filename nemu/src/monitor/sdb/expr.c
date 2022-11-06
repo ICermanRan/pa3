@@ -496,6 +496,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      * For now this token should be a number.
      * Return the value of the number.
      */
+    Log("enter the It's a number\n");
     printf("It's a number\n"); 
     value_num = atoi(tokens[p].str); 
     //return result = value_num;   
