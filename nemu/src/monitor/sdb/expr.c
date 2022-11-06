@@ -84,12 +84,13 @@ static int nr_token __attribute__((used))  = 0;
 
  int token_addr = 0;//全局变量，记录tokens数组元素用了多少个
  int token_addrs;
+ bool logic2 = true;//全局变量，用于判断输入的表达式括号是否匹配，不匹配则false给expr函数
 
  static int eval(int p, int q); //函数声明
  static int main_op(int tokens_addr);//独属形参tokens_addr
  static bool check_parentheses(int p, int q);//括号配对及正确性函数声明
- char push(char bracket);//压栈操作函数
- void pop();		//出栈操作函数
+ //char push(char bracket);//压栈操作函数
+ //void pop();		//出栈操作函数
 
 
 static bool make_token(char *e) {
@@ -214,12 +215,17 @@ static bool make_token(char *e) {
 
 
 
-word_t expr(char *e, bool *success) {
+word_t expr(char *e, bool *success,int p, int q) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
 
+  if (logic2 == false)
+  {
+    *success = false;
+    return 0;
+  }
   /* TODO: Insert codes to evaluate the expression. */
  // TODO();// 记得取消注释！！
   return 0;
@@ -229,31 +235,33 @@ word_t expr(char *e, bool *success) {
 
 
  
-char *top = NULL; //指针，指向栈顶的
+// char *top = NULL; //指针，指向栈顶的
 
-char push(char bracket)		//压栈操作函数
-{
-	top = top+1;
-	return *(top) = bracket;
-}
+// char push(char bracket)		//压栈操作函数
+// {
+// 	top = top+1;
+// 	return *(top) = bracket;
+// }
 
-void pop()			//出栈操作函数，待会匹配的时候，调用这个函数把匹配的两个括号弹出 
-{
-	top = top-2;
-}
+// void pop()			//出栈操作函数，待会匹配的时候，调用这个函数把匹配的两个括号弹出 
+// {
+// 	top = top-2;
+// }
 
 //判断表达式是否被一对匹配的括号包围着, 同时检查表达式的左右括号是否匹配
 
 static bool check_parentheses(int p, int q)
 {
   int a,b;
-  int condition_1,condition_2;
-  int i,k;
-  int j=0;
-  char array[32];//数组，将tokens数组中的括号按顺序存放入其中
-  char stack[32];//数组，用来做栈的空间 
-  int stack_length;
-  bool logic = true;
+  int condition_1 = 0, condition_2 = 0;
+  int i;
+  int cnt_l = 0,cnt_r = 0;//左右括号计数器
+//  int j=0;
+// char array[32];//数组，将tokens数组中的括号按顺序存放入其中
+//  char stack[32];//数组，用来做栈的空间 
+//  int stack_length;
+  bool logic1 = true;
+
   
   a = tokens[p].type;
   b = tokens[q].type;
@@ -264,78 +272,92 @@ static bool check_parentheses(int p, int q)
     condition_1 = 1;//被括号包围    
   else 
     condition_1 = 0;//没被括号包围
+
   
   for(i = p; i <= q; i++)
-  {
-    if((tokens[i].type == '(') )
-      {
-        array[j] = '(';//将tokens数组中的括号按顺序存放入其中
-        j++;
-      }
-    else if((tokens[i].type == ')'))
-      {
-        array[j] = ')';//将tokens数组中的括号按顺序存放入其中
-        j++;
-      }
-  }
+    {
+      if((tokens[i].type == '('))
+            cnt_l++;
+      if((tokens[i].type == ')'))
+            cnt_r++;
+      if(cnt_l < cnt_r)
+            condition_2 = 0;//在任意位置，左括号个数比右括号小，必定不匹配
+    }
+
+    if(cnt_l == cnt_r)
+        condition_2 = 1;//左括号个数等于右括号个数，匹配
+    else
+        condition_2 = 0;//否则，不匹配
+
   
-  stack_length = strlen(array);//计算数组里的括号个数，待会控制for轮次的时候用
-
-  for(k = 0; k < stack_length; k++)
-  {
-    push(array[k]);//先把数组里的括号压入栈里
-
-    if(array[k] == ']')//如果压入的是']'号
-    {
-      if(*(top-1) == '[')//就在当前位置往下一个单位判断有没有'['号，如果有，就弹出栈 
-      {
-        pop();
-      }
-    }
-
-    if(array[k] == ')')//如果压入的是')'号
-    {
-      if(*(top-1) == '(')//就在当前位置往下一个单位判断有没有'('号，如果有，就弹出栈 
-      {
-        pop();//必须先入栈的是左括号，后入栈的是右括号才能配对
-      }
-    }
-
-    if(array[k] == '}')//如果压入的是')'号
-    {
-      if(*(top-1) == '{')//就在当前位置往下一个单位判断有没有'('号，如果有，就弹出栈 
-      {
-        pop();//必须先入栈的是左括号，后入栈的是右括号才能配对
-      }
-    }
-  }
+  // for(i = p; i <= q; i++)
+  // {
+  //   if((tokens[i].type == '(') )
+  //     {
+  //       array[j] = '(';//将tokens数组中的括号按顺序存放入其中
+  //       j++;
+  //     }
+  //   else if((tokens[i].type == ')'))
+  //     {
+  //       array[j] = ')';//将tokens数组中的括号按顺序存放入其中
+  //       j++;
+  //     }
+  // }
   
-  if(top == stack-1)
-  {
-    printf("括号匹配");
-    condition_2 = 1;
-  }
-  else
-  {
-    printf("括号不匹配");
-    condition_2 = 0;
-  }
+  // stack_length = strlen(array);//计算数组里的括号个数，待会控制for轮次的时候用
+
+  // for(k = 0; k < stack_length; k++)
+  // {
+  //   push(array[k]);//先把数组里的括号压入栈里
+
+  //   if(array[k] == ']')//如果压入的是']'号
+  //   {
+  //     if(*(top-1) == '[')//就在当前位置往下一个单位判断有没有'['号，如果有，就弹出栈 
+  //     {
+  //       pop();
+  //     }
+  //   }
+
+  //   if(array[k] == ')')//如果压入的是')'号
+  //   {
+  //     if(*(top-1) == '(')//就在当前位置往下一个单位判断有没有'('号，如果有，就弹出栈 
+  //     {
+  //       pop();//必须先入栈的是左括号，后入栈的是右括号才能配对
+  //     }
+  //   }
+
+  //   if(array[k] == '}')//如果压入的是')'号
+  //   {
+  //     if(*(top-1) == '{')//就在当前位置往下一个单位判断有没有'('号，如果有，就弹出栈 
+  //     {
+  //       pop();//必须先入栈的是左括号，后入栈的是右括号才能配对
+  //     }
+  //   }
+  // }
+  
+  // if(top == stack-1)
+  // {
+  //   printf("括号匹配");
+  //   condition_2 = 1;
+  // }
+  // else
+  // {
+  //   printf("括号不匹配");
+  //   condition_2 = 0;
+  // }
   
   
   if((condition_1 == 1) && (condition_2 == 1))
-    {
-    return logic = true;  //被括号包围且左右匹配，返回true
-    }
-  else if((condition_1 == 0) && (condition_2 == 1))
-    {
-    return logic = false;  //未被括号包围但左右匹配，返回false
-    }
-  else if((condition_1 == 1) && (condition_2 == 0))
-    {
-    return  logic = false;
-    }
+    return logic1 = true;  //被括号包围且左右匹配，返回true
+    
+  if((condition_1 == 0) && (condition_2 == 1))
+    return logic1 = false;  //未被括号包围但左右匹配，返回false
 
-    return logic;
+  if(condition_2 == 0)
+    logic2 = false;
+
+  
+  return logic1;
 }
   
  
@@ -459,7 +481,6 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      *The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    Log("enter the It's a number\n");
     printf("begin to solve 括号\n");
     if((tokens[p].type == '(') && (tokens[q].type == '('))
     //  return result = eval(p + 1, q - 1);
