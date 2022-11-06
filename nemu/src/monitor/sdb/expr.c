@@ -432,8 +432,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      * If that is the case, just throw away the parentheses.
      */
     printf("3、begin to solve 括号\n");
+    
     if(check_parentheses(p+1,q-1) == false)
     {
+      printf("针对去掉括号有问题的时候：\n");
       op = main_op(p,q);
       op_type = tokens[op].type;
       printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
@@ -447,11 +449,14 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       default: assert(0);
     }
     }
-
+  else
+   {
     result = eval(p + 1, q - 1);
     return result;
+   }
   }
   else {
+    printf("针对去掉括号没有问题的时候：\n");
     op = main_op(p,q);
     op_type = tokens[op].type;
     printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
