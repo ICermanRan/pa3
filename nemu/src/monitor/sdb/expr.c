@@ -248,6 +248,7 @@ word_t expr(char *e, bool *success,int p, int q) {
 // 	top = top-2;
 // }
 
+
 //判断表达式是否被一对匹配的括号包围着, 同时检查表达式的左右括号是否匹配
 
 static bool check_parentheses(int p, int q)
@@ -265,7 +266,7 @@ static bool check_parentheses(int p, int q)
   
   a = tokens[p].type;
   b = tokens[q].type;
-  printf("进入括号配对");
+  printf("进入括号配对函数\n");
  // printf("%s = %d, %s = %d\n", tokens[p].str, a, tokens[q].str,b);
  
   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
@@ -346,6 +347,7 @@ static bool check_parentheses(int p, int q)
   //   condition_2 = 0;
   // }
   
+  printf("condition_1 = %d,condition_2 =%d", condition_1,condition_2);
   
   if((condition_1 == 1) && (condition_2 == 1))
     return logic1 = true;  //被括号包围且左右匹配，返回true
@@ -455,11 +457,11 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
   
   op = main_op(token_addrs);//返回的是op在tokens数组中的位置
   op_type = tokens[op].type;
-  printf("the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+  printf("1、刚进入eval,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
 
   if (p > q)
    {
-     printf("It's a Bad expression\n");
+     printf("p > q,It's a Bad expression\n");
      assert(0);
    }  
   else if (p == q)
@@ -468,8 +470,8 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      * For now this token should be a number.
      * Return the value of the number.
      */
-    Log("enter the It's a number\n");
-    printf("It's a number\n"); 
+   // Log("enter the It's a number\n");
+    printf("2、判断为:It's a number\n"); 
     value_num = atoi(tokens[p].str); 
     //return result = value_num;   
      result = value_num;
@@ -481,7 +483,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
      *The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    printf("begin to solve 括号\n");
+    printf("3、begin to solve 括号\n");
     if((tokens[p].type == '(') && (tokens[q].type == '('))
     //  return result = eval(p + 1, q - 1);
     result = eval(p + 1, q - 1);
@@ -489,7 +491,7 @@ static int eval(int p, int q)  //p=开始位置，q=结束位置
   else {
   // op = the position of 主运算符 in the token expression;
   // printf("the position of 主运算符%s in the token expression: %d\n", tokens[op].str, op);
-    printf("开始求值");
+    printf("开始求值\n");
     val1 = eval(p, op - 1);
     val2 = eval(op + 1, q);
       switch (op_type) {
