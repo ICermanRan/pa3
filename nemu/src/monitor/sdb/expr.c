@@ -259,13 +259,13 @@ static bool check_parentheses(int p, int q)
   
   for(i = p; i <= q; i++)
     {
-      printf("tokens[i].str = %s\n",tokens[i].str);
+      // printf("tokens[i].str = %s\n",tokens[i].str);
       if((tokens[i].type == '('))
             cnt_l++;
       if((tokens[i].type == ')'))
             cnt_r++;
 
-      printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
+      // printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
       if(cnt_l < cnt_r)
       {
        printf("括号不配对,程序中止");
