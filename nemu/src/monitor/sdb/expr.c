@@ -102,7 +102,7 @@ static bool make_token(char *e) {
  
   regmatch_t pmatch;//存放匹配文本串位置信息
 
-  //printf("e = %s\n", e);
+  printf("e = %s\n", e);
   nr_token = 0;
   while (e[position] != '\0') {
    
