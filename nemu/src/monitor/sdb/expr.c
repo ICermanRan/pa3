@@ -225,6 +225,7 @@ static bool make_token(char *e) {
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
+    printf("回到顶层");
     *success = false;
     return 0;
   }
