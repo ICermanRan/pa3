@@ -237,6 +237,8 @@ static int check_parentheses(int p, int q)
   int i;
   int cnt_l = 0,cnt_r = 0;//左右括号计数器
 
+  printf("进入括号配对函数\n");
+  printf("传入的p = %d ,传入的q = %d\n", p, q);
   for(i = p; i <= q; i++)
     {
       if((tokens[i].type == '('))
@@ -272,7 +274,7 @@ static bool check_surround(int p, int q)
   
   a = tokens[p].type;
   b = tokens[q].type;
-  printf("进入括号配对函数\n");
+  printf("进入括号包围函数\n");
   printf("传入的p = %d ,传入的q = %d\n", p, q);
  // printf("%s = %d, %s = %d\n", tokens[p].str, a, tokens[q].str,b);
  
