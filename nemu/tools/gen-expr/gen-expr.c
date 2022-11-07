@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
 
   if (argc > 1) 
   {
-    sscanf(argv[1], "%d", &loop);
+    sscanf(argv[1], "%d", &loop);//将argv[1]中的字符串转为int,保存在变量loop中
   }
 
   int i;
