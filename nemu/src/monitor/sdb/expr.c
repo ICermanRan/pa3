@@ -41,8 +41,8 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-    {"[1-9][0-9]*", TK_num}, // number
-   // {"[0-9]", TK_num}, // number
+    {"(-)?[1-9][0-9]*", TK_num}, // number
+    //{"(-|+)?\d+", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
@@ -84,9 +84,9 @@ static int nr_token __attribute__((used))  = 0;
 
  int token_addr = 0;//全局变量，记录tokens数组元素用了多少个
  int token_addrs;
- bool logic2 = true;//全局变量，用于判断输入的表达式括号是否匹配，不匹配则false给expr函数
+ //bool logic2 = true;//全局变量，用于判断输入的表达式括号是否匹配，不匹配则false给expr函数
 
- static int eval(int p, int q,_Bool success); //函数声明
+ static int eval(int p, int q,bool success); //函数声明
  static int main_op(int p, int q);//独属形参tokens_addr
  static int check_parentheses(int p, int q);//括号配对函数声明
  static bool check_surround(int p, int q);//括号包围函数声明
@@ -210,7 +210,7 @@ static bool make_token(char *e) {
   // }
 
    token_addrs = token_addr-1;
-   value = eval(0,token_addrs,true);
+   value = eval(0,token_addrs,1);
    printf("value = %d\n", value);
   return true;
 } 
@@ -222,6 +222,8 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+
+  
 
 
   /* TODO: Insert codes to evaluate the expression. */
@@ -388,7 +390,7 @@ static bool check_surround(int p, int q)
  }
 
 //eval函数 
-static int eval(int start, int end,_Bool success)  //p=开始位置，q=结束位置
+static int eval(int start, int end,bool  success)  //p=开始位置，q=结束位置
  {
   int op;
   int op_type;
@@ -420,9 +422,9 @@ static int eval(int start, int end,_Bool success)  //p=开始位置，q=结束�
 
   else if((check_surround(p, q) == true) && (check_parentheses(p,q) == 0))//被包围但不匹配
   {
-    printf("错误的表达式");
-    eval(p,q,false);
-    //assert(0);
+    printf("错误的表达式\n");
+    //eval(p,q,false);
+    assert(0);
   }
 
   else if ((check_surround(p, q) == true) && (check_parentheses(p,q) == 1))//被包围且匹配
@@ -431,7 +433,7 @@ static int eval(int start, int end,_Bool success)  //p=开始位置，q=结束�
     if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == false))
     {
       printf("去掉外面一层括号后，不再被括号包围且内部括号配对：\n");
-      result = eval(p + 1, q - 1,true);
+      result = eval(p + 1, q - 1,1);
       return result;
     }
     else if((check_parentheses(p+1,q-1) == 0) && (check_surround(p+1,q-1) == false))
@@ -441,8 +443,8 @@ static int eval(int start, int end,_Bool success)  //p=开始位置，q=结束�
       op = main_op(p,q);
       op_type = tokens[op].type;
       //printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-      val1 = eval(p, op - 1,true);
-      val2 = eval(op + 1, q,true);
+      val1 = eval(p, op - 1,1);
+      val2 = eval(op + 1, q,1);
       switch (op_type) 
       {
       case '+': return result = val1 + val2;
@@ -455,7 +457,7 @@ static int eval(int start, int end,_Bool success)  //p=开始位置，q=结束�
     else if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == true))
     {
       printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
-      result = eval(p + 1, q - 1,true);
+      result = eval(p + 1, q - 1,1);
       return result;
     }
   
@@ -466,8 +468,8 @@ static int eval(int start, int end,_Bool success)  //p=开始位置，q=结束�
     op_type = tokens[op].type;
     printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     printf("开始求值\n");
-    val1 = eval(p, op - 1,true);
-    val2 = eval(op + 1, q,true);
+    val1 = eval(p, op - 1,1);
+    val2 = eval(op + 1, q,1);
       switch (op_type) {
       case '+': return result = val1 + val2;
       case '-': return result = val1 - val2;
