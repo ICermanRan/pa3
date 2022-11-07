@@ -421,7 +421,8 @@ static int eval(int start, int end,_Bool success)  //p=开始位置，q=结束�
   else if((check_surround(p, q) == true) && (check_parentheses(p,q) == 0))//被包围但不匹配
   {
     printf("错误的表达式");
-    assert(0);
+    eval(p,q,false);
+    //assert(0);
   }
 
   else if ((check_surround(p, q) == true) && (check_parentheses(p,q) == 1))//被包围且匹配
