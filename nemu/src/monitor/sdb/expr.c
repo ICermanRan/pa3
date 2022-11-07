@@ -217,17 +217,13 @@ static bool make_token(char *e) {
 
 
 
-word_t expr(char *e, bool *success,int p, int q) {
+word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
 
-  if (logic2 == false)
-  {
-    *success = false;
-    return 0;
-  }
+
   /* TODO: Insert codes to evaluate the expression. */
  // TODO();// 记得取消注释！！
   return 0;
@@ -253,10 +249,6 @@ static int check_parentheses(int p, int q)
       {
         printf("括号存在不配对,程序中止");
         return condition_2 = 0;
-       // return false;
-      // return logic2 = 0;
-      // assert(0);
-      // logic2 = false;
       }
     }
  
@@ -268,8 +260,9 @@ static int check_parentheses(int p, int q)
 
 }
 
-//判断表达式是否被一对括号包围着
 
+
+//判断表达式是否被一对括号包围着
 static bool check_surround(int p, int q)
 {
   int a,b;
@@ -301,20 +294,6 @@ static bool check_surround(int p, int q)
     printf("未被括号包围，返回false\n");
     logic1 = false;
   }
-
-
-  // if((condition_1 == 1) && (condition_2 == 1))
-  // {
-  //   printf("condition_1 = %d,condition_2 = %d\n", condition_1,condition_2);
-  //   printf("被括号包围且左右匹配，返回true\n");
-  //   return logic1 = true;  //被括号包围且左右匹配，返回true
-  // } 
-  // if((condition_1 == 0) && (condition_2 == 1))
-  // {
-  //   printf("condition_1 = %d,condition_2 = %d\n", condition_1,condition_2);
-  //   printf("未被括号包围但左右匹配，返回false\n");
-  //   return logic1 = false;  //未被括号包围但左右匹配，返回false
-  // }
     
 
   
@@ -428,13 +407,9 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      printf("p = %d, q = %d,p > q,It's a Bad expression\n",p ,q);
      assert(0);
    }  
+
   else if (p == q)
    {
-    /* Single token.  BNF:<expr> ::= <number>    # 一个数是表达式
-     * For now this token should be a number.
-     * Return the value of the number.
-     */
-   // Log("enter the It's a number\n");
     printf("2、判断为:It's a number\n"); 
     value_num = atoi(tokens[p].str); 
     printf("value_num = %d\n" , value_num);
@@ -442,34 +417,51 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      result = value_num;
      return result;
    }
-  else if ((check_surround(p, q) == true) && (check_parentheses(p,q) == 1)) 
+
+  else if((check_surround(p, q) == true) && (check_parentheses(p,q) == 0))//被包围但不匹配
   {
-    printf("3、begin to solve 括号\n");
+    printf("错误的表达式");
+    assert(0);
+  }
+
+  else if ((check_surround(p, q) == true) && (check_parentheses(p,q) == 1))//被包围且匹配
+  {
+    printf("begin to solve 括号\n");
     
-  //   if(check_parentheses(p+1,q-1) == false)
-  //   {
-  //     printf("针对去掉括号有问题的时候：\n");
-  //     op = main_op(p,q);
-  //     op_type = tokens[op].type;
-  //     printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-  //     val1 = eval(p, op - 1);
-  //     val2 = eval(op + 1, q);
-  //     switch (op_type) {
-  //     case '+': return result = val1 + val2;
-  //     case '-': return result = val1 - val2;
-  //     case '*': return result = val1 * val2;
-  //     case '/': return result = val1 / val2;
-  //     default: assert(0);
-  //   }
-  //   }
-  // else
-  //  {
-    result = eval(p + 1, q - 1);
-    return result;
-   //}
+    if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == false))
+    {
+      printf("去掉外面一层括号后，不再被括号包围且内部括号配对：\n");
+      result = eval(p + 1, q - 1);
+      return result;
+    }
+    else if((check_parentheses(p+1,q-1) == 0) && (check_surround(p+1,q-1) == false))
+    {
+      printf("去掉外面一层括号后，不再被括号包围但内部括号不配对：\n");
+      printf("此时先找主运算符");
+      op = main_op(p,q);
+      op_type = tokens[op].type;
+      //printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+      val1 = eval(p, op - 1);
+      val2 = eval(op + 1, q);
+      switch (op_type) 
+      {
+      case '+': return result = val1 + val2;
+      case '-': return result = val1 - val2;
+      case '*': return result = val1 * val2;
+      case '/': return result = val1 / val2;
+      default: assert(0);
+      }
+    }
+
+    // else
+    // {
+    //   printf("")
+    //   result = eval(p + 1, q - 1);
+    //   return result;
+    // }
   }
   else {
-    printf("针对去掉括号没有问题的时候：\n");
+   // printf("针对去掉括号没有问题的时候：\n");
     op = main_op(p,q);
     op_type = tokens[op].type;
     printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
