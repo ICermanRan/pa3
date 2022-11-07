@@ -22,10 +22,10 @@
 
 //函数声明
 static int choose(int a);
-static int gen_num();//产生随机数
-static char gen_left();
-static char gen_right();
-static char gen_op();
+static char * gen_num();//产生随机数
+static  char * gen_left();
+static  char * gen_right();
+static char * gen_rand_op();
 static void gen_rand_expr();
 
 // this should be enough
@@ -47,51 +47,54 @@ static int choose(int a)
   return cho;
 }
 
-static int gen_num()//产生随机数
+static char * gen_num()//产生随机数
 {
+  char * str = NULL;
   srand((unsigned)time(NULL));
   uint32_t number;
   number = rand();
-  printf("number = %d", number);
+ // printf("number = %d", number);
+  sprintf(str, "%d", number);//利用sprintf将number转为字符串
 
-  return number;
+
+  return str;
 }
 
-static char gen_left()
+static  char * gen_left()
 {
-  char left = '(';
+  char * left = "(";
   return left;
 }
 
-static char gen_right()
+static  char * gen_right()
 {
-  char right = ')';
+ char * right = ")";
   return right;
 }
 
 
-static char gen_op()
+static char * gen_rand_op()
 {
   srand((unsigned)time(NULL));
   unsigned int op_num;
   op_num = rand() % 3;//产生范围0-3的随机数
-  char op;
+  char * op = NULL;
 
   switch (op_num)
   {
   case 0:
-        op = '+';
+        op = "+";
         break;
 
   case 1:
-        op = '-';
+        op = "-";
         break;
   case 2:
-        op = '*';
+        op = "*";
         break;
 
   case 3:
-        op = '/';
+        op = "/";
         break;
   
  default:
@@ -102,25 +105,25 @@ static char gen_op()
 }
 
 static void gen_rand_expr() {
-  buf[0] = '\0';
-
+ // buf[0] = '\0';
   switch(choose(3))
   {
     case 0: 
-            gen_num();
-            break;
+           // gen_num();
+           strncpy(buf,gen_num(),nonnull(gen_num()));
+           break;
     case 1: 
             //gen('(');
-            gen_left();
+            strncpy(buf, gen_left(), strlen(gen_left()));
             gen_rand_expr();
-            gen_rignt();
+            strncpy(buf, gen_rignt(), strlen(gen_rignt()));
            // gen(')');
             break;
     case 2:
-            gen_rand_op();
+            strncpy(buf,gen_rand_op(),strlen(gen_rand_op()));
   default:
             gen_rand_expr();
-            gen_rand_op();
+            strncpy(buf, gen_rand_op(),strlen( gen_rand_op()));
             gen_rand_expr();
             break;
   }
@@ -141,7 +144,7 @@ int main(int argc, char *argv[]) {
    {
     gen_rand_expr();
 
-    sprintf(code_buf, code_format, buf);
+    sprintf(code_buf, code_format, buf);//把code_format的内容存到code_buf，其中的%s由buf赋值
 
     FILE *fp = fopen("/tmp/.code.c", "w");
     assert(fp != NULL);
