@@ -214,11 +214,10 @@ static bool make_token(char *e) {
 
    if( logic == false)
     return false;
-   else 
-    {
-    printf("value = %d\n", value);
-    return true;
-    }
+  
+  printf("value = %d\n", value);
+  return true;
+
 } 
 
 
