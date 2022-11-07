@@ -219,6 +219,7 @@ static bool make_token(char *e) {
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
+    printf("make_token有错");
     *success = false;
     return 0;
   }
