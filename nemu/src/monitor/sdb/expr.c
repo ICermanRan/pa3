@@ -102,7 +102,7 @@ static bool make_token(char *e) {
  
   regmatch_t pmatch;//存放匹配文本串位置信息
 
-  printf("e = %s\n", e);
+  //printf("e = %s\n", e);
   nr_token = 0;
   while (e[position] != '\0') {
    
@@ -202,12 +202,12 @@ static bool make_token(char *e) {
       token_addr++;
   }
 
-  // int c;
-  // for(c = 0; c < token_addr; c++)
-  // {
-  //    printf("outloop： tokens[%d].type = %d ", c, tokens[c].type);
-  //    printf("tokens[%d].str = %s\n", c,tokens[c].str);
-  // }
+  int c;
+  for(c = 0; c < token_addr; c++)
+  {
+     printf("outloop： tokens[%d].type = %d ", c, tokens[c].type);
+     printf("tokens[%d].str = %s\n", c,tokens[c].str);
+  }
 
    token_addrs = token_addr-1;
    value = eval(0,token_addrs);
