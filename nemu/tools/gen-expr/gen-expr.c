@@ -20,6 +20,14 @@
 #include <assert.h>
 #include <string.h>
 
+//函数声明
+static int choose(int a);
+static int gen_num();//产生随机数
+static char gen_left();
+static char gen_right();
+static char gen_op();
+static void gen_rand_expr();
+
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
@@ -31,19 +39,106 @@ static char *code_format =
 "  return 0; "
 "}";
 
+static int choose(int a)
+{
+  srand(time(NULL));
+  int cho = rand() % (a-1);
+
+  return cho;
+}
+
+static int gen_num()//产生随机数
+{
+  srand((unsigned)time(NULL));
+  uint32_t number;
+  number = rand();
+  printf("number = %d", number);
+
+  return number;
+}
+
+static char gen_left()
+{
+  char left = '(';
+  return left;
+}
+
+static char gen_right()
+{
+  char right = ')';
+  return right;
+}
+
+
+static char gen_op()
+{
+  srand((unsigned)time(NULL));
+  unsigned int op_num;
+  op_num = rand() % 3;//产生范围0-3的随机数
+  char op;
+
+  switch (op_num)
+  {
+  case 0:
+        op = '+';
+        break;
+
+  case 1:
+        op = '-';
+        break;
+  case 2:
+        op = '*';
+        break;
+
+  case 3:
+        op = '/';
+        break;
+  
+ default:
+        break;
+  }
+
+  return op;
+}
+
 static void gen_rand_expr() {
   buf[0] = '\0';
+
+  switch(choose(3))
+  {
+    case 0: 
+            gen_num();
+            break;
+    case 1: 
+            //gen('(');
+            gen_left();
+            gen_rand_expr();
+            gen_rignt();
+           // gen(')');
+            break;
+    case 2:
+            gen_rand_op();
+  default:
+            gen_rand_expr();
+            gen_rand_op();
+            gen_rand_expr();
+            break;
+  }
 }
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
   srand(seed);
   int loop = 1;
-  if (argc > 1) {
+
+  if (argc > 1) 
+  {
     sscanf(argv[1], "%d", &loop);
   }
+
   int i;
-  for (i = 0; i < loop; i ++) {
+  for (i = 0; i < loop; i ++)
+   {
     gen_rand_expr();
 
     sprintf(code_buf, code_format, buf);
@@ -59,11 +154,11 @@ int main(int argc, char *argv[]) {
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
-    int result;
+    unsigned int result;
     fscanf(fp, "%d", &result);
     pclose(fp);
 
     printf("%u %s\n", result, buf);
-  }
+   }
   return 0;
 }
