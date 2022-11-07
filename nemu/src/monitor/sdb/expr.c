@@ -286,14 +286,14 @@ static bool check_surround(int p, int q)
   
   if(condition_1 == 1)
   {
-    // printf("condition_1 = %d\n", condition_1);
-    // printf("被括号包围，返回true\n");
+    printf("condition_1 = %d\n", condition_1);
+    printf("被括号包围，返回true\n");
     logic1 = true;
   }
    if(condition_1 == 0)
   {
-    // printf("condition_1 = %d\n", condition_1);
-    // printf("未被括号包围，返回false\n");
+    printf("condition_1 = %d\n", condition_1);
+    printf("未被括号包围，返回false\n");
     logic1 = false;
   }
     
@@ -451,7 +451,13 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       default: assert(0);
       }
     }
-
+    else if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == true))
+    {
+      printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
+      result = eval(p + 1, q - 1);
+      return result;
+    }
+  
   }
   else {
    // printf("针对去掉括号没有问题的时候：\n");
