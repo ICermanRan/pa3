@@ -222,6 +222,7 @@ static bool make_token(char *e) {
     return false;
   
   printf("value = %d\n", value);
+  token_addr = 0;
   return true;
 
 } 
