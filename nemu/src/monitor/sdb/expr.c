@@ -162,6 +162,7 @@ static bool make_token(char *e) {
           case '+':  
                     tokens[token_addr].type =  43;
                     strncpy(tokens[token_addr].str, substr_start,substr_len);
+                    tokens[token_addr].str[substr_len] = '\0';
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
 
@@ -181,6 +182,7 @@ static bool make_token(char *e) {
                      {
                       tokens[token_addr].type =  TK_num;
                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
                      }
                    break;
           
@@ -203,11 +205,11 @@ static bool make_token(char *e) {
       token_addr++;
   }
 
-  char * substr_end = "\0"; 
-  strncpy(tokens[token_addr].str,substr_end,2);
+  // char * substr_end = "\0"; 
+  // strncpy(tokens[token_addr].str,substr_end,2);
 
   int c;
-  for(c = 0; c <= token_addr; c++)
+  for(c = 0; c < token_addr; c++)
   {
      printf("outloop： tokens[%d].type = %d ", c, tokens[c].type);
      printf("tokens[%d].str = %s\n", c,tokens[c].str);
