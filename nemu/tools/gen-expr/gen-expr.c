@@ -110,17 +110,21 @@ static void gen_rand_expr() {
   {
     case 0: 
            // gen_num();
-           strncpy(buf,gen_num(),nonnull(gen_num()));
+           //strncpy(buf,gen_num(),strlen(gen_num()));
+           strcpy(buf,gen_num());
            break;
     case 1: 
             //gen('(');
-            strncpy(buf, gen_left(), strlen(gen_left()));
+            //strncpy(buf, gen_left(), strlen(gen_left()));
+            strcpy(buf, gen_left());
             gen_rand_expr();
-            strncpy(buf, gen_rignt(), strlen(gen_rignt()));
+            strcpy(buf, gen_rignt());
+           // strncpy(buf, gen_rignt(), strlen(gen_rignt()));
            // gen(')');
             break;
     case 2:
-            strncpy(buf,gen_rand_op(),strlen(gen_rand_op()));
+            // strncpy(buf,gen_rand_op(),strlen(gen_rand_op()));
+            strcpy(buf,gen_rand_op());
   default:
             gen_rand_expr();
             strncpy(buf, gen_rand_op(),strlen( gen_rand_op()));
