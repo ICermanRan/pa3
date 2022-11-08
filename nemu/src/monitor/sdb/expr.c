@@ -203,7 +203,8 @@ static bool make_token(char *e) {
       token_addr++;
   }
 
-  //tokens[token_addr].str = \0;
+  char * substr_end = "\0"; 
+  strncpy(tokens[token_addr].str,substr_end,1);
 
   int c;
   for(c = 0; c <= token_addr; c++)
