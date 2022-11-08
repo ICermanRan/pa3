@@ -138,7 +138,7 @@ static bool make_token(char *e) {
           case  '(':
                     tokens[token_addr].type =  40;
                     strncpy(tokens[token_addr].str, substr_start, substr_len);
-                    tokens[token_addr].str[substr_len] = '\0';
+                    tokens[token_addr].str[substr_len] = '\0';//为了能在同一个run里执行不同的算数表达式
                     // printf("for left: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position);
                     break;
 
@@ -227,7 +227,7 @@ static bool make_token(char *e) {
     return false;
   
   printf("value = %d\n", value);
-  token_addr = 0;
+  token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
   return true;
 
 } 

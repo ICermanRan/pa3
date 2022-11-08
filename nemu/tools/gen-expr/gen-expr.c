@@ -22,11 +22,14 @@
 
 //函数声明
 static int choose(int a);
-static char * gen_num();//产生随机数
-static  char * gen_left();
-static  char * gen_right();
-static char * gen_rand_op();
+static void  gen_num();//产生随机数
+static  void  gen_l();
+static  void  gen_r();
+static void  gen_rand_op();
 static void gen_rand_expr();
+
+//全局变量定义
+static int buf_addr = 0;
 
 // this should be enough
 static char buf[65536] = {};
@@ -47,61 +50,75 @@ static int choose(int a)
   return cho;
 }
 
-static char * gen_num()//产生随机数
+static void  gen_num()//产生随机数
 {
-  char * str = NULL;
+  char str[16] = {0};
+  //char * str = NULL;
   srand((unsigned)time(NULL));
   uint32_t number;
   number = rand();
  // printf("number = %d", number);
-  sprintf(str, "%d", number);//利用sprintf将number转为字符串
+  sprintf(str, "%d", number);//利用sprintf将number转为字符
+ // itoa(number, str, 10);
+  int l = strlen(str);
+  //char num[strlen(str)];
+  int i;
+  for(i = 0; i < l; i++)
+  {
+    buf_addr++;
+    buf[buf_addr] = str[i];  
+  }
 
-
-  return str;
+  //return 0;
 }
 
-static  char * gen_left()
+static  void  gen_l()
 {
-  char * left = "(";
-  return left;
+  char left = '(';
+  buf_addr++;
+  buf[buf_addr] = left;
+  //return 0;
 }
 
-static  char * gen_right()
+static  void  gen_r()
 {
- char * right = ")";
-  return right;
+  char  right = ')';
+  buf_addr++;
+  buf[buf_addr] = right;
+  //return 0;
 }
 
 
-static char * gen_rand_op()
+static void  gen_rand_op()
 {
   srand((unsigned)time(NULL));
   unsigned int op_num;
   op_num = rand() % 3;//产生范围0-3的随机数
-  char * op = NULL;
+  char op = ' ';
 
   switch (op_num)
   {
   case 0:
-        op = "+";
+        op = '+';
         break;
 
   case 1:
-        op = "-";
+        op = '-';
         break;
   case 2:
-        op = "*";
+        op = '*';
         break;
 
   case 3:
-        op = "/";
+        op = '/';
         break;
   
  default:
         break;
   }
-
-  return op;
+  buf_addr++;
+  buf[buf_addr] = op;
+  //return 0;
 }
 
 static void gen_rand_expr() {
@@ -109,25 +126,25 @@ static void gen_rand_expr() {
   switch(choose(3))
   {
     case 0: 
-           // gen_num();
-           //strncpy(buf,gen_num(),strlen(gen_num()));
-           strcpy(buf,gen_num());
+           gen_num();
+          //  sprintf(buf[buf_addr], "%c", gen_num());
+          //  sprintf(buf, "%s", gen_num());
            break;
     case 1: 
-            //gen('(');
-            //strncpy(buf, gen_left(), strlen(gen_left()));
-            strcpy(buf, gen_left());
+            gen_l();
+            // sprintf(buf[buf_addr], "%c", gen_l());
             gen_rand_expr();
-            strcpy(buf, gen_rignt());
-           // strncpy(buf, gen_rignt(), strlen(gen_rignt()));
-           // gen(')');
+            // sprintf(buf[buf_addr], "%c", gen_r());
+            gen_r();
             break;
     case 2:
-            // strncpy(buf,gen_rand_op(),strlen(gen_rand_op()));
-            strcpy(buf,gen_rand_op());
+            // sprintf(buf[buf_addr], "%c", gen_rand_op());
+            gen_rand_op();
+            break;
   default:
             gen_rand_expr();
-            strncpy(buf, gen_rand_op(),strlen( gen_rand_op()));
+           // sprintf(buf[buf_addr], "%c", gen_rand_op());
+            gen_rand_op();
             gen_rand_expr();
             break;
   }
@@ -150,19 +167,19 @@ int main(int argc, char *argv[]) {
 
     sprintf(code_buf, code_format, buf);//把code_format的内容存到code_buf，其中的%s由buf赋值
 
-    FILE *fp = fopen("/tmp/.code.c", "w");
-    assert(fp != NULL);
-    fputs(code_buf, fp);
-    fclose(fp);
+    FILE *fp = fopen("/tmp/.code.c", "w");//打开文件，读文件到内存，返回文件信息结构指针
+    assert(fp != NULL);//断言，如果fp==NULL，则程序终止
+    fputs(code_buf, fp);//将一行字符串写入文件，它将字符串输出到流。
+    fclose(fp);//关闭已经使用fopen打开成功的文件
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");//用system函数进行gcc命令
     if (ret != 0) continue;
 
-    fp = popen("/tmp/.expr", "r");
-    assert(fp != NULL);
+    fp = popen("/tmp/.expr", "r");//Create a new stream connected to a pipe running the given command.
+    assert(fp != NULL);           //用创建管道的方式启动一个进程, 并调用 shell. 
 
     unsigned int result;
-    fscanf(fp, "%d", &result);
+    if(fscanf(fp, "%d", &result) == 1);
     pclose(fp);
 
     printf("%u %s\n", result, buf);
