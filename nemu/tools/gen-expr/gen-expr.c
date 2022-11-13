@@ -174,7 +174,7 @@ static void gen_rand_expr() {
   cnt_expr++;//每调用进入一次gen_rand_expr()，则记录一次
 // printf("cnt_expr = %d\n", cnt_expr);
 
-  if((cnt_expr == 10))
+  if((cnt_expr == 6))
     {
     gen_num();
     return ;
