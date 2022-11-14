@@ -236,19 +236,22 @@ int main(int argc, char *argv[]) {
 
     sprintf(code_buf, code_format, buf);//把code_format和buf数组的内容相结合，存到code_buf，其中的%s由buf赋值
 
-    FILE *fp = fopen("/tmp/.code.c", "w");//把code_buf存入到.code.c，读文件到内存，返回文件信息结构指针
+    //  FILE *fp = fopen("/tmp/.code.c", "w");//把code_buf存入到.code.c，读文件到内存，返回文件信息结构指针
+     FILE *fp = fopen("/home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/code.c", "w");
     assert(fp != NULL);//断言，如果fp==NULL，则程序终止
     fputs(code_buf, fp);//将一行字符串写入文件，它将字符串输出到流。
     fclose(fp);//关闭已经使用fopen打开成功的文件
 
-    int ret = system("gcc /tmp/.code.c -g -o /tmp/.expr");//用system函数进行gcc命令，对code.c进行编译
+      // int ret = system("gcc /tmp/.code.c -g -o /tmp/.expr");//用system函数进行gcc命令，对code.c进行编译
+     int ret = system("gcc /home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/code.c -g -o /home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/.expr");
     if (ret != 0) continue;
 
-    fp = popen("/tmp/", "r");//popen()会建立管道连到子进程的标准输出设备或标准输入设备，然后返回一个文件指针
+      // fp = popen("/tmp/", "r");//popen()会建立管道连到子进程的标准输出设备或标准输入设备，然后返回一个文件指针
+    fp = popen("/home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/.expr", "r");
     assert(fp != NULL);           //随后进程便可利用此文件指针来读取子进程的输出设备或是写入到子进程的标准输入设备中。
                                   //这里为r,代表读取。
                                   //这里的作用是把code.c编译的结果，即定义result=算数表达式，得到的result的值读取到main.c
-    unsigned int result;
+    uint32_t result;
     //fscanf(fp, "%d", &result);
     
     if(fscanf(fp, "%d", &result))
