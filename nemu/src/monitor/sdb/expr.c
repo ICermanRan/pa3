@@ -192,8 +192,18 @@ static bool make_token(char *e) {
                    break;
           
           case TK_NOTYPE:
-                   // position += substr_len;
-                    break;
+                   if(substr_len > 33)
+                     {
+                      tokens[token_addr].type =  TK_NOTYPE;
+                      strncpy(tokens[token_addr].str, substr_start,32); //避免输入过长，导致缓冲区溢出
+                     }
+                    else
+                     {
+                      tokens[token_addr].type =  TK_NOTYPE;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
+                     }
+                   break;
 
 
           //default: TODO();
