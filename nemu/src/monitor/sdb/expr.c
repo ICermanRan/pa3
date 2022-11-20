@@ -74,10 +74,10 @@ void init_regex() {
 
 typedef struct token {
   int type;
-  char str[65536];
+  char str[10000];
 } Token;
 
-static Token tokens[65536] __attribute__((used)) = {};
+static Token tokens[10000] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 //int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
