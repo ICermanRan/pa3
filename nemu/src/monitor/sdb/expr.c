@@ -203,7 +203,7 @@ static bool make_token(char *e) {
                   //     strncpy(tokens[token_addr].str, substr_start,substr_len); 
                   //     tokens[token_addr].str[substr_len] = '\0';
                   //    }
-                   break;
+                   continue;
 
 
           //default: TODO();
