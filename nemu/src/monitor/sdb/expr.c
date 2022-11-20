@@ -74,10 +74,10 @@ void init_regex() {
 
 typedef struct token {
   int type;
-  char str[32];
+  char str[65536];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[65536] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 //int num_substr_len = 0;//存放数字字符长度，用于非数字字符存放在tokens数组
@@ -178,21 +178,21 @@ static bool make_token(char *e) {
                    break;
 
           case TK_num:  
-                    if(substr_len > 33)
-                     {
-                      tokens[token_addr].type =  TK_num;
-                      strncpy(tokens[token_addr].str, substr_start,32); //避免输入过长，导致缓冲区溢出
-                     }
-                    else
-                     {
+                    // if(substr_len > 33)
+                    //  {
+                    //   tokens[token_addr].type =  TK_num;
+                    //   strncpy(tokens[token_addr].str, substr_start,32); //避免输入过长，导致缓冲区溢出
+                    //  }
+                    // else
+                    //  {
                       tokens[token_addr].type =  TK_num;
                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
                       tokens[token_addr].str[substr_len] = '\0';
-                     }
+                    //  }
                    break;
           
           case TK_NOTYPE:
-                     token_addr--;
+                     token_addr--;//检测到空格时，无需任何操作，回到前一个token_addr，当作什么也没发生
                      break;
 
 
@@ -420,7 +420,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   p = start;
   q = end;
   
-   printf("进入eval,p = %d, q = %d\n", p, q);
+  //  printf("进入eval,p = %d, q = %d\n", p, q);
 
 
   if (p > q)
@@ -431,9 +431,9 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
 
   else if (p == q)
    {
-     printf("2、判断为:It's a number\n"); 
+    //  printf("2、判断为:It's a number\n"); 
      value_num = atoi(tokens[p].str); 
-     printf("value_num = %d\n" , value_num);
+    //  printf("value_num = %d\n" , value_num);
      result = value_num;
      return result;
    }
@@ -450,14 +450,14 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     
     if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == false))
     {
-      printf("去掉外面一层括号后，不再被括号包围且内部括号配对：\n");
+      // printf("去掉外面一层括号后，不再被括号包围且内部括号配对：\n");
       result = eval(p + 1, q - 1);
       return result;
     }
     else if((check_parentheses(p+1,q-1) == 0) && (check_surround(p+1,q-1) == false))
     {
-      printf("去掉外面一层括号后，不再被括号包围但内部括号不配对：\n");
-      printf("此时先找主运算符");
+      // printf("去掉外面一层括号后，不再被括号包围但内部括号不配对：\n");
+      // printf("此时先找主运算符");
       op = main_op(p,q);
       op_type = tokens[op].type;
       //printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
@@ -474,7 +474,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     }
     else if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == true))
     {
-      printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
+      // printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
       result = eval(p + 1, q - 1);
       return result;
     }
@@ -484,8 +484,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    // printf("针对去掉括号没有问题的时候：\n");
     op = main_op(p,q);
     op_type = tokens[op].type;
-    printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-    printf("开始求值\n");
+    // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+    // printf("开始求值\n");
     val1 = eval(p, op - 1);
     val2 = eval(op + 1, q);
       switch (op_type) {
