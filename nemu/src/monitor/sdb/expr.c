@@ -307,7 +307,7 @@ static bool check_surround(int p, int q)
   if(condition_1 == 1)
   {
     // printf("condition_1 = %d\n", condition_1);
-    printf("被括号包围，返回true\n");
+    // printf("被括号包围，返回true\n");
     logic1 = true;
   }
    if(condition_1 == 0)
