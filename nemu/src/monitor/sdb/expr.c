@@ -332,11 +332,11 @@ static bool check_surround(int p, int q)
 
   for(j = q; j >= p; j--)
   {
-    printf("j = %d\n", j);
+     printf("j = %d\n", j);
     cnt1 = 0;
     for(i = j; i >= p; i--)
     {
-      printf("tokens[i].type = %d\n", tokens[i].type);
+      // printf("tokens[i].type = %d\n", tokens[i].type);
       if(tokens[i].type == '(')
         cnt1 = cnt1 + 1;
       else if(tokens[i].type == ')')
