@@ -298,7 +298,7 @@ int main(int argc, char *argv[]) {
       }
 
       // printf("result = %lu  buf = %s\n", result, buf);//打印表达式及其结果
-      printf(" %lu  %s\n", result, buf);
+      printf("%lu %s\n", result, buf);
       // printf("result = %ld\n", result);//打印表达式及其结果
     }
     
