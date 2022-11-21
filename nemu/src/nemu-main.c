@@ -30,9 +30,6 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
-  engine_start();
-  
-
   /********测试表达式求值-start********/
   FILE *fp;
 	fp = fopen("/home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr//build/input", "r");
@@ -64,6 +61,10 @@ int main(int argc, char *argv[]) {
     }
 	  fclose(fp);//关闭数据文件
   /********测试表达式求值-end********/
+  engine_start();
+  
+
+  
 
 
  // return is_exit_status_bad();
