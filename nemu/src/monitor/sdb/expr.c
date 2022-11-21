@@ -344,7 +344,7 @@ static bool check_surround(int p, int q)
       else 
         cnt1 = cnt1;
 
-      //printf("cnt1 = %d\n", cnt1);
+      printf("cnt1 = %d\n", cnt1);
     } //确认当前位置向左遍历，括号是否配对
 
     if(cnt1 == 0) //不被括号包围，开始找符号
