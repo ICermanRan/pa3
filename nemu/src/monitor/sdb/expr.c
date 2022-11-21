@@ -349,7 +349,8 @@ static bool check_surround(int p, int q)
 
     if(cnt1 == 0) //不被括号包围，开始找符号
     {
-       printf("tokens[j].str = %s\n",tokens[j].str);
+       printf("有资格判断为主符号的tokens[j].str = %s\n",tokens[j].str);
+       printf("tokens[j].type = %d\n",tokens[j].type);
         switch (tokens[j].type) //算符匹配+-
         {  
           case '+':
