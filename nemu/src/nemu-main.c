@@ -33,34 +33,34 @@ int main(int argc, char *argv[]) {
 
   /* Start engine. */
   /********测试表达式求值-start********/
-  	// FILE *fp;
-  	// fp = fopen("/home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr//build/input", "r");
-  	// if(fp == NULL)
-	//  {
-	// 	printf("cannot open this file\n");
-   	// 	return 0;
-	//  }
+  	FILE *fp;
+  	fp = fopen("/home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr//build/input", "r");
+  	if(fp == NULL)
+	 {
+		printf("cannot open this file\n");
+   		return 0;
+	 }
 	
-  	// _Bool * success = NULL;
-  	// unsigned long result;
-	// char buf[65536] = {};
-	// char dtm[65536];
-	// char *arg = NULL; 
-	// char *expr_ready = NULL;
+  	_Bool * success = NULL;
+  	unsigned long result;
+	char buf[65536] = {};
+	char dtm[65536];
+	char *arg = NULL; 
+	char *expr_ready = NULL;
 
-	//  while (fgets(buf, sizeof(buf), fp) != NULL)
-    // {
-	//   strcpy(dtm,buf);//把 buf 所指向的字符串复制到dtm。
-	//   arg = strtok(dtm, " ");// 在第一次分割时，需要指定源字符串
-  	//   if(arg != NULL)
-    //   {
-	// 	sscanf(dtm,"%lu", &result);//sscanf有局限性，遇到空格就结束了，所以只用于读取result
-   	//   	expr_ready = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
-	//     printf("%lu %s\n", result, expr_ready);
-    //   	expr(expr_ready,success);
-    //   }
-    // }
-	//   fclose(fp);//关闭数据文件
+	 while (fgets(buf, sizeof(buf), fp) != NULL)
+    {
+	  strcpy(dtm,buf);//把 buf 所指向的字符串复制到dtm。
+	  arg = strtok(dtm, " ");// 在第一次分割时，需要指定源字符串
+  	  if(arg != NULL)
+      {
+		sscanf(dtm,"%lu", &result);//sscanf有局限性，遇到空格就结束了，所以只用于读取result
+   	  	expr_ready = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
+	    printf("%lu %s\n", result, expr_ready);
+      	expr(expr_ready,success);
+      }
+    }
+	  fclose(fp);//关闭数据文件
  /********测试表达式求值-end********/
   
   

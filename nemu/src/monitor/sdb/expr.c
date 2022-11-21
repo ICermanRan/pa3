@@ -98,7 +98,7 @@ static int nr_token __attribute__((used))  = 0;
 static bool make_token(char *e) {
   int position = 0;
   int i;
-  u_int32_t value;
+  uint64_t value;
  
   regmatch_t pmatch;//存放匹配文本串位置信息
 
@@ -226,7 +226,7 @@ static bool make_token(char *e) {
    if( logic == false)
     return false;
   
-  printf("value = %d\n", value);
+  printf("value = %lu\n", value);
   token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
   return true;
 
@@ -414,8 +414,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   int op_type;
   int val1,val2;
   int p,q;
-  u_int32_t result = 0;
-  u_int32_t value_num;//数字字符转为数值
+  uint64_t result = 0;
+  uint64_t value_num;//数字字符转为数值
   
   p = start;
   q = end;
