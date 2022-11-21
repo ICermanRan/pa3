@@ -332,7 +332,7 @@ static bool check_surround(int p, int q)
 
   for(j = q; j >= p; j--)
   {
-    //printf("j = %d\n", j);
+    printf("j = %d\n", j);
     cnt1 = 0;
     for(i = j; i >= p; i--)
     {
