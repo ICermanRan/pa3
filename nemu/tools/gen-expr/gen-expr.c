@@ -271,7 +271,7 @@ int main(int argc, char *argv[]) {
     //编译code.c的时候把warning当作error对待，system函数的返回值会有变化，检测到变化就通过continue，重新生成表达式
     int ret = system("gcc /home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/code.c -g -Werror -o  /home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/.expr");  
     //  int ret = system("gcc /home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/code.c -g  -o  /home/ran/ysyx/ysyx-workbench/nemu/tools/gen-expr/.expr");
-    //  printf("ret = %d\n", ret);
+    // printf("ret = %d\n", ret);
     if (ret != 0) 
       continue;
     else if (ret == 256)
