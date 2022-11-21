@@ -416,7 +416,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   p = start;
   q = end;
   
-  //  printf("进入eval,p = %d, q = %d\n", p, q);
+  printf("进入eval,p = %d, q = %d\n", p, q);
 
 
   if (p > q)
@@ -427,9 +427,9 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
 
   else if (p == q)
    {
-    //  printf("2、判断为:It's a number\n"); 
+    printf("2、判断为:It's a number\n"); 
      value_num = atoi(tokens[p].str); 
-    //  printf("value_num = %d\n" , value_num);
+    printf("value_num = %lu\n" , value_num);
      result = value_num;
      return result;
    }
@@ -446,17 +446,17 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     
     if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == false))
     {
-      // printf("去掉外面一层括号后，不再被括号包围且内部括号配对：\n");
+      printf("去掉外面一层括号后，不再被括号包围且内部括号配对：\n");
       result = eval(p + 1, q - 1);
       return result;
     }
     else if((check_parentheses(p+1,q-1) == 0) && (check_surround(p+1,q-1) == false))
     {
-      // printf("去掉外面一层括号后，不再被括号包围但内部括号不配对：\n");
-      // printf("此时先找主运算符");
+       printf("去掉外面一层括号后，不再被括号包围但内部括号不配对：\n");
+       printf("此时先找主运算符");
       op = main_op(p,q);
       op_type = tokens[op].type;
-      //printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+       printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
       val1 = eval(p, op - 1);
       val2 = eval(op + 1, q);
       switch (op_type) 
@@ -470,14 +470,14 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     }
     else if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == true))
     {
-      // printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
+      printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
       result = eval(p + 1, q - 1);
       return result;
     }
   
   }
   else {
-   // printf("针对去掉括号没有问题的时候：\n");
+    printf("针对去掉括号没有问题的时候：\n");
     op = main_op(p,q);
     op_type = tokens[op].type;
     // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
