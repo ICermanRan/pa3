@@ -248,16 +248,16 @@ int main(int argc, char *argv[]) {
       gen_rand_expr();
     }
     buf[buf_addr] = '\0';
-    // printf("在已经产生完表达式后，循环打印出来\n");
-    // printf("buf_addr = %d\n", buf_addr);
-    // int x = strlen(buf);
-    // printf("buf长度为%d\n",x);
-    // printf("buf=%s\n", buf);
-    // int j;
-    // for(j = 0; j < buf_addr; j++)
-    // {
-    //   printf("buf[%d] = %c\n", j, buf[j]);
-    // }
+    printf("在已经产生完表达式后，循环打印出来\n");
+    printf("buf_addr = %d\n", buf_addr);
+    int x = strlen(buf);
+    printf("buf长度为%d\n",x);
+    printf("buf=%s\n", buf);
+    int j;
+    for(j = 0; j < buf_addr; j++)
+    {
+      printf("buf[%d] = %c\n", j, buf[j]);
+    }
 
     sprintf(code_buf, code_format, buf);//把code_format和buf数组的内容相结合，存到code_buf，其中的%s由buf赋值
 

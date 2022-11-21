@@ -45,7 +45,9 @@ int main(int argc, char *argv[]) {
   	unsigned long result;
 	char buf[65536] = {};
 	char dtm[65536];
+	char expr_2[65536];
 	char *arg = NULL; 
+	char *expr_wrong = NULL;
 	char *expr_ready = NULL;
 
 	 while (fgets(buf, sizeof(buf), fp) != NULL)
@@ -55,9 +57,19 @@ int main(int argc, char *argv[]) {
   	  if(arg != NULL)
       {
 		sscanf(dtm,"%lu", &result);//sscanf有局限性，遇到空格就结束了，所以只用于读取result
-   	  	expr_ready = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
-	    printf("%lu %s\n", result, expr_ready);
+   	  	expr_wrong = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
+		int strLen = strlen(expr_wrong);
+	    // printf("%lu %s\n", result, expr_ready);
+		int i;
+		for(i = 0; i < strLen-1; i++)
+		{
+			expr_2[i] = *(expr_wrong+i);
+		}
+
+		expr_ready = expr_2;
+
       	expr(expr_ready,success);
+		memset(expr_2, '\0', sizeof(expr_2));
       }
     }
 	  fclose(fp);//关闭数据文件
