@@ -328,7 +328,7 @@ static bool check_surround(int p, int q)
   int stop_1 = 0,stop_2 = 0;
   int main_addr = 0;
  
-  // printf("进入main_op,p = %d, q = %d\n", p ,q);
+  printf("进入main_op,p = %d, q = %d\n", p ,q);
 
   for(j = q; j >= p; j--)
   {
@@ -452,7 +452,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     }
     else if((check_parentheses(p+1,q-1) == 0) && (check_surround(p+1,q-1) == false))
     {
-       printf("去掉外面一层括号后，不再被括号包围但内部括号不配对：\n");
+       printf("去掉外面一层括号后，不再被括号包围,但内部括号不配对：\n");
        printf("此时先找主运算符");
       op = main_op(p,q);
       op_type = tokens[op].type;
