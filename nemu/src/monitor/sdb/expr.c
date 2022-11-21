@@ -357,6 +357,7 @@ static bool check_surround(int p, int q)
           case '-':
                   main_addr = j;
                   stop_1 = 1;//表示已找到主运算符+-，无需再遍历
+                  return main_addr;
                   break;
           default :
                   break;
@@ -389,6 +390,7 @@ static bool check_surround(int p, int q)
           case '/':
                   main_addr = j;
                   stop_2 = 1;//表示已找到主运算符*/，无需再遍历
+                  return main_addr;
                   break;
           default :
                   break;
