@@ -247,9 +247,12 @@ int main(int argc, char *argv[]) {
       buf_addr = 0;
       gen_rand_expr();
     }
-    // buf[buf_addr] = '\0';
-
+    buf[buf_addr] = '\0';
     // printf("在已经产生完表达式后，循环打印出来\n");
+    // printf("buf_addr = %d\n", buf_addr);
+    // int x = strlen(buf);
+    // printf("buf长度为%d\n",x);
+    // printf("buf=%s\n", buf);
     // int j;
     // for(j = 0; j < buf_addr; j++)
     // {
