@@ -273,7 +273,7 @@ static int check_parentheses(int p, int q)
   if(cnt_l == cnt_r)
     return condition_2 = 1;//左括号个数等于右括号个数，匹配
 
-
+  printf("condition_2 = %d\n", condition_2);
   return condition_2;
 
 }
@@ -314,7 +314,7 @@ static bool check_surround(int p, int q)
   }
     
 
-  
+  printf("logic= %d\n",logic1);
   return logic1;
 }
   
