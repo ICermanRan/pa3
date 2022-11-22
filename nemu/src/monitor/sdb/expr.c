@@ -421,7 +421,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   p = start;
   q = end;
   
-  // printf("进入eval,p = %d, q = %d\n", p, q);
+  printf("进入eval,p = %d, q = %d\n", p, q);
 
 
   if (p > q)
