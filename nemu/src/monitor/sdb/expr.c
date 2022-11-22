@@ -413,7 +413,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   int op;
   int op_type;
   uint64_t val1,val2;
-  uint64_t p,q;
+  int p,q;
   uint64_t result = 0;
   uint64_t value_num;//数字字符转为数值
   
@@ -462,6 +462,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       op = main_op(p,q);
       op_type = tokens[op].type;
       printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+      printf("p = %d\n", p);
+      printf("q = %d\n", q);
       val1 = eval(p, op - 1);
       val2 = eval(op + 1, q);
 
