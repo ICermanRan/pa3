@@ -273,7 +273,8 @@ static int check_parentheses(int p, int q)
   if(cnt_l == cnt_r)
     return condition_2 = 1;//左括号个数等于右括号个数，匹配
 
-  printf("condition_2 = %d\n", condition_2);
+  Log("condition_2 = %d\n",condition_2);
+  // printf("condition_2 = %d\n", condition_2);
   return condition_2;
 
 }
@@ -314,7 +315,8 @@ static bool check_surround(int p, int q)
   }
     
 
-  printf("logic= %d\n",logic1);
+  Log("logic = %d\n",logic1);
+  // printf("logic= %d\n",logic1);
   return logic1;
 }
   
@@ -479,12 +481,15 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       default: assert(0);
       }
     }
-    else if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == true))
+    else if(check_parentheses(p+1,q-1) == 1)
     {
-      printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
-      result = eval(p + 1, q - 1);
-      printf("result = %lu\n", result);
-      return result;
+      if(check_surround(p+1,q-1) == true)
+      {
+        printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
+        result = eval(p + 1, q - 1);
+        printf("result = %lu\n", result);
+        return result;
+      }
     }
   
   }
