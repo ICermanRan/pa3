@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	 }
 	
   	_Bool * success = NULL;
-  	unsigned long result;
+  	uint64_t result;
 	char buf[65536] = {};
 	char dtm[65536];
 	char expr_2[65536];
@@ -68,8 +68,9 @@ int main(int argc, char *argv[]) {
 
 		expr_ready = expr_2;
 		// printf("expr = %s\n", expr_ready);
-      	uint64_t ans = expr(expr_ready,success);
-		printf("ans = %lu", ans);
+      	expr(expr_ready,success);
+		printf("result = %lu\n", result);
+		// printf("ans = %lu", ans);
 		// int pass_number = 0;
 
 		// if(result == ans)
