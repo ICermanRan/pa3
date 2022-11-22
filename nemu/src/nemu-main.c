@@ -67,15 +67,16 @@ int main(int argc, char *argv[]) {
 		}
 
 		expr_ready = expr_2;
-		printf("expr = %s\n", expr_ready);
+		// printf("expr = %s\n", expr_ready);
       	uint64_t ans = expr(expr_ready,success);
-		int pass_number = 0;
+		printf("ans = %lu", ans);
+		// int pass_number = 0;
 
-		if(result == ans)
-		 {
-		   pass_number++;
-		   printf("pass_number = %d\n", pass_number);
-		 }
+		// if(result == ans)
+		//  {
+		//    pass_number++;
+		//    printf("pass_number = %d\n", pass_number);
+		//  }
 		memset(expr_2, '\0', sizeof(expr_2));
       }
     }

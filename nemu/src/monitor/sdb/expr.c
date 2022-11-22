@@ -222,7 +222,7 @@ static bool make_token(char *e) {
    if( logic == false)
     return false;
   
-  printf("value = %lu\n", value);
+   printf("value = %lu\n", value);
   token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
   return true;
 
