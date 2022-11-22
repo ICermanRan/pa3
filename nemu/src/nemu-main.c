@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 		if(result == ans)
 		 {
 		   pass_number++;
-		   printf("pass_number = %d", pass_number);
+		   printf("pass_number = %d\n", pass_number);
 		 }
 		memset(expr_2, '\0', sizeof(expr_2));
       }
