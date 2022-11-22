@@ -412,7 +412,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
  {
   int op;
   int op_type;
-  uint64_t val1,val2;
+  int val1;
+  uint64_t val2;
   int p,q;
   uint64_t result = 0;
   uint64_t value_num;//数字字符转为数值
@@ -467,7 +468,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       val1 = eval(p, op - 1);
       val2 = eval(op + 1, q);
 
-      printf("val1 = %lu\n", val1);
+      printf("val1 = %d\n", val1);
       printf("val2 = %lu\n", val2);
       switch (op_type) 
       {
@@ -495,7 +496,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     // printf("开始求值\n");
     val1 = eval(p, op - 1);
     val2 = eval(op + 1, q);
-    printf("val1 = %lu\n", val1);
+    printf("val1 = %d\n", val1);
       printf("val2 = %lu\n", val2);
       switch (op_type) {
       case '+': return result = val1 + val2;
