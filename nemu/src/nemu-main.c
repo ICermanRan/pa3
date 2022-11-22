@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		expr_ready = expr_2;
-		// printf("expr = %s\n", expr_ready);
+		 printf("expr = %s\n", expr_ready);
       	expr(expr_ready,success);
 		printf("result = %lu\n", result);
 		// printf("ans = %lu", ans);
