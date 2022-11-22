@@ -67,9 +67,9 @@ int main(int argc, char *argv[]) {
 		}
 
 		expr_ready = expr_2;
-		 printf("expr = %s\n", expr_ready);
-      	expr(expr_ready,success);
+		printf("expr = %s\n", expr_ready);
 		printf("result = %lu\n", result);
+      	expr(expr_ready,success);
 		// printf("ans = %lu", ans);
 		// int pass_number = 0;
 
