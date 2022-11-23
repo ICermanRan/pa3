@@ -376,7 +376,7 @@ static bool check_surround(int p, int q)
           case '-':
                   // printf("找到主运算符\n");
                   main_addr = j;
-                  Log("主运算符main_addr = %d\n" ,j);
+                  Log("主运算符main_addr = %d\n" ,main_addr);
                   stop_1 = 1;//表示已找到主运算符+-，无需再遍历
                   return main_addr;
                   break;
