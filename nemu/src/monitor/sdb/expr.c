@@ -486,29 +486,24 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       default: assert(0);
       }
     }
-    else if(check_surround(p+1,q-1) == true)
+    else if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == true))
     {
-      if(check_parentheses(p+1,q-1) == 1)
-      {
-        printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
-        result = eval(p + 1, q - 1);
-        printf("result = %lu\n", result);
-        return result;
-      }
+      printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
+      result = eval(p + 1, q - 1);
+      printf("result = %lu\n", result);
+      return result;
     }
-    else if(check_surround(p+1,q-1) == true)
+    else if((check_parentheses(p+1,q-1) == 0) && (check_surround(p+1,q-1) == true))
     {
-      if(check_parentheses(p+1,q-1) == 0)
-      {
-        printf("去掉外面一层括号后，仍被括号包围,但内部括号不配对：\n");
-        op = main_op(p,q);
-        op_type = tokens[op].type;
-        val1 = eval(p, op - 1);
-        val2 = eval(op + 1, q);
+      printf("去掉外面一层括号后，仍被括号包围,但内部括号不配对：\n");
+      op = main_op(p,q);
+      op_type = tokens[op].type;
+      val1 = eval(p, op - 1);
+      val2 = eval(op + 1, q);
 
-        printf("val1 = %lu\n", val1);
-        printf("val2 = %lu\n", val2);
-        switch (op_type) 
+      printf("val1 = %lu\n", val1);
+      printf("val2 = %lu\n", val2);
+      switch (op_type) 
         {
         case '+': return result = val1 + val2;
         case '-': return result = val1 - val2;
@@ -517,11 +512,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         default: assert(0);
         }
         return result;
-      }
     }
-  
   }
-  else {
+  else 
+  {
      printf("针对去掉括号没有问题的时候：\n");
     op = main_op(p,q);
     op_type = tokens[op].type;
@@ -541,6 +535,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   }
   return result;
  } 
+
 
 
 static bool warn_wrong(bool a)
