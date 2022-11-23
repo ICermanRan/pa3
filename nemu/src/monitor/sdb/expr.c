@@ -490,7 +490,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     {
       // printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
       result = eval(p + 1, q - 1);
-      printf("result = %lu\n", result);
+      // printf("result = %lu\n", result);
       return result;
     }
     else if((check_parentheses(p+1,q-1) == 0) && (check_surround(p+1,q-1) == true))
