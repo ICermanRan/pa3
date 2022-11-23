@@ -26,7 +26,8 @@ enum {
   TK_NOTYPE = 256, TK_EQ = 257,
 
   /* TODO: Add more token types */
-  TK_num = 255,TK_UNEQ = 258,TK_AND = 259,TK_NEG = 260
+  TK_num = 255,TK_UNEQ = 258,TK_AND = 259,TK_NEG = 260,
+  TK_HEX = 261
 }; //枚举类型，标识符的作用范围是全局的
 
 static struct rule {
@@ -48,7 +49,8 @@ static struct rule {
     {"==", TK_EQ},        // equal
     {"!=", TK_UNEQ},      // unequal
     {"&&", TK_AND},        //and
-    {"-", TK_NEG}
+    {"-", TK_NEG},
+    {"0[xX][[0-9a-fA-F]]+", TK_HEX} //hexadecimal-number
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
