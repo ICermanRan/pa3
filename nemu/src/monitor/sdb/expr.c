@@ -27,7 +27,7 @@ enum {
 
   /* TODO: Add more token types */
   TK_num = 255,TK_UNEQ = 258,TK_AND = 259,TK_NEG = 260,
-  TK_HEX = 261
+  TK_HEX = 261,TK_REG = 262
 }; //枚举类型，标识符的作用范围是全局的
 
 static struct rule {
@@ -50,7 +50,8 @@ static struct rule {
     {"!=", TK_UNEQ},      // unequal
     {"&&", TK_AND},        //and
     {"-", TK_NEG},
-    {"[0][xX][0-9a-fA-F]+", TK_HEX} //hexadecimal-number
+    {"[0][xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
+    {"[$][$a-z][0-9]", TK_REG}
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
@@ -225,6 +226,12 @@ static bool make_token(char *e) {
 
           case TK_HEX:
                       tokens[token_addr].type =  TK_HEX;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
+                   break;
+          
+          case TK_REG:
+                      tokens[token_addr].type =  TK_REG;
                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
                       tokens[token_addr].str[substr_len] = '\0';
                    break;
