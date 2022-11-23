@@ -454,7 +454,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   else if((q > p) && (tokens[p].type == TK_NEG))
    {
      printf("2、判断为:It's a negative number\n");
-     result = 0-eval(p+1,q);
+     result = -eval(p+1,q);
      return result;
    }
   else if (p == q)
