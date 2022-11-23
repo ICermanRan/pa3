@@ -253,8 +253,8 @@ static int check_parentheses(int p, int q)
   int i;
   int cnt_l = 0,cnt_r = 0;//左右括号计数器
 
-  // printf("进入括号配对函数\n");
-  // printf("传入的p = %d ,传入的q = %d\n", p, q);
+   printf("进入括号配对函数\n");
+   printf("传入的p = %d ,传入的q = %d\n", p, q);
   for(i = p; i <= q; i++)
     {
       if((tokens[i].type == '('))
@@ -262,7 +262,7 @@ static int check_parentheses(int p, int q)
       if((tokens[i].type == ')'))
             cnt_r++;
 
-      // printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
+      printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
       if(cnt_l < cnt_r)
       {
         // printf("括号存在不配对,程序中止\n");
@@ -481,16 +481,6 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       default: assert(0);
       }
     }
-    // else if(check_parentheses(p+1,q-1) == 1)
-    // {
-    //   if(check_surround(p+1,q-1) == true)
-    //   {
-    //     printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
-    //     result = eval(p + 1, q - 1);
-    //     printf("result = %lu\n", result);
-    //     return result;
-    //   }
-    // }
     else if(check_surround(p+1,q-1) == true)
     {
       if(check_parentheses(p+1,q-1) == 1)
@@ -498,6 +488,29 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
         result = eval(p + 1, q - 1);
         printf("result = %lu\n", result);
+        return result;
+      }
+    }
+    else if(check_surround(p+1,q-1) == true)
+    {
+      if(check_parentheses(p+1,q-1) == 0)
+      {
+        printf("去掉外面一层括号后，仍被括号包围,但内部括号不配对：\n");
+        op = main_op(p,q);
+        op_type = tokens[op].type;
+        val1 = eval(p, op - 1);
+        val2 = eval(op + 1, q);
+
+        printf("val1 = %lu\n", val1);
+        printf("val2 = %lu\n", val2);
+        switch (op_type) 
+        {
+        case '+': return result = val1 + val2;
+        case '-': return result = val1 - val2;
+        case '*': return result = val1 * val2;
+        case '/': return result = val1 / val2;
+        default: assert(0);
+        }
         return result;
       }
     }
