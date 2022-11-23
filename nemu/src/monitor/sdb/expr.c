@@ -266,14 +266,19 @@ static int check_parentheses(int p, int q)
       if(cnt_l < cnt_r)
       {
         // printf("括号存在不配对,程序中止\n");
-        return condition_2 = 0;
+        condition_2 = 0;
+        Log("condition_2 = %d\n",condition_2);
+        return condition_2;
       }
     }
  
   if(cnt_l == cnt_r)
-    return condition_2 = 1;//左括号个数等于右括号个数，匹配
+  {   
+    condition_2 = 1;
+    Log("condition_2 = %d\n",condition_2);
+    return condition_2;//左括号个数等于右括号个数，匹配
+  }
 
-  Log("condition_2 = %d\n",condition_2);
   // printf("condition_2 = %d\n", condition_2);
   return condition_2;
 
