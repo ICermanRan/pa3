@@ -267,7 +267,7 @@ static int check_parentheses(int p, int q)
       {
         // printf("括号存在不配对,程序中止\n");
         condition_2 = 0;
-        Log("condition_2 = %d\n",condition_2);
+        Log("condition_2 = %d ,括号不配对\n",condition_2);
         return condition_2;
       }
     }
@@ -275,7 +275,7 @@ static int check_parentheses(int p, int q)
   if(cnt_l == cnt_r)
   {   
     condition_2 = 1;
-    Log("condition_2 = %d\n",condition_2);
+    Log("condition_2 = %d ,括号配对\n",condition_2);
     return condition_2;//左括号个数等于右括号个数，匹配
   }
 
@@ -296,8 +296,8 @@ static bool check_surround(int p, int q)
   
   a = tokens[p].type;
   b = tokens[q].type;
-  // printf("进入括号包围函数\n");
-  // printf("传入的p = %d ,传入的q = %d\n", p, q);
+   printf("进入括号包围函数\n");
+   printf("传入的p = %d ,传入的q = %d\n", p, q);
  
  
   if((a == '(') && (b == ')')) //判断是否被一对匹配的括号包围
