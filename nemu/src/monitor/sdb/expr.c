@@ -49,9 +49,10 @@ static struct rule {
     {"==", TK_EQ},        // equal
     {"!=", TK_UNEQ},      // unequal
     {"&&", TK_AND},        //and
-    {"-", TK_NEG},
+    {"-", TK_NEG},         //negative
     {"[0][xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
-    {"[$][$a-z][0-9]", TK_REG}
+    // {"[$][$a-z][0-9]+", TK_REG}
+    {"\\$[\\$]?[a-z0-9]+", TK_REG}
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
@@ -525,15 +526,14 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       // printf("q = %d\n", q);
       val1 = eval(p, op - 1);
       val2 = eval(op + 1, q);
-
-      // printf("val1 = %lu\n", val1);
-      // printf("val2 = %lu\n", val2);
       switch (op_type) 
       {
       case '+': return result = val1 + val2;
       case '-': return result = val1 - val2;
       case '*': return result = val1 * val2;
       case '/': return result = val1 / val2;
+      case TK_EQ : return result = (val1 == val2);
+      case TK_UNEQ : return result = (val1 != val2);
       default: assert(0);
       }
     }
