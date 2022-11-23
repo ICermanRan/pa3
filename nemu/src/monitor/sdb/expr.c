@@ -262,7 +262,7 @@ static int check_parentheses(int p, int q)
       if((tokens[i].type == ')'))
             cnt_r++;
 
-      printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
+      // printf("cnt_l = %d, cnt_r = %d\n", cnt_l,cnt_r);
       if(cnt_l < cnt_r)
       {
         // printf("括号存在不配对,程序中止\n");
