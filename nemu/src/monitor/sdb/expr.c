@@ -481,9 +481,19 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       default: assert(0);
       }
     }
-    else if(check_parentheses(p+1,q-1) == 1)
+    // else if(check_parentheses(p+1,q-1) == 1)
+    // {
+    //   if(check_surround(p+1,q-1) == true)
+    //   {
+    //     printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
+    //     result = eval(p + 1, q - 1);
+    //     printf("result = %lu\n", result);
+    //     return result;
+    //   }
+    // }
+    else if(check_surround(p+1,q-1) == true)
     {
-      if(check_surround(p+1,q-1) == true)
+      if(check_parentheses(p+1,q-1) == 1)
       {
         printf("去掉外面一层括号后，仍被括号包围且内部括号配对：\n");
         result = eval(p + 1, q - 1);
