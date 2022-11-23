@@ -223,6 +223,12 @@ static bool make_token(char *e) {
                       tokens[token_addr].str[substr_len] = '\0';
                    break;
 
+          case TK_HEX:
+                      tokens[token_addr].type =  TK_HEX;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
+                   break;
+
           //default: TODO();
         }
       
