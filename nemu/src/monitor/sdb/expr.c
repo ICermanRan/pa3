@@ -455,6 +455,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    {
      printf("2、判断为:It's a negative number\n");
      result = -eval(p+1,q);
+     Log("negative number result= %lu\n", result);
      return result;
    }
   else if (p == q)
