@@ -347,7 +347,7 @@ static bool check_surround(int p, int q)
   int stop_1 = 0,stop_2 = 0;
   int main_addr = 0;
  
-  // printf("进入main_op,p = %d, q = %d\n", p ,q);
+   printf("进入main_op,p = %d, q = %d\n", p ,q);
 
   for(j = q; j >= p; j--)
   {
@@ -368,8 +368,8 @@ static bool check_surround(int p, int q)
 
     if(cnt1 == 0) //不被括号包围，开始找符号
     {
-      //  printf("有资格判断为主符号的tokens[j].str = %s\n",tokens[j].str);
-      //  printf("tokens[j].type = %d\n",tokens[j].type);
+        printf("有资格判断为主符号的tokens[j].str = %s\n",tokens[j].str);
+        printf("tokens[j].type = %d\n",tokens[j].type);
         switch (tokens[j].type) //算符匹配+-
         {  
           case '+':
