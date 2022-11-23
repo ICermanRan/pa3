@@ -442,7 +442,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   p = start;
   q = end;
   
-   printf("进入eval,p = %d, q = %d\n", p, q);
+  printf("进入eval,p = %d, q = %d\n", p, q);
+
 
 
   if (p > q)
@@ -450,22 +451,27 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("p = %d, q = %d,p > q,It's a Bad expression\n",p ,q);
      assert(0);
    }  
-
+  else if((q > p) && (tokens[p].type == TK_NEG))
+   {
+     printf("2、判断为:It's a negative number\n");
+     result = 0-eval(p+1,q);
+     return result;
+   }
   else if (p == q)
    {
       printf("2、判断为:It's a number\n");
-     value_num = atoi(tokens[p].str); 
+      value_num = atoi(tokens[p].str); 
     //  printf("value_num = %lu\n" , value_num);
-     if(tokens[p-1].type == TK_NEG)
-      {
-        result = 0-value_num;
-        printf("value_num = %lu\n" , value_num);
-      }
-     else
-     {
+    //  if(tokens[p-1].type == TK_NEG)
+    //   {
+    //     result = 0-value_num;
+    //     printf("value_num = %lu\n" , value_num);
+    //   }
+    //  else
+    //  {
         result = value_num;
         printf("value_num = %lu\n" , value_num);
-     }
+    //  }
     return result;
    }
 
