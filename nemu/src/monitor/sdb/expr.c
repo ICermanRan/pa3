@@ -462,17 +462,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    {
       printf("2、判断为:It's a number\n");
       value_num = atoi(tokens[p].str); 
-    //  printf("value_num = %lu\n" , value_num);
-    //  if(tokens[p-1].type == TK_NEG)
-    //   {
-    //     result = 0-value_num;
-    //     printf("value_num = %lu\n" , value_num);
-    //   }
-    //  else
-    //  {
-        result = value_num;
-        printf("value_num = %lu\n" , value_num);
-    //  }
+      result = value_num;
+      printf("value_num = %lu\n" , value_num);
     return result;
    }
 
