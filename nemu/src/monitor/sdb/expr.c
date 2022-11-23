@@ -50,7 +50,7 @@ static struct rule {
     {"!=", TK_UNEQ},      // unequal
     {"&&", TK_AND},        //and
     {"-", TK_NEG},
-    {"[0][xX][0-9a-fA-F]*", TK_HEX} //hexadecimal-number
+    {"[0][xX][0-9a-fA-F]+", TK_HEX} //hexadecimal-number
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
