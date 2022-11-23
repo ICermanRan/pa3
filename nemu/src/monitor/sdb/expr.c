@@ -451,7 +451,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("p = %d, q = %d,p > q,It's a Bad expression\n",p ,q);
      assert(0);
    }  
-  else if((q > p) && (tokens[p].type == TK_NEG))
+  else if((q == p+1) && (tokens[p].type == TK_NEG))
    {
      printf("2、判断为:It's a negative number\n");
      result = -eval(p+1,q);
