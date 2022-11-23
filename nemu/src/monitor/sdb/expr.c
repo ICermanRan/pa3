@@ -23,10 +23,10 @@
 #include <string.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ = 257,
 
   /* TODO: Add more token types */
-  TK_num = 255
+  TK_num = 255,TK_UNEQ = 258,TK_AND = 259,TK_NEG = 260
 }; //枚举类型，标识符的作用范围是全局的
 
 static struct rule {
@@ -41,12 +41,14 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-    //{"(-)?[1-9][0-9]*", TK_num}, // number
     {"[1-9][0-9]*", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
     {"==", TK_EQ},        // equal
+    {"!=", TK_UNEQ},      // unequal
+    {"&&", TK_AND},        //and
+    {"-", TK_NEG}
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
@@ -170,24 +172,33 @@ static bool make_token(char *e) {
                     break;
 
           case '-':  
-                   tokens[token_addr].type =  45;
-                   strncpy(tokens[token_addr].str, substr_start,substr_len);
-                   tokens[token_addr].str[substr_len] = '\0';
-                   // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
-                   break;
+                   if(tokens[token_addr-1].type == '+' || tokens[token_addr-1].type == '-' || tokens[token_addr-1].type == '*' || tokens[token_addr-1].type == '/' || tokens[token_addr-1].type == '(' || token_addr == 0)
+                   {
+                    //当字符为-，且满足前面一个字符出现为+-*/(其中之一
+                    //或者，此时token_addr为0
+                    //则判定其存储类型不为减号，而是取负
+                    tokens[token_addr].type =  TK_NEG;
+                    strncpy(tokens[token_addr].str, substr_start,substr_len);
+                    tokens[token_addr].str[substr_len] = '\0';
+                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                    break;
+                   }
+                   else
+                   {
+                    tokens[token_addr].type =  45;
+                    strncpy(tokens[token_addr].str, substr_start,substr_len);
+                    tokens[token_addr].str[substr_len] = '\0';
+                    // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
+                    break;
+                   }
+                   
+                   
+                   
 
           case TK_num:  
-                    // if(substr_len > 33)
-                    //  {
-                    //   tokens[token_addr].type =  TK_num;
-                    //   strncpy(tokens[token_addr].str, substr_start,32); //避免输入过长，导致缓冲区溢出
-                    //  }
-                    // else
-                    //  {
                       tokens[token_addr].type =  TK_num;
                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
                       tokens[token_addr].str[substr_len] = '\0';
-                    //  }
                    break;
           
           case TK_NOTYPE:
@@ -230,7 +241,8 @@ static bool make_token(char *e) {
 
 
 
-word_t expr(char *e, bool *success) {
+word_t expr(char *e, bool *success)
+ {
   if (!make_token(e)) {
     printf("回到顶层");
     *success = false;
@@ -243,7 +255,7 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
  // TODO();// 记得取消注释！！
   return 0;
-}
+ }
 
   
 //判断表达式的括号是否配对匹配
@@ -439,11 +451,15 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
 
   else if (p == q)
    {
-    //  printf("2、判断为:It's a number\n"); 
+    //  printf("2、判断为:It's a number\n");
      value_num = atoi(tokens[p].str); 
     //  printf("value_num = %lu\n" , value_num);
-     result = value_num;
-     return result;
+     if(tokens[p-1].type == TK_NEG)
+      result = 0-value_num;
+     else
+      result = value_num;
+     
+    return result;
    }
 
   else if((check_surround(p, q) == true) && (check_parentheses(p,q) == 0))//被包围但不匹配
