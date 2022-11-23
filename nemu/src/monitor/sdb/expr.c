@@ -374,9 +374,9 @@ static bool check_surround(int p, int q)
         {  
           case '+':
           case '-':
-                  printf("找到主运算符\n");
+                  // printf("找到主运算符\n");
                   main_addr = j;
-                  Log("main_addr = %d" ,j);
+                  Log("主运算符main_addr = %d\n" ,j);
                   stop_1 = 1;//表示已找到主运算符+-，无需再遍历
                   return main_addr;
                   break;
