@@ -177,6 +177,7 @@ static bool make_token(char *e) {
                     //当字符为-，且满足前面一个字符出现为+-*/(其中之一
                     //或者，此时token_addr为0
                     //则判定其存储类型不为减号，而是取负
+                    //这里有点bug
                     tokens[token_addr].type =  TK_NEG;
                     strncpy(tokens[token_addr].str, substr_start,substr_len);
                     tokens[token_addr].str[substr_len] = '\0';
@@ -191,10 +192,7 @@ static bool make_token(char *e) {
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
                    }
-                   
-                   
-                   
-
+          
           case TK_num:  
                       tokens[token_addr].type =  TK_num;
                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
@@ -205,6 +203,23 @@ static bool make_token(char *e) {
                      token_addr--;//检测到空格时，无需任何操作，回到前一个token_addr，当作什么也没发生
                      break;
 
+          case TK_EQ:
+                      tokens[token_addr].type =  TK_EQ;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
+                   break;
+          
+          case TK_UNEQ:
+                      tokens[token_addr].type =  TK_UNEQ;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
+                   break;
+
+          case TK_AND:
+                      tokens[token_addr].type =  TK_AND;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
+                   break;
 
           //default: TODO();
         }
