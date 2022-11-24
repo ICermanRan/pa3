@@ -262,7 +262,8 @@ static bool make_token(char *e) {
                       if(tokens[token_addr-1].type == '$')
                       {
                         tokens[token_addr].type =  TK_REG;
-                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                        // strncpy(tokens[token_addr].str, substr_start,substr_len);
+                        strncpy(tokens[token_addr].str, substr_start,2);  
                         tokens[token_addr].str[substr_len] = '\0';
                         break;
                       }
@@ -273,7 +274,8 @@ static bool make_token(char *e) {
                       )
                       {
                        tokens[token_addr].type =  '$';
-                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      //  strncpy(tokens[token_addr].str, substr_start,substr_len);
+                       strncpy(tokens[token_addr].str, substr_start,1);  
                        tokens[token_addr].str[substr_len] = '\0';
                        break;
                       }
