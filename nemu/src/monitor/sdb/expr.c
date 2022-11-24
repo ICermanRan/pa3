@@ -587,6 +587,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       // printf("去掉外面一层括号后，仍被括号包围,但内部括号不配对：\n");
       op = main_op(p,q);
       op_type = tokens[op].type;
+      // Log("main_op = %s, op = %d", tokens[op].str,op);
 
        if(tokens[op].type == TK_DEREF)
       {
