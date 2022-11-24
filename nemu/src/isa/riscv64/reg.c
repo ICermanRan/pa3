@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include "local-include/reg.h"
+#define GET_ARRAY_LEN(array,len) {len = (sizeof(array) / sizeof(array[0]));}
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -34,16 +35,25 @@ void isa_reg_display() {
 
 }
 
+static int find_string(const char *strs[], const char *str, int len)
+{
+    int i = 1;
+    while(i < len + 1){
+        if(strcmp(*strs, str) == 0){
+            break;
+        }
+        i++;
+        strs++;
+    }
+    if(i == len + 1){
+        return -1;
+    }
+    return i-1;
+}
 word_t isa_reg_str2val(const char *s, bool *success) {
-  int i = 0;
-  int j = 0;
-  printf("s = %s\n", s);
-  while(strcmp(s,regs[i]) == -1)
-  {
-	printf("%s", regs[i]);
-	i++;
-	j = i;
-  }
+  int len,j;
+  GET_ARRAY_LEN(regs,len);
+  j = find_string(regs, s, len);
   printf("j = %d\n", j);
   word_t reg_value = cpu.gpr[j];	 
   return reg_value;
