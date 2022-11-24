@@ -266,12 +266,12 @@ static bool make_token(char *e) {
       token_addr++;
   }
 
-  int c;
-  for(c = 0; c < token_addr; c++)
-  {
-     printf("tokens[%d].type = %d ", c, tokens[c].type);
-     printf("tokens[%d].str = %s\n", c,tokens[c].str);
-  }
+  // int c;
+  // for(c = 0; c < token_addr; c++)
+  // {
+  //    printf("tokens[%d].type = %d ", c, tokens[c].type);
+  //    printf("tokens[%d].str = %s\n", c,tokens[c].str);
+  // }
 
    token_addrs = token_addr-1;
    value = eval(0,token_addrs);
