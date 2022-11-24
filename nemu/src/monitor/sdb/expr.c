@@ -412,10 +412,8 @@ static bool check_surround(int p, int q)
 
   if(op == -1)
     assert(0);//未找到主运算符，程序中止
-
-
   return main_addr;
- }
+}
 
 //eval函数 
 static int eval(int start, int end)  //p=开始位置，q=结束位置
@@ -492,6 +490,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       case '/': return result = val1 / val2;
       case TK_EQ : return result = (val1 == val2);
       case TK_UNEQ : return result = (val1 != val2);
+      case TK_AND : return result = (val1 && val2);
       default: assert(0);
       }
     }
@@ -518,6 +517,9 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         case '-': return result = val1 - val2;
         case '*': return result = val1 * val2;
         case '/': return result = val1 / val2;
+        case TK_EQ : return result = (val1 == val2);
+        case TK_UNEQ : return result = (val1 != val2);
+        case TK_AND : return result = (val1 && val2);
         default: assert(0);
         }
         return result;
@@ -539,6 +541,9 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       case '-': return result = val1 - val2;
       case '*': return result = val1 * val2;
       case '/': return result = val1 / val2;
+      case TK_EQ : return result = (val1 == val2);
+      case TK_UNEQ : return result = (val1 != val2);
+      case TK_AND : return result = (val1 && val2);
       default: assert(0);
     }
   }
