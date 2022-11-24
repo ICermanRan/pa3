@@ -464,7 +464,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   else if((q == p+1) && (tokens[p].type == TK_DEREF) && (tokens[q].type == TK_HEX))
    {
     //判定为指针解引用
-     printf("%s", tokens[q].str);
+     printf("%s\n", tokens[q].str);
      long long DEREF_addr = atoi(tokens[q].str);
      printf("DEREF_addr = %#llx\n", DEREF_addr);
      result = vaddr_read(DEREF_addr,4);
