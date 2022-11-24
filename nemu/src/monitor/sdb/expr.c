@@ -488,7 +488,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    }
   else if(p == q && tokens[p].type == TK_REG)
    {
-     printf("2、判断为:REG reading \n");
+    //  printf("2、判断为:REG reading \n");
      const char *s;
      _Bool * success = NULL;
      s = tokens[p].str + 1;
@@ -537,30 +537,41 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     {
       // printf("去掉外面一层括号后，不再被括号包围,但内部括号不配对：\n");
       //  printf("此时先找主运算符");
-      op = main_op(p,q);
-      op_type = tokens[op].type;
-      // printf("在去掉两边括号不对时，就先找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-      // printf("p = %d\n", p);
-      // printf("q = %d\n", q);
-      val1 = eval(p, op - 1);
-      val2 = eval(op + 1, q);
-      switch (op_type) 
+       op = main_op(p,q);
+       op_type = tokens[op].type;
+
+       if(tokens[op].type == TK_DEREF)
       {
-      case '+': return result = val1 + val2;
-      case '-': return result = val1 - val2;
-      case '*': return result = val1 * val2;
-      case '/': return result = val1 / val2;
-      case TK_EQ : return result = (val1 == val2);
-      case TK_UNEQ : return result = (val1 != val2);
-      case TK_AND : return result = (val1 && val2);
-      
-      case TK_DEREF ://指针解引用
+                            //指针解引用
+        val2 = eval(op+1,q);
+        val1 = 0;
+        return result = val2;
+            
+      }
+      else 
+      {
+        val1 = eval(p, op - 1);
+        val2 = eval(op + 1, q);
+        // printf("val1 = %lu\n", val1);
+        // printf("val2 = %lu\n", val2);
+        switch (op_type)
+        {
+          case '+': return result = val1 + val2;
+          case '-': return result = val1 - val2;
+          case '*': return result = val1 * val2;
+          case '/': return result = val1 / val2;
+          case TK_EQ : return result = (val1 == val2);
+          case TK_UNEQ : return result = (val1 != val2);
+          case TK_AND : return result = (val1 && val2);
+
+          case TK_DEREF ://指针解引用
                      word_t DEREF_addr;
                      sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
                      result = vaddr_read(DEREF_addr,4);
                      return result;
 
-      default: assert(0);
+          default: assert(0);
+        }
       }
     }
     else if((check_parentheses(p+1,q-1) == 1) && (check_surround(p+1,q-1) == true))
@@ -575,30 +586,40 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       // printf("去掉外面一层括号后，仍被括号包围,但内部括号不配对：\n");
       op = main_op(p,q);
       op_type = tokens[op].type;
-      val1 = eval(p, op - 1);
-      val2 = eval(op + 1, q);
 
-      // printf("val1 = %lu\n", val1);
-      // printf("val2 = %lu\n", val2);
-      switch (op_type) 
+       if(tokens[op].type == TK_DEREF)
+      {
+                            //指针解引用
+        val2 = eval(op+1,q);
+        val1 = 0;
+        return result = val2;
+            
+      }
+      else 
+      {
+        val1 = eval(p, op - 1);
+        val2 = eval(op + 1, q);
+        // printf("val1 = %lu\n", val1);
+        // printf("val2 = %lu\n", val2);
+        switch (op_type)
         {
-        case '+': return result = val1 + val2;
-        case '-': return result = val1 - val2;
-        case '*': return result = val1 * val2;
-        case '/': return result = val1 / val2;
-        case TK_EQ : return result = (val1 == val2);
-        case TK_UNEQ : return result = (val1 != val2);
-        case TK_AND : return result = (val1 && val2);
+          case '+': return result = val1 + val2;
+          case '-': return result = val1 - val2;
+          case '*': return result = val1 * val2;
+          case '/': return result = val1 / val2;
+          case TK_EQ : return result = (val1 == val2);
+          case TK_UNEQ : return result = (val1 != val2);
+          case TK_AND : return result = (val1 && val2);
 
-        case TK_DEREF ://指针解引用
+          case TK_DEREF ://指针解引用
                      word_t DEREF_addr;
                      sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
                      result = vaddr_read(DEREF_addr,4);
                      return result;
 
-        default: assert(0);
+          default: assert(0);
         }
-        return result;
+      }
     }
   }
   else 
@@ -610,22 +631,11 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     // printf("开始求值\n");
     if(tokens[op].type == TK_DEREF)
     {
-      //单目运算符情况
-      // switch (op_type)
-      // {
-        // case TK_DEREF:                        //指针解引用
-                      val2 = eval(op+1,q);
-                      val1 = 0;
-                      return result = val2;
-      //   case '$':                             //读取寄存器
-      //                 _Bool * success = NULL;
-      //                 result = isa_reg_str2val(tokens[op+1].str, success);
-      //                 return result;
-      //   default: assert(0);
-      // }              
-      
-     
-
+                            //指针解引用
+      val2 = eval(op+1,q);
+      val1 = 0;
+      return result = val2;
+            
     }
     else 
     {
