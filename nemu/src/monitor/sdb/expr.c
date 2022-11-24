@@ -279,7 +279,8 @@ static bool make_token(char *e) {
    if( logic == false)
     return false;
   
-  printf("value  = %lu or %#010lx\n", value, value);
+  // printf("value  = %lu or %#010lx\n", value, value);
+   printf("DEX = %lu or HEX = %#010lx\n", value, value);
   token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
   return true;
 
