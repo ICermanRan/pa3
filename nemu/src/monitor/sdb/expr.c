@@ -465,6 +465,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    {
     //判定为指针解引用
      long long DEREF_addr = atoi(tokens[q].str);
+      printf("DEREF_addr = %#llx\n", DEREF_addr);
      result = vaddr_read(DEREF_addr,4);
      return result;
 
