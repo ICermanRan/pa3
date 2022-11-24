@@ -464,10 +464,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   else if((q == p+1) && (tokens[p].type == TK_DEREF) && (tokens[q].type == TK_HEX))
    {
     //判定为指针解引用
-     printf("%s\n", tokens[q].str);
+    //  printf("%s\n", tokens[q].str);
      word_t DEREF_addr;
-     sscanf(tokens[q].str, "%lx",&DEREF_addr);
-     printf("DEREF_addr = %lx\n", DEREF_addr);
+     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+    //  printf("DEREF_addr = %lx\n", DEREF_addr);
      result = vaddr_read(DEREF_addr,4);
      return result;
 
