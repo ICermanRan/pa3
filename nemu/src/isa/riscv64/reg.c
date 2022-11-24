@@ -40,8 +40,9 @@ word_t isa_reg_str2val(const char *s, bool *success) {
    {
 	 if(s == regs[i])
 		j = i;
-	 printf("j = %d\n", j);
+	 
    }
+   printf("j = %d\n", j);
   word_t reg_value = cpu.gpr[j];	 
   return reg_value;
 }
