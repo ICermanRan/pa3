@@ -501,7 +501,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    }
   else if(p == q && tokens[p].type == TK_HEX)
    {
-      printf("2、判断为:It's a HEX number\n");
+      // printf("2、判断为:It's a HEX number\n");
       word_t DEREF_addr;
       sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
       result = vaddr_read(DEREF_addr,4);
