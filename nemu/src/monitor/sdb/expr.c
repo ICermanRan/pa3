@@ -472,7 +472,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      Log("negative number result= %lu\n", result);
      return result;
    }
-  // else if((q == p+1) && (tokens[p].type == TK_DEREF) && (tokens[q].type == TK_HEX))
+  // else if(p == q && tokens[p].type == TK_HEX)
   //  {
   //   //判定为指针解引用
   //   //  printf("%s\n", tokens[q].str);
@@ -483,13 +483,22 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   //    return result;
 
   //  }
+  else if(p == q && tokens[p].type == TK_HEX)
+   {
+      printf("2、判断为:It's a HEX number\n");
+      word_t DEREF_addr;
+      sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+      result = vaddr_read(DEREF_addr,4);
+      return result;
+
+   }
   else if (p == q)
    {
       printf("2、判断为:It's a number\n");
       value_num = atoi(tokens[p].str); 
       result = value_num;
       printf("value_num = %lu\n" , value_num);
-    return result;
+      return result;
    }
 
   else if((check_surround(p, q) == true) && (check_parentheses(p,q) == 0))//被包围但不匹配
@@ -584,8 +593,17 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     op_type = tokens[op].type;
     // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     // printf("开始求值\n");
-    val1 = eval(p, op - 1);
-    val2 = eval(op + 1, q);
+    if(tokens[op].type == TK_DEREF)
+    {
+      val2 = eval(op+1,q);
+      val1 = 0;
+      return result = val1;
+
+    }
+    else 
+    {
+      val1 = eval(p, op - 1);
+      val2 = eval(op + 1, q);
       // printf("val1 = %lu\n", val1);
       // printf("val2 = %lu\n", val2);
       switch (op_type)
@@ -605,6 +623,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
                      return result;
 
         default: assert(0);
+       }
     }
   }
   return result;
