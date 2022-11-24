@@ -37,8 +37,8 @@ void isa_reg_display() {
 word_t isa_reg_str2val(const char *s, bool *success) {
   int i = 0;
   int j = 0;
-  printf("s = %s", s);
-  while((strcmp(s,regs[i])) == -1)
+  printf("s = %s\n", s);
+  while(strcmp(s,regs[i]) == -1)
   {
 	i++;
 	j = i;
