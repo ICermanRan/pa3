@@ -27,8 +27,8 @@ enum {
   TK_NOTYPE = 256, TK_EQ = 257,
 
   /* TODO: Add more token types */
-  TK_num = 255,TK_UNEQ = 258,TK_AND = 259,TK_NEG = 260,
-  TK_HEX = 261,TK_REG = 262,TK_DEREF = 263
+  TK_num = 255, TK_UNEQ = 258, TK_AND = 259, TK_NEG = 260,
+  TK_HEX = 261, TK_REG = 262, TK_DEREF = 263, TK_RDREG = 264
 }; //枚举类型，标识符的作用范围是全局的
 
 static struct rule {
@@ -54,7 +54,9 @@ static struct rule {
     {"\\*", TK_DEREF},       //指针解引用(dereference)
     {"[0][xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
     // {"[$][$a-z][0-9]+", TK_REG}
-    {"\\$[\\$]?[a-z0-9]+", TK_REG}
+    // {"\\$[\\$]?[a-z0-9]+", TK_REG}
+    {"[\\$]?[a-z0-9]+", TK_REG},
+    {"\\$", TK_RDREG}
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
@@ -257,11 +259,24 @@ static bool make_token(char *e) {
                    break;
           
           case TK_REG:
-                      tokens[token_addr].type =  TK_REG;
-                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
-                      tokens[token_addr].str[substr_len] = '\0';
-                   break;
-
+                      if(tokens[token_addr-1].type == TK_RDREG)
+                      {
+                        tokens[token_addr].type =  TK_REG;
+                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                        tokens[token_addr].str[substr_len] = '\0';
+                        break;
+                      }
+        
+          case TK_RDREG:
+                      if(token_addr == 0 ||
+                        ((token_addr == 0) && (tokens[token_addr+1].type == TK_REG))
+                      )
+                      {
+                       tokens[token_addr].type =  TK_RDREG;
+                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                       tokens[token_addr].str[substr_len] = '\0';
+                       break;
+                      }
           //default: TODO();
         }
       
