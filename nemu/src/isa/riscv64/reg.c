@@ -38,8 +38,9 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   int i,j = 0;
   for(i = 0; i < 31; i++)
    {
-		if(s == regs[i])
-			j = i;
+	 if(s == regs[i])
+		j = i;
+	 printf("j = %d", j);
    }
   word_t reg_value = cpu.gpr[j];	 
   return reg_value;
