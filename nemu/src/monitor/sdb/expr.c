@@ -540,7 +540,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       //  printf("此时先找主运算符");
        op = main_op(p,q);
        op_type = tokens[op].type;
-
+       Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
        if(tokens[op].type == TK_DEREF)
       {
                             //指针解引用
@@ -587,7 +587,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       // printf("去掉外面一层括号后，仍被括号包围,但内部括号不配对：\n");
       op = main_op(p,q);
       op_type = tokens[op].type;
-      // Log("main_op = %s, op = %d", tokens[op].str,op);
+      Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
 
        if(tokens[op].type == TK_DEREF)
       {
@@ -631,6 +631,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     op_type = tokens[op].type;
     // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     // printf("开始求值\n");
+    Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     if(tokens[op].type == TK_DEREF)
     {
                             //指针解引用
