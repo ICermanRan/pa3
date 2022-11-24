@@ -163,7 +163,7 @@ static bool make_token(char *e) {
                     break;
 
           case '*':  
-                    if(token_addr == 0)
+                    if((token_addr == 0 || tokens[token_addr-1].type == TK_NOTYPE) && (tokens[token_addr+1].type = TK_HEX))
                    {
                     tokens[token_addr].type =  TK_DEREF;
                     strncpy(tokens[token_addr].str, substr_start,substr_len);
@@ -212,7 +212,7 @@ static bool make_token(char *e) {
                       tokens[token_addr].type =  TK_num;
                       strncpy(tokens[token_addr].str, substr_start,substr_len); 
                       tokens[token_addr].str[substr_len] = '\0';
-                   break;
+                      break;
           
           case TK_NOTYPE:
                      token_addr--;//检测到空格时，无需任何操作，回到前一个token_addr，当作什么也没发生
