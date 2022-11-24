@@ -53,10 +53,9 @@ static struct rule {
     {"-", TK_NEG},         //negative
     {"\\*", TK_DEREF},       //指针解引用(dereference)
     {"[0][xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
-    {"[a-z0-9$]{2}", TK_REG},
     // {"\\$[\\$]?[a-z0-9]+", TK_REG}
-    // {"[\\$]?[a-z0-9]+", TK_REG},
-    {"\\$", '$'}
+    {"$[a-z0-9$]{1,3}", TK_REG},
+    //  {"\\$", '$'}
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
@@ -259,26 +258,24 @@ static bool make_token(char *e) {
                    break;
           
           case TK_REG:
-                      if(tokens[token_addr-1].type == '$')
-                      {
-                        tokens[token_addr].type =  TK_REG;
-                        // strncpy(tokens[token_addr].str, substr_start,substr_len);
-                        strncpy(tokens[token_addr].str, substr_start,2);  
-                        tokens[token_addr].str[substr_len] = '\0';
-                        break;
-                      }
+
+                      tokens[token_addr].type =  TK_REG;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len);
+                      tokens[token_addr].str[substr_len] = '\0';
+                      break;
+                      
         
-          case '$':
-                      if(token_addr == 0 ||
-                        ((token_addr == 0) && (tokens[token_addr+1].type == TK_REG))
-                      )
-                      {
-                       tokens[token_addr].type =  '$';
-                      //  strncpy(tokens[token_addr].str, substr_start,substr_len);
-                       strncpy(tokens[token_addr].str, substr_start,1);  
-                       tokens[token_addr].str[substr_len] = '\0';
-                       break;
-                      }
+          // case '$':
+          //             if(token_addr == 0 ||
+          //               ((token_addr == 0) && (tokens[token_addr+1].type == TK_REG))
+          //             )
+          //             {
+          //              tokens[token_addr].type =  '$';
+          //             //  strncpy(tokens[token_addr].str, substr_start,substr_len);
+          //              strncpy(tokens[token_addr].str, substr_start,1);  
+          //              tokens[token_addr].str[substr_len] = '\0';
+          //              break;
+          //             }
           //default: TODO();
         }
       
@@ -421,7 +418,7 @@ static bool check_surround(int p, int q)
   int op = -1;
   int right_bracker = 0;
   int priority[] = {
-    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_DEREF,'$'
+    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_DEREF
   };//符号运算优先级从低到高
  
   printf("进入main_op,p = %d, q = %d\n", p ,q);
@@ -489,17 +486,17 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      Log("negative number result= %lu\n", result);
      return result;
    }
-  // else if(p == q && tokens[p].type == TK_HEX)
-  //  {
-  //   //判定为指针解引用
-  //   //  printf("%s\n", tokens[q].str);
-  //    word_t DEREF_addr;
-  //    sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-  //   //  printf("DEREF_addr = %lx\n", DEREF_addr);
-  //    result = vaddr_read(DEREF_addr,4);
-  //    return result;
+  else if(p == q && tokens[p].type == TK_REG)
+   {
+     const char *s;
+     _Bool * success = NULL;
+     s = tokens[p].str + 1;
+     printf("s = %s\n", s);
+     word_t value = isa_reg_str2val(s, success);
 
-  //  }
+     return result = value;
+
+   }
   else if(p == q && tokens[p].type == TK_HEX)
    {
       printf("2、判断为:It's a HEX number\n");
@@ -610,21 +607,21 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     op_type = tokens[op].type;
     // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     // printf("开始求值\n");
-    if(tokens[op].type == TK_DEREF || tokens[op].type == '$')
+    if(tokens[op].type == TK_DEREF)
     {
       //单目运算符情况
-      switch (op_type)
-      {
-        case TK_DEREF:                        //指针解引用
+      // switch (op_type)
+      // {
+        // case TK_DEREF:                        //指针解引用
                       val2 = eval(op+1,q);
                       val1 = 0;
                       return result = val2;
-        case '$':                             //读取寄存器
-                      _Bool * success = NULL;
-                      result = isa_reg_str2val(tokens[op+1].str, success);
-                      return result;
-        default: assert(0);
-      }              
+      //   case '$':                             //读取寄存器
+      //                 _Bool * success = NULL;
+      //                 result = isa_reg_str2val(tokens[op+1].str, success);
+      //                 return result;
+      //   default: assert(0);
+      // }              
       
      
 
