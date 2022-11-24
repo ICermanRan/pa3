@@ -164,7 +164,16 @@ static bool make_token(char *e) {
                     break;
 
           case '*':  
-                    if((token_addr == 0 || tokens[token_addr-1].type == TK_NOTYPE) && (tokens[token_addr+1].type = TK_HEX))
+                    if(token_addr == 0 || 
+                      tokens[token_addr-1].type == '*' || 
+                      tokens[token_addr-1].type == '+' ||
+                      tokens[token_addr-1].type == '-' ||
+                      tokens[token_addr-1].type == '/' ||
+                      tokens[token_addr-1].type == TK_EQ ||
+                      tokens[token_addr-1].type == TK_UNEQ ||
+                      tokens[token_addr-1].type == TK_AND ||
+                      ((tokens[token_addr-1].type == TK_NOTYPE) && (tokens[token_addr+1].type = TK_HEX))
+                      )
                    {
                     //当字符为*，且满足前面一个字符出现为空格或此时地址为0
                     //再逻辑与上下一个存储类型为16进制数
@@ -174,8 +183,9 @@ static bool make_token(char *e) {
                     tokens[token_addr].str[substr_len] = '\0';
                     break;
                    }
-                    else
+                    else if(tokens[token_addr-1].type == ')' || tokens[token_addr-1].type == TK_num)
                    {
+                    //*前面为右括号或整数，判断为
                     tokens[token_addr].type =  42;
                     strncpy(tokens[token_addr].str, substr_start,substr_len);
                     tokens[token_addr].str[substr_len] = '\0';
@@ -394,7 +404,7 @@ static bool check_surround(int p, int q)
   int op = -1;
   int right_bracker = 0;
   int priority[] = {
-    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/'
+    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_DEREF
   };//符号运算优先级从低到高
  
   printf("进入main_op,p = %d, q = %d\n", p ,q);
@@ -462,17 +472,17 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      Log("negative number result= %lu\n", result);
      return result;
    }
-  else if((q == p+1) && (tokens[p].type == TK_DEREF) && (tokens[q].type == TK_HEX))
-   {
-    //判定为指针解引用
-    //  printf("%s\n", tokens[q].str);
-     word_t DEREF_addr;
-     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-    //  printf("DEREF_addr = %lx\n", DEREF_addr);
-     result = vaddr_read(DEREF_addr,4);
-     return result;
+  // else if((q == p+1) && (tokens[p].type == TK_DEREF) && (tokens[q].type == TK_HEX))
+  //  {
+  //   //判定为指针解引用
+  //   //  printf("%s\n", tokens[q].str);
+  //    word_t DEREF_addr;
+  //    sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+  //   //  printf("DEREF_addr = %lx\n", DEREF_addr);
+  //    result = vaddr_read(DEREF_addr,4);
+  //    return result;
 
-   }
+  //  }
   else if (p == q)
    {
       printf("2、判断为:It's a number\n");
@@ -519,6 +529,13 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       case TK_EQ : return result = (val1 == val2);
       case TK_UNEQ : return result = (val1 != val2);
       case TK_AND : return result = (val1 && val2);
+      
+      case TK_DEREF ://指针解引用
+                     word_t DEREF_addr;
+                     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                     result = vaddr_read(DEREF_addr,4);
+                     return result;
+
       default: assert(0);
       }
     }
@@ -548,6 +565,13 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         case TK_EQ : return result = (val1 == val2);
         case TK_UNEQ : return result = (val1 != val2);
         case TK_AND : return result = (val1 && val2);
+
+        case TK_DEREF ://指针解引用
+                     word_t DEREF_addr;
+                     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                     result = vaddr_read(DEREF_addr,4);
+                     return result;
+
         default: assert(0);
         }
         return result;
@@ -564,15 +588,23 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     val2 = eval(op + 1, q);
       // printf("val1 = %lu\n", val1);
       // printf("val2 = %lu\n", val2);
-      switch (op_type) {
-      case '+': return result = val1 + val2;
-      case '-': return result = val1 - val2;
-      case '*': return result = val1 * val2;
-      case '/': return result = val1 / val2;
-      case TK_EQ : return result = (val1 == val2);
-      case TK_UNEQ : return result = (val1 != val2);
-      case TK_AND : return result = (val1 && val2);
-      default: assert(0);
+      switch (op_type)
+       {
+        case '+': return result = val1 + val2;
+        case '-': return result = val1 - val2;
+        case '*': return result = val1 * val2;
+        case '/': return result = val1 / val2;
+        case TK_EQ : return result = (val1 == val2);
+        case TK_UNEQ : return result = (val1 != val2);
+        case TK_AND : return result = (val1 && val2);
+
+        case TK_DEREF ://指针解引用
+                     word_t DEREF_addr;
+                     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                     result = vaddr_read(DEREF_addr,4);
+                     return result;
+
+        default: assert(0);
     }
   }
   return result;
