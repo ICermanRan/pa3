@@ -28,7 +28,7 @@ enum {
 
   /* TODO: Add more token types */
   TK_num = 255, TK_UNEQ = 258, TK_AND = 259, TK_NEG = 260,
-  TK_HEX = 261, TK_REG = 262, TK_DEREF = 263, TK_RDREG = 264
+  TK_HEX = 261, TK_REG = 262, TK_DEREF = 263
 }; //枚举类型，标识符的作用范围是全局的
 
 static struct rule {
@@ -56,7 +56,7 @@ static struct rule {
     // {"[$][$a-z][0-9]+", TK_REG}
     // {"\\$[\\$]?[a-z0-9]+", TK_REG}
     {"[\\$]?[a-z0-9]+", TK_REG},
-    {"\\$", TK_RDREG}
+    {"\\$", '$'}
 };
 
 #define NR_REGEX ARRLEN(rules) //NR_REGEX = rules中定义的token类型数目
@@ -259,7 +259,7 @@ static bool make_token(char *e) {
                    break;
           
           case TK_REG:
-                      if(tokens[token_addr-1].type == TK_RDREG)
+                      if(tokens[token_addr-1].type == '$')
                       {
                         tokens[token_addr].type =  TK_REG;
                         strncpy(tokens[token_addr].str, substr_start,substr_len); 
@@ -267,12 +267,12 @@ static bool make_token(char *e) {
                         break;
                       }
         
-          case TK_RDREG:
+          case '$':
                       if(token_addr == 0 ||
                         ((token_addr == 0) && (tokens[token_addr+1].type == TK_REG))
                       )
                       {
-                       tokens[token_addr].type =  TK_RDREG;
+                       tokens[token_addr].type =  '$';
                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
                        tokens[token_addr].str[substr_len] = '\0';
                        break;
@@ -419,7 +419,7 @@ static bool check_surround(int p, int q)
   int op = -1;
   int right_bracker = 0;
   int priority[] = {
-    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_DEREF
+    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_DEREF,'$'
   };//符号运算优先级从低到高
  
   printf("进入main_op,p = %d, q = %d\n", p ,q);
@@ -608,11 +608,23 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     op_type = tokens[op].type;
     // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     // printf("开始求值\n");
-    if(tokens[op].type == TK_DEREF)
+    if(tokens[op].type == TK_DEREF || tokens[op].type == '$')
     {
-      val2 = eval(op+1,q);
-      val1 = 0;
-      return result = val2;
+      //单目运算符情况
+      switch (op_type)
+      {
+        case TK_DEREF:                        //指针解引用
+                      val2 = eval(op+1,q);
+                      val1 = 0;
+                      return result = val2;
+        case '$':                             //读取寄存器
+                      _Bool * success = NULL;
+                      result = isa_reg_str2val(tokens[op+1].str, success);
+                      return result;
+        default: assert(0);
+      }              
+      
+     
 
     }
     else 
