@@ -597,7 +597,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     {
       val2 = eval(op+1,q);
       val1 = 0;
-      return result = val1;
+      return result = val2;
 
     }
     else 
