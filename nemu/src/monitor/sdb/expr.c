@@ -372,87 +372,45 @@ static bool check_surround(int p, int q)
 //寻找算数表达式的主运算符，返回它在tokens表达式中的addr
  static int main_op(int p, int q)
  {
-  int j;
   int i;
-  int cnt1,cnt2;
-  int stop_1 = 0,stop_2 = 0;
   int main_addr = 0;
+
+  int op = -1;
+  int right_bracker = 0;
+  int priority[] = {
+    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/'
+  };//符号运算优先级从低到高
  
-   printf("进入main_op,p = %d, q = %d\n", p ,q);
+  printf("进入main_op,p = %d, q = %d\n", p ,q);
 
-  for(j = q; j >= p; j--)
+  int order = 0;
+
+  while(op == -1)
   {
-    //  printf("j = %d\n", j);
-    cnt1 = 0;
-    for(i = j; i >= p; i--)
+    for(i = q; i >= p; i--)
     {
-      // printf("tokens[i].type = %d\n", tokens[i].type);
-      if(tokens[i].type == '(')
-        cnt1 = cnt1 + 1;
-      else if(tokens[i].type == ')')
-        cnt1 = cnt1 - 1;
-      else 
-        cnt1 = cnt1;
+      if(tokens[i].type == ')')
+        right_bracker++;
+      else if(tokens[i].type == '(')
+        right_bracker--;
 
-      // printf("cnt1 = %d\n", cnt1);
-    } //确认当前位置向左遍历，括号是否配对
+      if(right_bracker != 0)
+        continue;
 
-    if(cnt1 == 0) //不被括号包围，开始找符号
-    {
-        printf("有资格判断为主符号的tokens[j].str = %s\n",tokens[j].str);
-        printf("tokens[j].type = %d\n",tokens[j].type);
-        switch (tokens[j].type) //算符匹配+-
-        {  
-          case '+':
-          case '-':
-                  // printf("找到主运算符\n");
-                  main_addr = j;
-                  Log("主运算符main_addr = %d\n" ,main_addr);
-                  stop_1 = 1;//表示已找到主运算符+-，无需再遍历
-                  return main_addr;
-                  break;
-          default :
-                  break;
-        } 
+      if(tokens[i].type == priority[order])
+      {  
+        op = i;
+        main_addr = op;
+        break;
+      }   
     }
+  order++;
+
+
+
   }
 
-  //printf("stop_1 = %d\n", stop_1);
-
-  if(stop_1 == 0)//未找到+-，重新开始遍历
-  { 
-    for(j = q; j >= p; j--)
-    {
-      cnt2 = 0;
-      for(i = j; i >= p; i--)
-     {
-        if(tokens[i].type == '(')
-          cnt2 = cnt2 + 1;
-        else if(tokens[i].type == ')')
-          cnt2 = cnt2 - 1;
-        else
-          cnt2 = cnt2;
-     } //确认当前位置向左遍历，括号是否配对
-
-    if(cnt2 == 0) //不被括号包围，开始找符号
-    {
-        switch (tokens[j].type) //算符匹配*/
-        {  
-          case '*':
-          case '/':
-                  main_addr = j;
-                  stop_2 = 1;//表示已找到主运算符*/，无需再遍历
-                  return main_addr;
-                  break;
-          default :
-                  break;
-        } 
-    }
-    }
-  }
-
-  //printf("stop_2 = %d\n", stop_2);
-  if((stop_2 == 0) && (stop_1 == 0))
+  if(op == -1)
     assert(0);//未找到主运算符，程序中止
 
 
