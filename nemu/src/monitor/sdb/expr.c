@@ -27,7 +27,7 @@ enum {
 
   /* TODO: Add more token types */
   TK_num = 255,TK_UNEQ = 258,TK_AND = 259,TK_NEG = 260,
-  TK_HEX = 261,TK_REG = 262
+  TK_HEX = 261,TK_REG = 262,TK_DEREF = 263
 }; //枚举类型，标识符的作用范围是全局的
 
 static struct rule {
@@ -50,6 +50,7 @@ static struct rule {
     {"!=", TK_UNEQ},      // unequal
     {"&&", TK_AND},        //and
     {"-", TK_NEG},         //negative
+    {"*", TK_DEREF},       //指针解引用(dereference)
     {"[0][xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
     // {"[$][$a-z][0-9]+", TK_REG}
     {"\\$[\\$]?[a-z0-9]+", TK_REG}
@@ -162,11 +163,21 @@ static bool make_token(char *e) {
                     break;
 
           case '*':  
+                    if((token_addr == 0) && (tokens[token_addr+1].type == TK_HEX))
+                   {
+                    tokens[token_addr].type =  TK_DEREF;
+                    strncpy(tokens[token_addr].str, substr_start,substr_len);
+                    tokens[token_addr].str[substr_len] = '\0';
+                    break;
+                   }
+                    else
+                   {
                     tokens[token_addr].type =  42;
                     strncpy(tokens[token_addr].str, substr_start,substr_len);
                     tokens[token_addr].str[substr_len] = '\0';
                     // printf("for minus: tokens[position].type = %d ,position = %d\n",  tokens[position].type, position); 
                     break;
+                   }
 
           case '+':  
                     tokens[token_addr].type =  43;
