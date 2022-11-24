@@ -21,6 +21,7 @@
 #include <regex.h>
 #include <stdio.h>
 #include <string.h>
+#include "/home/ran/ysyx/ysyx-workbench/nemu/include/memory/vaddr.h"
 
 enum {
   TK_NOTYPE = 256, TK_EQ = 257,
@@ -165,6 +166,9 @@ static bool make_token(char *e) {
           case '*':  
                     if((token_addr == 0 || tokens[token_addr-1].type == TK_NOTYPE) && (tokens[token_addr+1].type = TK_HEX))
                    {
+                    //当字符为*，且满足前面一个字符出现为空格或此时地址为0
+                    //再逻辑与上下一个存储类型为16进制数
+                    //则判定其存储类型为 指针解引用
                     tokens[token_addr].type =  TK_DEREF;
                     strncpy(tokens[token_addr].str, substr_start,substr_len);
                     tokens[token_addr].str[substr_len] = '\0';
@@ -275,7 +279,7 @@ static bool make_token(char *e) {
    if( logic == false)
     return false;
   
-  printf("value  = %lu\n", value);
+  printf("value  = %lu or %#010lx\n", value, value);
   token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
   return true;
 
@@ -451,10 +455,19 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    }  
   else if((q == p+1) && (tokens[p].type == TK_NEG))
    {
+     //判定为负数的判断方法
      printf("2、判断为:It's a negative number\n");
      result = -eval(p+1,q);
      Log("negative number result= %lu\n", result);
      return result;
+   }
+  else if((q == p+1) && (tokens[p].type == TK_DEREF) && (tokens[q].type == TK_HEX))
+   {
+    //判定为指针解引用
+     long long DEREF_addr = atoi(tokens[q].str);
+     result = vaddr_read(DEREF_addr,4);
+     return result;
+
    }
   else if (p == q)
    {

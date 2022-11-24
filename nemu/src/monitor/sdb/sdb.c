@@ -21,6 +21,7 @@
 
 
 
+
 static int is_batch_mode = false;
 
 void init_regex();
