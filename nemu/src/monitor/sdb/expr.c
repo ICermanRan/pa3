@@ -163,7 +163,7 @@ static bool make_token(char *e) {
                     break;
 
           case '*':  
-                    if((token_addr == 0) && (tokens[token_addr+1].type == TK_HEX))
+                    if(token_addr == 0)
                    {
                     tokens[token_addr].type =  TK_DEREF;
                     strncpy(tokens[token_addr].str, substr_start,substr_len);
