@@ -53,8 +53,8 @@ static struct rule {
     {"-", TK_NEG},         //negative
     {"\\*", TK_DEREF},       //指针解引用(dereference)
     {"[0][xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
-    // {"\\$[\\$]?[a-z0-9]+", TK_REG}
-    {"$[a-z0-9$]{1,3}", TK_REG}
+    {"\\$[\\$]?[a-z0-9]+", TK_REG}
+    // {"$[a-z0-9$]{1,3}", TK_REG}
     //  {"\\$", '$'}
 };
 
