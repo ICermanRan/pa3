@@ -230,22 +230,22 @@ static bool make_token(char *e) {
                    }
           
           case TK_num:  
-                      //  if(tokens[token_addr-1].type == TK_DEREF ||
-                      //     tokens[token_addr-1].type == TK_DEREF
-                      //    )
-                      //  {
-                      //   tokens[token_addr].type =  TK_HEX;
-                      //   strncpy(tokens[token_addr].str, substr_start,substr_len); 
-                      //   tokens[token_addr].str[substr_len] = '\0';
-                      //   break;
-                      //  }
-                      //  else
-                      //  {
+                       if(tokens[token_addr-1].type == TK_DEREF ||
+                          tokens[token_addr-2].type == TK_DEREF
+                         )
+                       {
+                        tokens[token_addr].type =  TK_HEX;
+                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                        tokens[token_addr].str[substr_len] = '\0';
+                        break;
+                       }
+                       else
+                       {
                         tokens[token_addr].type =  TK_num;
                         strncpy(tokens[token_addr].str, substr_start,substr_len); 
                         tokens[token_addr].str[substr_len] = '\0';
                          break;
-                      //  }
+                       }
                      
           
           case TK_NOTYPE:
@@ -270,14 +270,14 @@ static bool make_token(char *e) {
                       tokens[token_addr].str[substr_len] = '\0';
                    break;
 
-          case TK_HEX:
-                      // if(tokens[token_addr-1].type == TK_DEREF)
-                      // {
-                        tokens[token_addr].type =  TK_HEX;
-                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
-                        tokens[token_addr].str[substr_len] = '\0';
-                        break;
-                      // }
+          // case TK_HEX:
+          //             // if(tokens[token_addr-1].type == TK_DEREF)
+          //             // {
+          //               tokens[token_addr].type =  TK_HEX;
+          //               strncpy(tokens[token_addr].str, substr_start,substr_len); 
+          //               tokens[token_addr].str[substr_len] = '\0';
+          //               break;
+          //             // }
                       
                        
           
