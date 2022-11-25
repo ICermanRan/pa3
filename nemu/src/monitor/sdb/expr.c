@@ -207,6 +207,7 @@ static bool make_token(char *e) {
                       tokens[token_addr-1].type == '*' || 
                       tokens[token_addr-1].type == '/' || 
                       tokens[token_addr-1].type == '(' || 
+                      tokens[token_addr-1].type == TK_NEG ||
                       token_addr == 0)
                    {
                     //当字符为-，且满足前面一个字符出现为+-*/(其中之一
