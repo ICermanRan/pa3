@@ -202,7 +202,12 @@ static bool make_token(char *e) {
                     break;
 
           case '-':  
-                   if(tokens[token_addr-1].type == '+' || tokens[token_addr-1].type == '-' || tokens[token_addr-1].type == '*' || tokens[token_addr-1].type == '/' || tokens[token_addr-1].type == '(' || token_addr == 0)
+                   if(tokens[token_addr-1].type == '+' || 
+                      tokens[token_addr-1].type == '-' || 
+                      tokens[token_addr-1].type == '*' || 
+                      tokens[token_addr-1].type == '/' || 
+                      tokens[token_addr-1].type == '(' || 
+                      token_addr == 0)
                    {
                     //当字符为-，且满足前面一个字符出现为+-*/(其中之一
                     //或者，此时token_addr为0
@@ -264,18 +269,6 @@ static bool make_token(char *e) {
                       tokens[token_addr].str[substr_len] = '\0';
                       break;
                       
-        
-          // case '$':
-          //             if(token_addr == 0 ||
-          //               ((token_addr == 0) && (tokens[token_addr+1].type == TK_REG))
-          //             )
-          //             {
-          //              tokens[token_addr].type =  '$';
-          //             //  strncpy(tokens[token_addr].str, substr_start,substr_len);
-          //              strncpy(tokens[token_addr].str, substr_start,1);  
-          //              tokens[token_addr].str[substr_len] = '\0';
-          //              break;
-          //             }
           //default: TODO();
         }
       
@@ -418,7 +411,7 @@ static bool check_surround(int p, int q)
   int op = -1;
   int right_bracker = 0;
   int priority[] = {
-    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_DEREF
+    TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_NEG,TK_DEREF
   };//符号运算优先级从低到高
  
   printf("进入main_op,p = %d, q = %d\n", p ,q);
@@ -478,14 +471,14 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("p = %d, q = %d,p > q,It's a Bad expression\n",p ,q);
      assert(0);
    }  
-  else if((q == p+1) && (tokens[p].type == TK_NEG))
-   {
-     //判定为负数的判断方法
-     printf("2、判断为:It's a negative number\n");
-     result = -eval(p+1,q);
-     Log("negative number result= %lu\n", result);
-     return result;
-   }
+  // else if((q == p+1) && (tokens[p].type == TK_NEG))
+  //  {
+  //    //判定为负数的判断方法
+  //    printf("2、判断为:It's a negative number\n");
+  //    result = -eval(p+1,q);
+  //    Log("negative number result= %lu\n", result);
+  //    return result;
+  //  }
   else if(p == q && tokens[p].type == TK_REG)
    {
     //  printf("2、判断为:REG reading \n");
@@ -541,13 +534,28 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
        op = main_op(p,q);
        op_type = tokens[op].type;
        Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-       if(tokens[op].type == TK_DEREF)
+       if(tokens[op].type == TK_DEREF || tokens[op].type == TK_NEG)
       {
-                            //指针解引用
-        val2 = eval(op+1,q);
-        val1 = 0;
-        return result = val2;
-            
+                           
+        // val2 = eval(op+1,q);
+        // val1 = 0;
+        
+        switch (op_type)
+        {
+          case TK_DEREF:       //指针解引用
+                        word_t DEREF_addr;
+                        sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                        result = vaddr_read(DEREF_addr,4);
+                        return result;
+          case TK_NEG:
+                        printf("判断为:It's a negative number\n");
+                        result = -eval(p+1,q);
+                        Log("negative number result= %lu\n", result);
+                        return result;
+
+          default: assert(0);
+       
+        }
       }
       else 
       {
@@ -565,11 +573,11 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
           case TK_UNEQ : return result = (val1 != val2);
           case TK_AND : return result = (val1 && val2);
 
-          case TK_DEREF ://指针解引用
-                     word_t DEREF_addr;
-                     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-                     result = vaddr_read(DEREF_addr,4);
-                     return result;
+          // case TK_DEREF ://指针解引用
+          //            word_t DEREF_addr;
+          //            sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+          //            result = vaddr_read(DEREF_addr,4);
+          //            return result;
 
           default: assert(0);
         }
@@ -589,13 +597,28 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       op_type = tokens[op].type;
       Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
 
-       if(tokens[op].type == TK_DEREF)
+      if(tokens[op].type == TK_DEREF || tokens[op].type == TK_NEG)
       {
-                            //指针解引用
-        val2 = eval(op+1,q);
-        val1 = 0;
-        return result = val2;
-            
+                           
+        // val2 = eval(op+1,q);
+        // val1 = 0;
+        
+        switch (op_type)
+        {
+          case TK_DEREF:       //指针解引用
+                        word_t DEREF_addr;
+                        sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                        result = vaddr_read(DEREF_addr,4);
+                        return result;
+          case TK_NEG:
+                        printf("判断为:It's a negative number\n");
+                        result = -eval(p+1,q);
+                        Log("negative number result= %lu\n", result);
+                        return result;
+
+          default: assert(0);
+       
+        }
       }
       else 
       {
@@ -613,11 +636,11 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
           case TK_UNEQ : return result = (val1 != val2);
           case TK_AND : return result = (val1 && val2);
 
-          case TK_DEREF ://指针解引用
-                     word_t DEREF_addr;
-                     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-                     result = vaddr_read(DEREF_addr,4);
-                     return result;
+          // case TK_DEREF ://指针解引用
+          //            word_t DEREF_addr;
+          //            sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+          //            result = vaddr_read(DEREF_addr,4);
+          //            return result;
 
           default: assert(0);
         }
@@ -632,13 +655,28 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     // printf("开始求值\n");
     Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-    if(tokens[op].type == TK_DEREF)
+    if(tokens[op].type == TK_DEREF || tokens[op].type == TK_NEG)
     {
-                            //指针解引用
-      val2 = eval(op+1,q);
-      val1 = 0;
-      return result = val2;
-            
+                           
+        // val2 = eval(op+1,q);
+        // val1 = 0;
+        
+        switch (op_type)
+        {
+          case TK_DEREF:       //指针解引用
+                        word_t DEREF_addr;
+                        sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                        result = vaddr_read(DEREF_addr,4);
+                        return result;
+          case TK_NEG:
+                        printf("判断为:It's a negative number\n");
+                        result = -eval(p+1,q);
+                        Log("negative number result= %lu\n", result);
+                        return result;
+
+          default: assert(0);
+       
+        }
     }
     else 
     {
@@ -656,11 +694,11 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         case TK_UNEQ : return result = (val1 != val2);
         case TK_AND : return result = (val1 && val2);
 
-        case TK_DEREF ://指针解引用
-                     word_t DEREF_addr;
-                     sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-                     result = vaddr_read(DEREF_addr,4);
-                     return result;
+        // case TK_DEREF ://指针解引用
+        //              word_t DEREF_addr;
+        //              sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+        //              result = vaddr_read(DEREF_addr,4);
+        //              return result;
 
         default: assert(0);
        }
