@@ -495,9 +495,11 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   else if(p == q && tokens[p].type == TK_HEX)
    {
       // printf("2、判断为:It's a HEX number\n");
-      word_t DEREF_addr;
-      sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-      result = vaddr_read(DEREF_addr,4);
+      // word_t DEREF_addr;
+      word_t HEX_num;
+      sscanf(tokens[q].str, "%lx",&HEX_num);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+      // result = vaddr_read(DEREF_addr,4);
+      result = HEX_num;
       return result;
 
    }
@@ -652,8 +654,6 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("针对去掉括号没有问题的时候：\n");
     op = main_op(p,q);
     op_type = tokens[op].type;
-    // printf("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
-    // printf("开始求值\n");
     Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     if(tokens[op].type == TK_DEREF || tokens[op].type == TK_NEG)
     {
@@ -664,8 +664,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         switch (op_type)
         {
           case TK_DEREF:       //指针解引用
-                        word_t DEREF_addr;
-                        sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                        val2 = eval(op+1,q);
+                        val1 = 0;
+                        word_t DEREF_addr = val2;
+                        // sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
                         result = vaddr_read(DEREF_addr,4);
                         return result;
           case TK_NEG:
