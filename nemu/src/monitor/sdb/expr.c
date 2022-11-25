@@ -101,8 +101,7 @@ static int nr_token __attribute__((used))  = 0;
  static int check_parentheses(int p, int q);//括号配对函数声明
  static bool check_surround(int p, int q);//括号包围函数声明
  static bool warn_wrong(bool a);
- //char push(char bracket);//压栈操作函数
- //void pop();		//出栈操作函数
+
 
 
 static bool make_token(char *e) {
@@ -124,7 +123,7 @@ static bool make_token(char *e) {
         int substr_len = pmatch.rm_eo; //存放匹配字符串长度
 
 
-         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
              i, rules[i].regex, position, substr_len, substr_len, substr_start);
       
 
