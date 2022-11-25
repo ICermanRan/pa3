@@ -43,7 +43,8 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-    {"[1-9][0-9]*", TK_num}, // number
+    // {"[1-9][0-9]*", TK_num}, // number
+    {"[0-9]+", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
@@ -229,10 +230,23 @@ static bool make_token(char *e) {
                    }
           
           case TK_num:  
-                      tokens[token_addr].type =  TK_num;
-                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
-                      tokens[token_addr].str[substr_len] = '\0';
-                      break;
+                       if(tokens[token_addr-1].type == TK_DEREF ||
+                          tokens[token_addr-1].type == TK_DEREF
+                         )
+                       {
+                        tokens[token_addr].type =  TK_HEX;
+                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                        tokens[token_addr].str[substr_len] = '\0';
+                        break;
+                       }
+                       else
+                       {
+                        tokens[token_addr].type =  TK_num;
+                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                        tokens[token_addr].str[substr_len] = '\0';
+                        break;
+                       }
+                     
           
           case TK_NOTYPE:
                      token_addr--;//检测到空格时，无需任何操作，回到前一个token_addr，当作什么也没发生
@@ -256,11 +270,15 @@ static bool make_token(char *e) {
                       tokens[token_addr].str[substr_len] = '\0';
                    break;
 
-          case TK_HEX:
-                      tokens[token_addr].type =  TK_HEX;
-                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
-                      tokens[token_addr].str[substr_len] = '\0';
-                   break;
+          // case TK_HEX:
+          //             if(tokens[token_addr-1].type == TK_DEREF)
+          //             {
+          //               tokens[token_addr].type =  TK_HEX;
+          //               strncpy(tokens[token_addr].str, substr_start,substr_len); 
+          //               tokens[token_addr].str[substr_len] = '\0';
+          //             }
+                      
+          //          break;
           
           case TK_REG:
 
@@ -545,8 +563,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         switch (op_type)
         {
           case TK_DEREF:       //指针解引用
-                        word_t DEREF_addr;
-                        sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                        val2 = eval(op+1,q);
+                        val1 = 0;
+                        word_t DEREF_addr = val2;
+                        // sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
                         result = vaddr_read(DEREF_addr,4);
                         return result;
           case TK_NEG:
@@ -608,8 +628,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         switch (op_type)
         {
           case TK_DEREF:       //指针解引用
-                        word_t DEREF_addr;
-                        sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
+                        val2 = eval(op+1,q);
+                        val1 = 0;
+                        word_t DEREF_addr = val2;
+                        // sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
                         result = vaddr_read(DEREF_addr,4);
                         return result;
           case TK_NEG:
