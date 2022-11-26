@@ -20,8 +20,9 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char expr[32];          //存储算数表达式
-  uint64_t data;          //存储算数表达式的结果
+  char exp[32];          //存储算数表达式
+  uint64_t old_value;          //旧值
+  uint64_t new_value;          //新值
 
   /* TODO: Add more members if necessary */
 } WP;
@@ -47,10 +48,26 @@ void init_wp_pool() {
 /* TODO: Implement the functionality of watchpoint */
 
 /*函数功能:从free_链表中返回一个空闲的监视点结构给head链表，且将表达式及结果赋给该监视点结构体*/
-// WP* new_wp(char *expr)
+// WP* new_wp(char *exp)
 // {
-//   if(free_ == NULL)
-//     as
+//   if(free_ == NULL) //没有空闲监视点结构
+//   {
+//     printf("Erro!free is null\n");
+//     assert(0);
+//   }
+    
+//   WP *temp = free_;
+//   free_ =  free_->next;
+//   temp->next = NULL;
 
+//   bool success = false;
+//   strcpy(temp->exp, exp);//将存储的表达式传给返回的空闲的监视点结构
+//   temp->new_value = expr(temp->exp, &success); //调用expr函数计算传入temp的表达式,并返回结果赋给new_value
+//   // assert(success);
+
+//   if(head == NULL)  //若head链表为空表
+//   {
+//     head = temp;    //将
+//   }
 
 // }
