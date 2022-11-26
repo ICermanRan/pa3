@@ -54,7 +54,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
-  // if(args == NULL)
+  printf("%s", args);
   return -1;
 }
 
@@ -81,7 +81,7 @@ static int cmd_s(char *args) {
 static int cmd_info(char *args) {
 		/* extract the first argument */
 
-  printf("%s\n", args);
+  // printf("%s\n", args);
 	char *arg = strtok(args, " ");//arg = "r"
 
 //	printf("%s\n", arg);
