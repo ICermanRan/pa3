@@ -48,7 +48,7 @@ static int find_string(const char *strs[], const char *str, int len)
     if(i == len + 1){
         return -1;
     }
-    return i-1;
+    return i;
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
