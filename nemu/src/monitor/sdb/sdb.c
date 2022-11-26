@@ -54,8 +54,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
-  printf("%s", args);
-  return -1;
+  return 1;
 }
 
 static int cmd_help(char *args);
