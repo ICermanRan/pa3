@@ -55,7 +55,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   GET_ARRAY_LEN(regs,len);
   j = find_string(regs, s, len);
 //   printf("j = %d\n", j);
-  word_t reg_value = cpu.gpr[j];	 
+  word_t reg_value = cpu.gpr[j];	 //这里可能有问题，因为cpu.gpr[0]总为0,可能j要有变化
 //   printf("reg_value = %ld\n", reg_value);
 //   word_t a=0;
   return reg_value;

@@ -176,6 +176,15 @@ static int cmd_p(char *args) {
   return 0;
 }
 
+// static int cmd_w(char *args) {
+  
+//   //printf("%s\n", args);//数学表达式以字符串存在args里
+//   // init_wp_pool();//初始化
+
+
+//   return 0;
+// }
+
 static struct {
   const char *name;
   const char *description;
@@ -190,7 +199,7 @@ static struct {
   { "info", "printf message", cmd_info},
   { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
   { "p", "eval the expr", cmd_p},//表达式求值
-  //{ "w", "set the watchpoint", cmd_w},
+  // { "w", "set the watchpoint", cmd_w}
   //{ "d", "delet the watchpoint", cmd_d},
 };
 

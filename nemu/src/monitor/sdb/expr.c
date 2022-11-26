@@ -43,8 +43,8 @@ static struct rule {
     {"\\)", ')'},         // right brackets,  token_type == 41
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
-    // {"[1-9][0-9]*", TK_num}, // number
-    // {"[0-9]+", TK_num}, // number
+    // {"[1-9][0-9]*", TK_num}, // number(无法检测0)
+    // {"[0-9]+", TK_num}, // number(和十六进制开头的0x冲突)
     {"^[0-9]*$", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
@@ -261,15 +261,10 @@ static bool make_token(char *e) {
                    break;
 
           case TK_HEX:
-                      // if(tokens[token_addr-1].type == TK_DEREF)
-                      // {
-                        tokens[token_addr].type =  TK_HEX;
-                        strncpy(tokens[token_addr].str, substr_start,substr_len); 
-                        tokens[token_addr].str[substr_len] = '\0';
-                        break;
-                      // }
-                      
-                       
+                      tokens[token_addr].type =  TK_HEX;
+                      strncpy(tokens[token_addr].str, substr_start,substr_len); 
+                      tokens[token_addr].str[substr_len] = '\0';
+                      break;
           
           case TK_REG:
 
@@ -493,7 +488,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("2、判断为:REG reading \n");
      const char *s;
      _Bool * success = NULL;
-     s = tokens[p].str + 1;
+     s = tokens[p].str + 1;//为了舍弃掉表示读寄存器的$符号
     //  printf("s = %s\n", s);
      word_t value = isa_reg_str2val(s, success);
      printf("valu = %#010lx\n", value);
@@ -651,11 +646,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
           case TK_UNEQ : return result = (val1 != val2);
           case TK_AND : return result = (val1 && val2);
 
-          // case TK_DEREF ://指针解引用
-          //            word_t DEREF_addr;
-          //            sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-          //            result = vaddr_read(DEREF_addr,4);
-          //            return result;
+
 
           default: assert(0);
         }
@@ -709,11 +700,6 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
         case TK_UNEQ : return result = (val1 != val2);
         case TK_AND : return result = (val1 && val2);
 
-        // case TK_DEREF ://指针解引用
-        //              word_t DEREF_addr;
-        //              sscanf(tokens[q].str, "%lx",&DEREF_addr);//匹配无符号十六进制数，前缀为0x或0x被丢弃
-        //              result = vaddr_read(DEREF_addr,4);
-        //              return result;
 
         default: assert(0);
        }
