@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 #ifdef CONFIG_TARGET_AM
   am_init_monitor();
 #else
-  init_monitor(argc, argv);
+  init_monitor(argc, argv);	//将客户程序读入到客户计算机中，进行一些和monitor相关的初始化工作
 #endif
 
   /* Start engine. */
