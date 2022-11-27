@@ -105,7 +105,8 @@ static int nr_token __attribute__((used))  = 0;
 
 
 
-static bool make_token(char *e) {
+// static bool make_token(char *e) {
+  static word_t make_token(char *e) {
   int position = 0;
   int i;
   uint64_t value;
@@ -301,9 +302,10 @@ static bool make_token(char *e) {
     return false;
   
   // printf("value  = %lu or %#010lx\n", value, value);
-   printf("DEX = %lu or HEX = %#010lx\n", value, value);
+  printf("DEX = %lu or HEX = %#010lx\n", value, value);
   token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
-  return true;
+  // return true;
+  return value; 
 
 } 
 
@@ -311,13 +313,21 @@ static bool make_token(char *e) {
 
 word_t expr(char *e, bool *success)
  {
-  if (!make_token(e)) {
+  if (!make_token(e)) 
+  {
     printf("回到顶层");
     *success = false;
     return 0;
   }
 
-  
+  uint64_t result;
+  if(make_token(e))
+  {
+    printf("求值成功");
+    *success = true;
+    result = make_token(e);
+    return result;
+  }
 
 
   /* TODO: Insert codes to evaluate the expression. */
