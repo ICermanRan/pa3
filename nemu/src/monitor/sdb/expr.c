@@ -295,16 +295,16 @@ static int nr_token __attribute__((used))  = 0;
      printf("tokens[%d].str = %s\n", c,tokens[c].str);
   }
 
-   token_addrs = token_addr-1;
-  //  value = eval(0,token_addrs);
-  eval(0,token_addrs);
+  //  token_addrs = token_addr-1;
+  // //  value = eval(0,token_addrs);
+  // eval(0,token_addrs);
 
-   if( logic == false)
-    return false;
+  //  if( logic == false)
+  //   return false;
   
-  // printf("value  = %lu or %#010lx\n", value, value);
-  // printf("DEX = %lu or HEX = %#010lx\n", value, value);
-  token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
+  // // printf("value  = %lu or %#010lx\n", value, value);
+  // // printf("DEX = %lu or HEX = %#010lx\n", value, value);
+  // token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
   return true;
   // return value; 
 
@@ -320,11 +320,23 @@ word_t expr(char *e, bool *success)
     *success = false;
     return 0;
   }
-
-
+  else
+  {
   /* TODO: Insert codes to evaluate the expression. */
+  uint64_t value;
+  token_addrs = token_addr-1;
+  value = eval(0,token_addrs);
+
+  if( logic == false)
+    return false;
+  
+  // printf("value  = %lu or %#010lx\n", value, value);
+  // printf("DEX = %lu or HEX = %#010lx\n", value, value);
+  token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
+
  // TODO();// 记得取消注释！！
-  return 0;
+  return value;
+  }
  }
 
   
