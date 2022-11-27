@@ -172,7 +172,8 @@ static int cmd_p(char *args) {
   _Bool * success = NULL;
 
   //printf("%s\n", args);//数学表达式以字符串存在args里
-  expr(args,success);
+  uint64_t result =  expr(args,success);
+  printf("result = %#010lx\n", result);
 
 
   return 0;

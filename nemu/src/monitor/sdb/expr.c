@@ -109,7 +109,7 @@ static int nr_token __attribute__((used))  = 0;
   // static word_t make_token(char *e) {
   int position = 0;
   int i;
-  uint64_t value;
+  // uint64_t value;
  
   regmatch_t pmatch;//存放匹配文本串位置信息
 
@@ -296,13 +296,14 @@ static int nr_token __attribute__((used))  = 0;
   }
 
    token_addrs = token_addr-1;
-   value = eval(0,token_addrs);
+  //  value = eval(0,token_addrs);
+  eval(0,token_addrs);
 
    if( logic == false)
     return false;
   
   // printf("value  = %lu or %#010lx\n", value, value);
-  printf("DEX = %lu or HEX = %#010lx\n", value, value);
+  // printf("DEX = %lu or HEX = %#010lx\n", value, value);
   token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
   return true;
   // return value; 
@@ -328,8 +329,6 @@ word_t expr(char *e, bool *success)
   //   result = make_token(e);
   //   return result;
   // }
-
-
   /* TODO: Insert codes to evaluate the expression. */
  // TODO();// 记得取消注释！！
   return 0;
