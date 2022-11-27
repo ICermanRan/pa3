@@ -44,8 +44,8 @@ static struct rule {
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
     // {"[1-9][0-9]*", TK_num}, // number(无法检测0)
-    // {"[0-9]+", TK_num}, // number(和十六进制开头的0x冲突)
-    {"^[0-9]*$", TK_num}, // number
+    {"[0-9]+", TK_num}, // number(和十六进制开头的0x冲突)
+    // {"^[0-9]*$", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
     {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
