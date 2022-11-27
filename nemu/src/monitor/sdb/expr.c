@@ -321,14 +321,7 @@ word_t expr(char *e, bool *success)
     return 0;
   }
 
-  // uint64_t result;
-  // if(make_token(e))
-  // {
-  //   printf("求值成功");
-  //   *success = true;
-  //   result = make_token(e);
-  //   return result;
-  // }
+
   /* TODO: Insert codes to evaluate the expression. */
  // TODO();// 记得取消注释！！
   return 0;
