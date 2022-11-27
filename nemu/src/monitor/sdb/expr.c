@@ -44,7 +44,7 @@ static struct rule {
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
     // {"[1-9][0-9]*", TK_num}, // number(无法检测0)
-    {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
+    {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number    为什么把十六进制放在十进制前面呢？  因为匹配规则是从ruls数组从头开始一个一个试，先遇见且匹配的就先认定
     {"[0-9]+", TK_num}, // number(和十六进制开头的0x冲突)
     // {"^[0-9]*$", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
@@ -55,8 +55,6 @@ static struct rule {
     {"&&", TK_AND},        //and
     {"-", TK_NEG},         //negative
     {"\\*", TK_DEREF},       //指针解引用(dereference)
-    // {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
-    // {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
     {"\\$[\\$]?[a-z0-9]+", TK_REG}
     // {"$[a-z0-9$]{1,3}", TK_REG}
     //  {"\\$", '$'}
