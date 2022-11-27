@@ -44,6 +44,7 @@ static struct rule {
     {"\\/", '/'},         // minus,           token_type == 47
     {"\\*", '*'},         // multiply,        token_type == 42
     // {"[1-9][0-9]*", TK_num}, // number(无法检测0)
+    {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
     {"[0-9]+", TK_num}, // number(和十六进制开头的0x冲突)
     // {"^[0-9]*$", TK_num}, // number
     {"\\-", '-'},         // reduce,          token_type == 45
@@ -55,7 +56,7 @@ static struct rule {
     {"-", TK_NEG},         //negative
     {"\\*", TK_DEREF},       //指针解引用(dereference)
     // {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
-    {"\\0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
+    // {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number
     {"\\$[\\$]?[a-z0-9]+", TK_REG}
     // {"$[a-z0-9$]{1,3}", TK_REG}
     //  {"\\$", '$'}
@@ -106,15 +107,15 @@ static int nr_token __attribute__((used))  = 0;
 
 
 
-// static bool make_token(char *e) {
-  static word_t make_token(char *e) {
+  static bool make_token(char *e) {
+  // static word_t make_token(char *e) {
   int position = 0;
   int i;
   uint64_t value;
  
   regmatch_t pmatch;//存放匹配文本串位置信息
 
-  //printf("e = %s\n", e);
+  
   nr_token = 0;
   while (e[position] != '\0')
   {
@@ -305,8 +306,8 @@ static int nr_token __attribute__((used))  = 0;
   // printf("value  = %lu or %#010lx\n", value, value);
   printf("DEX = %lu or HEX = %#010lx\n", value, value);
   token_addr = 0;//把tokens元素地址清0,以便于同一个make run内的下一个算数表达式
-  // return true;
-  return value; 
+  return true;
+  // return value; 
 
 } 
 
