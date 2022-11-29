@@ -63,6 +63,8 @@ WP* new_wp(char *exp)
   free_ =  free_->next;
   temp->next = NULL;
 
+  printf("成功从free链表截取了一个节点出来\n");
+
   bool success = false;
   strcpy(temp->exp, exp);//将存储的表达式传给返回的空闲的监视点结构
   temp->old_value = expr(temp->exp, &success); //调用expr函数计算传入temp的表达式,并返回结果赋给new_value

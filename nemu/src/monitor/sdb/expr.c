@@ -288,12 +288,12 @@ static int nr_token __attribute__((used))  = 0;
       token_addr++;
   }
 
-  int c;
-  for(c = 0; c < token_addr; c++)
-  {
-     printf("tokens[%d].type = %d ", c, tokens[c].type);
-     printf("tokens[%d].str = %s\n", c,tokens[c].str);
-  }
+  // int c;
+  // for(c = 0; c < token_addr; c++)
+  // {
+  //    printf("tokens[%d].type = %d ", c, tokens[c].type);
+  //    printf("tokens[%d].str = %s\n", c,tokens[c].str);
+  // }
 
   //  token_addrs = token_addr-1;
   // //  value = eval(0,token_addrs);
@@ -521,10 +521,10 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
    }
   else if (p == q)
    {
-      printf("2、判断为:It's a number\n");
+      // printf("2、判断为:It's a number\n");
       value_num = atoi(tokens[p].str); 
       result = value_num;
-      printf("value_num = %lu\n" , value_num);
+      // printf("value_num = %lu\n" , value_num);
       return result;
    }
 
@@ -670,7 +670,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("针对去掉括号没有问题的时候：\n");
     op = main_op(p,q);
     op_type = tokens[op].type;
-    Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
+    // Log("找主运算符,the position of 主运算符op = %s in the token expression: %d\n", tokens[op].str, op);
     if(tokens[op].type == TK_DEREF || tokens[op].type == TK_NEG)
     {
                            
