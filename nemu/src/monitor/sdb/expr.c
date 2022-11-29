@@ -326,6 +326,7 @@ word_t expr(char *e, bool *success)
   uint64_t value;
   token_addrs = token_addr-1;
   value = eval(0,token_addrs);
+  *success = true;
 
   if( logic == false)
     return false;
@@ -430,7 +431,7 @@ static bool check_surround(int p, int q)
     TK_AND, TK_EQ, TK_UNEQ, '+', '-', '*', '/', TK_NEG,TK_DEREF
   };//符号运算优先级从低到高
  
-  printf("进入main_op,p = %d, q = %d\n", p ,q);
+  // printf("进入main_op,p = %d, q = %d\n", p ,q);
 
   int order = 0;
 
