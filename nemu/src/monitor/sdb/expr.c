@@ -125,8 +125,8 @@ static int nr_token __attribute__((used))  = 0;
         int substr_len = pmatch.rm_eo; //存放匹配字符串长度
 
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-             i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+        //      i, rules[i].regex, position, substr_len, substr_len, substr_start);
       
 
       //  printf("i = %d, rules[i] = %s\n",  i, rules[i].regex);
