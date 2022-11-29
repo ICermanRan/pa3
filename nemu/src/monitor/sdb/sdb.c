@@ -190,11 +190,11 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-  printf("args =%s\n",args);
+  // printf("args =%s\n",args);
   int num = 0;
-  char *arg = strtok(NULL," ");
-  printf("arg =%s\n",arg);
-  sscanf(arg, "%d", &num);
+  // char *arg = strtok(NULL," ");
+  // printf("arg =%s\n",arg);
+  sscanf(args, "%d", &num);
   int d = free_wp(num);//调用这个函数，从head链表中删除一个节点返回到free链表中
 
   if(d == 1)
