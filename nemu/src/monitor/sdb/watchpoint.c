@@ -178,7 +178,7 @@ int test_change()
 void print_wp()
 {
   WP *p = head;
-  printf("WP_NO\tEXPR\t\tDEX_Value\tHEX_Value\n");
+  printf("WP_NO\tEXPR\t\tDEX_Value\t\tHEX_Value\n");
   while(p != NULL)
   {
     printf("%d\t%-11s\t%-20lu\t%#010lx\n", p->NO, p->exp, p->old_value, p->old_value);
