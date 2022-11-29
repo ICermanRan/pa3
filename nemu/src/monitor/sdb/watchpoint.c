@@ -142,6 +142,8 @@ int test_change()
 {
   WP *p = head;
   
+  if(p == NULL)     //如果head链表为空
+    return 0;
 
   while(p != NULL)  //一直移动到head链表表尾才退出，检测到有变化也会退出
     {
@@ -151,13 +153,15 @@ int test_change()
       if(p->new_value != p->old_value)
       {
         //表达式求的新值与旧值不相等
+        printf("old value = %lu\n", p->old_value);
+        printf("new value = %lu\n", p->new_value);
         return 1;
       }
       
       if(p->new_value == p->old_value)
       {
         //表达式求的新值与旧值相等
-        p->old_value = p->new_value;//old_value更替为新值
+        // p->old_value = p->new_value;//old_value更替为新值
         p = p->next;                //移动到head链表下一个位置
       }  
        
