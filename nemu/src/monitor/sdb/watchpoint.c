@@ -174,7 +174,7 @@ void print_wp()
   printf("WP_NO\tEXPR\t\tDEX_Value\tHEX_Value\n");
   while(p != NULL)
   {
-    printf("%d\t%11s\t%9lu\t%#010lx\n", p->NO, p->exp, p->old_value, p->old_value);
+    printf("%d\t%-11s\t%9lu\t%#010lx\n", p->NO, p->exp, p->old_value, p->old_value);
     p = p->next;
   }
 
