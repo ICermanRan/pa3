@@ -189,6 +189,21 @@ static int cmd_w(char *args) {
   return 0;
 }
 
+static int cmd_d(char *args) {
+  printf("args =%s",args);
+  int num = 0;
+  char * arg = strtok(NULL," ");
+  sscanf(arg, "%d", &num);
+  int d = free_wp(num);//调用这个函数，从head链表中删除一个节点返回到free链表中
+
+  if(d == 1)
+    printf("delete watchpoint %d successfully\n", num);
+  else
+    printf("there is no watchpoint %d\n", num);
+  
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -203,8 +218,8 @@ static struct {
   { "info", "printf message", cmd_info},
   { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
   { "p", "eval the expr", cmd_p},//表达式求值
-  { "w", "set the watchpoint", cmd_w}
-  //{ "d", "delet the watchpoint", cmd_d},
+  { "w", "set the watchpoint", cmd_w},
+  { "d", "delet the watchpoint", cmd_d}
 };
 
 #define NR_CMD ARRLEN(cmd_table)

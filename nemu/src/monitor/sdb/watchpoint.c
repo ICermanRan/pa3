@@ -34,7 +34,7 @@ static WP wp_pool[NR_WP] = {};        //本质就是一个WP类型的数组？
 static WP *head = NULL, *free_ = NULL;
 
 // WP* new_wp();
-int free_wp(WP *wp);
+// int free_wp(WP *wp);
 
 /*函数功能:初始化wp_pool、free、head*/
 void init_wp_pool() {
@@ -90,49 +90,52 @@ WP* new_wp(char *exp)
 
 
 /*函数功能:将形式参数wp所指的节点归还到free_链表中,本质就是删除监视点*/
-int free_wp(WP *wp)
+int free_wp(int num)
 {
   WP *p = head;
-  if(head == NULL)
-  {
+  WP *q = head;
+
+  
+  if(p == NULL) 
+  { 
     printf("Erro!监视点列表为空\n");
     assert(0);
   } 
   
-  
-  if(wp == NULL)          //若 wp = NULL ，则说明输入有误
+  while(num != p->NO && p->next != NULL)  //未找到且未到表尾
   {
-    printf("Input something!\n");
-  }
-  else if(wp->NO == head->NO)     //若 wp = head ，说明wp指向head链表的头节点
+    q = p;
+    p = p->next;
+  } //找到要删除的目标节点才会退出循环
+
+
+  if(num == p->NO)     //若 num == p->NO ，找到待删除的节点
   {
-    head = head->next;    //让head指针指向下一个结点
-    wp->next = free_;     //再将wp所指的节点连到free_链表的第一个位置
-    wp->old_value = 0;
-    wp->new_value = 0;
-    free_ = wp;           //让free_指针指向该节点
+    if(p == head)     //若待删除节点为头节点
+    {
+      head = p->next;     //让头指针指向待删除节点p的下一节点
+    }
+    else                  //若待删除节点不是头节点
+    {
+      q->next = p->next;  ////让前一节点的指针指向待删除节点p的下一节点
+    }
+    
+    p->old_value = 0;
+    p->new_value = 0;
+    memset(p->exp,0,sizeof(p->exp)); //清空删除节点的数据域
+    /*待补充的结构体元素*/
+    p->next = free_;     //再将wp所指的节点连到free_链表的第一个位置
+    free_ = p;           //让free_指针指向该节点
+
+    // printf("Free the %d",p->NO);
   }
-  else                    //若 wp 为其它节点
+  else                   //若找到head表尾但仍为找到节点序号为num要删除的节点
   {
-   
-    while(p->NO != wp->NO)
-      {
-        p = p->next;
-
-        if(p == NULL)
-          {
-            printf("遍历整个监视点列表也没找到要删除的节点\n");
-            return 0;
-          }
-      }
-    p->next = wp->next;
-    wp->next = free_;     //再将wp所指的节点连到free_链表的第一个位置
-    wp->old_value = 0;
-    wp->new_value = 0;
-    free_ = wp;           //让free_指针指向该节点
-
+    printf("遍历整个监视点列表也没找到要删除的节点\n");
+    return 0;
   }
 
+ 
   return 1;
 
 }

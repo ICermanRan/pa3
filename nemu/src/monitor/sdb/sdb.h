@@ -41,6 +41,7 @@ typedef struct watchpoint {
 } WP;
 
 WP* new_wp(); //函数定义
+int free_wp(int num);//函数定义
 
 
 #endif
