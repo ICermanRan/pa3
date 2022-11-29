@@ -28,6 +28,7 @@ word_t expr(char *e, bool *success);
 
 
 int test_change();
+void print_wp();
 
 typedef struct watchpoint {
   int NO;

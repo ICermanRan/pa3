@@ -85,8 +85,10 @@ static int cmd_info(char *args) {
 	char *arg = strtok(args, " ");//arg = "r"
 
 //	printf("%s\n", arg);
-	if(*arg == 'r')
+	if(*arg == 'r')       //打印寄存器
 		isa_reg_display();
+  else if(*arg == 'w')  //打印所有监视点
+    print_wp();
 	else
 		printf("Unknown command '%s'\n", arg);
 	

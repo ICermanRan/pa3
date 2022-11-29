@@ -165,3 +165,17 @@ int test_change()
 
   return 0;
 }
+
+
+/*函数功能:打印所有head链表的监视点信息*/
+void print_wp()
+{
+  WP *p = head;
+  printf("WP_NO      EXPR      DEX_Value      HEX_Value\n");
+  while(p != NULL)
+  {
+    printf("%d      %s      %lu      %#010lx\n", p->NO, p->exp, p->old_value, p->old_value);
+    p = p->next;
+  }
+
+}
