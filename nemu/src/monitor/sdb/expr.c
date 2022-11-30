@@ -323,7 +323,8 @@ word_t expr(char *e, bool *success)
   else
   {
   /* TODO: Insert codes to evaluate the expression. */
-  uint64_t value;
+  // uint64_t value;
+  word_t value;
   token_addrs = token_addr-1;
   value = eval(0,token_addrs);
   *success = true;
