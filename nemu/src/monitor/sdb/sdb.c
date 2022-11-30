@@ -175,7 +175,8 @@ static int cmd_p(char *args) {
 
   //printf("%s\n", args);//数学表达式以字符串存在args里
   uint64_t result =  expr(args,&success);
-  printf("DEX = %lu or HEX = %#010lx\n", result, result);
+  // printf("DEX = %lu or HEX = %#010lx\n", result, result);
+  printf("DEX = %lu or HEX = %#lx\n", result, result);
 
 
   return 0;
