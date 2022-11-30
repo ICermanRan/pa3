@@ -516,7 +516,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
       return result;
 
    }
-  else if (p == q)
+  else if (p == q && tokens[p].type == TK_num)
    {
       // printf("2、判断为:It's a number\n");
       value_num = atoi(tokens[p].str); 
