@@ -178,7 +178,7 @@ static int cmd_p(char *args) {
   word_t result =  expr(args,&success);
   word_t hex = result;
   // printf("DEX = %lu or HEX = %#010lx\n", result, result);
-  printf("DEX = %lu or HEX = %lx\n", result, hex);
+  printf("DEX = %lu or HEX = %#010lx\n", result, hex);
 
 
   return 0;
