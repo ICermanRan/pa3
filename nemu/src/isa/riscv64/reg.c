@@ -21,7 +21,9 @@ const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
   "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
-  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6",
+  /*add a name*/
+  "pc"
 };
 
 void isa_reg_display() {
@@ -52,8 +54,8 @@ static int find_string(const char *strs[], const char *str, int len)
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  printf("s = %s", s);
-  
+  printf("s = %s\n", s);
+
   int len,j;
   GET_ARRAY_LEN(regs,len);
   j = find_string(regs, s, len);
