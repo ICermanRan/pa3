@@ -97,7 +97,7 @@ static int nr_token __attribute__((used))  = 0;
  int token_addrs;
  bool logic = true;//全局变量，用于判断输入的表达式括号是否匹配，不匹配则false给expr函数
 
- static int eval(int p, int q); //函数声明
+ static word_t eval(int p, int q); //函数声明
  static int main_op(int p, int q);//独属形参tokens_addr
  static int check_parentheses(int p, int q);//括号配对函数声明
  static bool check_surround(int p, int q);//括号包围函数声明
@@ -467,7 +467,7 @@ static bool check_surround(int p, int q)
 }
 
 //eval函数 
-static int eval(int start, int end)  //p=开始位置，q=结束位置
+static word_t eval(int start, int end)  //p=开始位置，q=结束位置
  {
   int op;
   int op_type;
