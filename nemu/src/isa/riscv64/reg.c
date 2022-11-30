@@ -54,12 +54,10 @@ static int find_string(const char *strs[], const char *str, int len)
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  printf("s = %s\n", s);
-
   int len,j;
   GET_ARRAY_LEN(regs,len);
   j = find_string(regs, s, len);
-  // printf("j = %d\n", j);
+  printf("j = %d\n", j);
   word_t reg_value;
   reg_value = cpu.gpr[j];
   
