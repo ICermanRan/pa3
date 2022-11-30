@@ -65,7 +65,7 @@ WP* new_wp(char *exp)
   temp->next = NULL;
 
   vaddr_t pc = cpu.pc;
-  printf("pc = %lu", pc);
+  printf("pc = %lu\n", pc);
   // printf("成功从free链表截取了一个节点出来\n");
 
   bool success = false;
