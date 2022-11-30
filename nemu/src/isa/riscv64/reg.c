@@ -59,7 +59,11 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   j = find_string(regs, s, len);
   printf("j = %d\n", j);
   word_t reg_value;
-  reg_value = cpu.gpr[j];
+
+  if(j == 33)
+    reg_value = cpu.pc;
+  else
+    reg_value = cpu.gpr[j];
   
   return reg_value;
 }
