@@ -473,7 +473,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
   uint64_t val1;
   uint64_t val2;
   int p,q;
-  uint64_t result = 0;
+  // uint64_t result = 0;
+  word_t result = 0;
   uint64_t value_num;//数字字符转为数值
   
   p = start;
