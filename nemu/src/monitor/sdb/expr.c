@@ -721,7 +721,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
        }
     }
   }
-  return result;
+  //  return result;
+  return 0;
  } 
 
 
