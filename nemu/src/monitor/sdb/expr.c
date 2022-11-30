@@ -491,14 +491,6 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("p = %d, q = %d,p > q,It's a Bad expression\n",p ,q);
      assert(0);
    }  
-  // else if((q == p+1) && (tokens[p].type == TK_NEG))
-  //  {
-  //    //判定为负数的判断方法
-  //    printf("2、判断为:It's a negative number\n");
-  //    result = -eval(p+1,q);
-  //    Log("negative number result= %lu\n", result);
-  //    return result;
-  //  }
   else if(p == q && tokens[p].type == TK_REG)
    {
     //  printf("2、判断为:REG reading \n");
@@ -509,7 +501,8 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
      word_t value = isa_reg_str2val(s, success);
       // printf("value = %#010lx\n", value);
       printf("读取到的value = 0x%lx \n", value);
-     return result = value;
+    //  return result = value;
+      return value;
 
    }
   else if(p == q && tokens[p].type == TK_HEX)
