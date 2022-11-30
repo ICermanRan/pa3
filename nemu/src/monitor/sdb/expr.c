@@ -326,7 +326,7 @@ word_t expr(char *e, bool *success)
   // uint64_t value;
   token_addrs = token_addr-1;
   word_t value = eval(0,token_addrs);
-  printf("返回前value = 0x%lx\n",value);
+  // printf("返回前value = 0x%lx\n",value);
   *success = true;
 
   if( logic == false)
@@ -499,7 +499,7 @@ static word_t eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("s = %s\n", s);
      word_t value = isa_reg_str2val(s, success);
       // printf("value = %#010lx\n", value);
-      printf("读取到的value = 0x%lx \n", value);
+      // printf("读取到的value = 0x%lx \n", value);
     //  return result = value;
       return value;
 
