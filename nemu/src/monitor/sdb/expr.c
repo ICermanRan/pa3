@@ -507,7 +507,7 @@ static int eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("s = %s\n", s);
      word_t value = isa_reg_str2val(s, success);
       // printf("value = %#010lx\n", value);
-      printf("value = %lu\n", value);
+      printf("value = %lx\n", value);
      return result = value;
 
    }
