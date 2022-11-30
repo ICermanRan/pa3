@@ -327,6 +327,7 @@ word_t expr(char *e, bool *success)
   word_t value;
   token_addrs = token_addr-1;
   value = eval(0,token_addrs);
+  printf("返回前value = 0x%lx\n",value);
   *success = true;
 
   if( logic == false)
