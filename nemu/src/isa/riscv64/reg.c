@@ -15,17 +15,55 @@
 
 #include <isa.h>
 #include "local-include/reg.h"
+#define GET_ARRAY_LEN(array,len) {len = (sizeof(array) / sizeof(array[0]));}
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
   "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
-  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6",
+  /*add a name*/
+  "pc"
 };
 
 void isa_reg_display() {
+	int i;
+	const char *temp = NULL;
+	for(i = 0; i < 32; i++)
+	{
+		temp = regs[i];
+		printf("reg %s ,value = %ld\n", temp, cpu.gpr[i]);
+	}
+
+}
+
+static int find_string(const char *strs[], const char *str, int len)
+{
+    int i = 1;
+    while(i < len + 1){
+        if(strcmp(*strs, str) == 0){
+            break;
+        }
+        i++;
+        strs++;
+    }
+    if(i == len + 1){
+        return -1;
+    }
+    return i;
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  return 0;
+  int len,j;
+  GET_ARRAY_LEN(regs,len);
+  j = find_string(regs, s, len);
+  // printf("j = %d\n", j);
+  word_t reg_value;
+
+  if(j == 33)
+    reg_value = cpu.pc;
+  else
+    reg_value = cpu.gpr[j];
+  
+  return reg_value;
 }

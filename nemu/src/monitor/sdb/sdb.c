@@ -19,10 +19,15 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+
+
+
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -49,10 +54,158 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;   //优雅的退出NEMU标准答案
   return -1;
 }
 
 static int cmd_help(char *args);
+
+
+static int cmd_s(char *args) {
+	/* extract the first argument */
+  char *arg = strtok(args, " ");//N = times
+  int N;
+  N = atoi(arg);//turn %s to %d
+  //printf("%s", arg);
+
+  if(arg == NULL)
+    cpu_exec(1);
+  else
+    cpu_exec(N);
+
+	return 0;
+}
+
+
+
+static int cmd_info(char *args) {
+		/* extract the first argument */
+
+  //  printf("%s\n", args);
+	char *arg = strtok(args, " ");//arg = "r"
+
+//	printf("%s\n", arg);
+	if(*arg == 'r')       //打印寄存器
+		isa_reg_display();
+  else if(*arg == 'w')  //打印所有监视点
+    print_wp();
+	else
+		printf("Unknown command '%s'\n", arg);
+	
+	return 0;
+	
+}
+
+
+
+static int cmd_x(char *args) {
+	/* extract the first argument */
+  char *arg = NULL; //定义分割出来的每个字符串
+  char *arg1 = NULL;
+
+  int i;
+  long long base_addr;
+  long long offset_addr = 0x1;
+  int j;
+  long  value;
+  int len = 4;//1: return *(uint8_t  *)addr;
+              // 2: return *(uint16_t *)addr;
+              // 4: return *(uint32_t *)addr;
+ 
+  arg = strtok(args, " ");// 在第一次分割时，需要指定源字符串
+  i = atoi(arg);
+  //printf(" = %d\n", i);
+   
+  arg1 = strtok(NULL, "\0");//往后的调用则将参数s设置成NULL
+  //printf("char base_addr = %s\n", arg1);
+
+
+  char arr[100];
+  int a = 0;
+
+  while(*arg1 != '\0')
+    {
+        arr[a] = *arg1;
+        a++;
+        arg1++;
+    }
+//  printf("a = %d\n",a);
+
+
+  int b;
+  int num[a];//数组存储数量=a-2
+    for(b = 2; b <= a-1; b++)
+    {
+        if((arr[b] >= 48) && (arr[b] <= 57))
+          num[b-2] = arr[b] - '0';
+        else if((arr[b] >= 97) && (arr[b] <= 102))
+          num[b-2] = arr[b] - 87;
+        
+       // printf("%d, b = %d\n", num[b-2], b);
+    } //用ASCII码值做计算，得到的值正好为对应的数字
+
+  // printf("b = %d\n", b);
+  
+  long m = 1;
+  long long sum = 0; 
+  int c;
+    for(c = b-3; c >=0; c--)
+    {
+     // printf("c=%d ,sum = %lld, m = %ld\n", c,sum, m);
+      sum += num[c]*m;
+      m *= 16;
+    }
+
+   base_addr = sum;//分离出起始地址int类型
+   printf("base_addr = %#llx\n", base_addr);
+
+  for(j = 0; j < i; j++)
+  {
+    //value = vaddr_read(base_addr + j*offset_addr, len);
+    value = vaddr_read(base_addr + 4*j*offset_addr, len);
+    printf("addr = %#llx ", base_addr + 4*j*offset_addr);
+    printf("value = %#010lx\n", value);
+  }
+
+  return 0;
+}
+
+static int cmd_p(char *args) {
+  bool  success = false;
+
+  //printf("%s\n", args);//数学表达式以字符串存在args里
+  // uint64_t result =  expr(args,&success);
+  word_t result =  expr(args,&success);
+  // printf("DEX = %lu or HEX = %#010lx\n", result, result);
+  printf("DEX = %lu or HEX = 0x%lx\n", result, result);
+
+
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  
+  WP *n_wp = NULL;
+  n_wp = new_wp(args);//调用这个函数，从free链表中返回一个空闲的监视点结构
+  printf("watchpoint %d: %s is set successfully\n", n_wp->NO, n_wp->exp);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  // printf("args =%s\n",args);
+  int num = 0;
+  // char *arg = strtok(NULL," ");
+  // printf("arg =%s\n",arg);
+  sscanf(args, "%d", &num);
+  int d = free_wp(num);//调用这个函数，从head链表中删除一个节点返回到free链表中
+
+  if(d == 1)
+    printf("delete watchpoint %d successfully\n", num);
+  else
+    printf("there is no watchpoint %d\n", num);
+  
+  return 0;
+}
 
 static struct {
   const char *name;
@@ -62,9 +215,14 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+	
   /* TODO: Add more commands */
-
+  { "si", "Step", cmd_s},
+  { "info", "printf message", cmd_info},
+  { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
+  { "p", "eval the expr", cmd_p},//表达式求值
+  { "w", "set the watchpoint", cmd_w},
+  { "d", "delet the watchpoint", cmd_d}
 };
 
 #define NR_CMD ARRLEN(cmd_table)
