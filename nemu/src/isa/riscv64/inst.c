@@ -27,8 +27,8 @@ enum {
   TYPE_N, // none
 };
 
-#define src1R() do { *src1 = R(rs1); } while (0)
-#define src2R() do { *src2 = R(rs2); } while (0)
+#define src1R() do { *src1 = R(rs1); } while (0)  //src1 = cpu.gpr(rs1)
+#define src2R() do { *src2 = R(rs2); } while (0)  //src2 = cpu.gpr(rs2)
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //符号位扩展的20位立即数左移12位
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
@@ -43,6 +43,8 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
 
+  printf("rs1 = %d\n", rs1);
+  printf("rs2 = %d\n", rs2);
   
   //decode_operand会首先统一对目的操作数进行寄存器操作数的译码
   //即调用*dest = rd, 不同的指令类型可以视情况使用dest
@@ -70,7 +72,9 @@ static int decode_exec(Decode *s) {
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   decode_operand(s, &dest, &src1, &src2, &imm, concat(TYPE_, type)); \
-  /* dest:目的操作数  src1、src2:两个源操作数  imm:立即数 */               \
+  /* dest:目的操作数  
+    src1、src2:两个源操作数  src1 = cpu.gpr(rs1) src2 = cpu.gpr(rs2)
+     imm:立即数 */               \
   __VA_ARGS__ ; \
 }
 
