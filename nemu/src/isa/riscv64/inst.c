@@ -27,8 +27,14 @@ enum {
   TYPE_N, // none
 };
 
-#define src1R() do { *src1 = R(rs1); } while (0)  //src1 = cpu.gpr(rs1)
-#define src2R() do { *src2 = R(rs2); } while (0)  //src2 = cpu.gpr(rs2)
+/*
+ 这里的*src1表示对指针变量src1的解引用(此src与译码函数里的src不是一个东西)  
+ 两者的关系是*src1 == *(&src1) == src1(这里是译码函数中的变量)
+ 所以，下面的宏里，rs表示寄存器编号，宏R表示对应编号寄存器里的值赋给了译码函数中的变量
+*/
+#define src1R() do { *src1 = R(rs1); } while (0)  //*src1 = cpu.gpr(rs1)
+#define src2R() do { *src2 = R(rs2); } while (0)  //*src2 = cpu.gpr(rs2)
+
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //符号位扩展的20位立即数左移12位
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
@@ -37,6 +43,7 @@ enum {
 
 
 //进一步译码，根据传入的指令类型type来进行操作数的译码
+//传入这个函数的 *src1、*src2已经是原来函数中变量的地址了，被保存在指针变量里
 static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
   int rd  = BITS(i, 11, 7);
