@@ -43,7 +43,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
 
-  printf("pc = %lx", s->pc);
+  printf("pc = %lx\n", s->pc);
   printf("rs1 = %d\n", rs1);
   printf("rs2 = %d\n", rs2);
   
