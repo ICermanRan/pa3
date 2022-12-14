@@ -20,7 +20,7 @@
 
 static inline int check_reg_idx(int idx) {
   printf("idx = %d",idx);
-  IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < 32));
+  // IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < 32));
   return idx;
 }
 
