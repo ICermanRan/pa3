@@ -69,7 +69,7 @@ static int decode_exec(Decode *s) {
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   decode_operand(s, &dest, &src1, &src2, &imm, concat(TYPE_, type)); \
-  /*dest:目的操作数  src1、src2:两个源操作数  imm:立即数 */               \
+  /* dest:目的操作数  src1、src2:两个源操作数  imm:立即数 */               \
   __VA_ARGS__ ; \
 }
 
@@ -85,7 +85,7 @@ static int decode_exec(Decode *s) {
               /*add more instructions*/
   // INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + R(src1));            
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
-  INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); //
+  INSTPAT("000000? ????? ????? 000 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); 
 
           
           //inv的规则, 表示"若前面所有的模式匹配规则都无法成功匹配, 则将该指令视为非法指令
