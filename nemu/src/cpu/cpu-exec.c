@@ -48,16 +48,21 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
     {
       nemu_state.state = NEMU_STOP;
       printf("监视点已被触发\n");
-      return; //返回到sdb_mainloop()循环中等待用户的命令.
+      return ; //返回到sdb_mainloop()循环中等待用户的命令.
     }
  #endif
 }
 
+/*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
+/*模拟了cpu的工作方式*/
 static void exec_once(Decode *s, vaddr_t pc) {
-  s->pc = pc;
+  s->pc = pc;       //s存放在执行一条指令过程中所需的信息, 包括指令的PC, 下一条指令的PC等
   s->snpc = pc;
-  isa_exec_once(s);
-  cpu.pc = s->dnpc;
+  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC.
+  cpu.pc = s->dnpc; //通过s->dnpc来更新PC
+
+  /*下面的代码与trace相关*/
+  /*当用gdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -82,11 +87,18 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 static void execute(uint64_t n) {
   Decode s;
-  for (;n > 0; n --) {
+  for (;n > 0; n --)
+  {
     exec_once(&s, cpu.pc);
-    g_nr_guest_inst ++;
+    g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
+
+    /*下面的代码与trace和difftest相关*/
     trace_and_difftest(&s, cpu.pc);
-    if (nemu_state.state != NEMU_RUNNING) break;
+
+    /*检查NEMU的状态是否为NEMU_RUNNING*/
+    /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
+    // if ((nemu_state.state != NEMU_RUNNING) && (nemu_state.state != NEMU_STOP)) break;
+     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
 }
@@ -107,7 +119,7 @@ void assert_fail_msg() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
-  g_print_step = (n < MAX_INST_TO_PRINT);
+  g_print_step = (n < MAX_INST_TO_PRINT);   //判断传入的要单步执行的步数，不能大于10
   switch (nemu_state.state) {
     case NEMU_END: case NEMU_ABORT:
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");

@@ -18,7 +18,7 @@
 #include <memory/vaddr.h>
 
 static inline uint32_t inst_fetch(vaddr_t *pc, int len) {
-  uint32_t inst = vaddr_ifetch(*pc, len);
+  uint32_t inst = vaddr_ifetch(*pc, len); //vaddr_ifetch调用paddr_read，访问物理内存中的内容
   (*pc) += len;
   return inst;
 }
