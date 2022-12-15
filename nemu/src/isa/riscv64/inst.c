@@ -35,8 +35,9 @@ enum {
 #define src1R() do { *src1 = R(rs1); } while (0)  //*src1 = cpu.gpr(rs1)
 #define src2R() do { *src2 = R(rs2); } while (0)  //*src2 = cpu.gpr(rs2)
 
-#define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
-#define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //20位立即数扩展为32位，左移12位后，符号位[31]设立为1
+/*符号位扩展均扩展为64位，最后返回的结果都是以补码形式看值，因为抽取的立即数在符号位扩展时的扩展规则是不同的(详见宏内)*/
+#define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)            //先12位立即数，再扩展为64位
+#define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //先抽取20位立即数，再扩展为64位，再左移12位
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1)) | BITS(i, 19, 12) | BITS(i, 20, 20) | BITS(i, 30, 21) ;} while(0)
 /*宏BITS 用于位抽取； 宏SEXT 用于符号位扩展*/
@@ -67,10 +68,10 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     定义了immI、immU()、immS()等辅助宏, 用于从指令中抽取出立即数
   */
   switch (type) {
-    case TYPE_I: src1R();          immI(); printf("imm = %ld\n",*imm); break;
-    case TYPE_U:                   immU(); break;
-    case TYPE_S: src1R(); src2R(); immS(); break;
-    case TYPE_J:                   immJ(); break;
+    case TYPE_I: src1R();          immI(); printf("Itype imm = %ld\n",*imm); break;
+    case TYPE_U:                   immU(); printf("Utype imm = %ld\n",*imm); break;
+    case TYPE_S: src1R(); src2R(); immS(); printf("Stype imm = %ld\n",*imm); break;
+    case TYPE_J:                   immJ(); printf("Jtype imm = %ld\n",*imm); break;
   } 
 }
 
@@ -102,7 +103,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
               /*add more instructions*/
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);//伪指令li的拓展指令之一
-  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->dnpc, s->pc += imm);
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->pc+4, s->pc += imm);
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
   // INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); 
 
