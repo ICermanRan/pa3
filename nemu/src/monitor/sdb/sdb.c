@@ -63,9 +63,8 @@ static int cmd_help(char *args);
 
 static int cmd_s(char *args) {
 	/* extract the first argument */
- 
-  // Assert(arg != )
-  printf("args = %s\n", args);
+
+  // printf("args = %s\n", args);
   int N;
   if(args == NULL)
   {
@@ -73,12 +72,11 @@ static int cmd_s(char *args) {
   }
   else 
   {
-   
-    N = atoi(args);//turn %s to %d
+   N = atoi(args);//turn %s to %d
   }
 
-  printf("N = %d\n", N);
-  Assert(N != 0, "无效的si步进，非法的表达式\n");
+  // printf("N = %d\n", N);
+  Assert(N != 0, "无效的si步数，非法的表达式\n");
   cpu_exec(N);
 
 	return 0;

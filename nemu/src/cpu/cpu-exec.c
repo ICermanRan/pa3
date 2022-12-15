@@ -97,7 +97,7 @@ static void execute(uint64_t n) {
 
     /*检查NEMU的状态是否为NEMU_RUNNING*/
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
-    if (nemu_state.state != NEMU_RUNNING) break;
+    if ((nemu_state.state != NEMU_RUNNING) && (nemu_state.state != NEMU_STOP)) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
 }
@@ -118,7 +118,7 @@ void assert_fail_msg() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
-  g_print_step = (n < MAX_INST_TO_PRINT);
+  g_print_step = (n < MAX_INST_TO_PRINT);   //判断传入的要单步执行的步数，不能大于10
   switch (nemu_state.state) {
     case NEMU_END: case NEMU_ABORT:
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
