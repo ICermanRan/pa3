@@ -51,16 +51,16 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
 
-  printf("pc = %lx\n", s->pc);
-  printf("rs1 = %d\n", rs1);
-  printf("rs2 = %d\n", rs2);
+  // printf("pc = %lx\n", s->pc);
+  // printf("rs1 = %d\n", rs1);
+  // printf("rs2 = %d\n", rs2);
   // printf("*src1 = %lu\n", *src1);
   // printf("*src2 = %lu\n", *src2);
   
   //decode_operand会首先统一对目的操作数进行寄存器操作数的译码
   //即调用*dest = rd, 不同的指令类型可以视情况使用dest
   *dest = rd;
-  printf("*dest = %d\n", *dest);
+  // printf("*dest = %d\n", *dest);
 
   //为了进一步实现操作数译码和指令译码的解耦, 我们对这些操作数的译码进行了抽象封装
   /*
