@@ -63,13 +63,21 @@ static int cmd_help(char *args);
 
 static int cmd_s(char *args) {
 	/* extract the first argument */
-  // char *arg = strtok(args, " ");//N = times
+ 
   // Assert(arg != )
   printf("args = %s\n", args);
-  // int N;
-  // N = atoi(arg);//turn %s to %d
-  // //
+  int N;
+  if(args == NULL)
+  {
+    N = 1;
+  }
+  else 
+  {
+    // Assert()
+    N = atoi(args);//turn %s to %d
+  }
 
+   printf("N = %d\n", N);
   // if(arg == NULL)
   //   cpu_exec(1);
   // else
