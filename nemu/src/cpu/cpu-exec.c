@@ -97,7 +97,8 @@ static void execute(uint64_t n) {
 
     /*检查NEMU的状态是否为NEMU_RUNNING*/
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
-    if ((nemu_state.state != NEMU_RUNNING) && (nemu_state.state != NEMU_STOP)) break;
+    // if ((nemu_state.state != NEMU_RUNNING) && (nemu_state.state != NEMU_STOP)) break;
+     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
 }
