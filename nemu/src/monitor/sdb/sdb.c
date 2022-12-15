@@ -63,15 +63,27 @@ static int cmd_help(char *args);
 
 static int cmd_s(char *args) {
 	/* extract the first argument */
-  char *arg = strtok(args, " ");//N = times
-  int N;
-  N = atoi(arg);//turn %s to %d
-  //printf("%s", arg);
 
-  if(arg == NULL)
-    cpu_exec(1);
-  else
-    cpu_exec(N);
+  // printf("args = %s\n", args);
+  int N;
+  if(args == NULL)
+  {
+    N = 1;
+  }
+  else 
+  {
+   N = atoi(args);//turn %s to %d
+  }
+
+  // printf("N = %d\n", N);
+  Assert(N != 0, "无效的si步数，非法的表达式\n");
+
+  /*
+    有一点要注意，在有断点触发的时候，要删除掉触发的断点/监视点才能si多步执行，
+    因为触发断点，trace_and_difftest里，状态变为了stop，直接就退出了execute里的循环
+    也就无法多步执行了
+  */
+  cpu_exec(N);
 
 	return 0;
 }
