@@ -77,7 +77,7 @@ static int cmd_s(char *args) {
     N = atoi(args);//turn %s to %d
   }
 
-  // printf("N = %d\n", N);
+  printf("N = %d\n", N);
   Assert(N != 0, "无效的si步进，非法的表达式\n");
   cpu_exec(N);
 
