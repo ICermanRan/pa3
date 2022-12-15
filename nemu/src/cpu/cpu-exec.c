@@ -48,7 +48,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
     {
       nemu_state.state = NEMU_STOP;
       printf("监视点已被触发\n");
-      return; //返回到sdb_mainloop()循环中等待用户的命令.
+      nemu_state.state = NEMU_RUNNING;
+      return ; //返回到sdb_mainloop()循环中等待用户的命令.
     }
  #endif
 }
