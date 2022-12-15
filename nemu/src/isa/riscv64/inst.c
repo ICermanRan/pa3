@@ -36,7 +36,7 @@ enum {
 #define src2R() do { *src2 = R(rs2); } while (0)  //*src2 = cpu.gpr(rs2)
 
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
-#define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //符号位扩展的20位立即数左移12位
+#define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //20位立即数扩展为32位，左移12位后，符号位[31]设立为1
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1)) | BITS(i, 19, 12) | BITS(i, 20, 20) | BITS(i, 30, 21) ;} while(0)
 /*宏BITS 用于位抽取； 宏SEXT 用于符号位扩展*/
@@ -67,7 +67,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     定义了immI、immU()、immS()等辅助宏, 用于从指令中抽取出立即数
   */
   switch (type) {
-    case TYPE_I: src1R();          immI(); break;
+    case TYPE_I: src1R();          immI(); printf("imm = %ld",*imm); break;
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
     case TYPE_J:                   immJ(); break;
