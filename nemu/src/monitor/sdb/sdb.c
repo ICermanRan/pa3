@@ -64,9 +64,10 @@ static int cmd_help(char *args);
 static int cmd_s(char *args) {
 	/* extract the first argument */
   char *arg = strtok(args, " ");//N = times
+  printf("%s", arg);
   int N;
   N = atoi(arg);//turn %s to %d
-  //printf("%s", arg);
+  //
 
   if(arg == NULL)
     cpu_exec(1);
