@@ -24,8 +24,8 @@
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
-  TYPE_N, // none
-};
+  TYPE_N, TYPE_J// none
+};  //定义指令type
 
 /*
  这里的*src1表示对指针变量src1的解引用(此src与译码函数里的src不是一个东西)  
@@ -38,7 +38,7 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //符号位扩展的20位立即数左移12位
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
-
+#define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1)) | BITS(i, 19, 12) | BITS(i, 20, 20) | BITS(i, 30, 21) ;} while(0)
 /*宏BITS 用于位抽取； 宏SEXT 用于符号位扩展*/
 
 
@@ -70,6 +70,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
+    case TYPE_J:                   immJ(); break;
   } 
 }
 
@@ -99,7 +100,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 011 ????? 01000 11", sd     , S, Mw(src1 + imm, 8, src2)); //
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
               /*add more instructions*/
-  INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);//伪指令li            
+  INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);//伪指令li的拓展指令之一
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->pc + 4, s->pc += imm);
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
   // INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); 
 
