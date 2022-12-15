@@ -67,7 +67,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     定义了immI、immU()、immS()等辅助宏, 用于从指令中抽取出立即数
   */
   switch (type) {
-    case TYPE_I: src1R();          immI(); printf("imm = %ld",*imm); break;
+    case TYPE_I: src1R();          immI(); printf("imm = %ld\n",*imm); break;
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
     case TYPE_J:                   immJ(); break;
