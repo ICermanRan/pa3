@@ -94,7 +94,7 @@ static void execute(uint64_t n) {
 
     /*下面的代码与trace和difftest相关*/
     trace_and_difftest(&s, cpu.pc);
-    nemu_state.state = NEMU_RUNNING;
+
     /*检查NEMU的状态是否为NEMU_RUNNING*/
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
     // if ((nemu_state.state != NEMU_RUNNING) && (nemu_state.state != NEMU_STOP)) break;
