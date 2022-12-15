@@ -66,6 +66,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
+  printf("shizhelima?\n");
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
   int ilen = s->snpc - s->pc;
   int i;
