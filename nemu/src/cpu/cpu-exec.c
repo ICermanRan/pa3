@@ -56,13 +56,14 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 /*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
 /*模拟了cpu的工作方式*/
 static void exec_once(Decode *s, vaddr_t pc) {
-  s->pc = pc;       //s存放在执行一条指令过程中所需的信息, 包括指令的PC, 下一条指令的PC等
-  s->snpc = pc;
+                    //s存放在执行一条指令过程中所需的信息, 包括指令的PC, 下一条指令的PC等
+  s->pc = pc;       //当前pc
+  s->snpc = pc;     //下一条指令的pc(静态)
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC.
-  cpu.pc = s->dnpc; //通过s->dnpc来更新PC
+  cpu.pc = s->dnpc; //下一条指令的pc(动态)
 
   /*下面的代码与trace相关*/
-  /*当用gdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
+  /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
