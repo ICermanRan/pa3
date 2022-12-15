@@ -114,6 +114,9 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
 
+  printf("pc = %0lx\n", s->pc);
+  printf("imm = %lx\n", imm);
+
   return 0;
 }
 
