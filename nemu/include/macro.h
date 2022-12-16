@@ -85,6 +85,14 @@
 
 #define BITMASK(bits) ((1ull << (bits)) - 1)
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
+
+//用到了位域和符号扩展的知识  类型说明符   域名 ：位域长度;
+//这里的类型说明符是64位有符号数int
+//位域长度不能超过其类型所对应的大小，即len的大小不能超过64
+//位域n的位域长度由传入的参数len决定
+//而符号扩展，传入的x如果当前最高位为0，那么就在高位补0，如果当前最高位为1，那么就在高位补1，这样，正数扩展后依然还是正数，负数扩展后依然还是负数
+//一直补到
+//值得注意的是，符号扩展后，都是取补码看结果(正数不变，负数符号位不变，其余取反再加1)
 #define SEXT(x, len) ({ struct { int64_t n : len; } __x = { .n = x }; (uint64_t)__x.n; })
 
 #define ROUNDUP(a, sz)   ((((uintptr_t)a) + (sz) - 1) & ~((sz) - 1))
