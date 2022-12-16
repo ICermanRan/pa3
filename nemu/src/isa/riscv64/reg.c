@@ -32,7 +32,7 @@ void isa_reg_display() {
 	for(i = 0; i < 32; i++)
 	{
 		temp = regs[i];
-		printf("reg %s ,value = %ld or 0x%lx\n", temp, cpu.gpr[i], cpu.gpr[i]);
+		printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
 	}
 
 }
