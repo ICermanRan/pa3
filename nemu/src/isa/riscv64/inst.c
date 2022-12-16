@@ -71,7 +71,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     case TYPE_I: src1R();          immI();  break; //printf("Itype imm = %ld\n",*imm); break;
     case TYPE_U:                   immU();  break; //printf("Utype imm = %ld\n",*imm); break;
     case TYPE_S: src1R(); src2R(); immS();  break; //printf("Stype imm = %ld\n",*imm); break;
-    case TYPE_J:                   immJ();  break; //printf("Jtype imm = %lx\n",*imm); break;
+    case TYPE_J:                   immJ();  printf("Jtype imm = %lx\n",*imm); break;
   } 
 }
 
@@ -80,6 +80,8 @@ static int decode_exec(Decode *s) {
   int dest = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
+
+  printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
 
   vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
 
@@ -120,7 +122,7 @@ static int decode_exec(Decode *s) {
 
   // printf("pc = %0lx\n", s->pc);
   // printf("snpc = %0lx\n", s->snpc);
-   printf("dnpc = %0lx\n", s->dnpc);
+   printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
   // printf("imm = %lx\n", imm);
 
   return 0;
