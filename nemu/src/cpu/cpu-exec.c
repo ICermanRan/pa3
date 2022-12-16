@@ -58,8 +58,9 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
                     //s存放在执行一条指令过程中所需的信息, 包括指令的PC, 下一条指令的PC等
   s->pc = pc;       //当前pc
-  s->snpc = pc;     //下一条指令的pc(静态)
-  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC.
+  s->snpc = pc;     //snpc先赋值为当前的pc
+  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
+                    //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC.
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
 
   /*下面的代码与trace相关*/
