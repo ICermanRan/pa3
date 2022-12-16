@@ -82,8 +82,8 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
-  printf("进入译码时的 pc = %0lx\n", s->pc);
-  printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
+  // printf("进入译码时的 pc = %0lx\n", s->pc);
+  // printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
 
   vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
 
@@ -108,7 +108,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 011 ????? 01000 11", sd     , S, Mw(src1 + imm, 8, src2)); //
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
               /*add more instructions*/
-  INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);//伪指令li的拓展指令之一
+  INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);//伪指令li的拓展指令之一、伪指令mv的拓展指令之一
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->dnpc, s->dnpc = s->pc + imm);//跳转指令，跳转地址 = 当前地址 + 处理后的imm;把顺序执行的地址存在寄存器x[1]
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, t = s->dnpc, s->dnpc = ((imm + src1) & ~1), R(dest) = t);
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
@@ -124,7 +124,7 @@ static int decode_exec(Decode *s) {
 
   // printf("pc = %0lx\n", s->pc);
   // printf("snpc = %0lx\n", s->snpc);
-   printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
+  // printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
   // printf("imm = %lx\n", imm);
 
   return 0;
