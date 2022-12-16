@@ -68,10 +68,10 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     定义了immI、immU()、immS()等辅助宏, 用于从指令中抽取出立即数
   */
   switch (type) {
-    case TYPE_I: src1R();          immI(); printf("Itype imm = %ld\n",*imm); break;
-    case TYPE_U:                   immU(); printf("Utype imm = %ld\n",*imm); break;
-    case TYPE_S: src1R(); src2R(); immS(); printf("Stype imm = %ld\n",*imm); break;
-    case TYPE_J:                   immJ(); printf("Jtype imm = %lx\n",*imm); break;
+    case TYPE_I: src1R();          immI();  break; //printf("Itype imm = %ld\n",*imm); break;
+    case TYPE_U:                   immU();  break; //printf("Utype imm = %ld\n",*imm); break;
+    case TYPE_S: src1R(); src2R(); immS();  break; //printf("Stype imm = %ld\n",*imm); break;
+    case TYPE_J:                   immJ();  break; //printf("Jtype imm = %lx\n",*imm); break;
   } 
 }
 
@@ -114,10 +114,10 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
 
-  printf("pc = %0lx\n", s->pc);
-  printf("snpc = %0lx\n", s->snpc);
-  printf("dnpc = %0lx\n", s->dnpc);
-  printf("imm = %lx\n", imm);
+  // printf("pc = %0lx\n", s->pc);
+  // printf("snpc = %0lx\n", s->snpc);
+  // printf("dnpc = %0lx\n", s->dnpc);
+  // printf("imm = %lx\n", imm);
 
   return 0;
 }
