@@ -55,8 +55,8 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
   // printf("pc = %lx\n", s->pc);
   Log("rs1 = %d\n", rs1);
   Log("rs2 = %d\n", rs2);
-  // printf("*src1 = %lu\n", *src1);
-  // printf("*src2 = %lu\n", *src2);
+  Log("*src1 = %lu\n", *src1);
+  Log("*src2 = %lu\n", *src2);
   
   //decode_operand会首先统一对目的操作数进行寄存器操作数的译码
   //即调用*dest = rd, 不同的指令类型可以视情况使用dest
