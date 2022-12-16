@@ -120,7 +120,7 @@ static int decode_exec(Decode *s) {
 
   // printf("pc = %0lx\n", s->pc);
   // printf("snpc = %0lx\n", s->snpc);
-  // printf("dnpc = %0lx\n", s->dnpc);
+   printf("dnpc = %0lx\n", s->dnpc);
   // printf("imm = %lx\n", imm);
 
   return 0;
