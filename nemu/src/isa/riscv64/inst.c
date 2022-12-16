@@ -26,7 +26,8 @@ static int unsigned_compare(uint64_t num1, uint64_t num2);
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
-  TYPE_N, TYPE_J, TYPE_R// none
+  TYPE_N, TYPE_J, TYPE_R,
+  TYPE_B// none
 };  //定义指令type
 
 /*
@@ -42,6 +43,7 @@ enum {
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //先抽取20位立即数，再扩展为64位，再左移12位
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { *imm = SEXT( (((BITS(i, 31, 31) << 8 | BITS(i, 19, 12)) << 1 | BITS(i, 20, 20)) << 10 | BITS(i, 30, 21)) << 1 ,21 ); } while(0)
+#define immB() do { *imm = SEXT( (((BITS(i, 31, 31) << 1 | BITS(i, 7, 7)) << 6 | BITS(i, 30, 25)) << 4 | BITS(i, 4, 1)) << 1 , 13); } while(0)
 // #define immJ() do { *imm = SEXT( (((BITS(i, 31, 31) << 8 | BITS(i, 19, 12)) << 1 | BITS(i, 20, 20)) << 10 | BITS(i, 30, 21)) ,21 ); } while(0)
 /*宏BITS 用于位抽取； 宏SEXT 用于符号位扩展*/
 
@@ -76,6 +78,14 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     case TYPE_S: src1R(); src2R(); immS();  break; //printf("Stype imm = %ld\n",*imm); break;
     case TYPE_J:                   immJ();  printf("Jtype imm = %lx\n",*imm); break;
     case TYPE_R: src1R(); src2R();          break;
+
+    case TYPE_B: src1R(); src2R(); 
+                 if(src1 == src2) 
+                    {
+                      immB();
+                      s->dnpc = s->pc + *imm;
+                    }   
+                 printf("Btype imm = %lx\n",*imm); break;
   } 
 }
 
@@ -117,7 +127,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                   //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
   INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31,0), 32));             //
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
-  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm)); 
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm));
+  INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, );                                              //若寄存器 x[rs1]和寄存器 x[rs2]的值相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
   // INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); 
 
