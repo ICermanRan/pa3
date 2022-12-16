@@ -22,6 +22,8 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
+static int unsigned_compare(uint64_t num1, uint64_t num2);
+
 enum {
   TYPE_I, TYPE_U, TYPE_S,
   TYPE_N, TYPE_J, TYPE_R// none
@@ -115,6 +117,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                   //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
   INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31,0), 32));             //
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm)); 
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
   // INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); 
 
@@ -147,4 +150,17 @@ int isa_exec_once(Decode *s) {
  
   //进入decode_exec()函数，开始译码
   return decode_exec(s);
+}
+
+/*无符号数比较函数*/
+static int unsigned_compare(uint64_t num1, uint64_t num2)
+{
+  int result;
+
+  if(num1 < num2)
+    result = 1;
+  else  
+    result = 0;
+
+  return result;
 }
