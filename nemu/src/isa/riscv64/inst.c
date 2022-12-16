@@ -81,6 +81,8 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
+  vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
+
 //定义两个宏：INSTPAT_INST、INSTPAT_MATCH, 在INSTPAT这个宏的内容中调用，简化程序
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
@@ -104,6 +106,7 @@ static int decode_exec(Decode *s) {
               /*add more instructions*/
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);//伪指令li的拓展指令之一
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->dnpc, s->dnpc += imm);
+  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, t = s->dnpc, s->dnpc = ((imm + src1) & ~1), R(dest) = t);
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
   // INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); 
 
@@ -113,6 +116,7 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
+  t = 0; //每个jalr的t不同，因此清0
 
   // printf("pc = %0lx\n", s->pc);
   // printf("snpc = %0lx\n", s->snpc);
