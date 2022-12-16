@@ -82,6 +82,7 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
+  printf("进入译码时的 pc = %0lx\n", s->pc);
   printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
 
   vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
