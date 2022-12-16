@@ -129,7 +129,9 @@ static int decode_exec(Decode *s) {
   printf("退出译码时的 pc = %0lx\n", s->pc);
   printf("退出译码时的 snpc = %0lx\n", s->snpc);
   printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
-  printf("imm = %lx\n", imm);
+  printf("退出译码时的 src1 = %0lx\n", src1);
+  printf("退出译码时的 src2 = %0lx\n", src2);
+  // printf("imm = %lx\n", imm);
 
   return 0;
 }
