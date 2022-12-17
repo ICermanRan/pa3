@@ -50,7 +50,8 @@ enum {
 
 //进一步译码，根据传入的指令类型type来进行操作数的译码
 //传入这个函数的 *src1、*src2已经是原来函数中变量的地址了，被保存在指针变量里
-static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) {
+static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) 
+{
   uint32_t i = s->isa.inst.val;
   int rd  = BITS(i, 11, 7);
   int rs1 = BITS(i, 19, 15);
@@ -72,23 +73,16 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     定义了src1R()和src2R()两个辅助宏, 用于寄存器的读取结果记录到相应的操作数变量中
     定义了immI、immU()、immS()等辅助宏, 用于从指令中抽取出立即数
   */
-  switch (type) {
+  switch (type)
+  {
     case TYPE_I: src1R();          immI();  break; //printf("Itype imm = %ld\n",*imm); break;
     case TYPE_U:                   immU();  break; //printf("Utype imm = %ld\n",*imm); break;
     case TYPE_S: src1R(); src2R(); immS();  break; //printf("Stype imm = %ld\n",*imm); break;
     case TYPE_J:                   immJ();  printf("Jtype imm = %lx\n",*imm); break;
     case TYPE_R: src1R(); src2R();          break;
-
-    case TYPE_B: src1R(); src2R(); 
-                 if(src1 == src2) 
-                    {
-                      immB();
-                      s->dnpc = s->pc + *imm;
-                    }   
-                 printf("Btype imm = %lx\n",*imm); break;
-  } 
+    case TYPE_B: src1R(); src2R(); immB();  printf("Btype imm = %lx\n",*imm); break;
+  }
 }
-
 /*译码(ID)*/
 static int decode_exec(Decode *s) {
   int dest = 0;
@@ -128,7 +122,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31,0), 32));             //
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm));
-  INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, );                                              //若寄存器 x[rs1]和寄存器 x[rs2]的值相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
+  //                               //若寄存器 x[rs1]和寄存器 x[rs2]的值相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
+ 
   // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);  
   // INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = (R(src1) << 6)); 
 
