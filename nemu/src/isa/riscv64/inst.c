@@ -154,7 +154,7 @@ static int decode_exec(Decode *s) {
   printf("退出译码时的 src1 = %0lx\n", src1);
   printf("退出译码时的 src2 = %0lx\n", src2);
   printf("退出译码时的 shamt = %d\n", shamt);
-  // printf("imm = %lx\n", imm);
+  printf("imm = %lx\n", imm);
 
   t = 0; //每个jalr的t不同，因此清0
   shamt = 0;//每个shamt不同，因此清0
