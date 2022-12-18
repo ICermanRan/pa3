@@ -91,10 +91,6 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
-  word_t a = 54;
-  word_t b = BITS(a,4,0);
-  printf("b = %lu\n",b);
-
   printf("进入译码时的 pc = %0lx\n", s->pc);
   printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
 
@@ -131,7 +127,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                                   //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));                             //从地址 x[rs1] + sign-extend(offset)读取一个字节，经零扩展后写入 x[rd]。
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
-  INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = src1 - src2);
+  INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1, 31, 0) << BITS(src2, 4, 0), 64));
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm));
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, BITS(src2, 15, 0)));                                    //将 x[rs2]的最低两个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = (sword_t)src1 >> shamt); //这里用了一个强制类型转换，在右移前把src1从无符号类型转为有符号类型，这样右移就会自动高位补符号位了                         
