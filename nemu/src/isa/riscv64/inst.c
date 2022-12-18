@@ -87,7 +87,8 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
 /*译码(ID)*/
 static int decode_exec(Decode *s) {
   int dest = 0;
-  int shamt = 0;
+  unsigned int shamt = 0;
+  // sword_t src1_signed = 0;//用于在srai指令中，为了方便右移
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
@@ -127,7 +128,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm));
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, BITS(src2, 15, 0)));                    //将 x[rs2]的最低两个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
-  INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = src1 >> shamt);                            
+  INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = (sword_t)src1 >> shamt);                            
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(src1 == src2) s->dnpc = s->pc + imm );                 //若寄存器 x[rs1]和寄存器 x[rs2]的值相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm );                 //若寄存器 x[rs1]和寄存器 x[rs2]的值不相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。          
   
