@@ -43,7 +43,7 @@ enum {
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)      //先抽取20位立即数，再扩展为64位，再左移12位
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { *imm = SEXT( (((BITS(i, 31, 31) << 8 | BITS(i, 19, 12)) << 1 | BITS(i, 20, 20)) << 10 | BITS(i, 30, 21)) << 1, 21); } while(0)
-#define immB() do { *imm = SEXT( (((BITS(i, 31, 31) << 1 | BITS(i, 7, 7)) << 6 | BITS(i, 30, 25)) << 4 | BITS(i, 4, 1)) << 1, 13); } while(0)
+#define immB() do { *imm = SEXT( (((BITS(i, 31, 31) << 1 | BITS(i, 7, 7)) << 6 | BITS(i, 30, 25)) << 4 | BITS(i, 11, 8)) << 1, 13); } while(0)
 // #define immB() do { *imm = SEXT( (( BITS(i, 31, 31) << 1 | 1 )) << 1 | 1, 3); } while(0)
 // #define immJ() do { *imm = SEXT( (((BITS(i, 31, 31) << 8 | BITS(i, 19, 12)) << 1 | BITS(i, 20, 20)) << 10 | BITS(i, 30, 21)) ,21 ); } while(0)
 /*宏BITS 用于位抽取； 宏SEXT 用于符号位扩展*/
