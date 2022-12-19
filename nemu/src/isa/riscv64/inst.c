@@ -111,8 +111,7 @@ static int decode_exec(Decode *s) {
   /*在INSTPAT中，满足if语句，表示匹配到了某个指令的编码*/         
   /*通过INSTPAT_MATCH宏中，调用decode_operand()函数，得到操作对象*/  
   INSTPAT_START();
-  INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(dest) = s->pc + imm);                                                   //imm = 二进制指令[31:12],从20位扩展到32位，然后左移12位且最高位符号位imm[31]为1;
-                                                                                                                                          //再与pc相加，写入寄存器x[rd]
+  INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(dest) = s->pc + imm);                                                   //imm = 二进制指令[31:12],从20位扩展到64位，然后左移12位;再与pc相加，写入寄存器x[rd]
   INSTPAT("??????? ????? ????? 011 ????? 00000 11", ld     , I, R(dest) = Mr(src1 + imm, 8));                                             //从地址src1 + imm，读取8个字节的内容，然后写入指定寄存器x[rd]
   INSTPAT("??????? ????? ????? 011 ????? 01000 11", sd     , S, Mw(src1 + imm, 8, src2)); 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)));                                                  // R(10) is $a0
