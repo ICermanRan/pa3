@@ -22,7 +22,7 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
-// static int unsigned_compare(uint64_t num1, uint64_t num2);
+static int unsigned_compare(uint64_t num1, uint64_t num2);
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
@@ -130,7 +130,7 @@ static int decode_exec(Decode *s) {
   // INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
   // INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, BITS(src2, 7, 0)));                                                   //将 x[rs2]的最低有效字节存入内存地址 x[rs1]+sign-extend(offset)。
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1, 31, 0) << BITS(src2, 4, 0), 64));
-  // INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = unsigned_compare(src1,src2));                                   //将 x[rs1]和 x[rs2]中的数视为无符号数进行比较。如果 x[rs1]更小，向 x[rd]写入 1，否则写入0。
+  INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = unsigned_compare(src1,src2));                                   //将 x[rs1]和 x[rs2]中的数视为无符号数进行比较。如果 x[rs1]更小，向 x[rd]写入 1，否则写入0。
   // INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm));                                    //将 x[rs1]和符号扩展的 immediate 视为无符号数进行比较。如果 x[rs1]更小，向 x[rd]写入 1，否则写入0。
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, BITS(src2, 15, 0)));                                    //将 x[rs2]的最低两个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = (sword_t)src1 >> shamt); //这里用了一个强制类型转换，在右移前把src1从无符号类型转为有符号类型，这样右移就会自动高位补符号位了                         
@@ -178,14 +178,14 @@ int isa_exec_once(Decode *s) {
 }
 
 /*无符号数比较函数*/
-// static int unsigned_compare(uint64_t num1, uint64_t num2)
-// {
-//   int result;
+static int unsigned_compare(uint64_t num1, uint64_t num2)
+{
+  int result;
 
-//   if(num1 < num2)
-//     result = 1;
-//   else  
-//     result = 0;
+  if(num1 < num2)
+    result = 1;
+  else  
+    result = 0;
 
-//   return result;
-// }
+  return result;
+}
