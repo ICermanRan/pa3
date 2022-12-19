@@ -94,7 +94,7 @@ static int decode_exec(Decode *s) {
   printf("进入译码时的 pc = %0lx\n", s->pc);
   printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
 
-  // vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
+  vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
 
 //定义两个宏：INSTPAT_INST、INSTPAT_MATCH, 在INSTPAT这个宏的内容中调用，简化程序
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
@@ -123,7 +123,7 @@ static int decode_exec(Decode *s) {
   // INSTPAT("??????? ????? ????? 111 ????? 00100 11", andi   , I, R(dest) = imm & src1);                                                    //把符号位扩展的立即数的值和寄存器 x[rs1]的值进行位与，结果写入 x[rd]。
   // INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);                                                    //将寄存器 x[rs1]和寄存器 x[rs2]位与的结果写入 x[rd]。
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->dnpc, s->dnpc = s->pc + imm);                                //跳转指令，跳转地址 = 当前地址 + 处理后的imm;把顺序执行的地址存在寄存器x[1]
-  // INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, t = s->dnpc, s->dnpc = ((imm + src1) & ~1), R(dest) = t);
+  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, t = s->dnpc, s->dnpc = ((imm + src1) & ~1), R(dest) = t);
   // INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                                   //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
   // INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取一个字节，经零扩展后写入 x[rd]。
   // INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori   , I, R(dest) = src1 ^ imm);                                                   //将 x[rs1]和符号扩展的 immediate 按位异或，结果写入 x[rd]。
@@ -159,7 +159,7 @@ static int decode_exec(Decode *s) {
   printf("退出译码时的 shamt = %d\n", shamt);
   printf("imm = %lx\n", imm);
 
-  // t = 0; //每个jalr的t不同，因此清0
+  t = 0; //每个jalr的t不同，因此清0
   shamt = 0;//每个shamt不同，因此清0
   return 0;
 }
