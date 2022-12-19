@@ -116,7 +116,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 011 ????? 01000 11", sd     , S, Mw(src1 + imm, 8, src2)); 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)));                                                  // R(10) is $a0
               /*add more instructions*/
-  // INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);                                                   //把寄存器 x[rs2]的值和寄存器 x[rs1]的值相加，结果写入 x[rd]。忽略算术溢出。
+  INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);                                                   //把寄存器 x[rs2]的值和寄存器 x[rs1]的值相加，结果写入 x[rd]。忽略算术溢出。
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);                                                    //伪指令li的拓展指令之一、伪指令mv的拓展指令之一
   // INSTPAT("??????? ????? ????? 000 ????? 00110 11", addiw  , I, R(dest) = SEXT(BITS(imm + src1, 31, 0), 32));                             //把符号位扩展的立即数的值和 x[rs1]的值相加，将结果截断为 32 位，再进行符号位扩展，最后写入 x[rd]。  
   // INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32)); 
