@@ -127,15 +127,15 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(dest) = SEXT(((signed)BITS(src1, 31, 0) / (signed)BITS(src2, 31, 0)) , 32));   //用寄存器 x[rs1]的低 32 位除以寄存器 x[rs2]的低 32 位，向零舍入，将这些数视为 2 的补码，把经符号位扩展的 32 位商写入 x[rd]。
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->dnpc, s->dnpc = s->pc + imm);                                //跳转指令，跳转地址 = 当前地址 + 处理后的imm;把顺序执行的地址存在寄存器x[1]
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, t = s->dnpc, s->dnpc = ((imm + src1) & ~1), R(dest) = t);
-  INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                                //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
+  INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                                   //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取一个字节，经零扩展后写入 x[rd]。
+  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(dest) = src1 * src2);                                                   //把寄存器 x[rs2]和寄存器 x[rs1]的值相乘，乘积写入 x[rd]。忽略算术溢出。
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT(BITS(src1 * src2, 31, 0) , 32));                                                              //把寄存器 x[rs2]和寄存器 x[rs1]的值相乘，乘积截为 32 位，符号扩展后写入 x[rd]。忽略算术溢出。
- 
   INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori   , I, R(dest) = src1 ^ imm);                                                    //将 x[rs1]和符号扩展的 immediate 按位异或，结果写入 x[rd]。
   INSTPAT("0000001 ????? ????? 110 ????? 01110 11", remw   , R, R(dest) = SEXT(((signed)BITS(src1, 31, 0) % (signed)BITS(src2, 31, 0)) , 32));                                                              //把 x[rs1]和 x[rs2]的低 32 位都视为 2 的补码并把它们相除，向 0 舍入，将余数的符号扩展并写入 x[rd]。
-  INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                                //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
+  INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, BITS(src2, 7, 0)));                                     //将 x[rs2]的最低有效字节存入内存地址 x[rs1]+sign-extend(offset)。
-  INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, BITS(src2, 31, 0)));                                     // 将x[rs2]的最低四个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
+  INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, BITS(src2, 31, 0)));                                    // 将x[rs2]的最低四个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1, 31, 0) << BITS(src2, 4, 0), 64));
   INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = src1 << shamt);                                                    //把寄存器 x[rs1]左移 shamt 位，空出的位置填零，结果写入 x[rd]。对于 RV32I，仅当 shamt[5]=0时，指令才是有效的。
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = unsigned_compare(src1,src2));                                   //将 x[rs1]和 x[rs2]中的数视为无符号数进行比较。如果 x[rs1]更小，向 x[rd]写入 1，否则写入0。
