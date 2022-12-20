@@ -125,7 +125,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 111 ????? 00100 11", andi   , I, R(dest) = imm & src1);                                                    //把符号位扩展的立即数的值和寄存器 x[rs1]的值进行位与，结果写入 x[rd]。
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);                                                   //将寄存器 x[rs1]和寄存器 x[rs2]位与的结果写入 x[rd]。
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(src1 == src2) s->dnpc = s->pc + imm );                                 //若寄存器 x[rs1]和寄存器 x[rs2]的值相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
-  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm );                                 //若寄存器 x[rs1]和寄存器 x[rs2]的值不相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。          
+  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm ,read_data = s->pc + imm);                                 //若寄存器 x[rs1]和寄存器 x[rs2]的值不相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。          
   INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge    , B, if( (signed)src1 >= (signed)src2 ) s->dnpc = s->pc + imm );               //若寄存器 x[rs1]的值大于等于寄存器 x[rs2]的值（均视为 2 的补码）(即加强制转换)，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", blt    , B, if( (signed)src1 < (signed)src2  ) s->dnpc = s->pc + imm );               //若寄存器 x[rs1]的值小于寄存器 x[rs2]的值（均视为 2 的补码），把 pc 的值设为当前值加上符号位扩展的偏移 offset。
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, if( src1 < src2  ) s->dnpc = s->pc + imm );                               //若寄存器 x[rs1]的值小于寄存器 x[rs2]的值（均视为无符号数），把pc的值设为当前值加上符号位扩展的偏移 offset。             
