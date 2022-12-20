@@ -88,6 +88,8 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
 static int decode_exec(Decode *s) {
   int dest = 0;
   unsigned int shamt = 0;
+  word_t read_addr = 0;
+  word_t read_data = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
@@ -132,9 +134,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, t = s->dnpc, s->dnpc = ((imm + src1) & ~1), R(dest) = t);
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                                   //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
   INSTPAT("??????? ????? ????? 001 ????? 00000 11", lh     , I, R(dest) = SEXT(Mr(src1 + imm, 2), 16));                                   //从地址 x[rs1] + sign-extend(offset)读取两个字节，经符号位扩展后写入 x[rd]。
-  INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取一个字节，经零扩展后写入 x[rd]。
+  INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, read_addr = src1 + imm, read_data = Mr(src1 + imm, 1), R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取一个字节，经零扩展后写入 x[rd]。
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(dest) = Mr(src1 + imm, 2) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取两个字节，经零扩展后写入 x[rd]。(零扩展的技巧)
-  INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm & 0xfffff000); //
+  INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm & 0xfffffffffffff000); //
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(dest) = src1 * src2);                                                   //把寄存器 x[rs2]和寄存器 x[rs1]的值相乘，乘积写入 x[rd]。忽略算术溢出。
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT(BITS(src1 * src2, 31, 0) , 32));                           //把寄存器 x[rs2]和寄存器 x[rs1]的值相乘，乘积截为 32 位，符号扩展后写入 x[rd]。忽略算术溢出。
   INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori   , I, R(dest) = src1 ^ imm);                                                    //将 x[rs1]和符号扩展的 immediate 按位异或，结果写入 x[rd]。
@@ -167,10 +169,14 @@ static int decode_exec(Decode *s) {
   printf("退出译码时的 src1 = %0lx\n", src1);
   printf("退出译码时的 src2 = %0lx\n", src2);
   printf("退出译码时的 shamt = %d\n", shamt);
+  printf("read_addr = %0lx\n", read_addr);
+  printf("read_data = %0lx\n", read_data);
   printf("imm = %0lx\n", imm);
 
   t = 0; //每个jalr的t不同，因此清0
   shamt = 0;//每个shamt不同，因此清0
+  read_addr = 0;
+  read_data = 0;
   return 0;
 }
 
