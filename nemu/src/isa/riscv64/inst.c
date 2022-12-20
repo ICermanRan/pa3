@@ -136,6 +136,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = (sword_t)src1 >> shamt); //这里用了一个强制类型转换，在右移前把src1从无符号类型转为有符号类型，这样右移就会自动高位补符号位了                         
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(src1 == src2) s->dnpc = s->pc + imm );                                 //若寄存器 x[rs1]和寄存器 x[rs2]的值相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm );                                 //若寄存器 x[rs1]和寄存器 x[rs2]的值不相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。          
+  INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(dest) = SEXT(((signed)BITS(src1, 31, 0) / (signed)BITS(src2, 31, 0)) , 32));   //用寄存器 x[rs1]的低 32 位除以寄存器 x[rs2]的低 32 位，向零舍入，将这些数视为 2 的补码，把经符号位扩展的 32 位商写入 x[rd]。
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, R(dest) = src1 | src2); 
  
  
