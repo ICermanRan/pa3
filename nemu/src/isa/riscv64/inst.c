@@ -153,6 +153,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = unsigned_compare(src1,src2));                                   //将 x[rs1]和 x[rs2]中的数视为无符号数进行比较。如果 x[rs1]更小，向 x[rd]写入 1，否则写入0。
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = unsigned_compare(src1,imm));                                    //将 x[rs1]和符号扩展的 immediate 视为无符号数进行比较。如果 x[rs1]更小，向 x[rd]写入 1，否则写入0。
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, BITS(src2, 15, 0)));                                    //将 x[rs2]的最低两个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
+  INSTPAT("0100000 ????? ????? 101 ????? 01110 11", sraw   , R, shamt = BITS(src2, 4, 0), R(dest) = SEXT(((signed)BITS(src1, 31, 0)) >> shamt , 32) ); 
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = (sword_t)src1 >> shamt); //这里用了一个强制类型转换，在右移前把src1从无符号类型转为有符号类型，这样右移就会自动高位补符号位了                         
   INSTPAT("000000? ????? ????? 101 ????? 00100 11", srli   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = src1 >> shamt);          //把寄存器 x[rs1]右移 shamt 位，空出的位置填零，结果写入 x[rd] 
   INSTPAT("0000000 ????? ????? 101 ????? 00110 11", srliw  , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = SEXT( (BITS(src1, 31, 0) >> shamt) , 32)  );//把寄存器 x[rs1]截为 32 位再右移 shamt 位，空出的位置填零，结果进行符号扩展后写入 x[rd];带w的是把64位寄存器当成32位看待，高位当成不存在，就变相模拟了32位寄存器
