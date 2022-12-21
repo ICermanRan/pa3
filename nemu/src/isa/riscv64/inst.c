@@ -79,9 +79,9 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     case TYPE_I: src1R();          immI();  break; //printf("Itype imm = %ld\n",*imm); break;
     case TYPE_U:                   immU();  break; //printf("Utype imm = %ld\n",*imm); break;
     case TYPE_S: src1R(); src2R(); immS();  break; //printf("Stype imm = %ld\n",*imm); break;
-    case TYPE_J:                   immJ();  printf("Jtype imm = %lx\n",*imm); break;
+    case TYPE_J:                   immJ();  break; //printf("Jtype imm = %lx\n",*imm); break;
     case TYPE_R: src1R(); src2R();          break;
-    case TYPE_B: src1R(); src2R(); immB();  printf("Btype imm = %lx\n",*imm); break;
+    case TYPE_B: src1R(); src2R(); immB();  break; //printf("Btype imm = %lx\n",*imm); break;
   }
 }
 /*译码(ID)*/
