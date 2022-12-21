@@ -88,13 +88,13 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
 static int decode_exec(Decode *s) {
   int dest = 0;
   unsigned int shamt = 0;
-  word_t read_addr = 0;
-  word_t read_data = 0;
+  // word_t read_addr = 0;
+  // word_t read_data = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
-  printf("进入译码时的 pc = %0lx\n", s->pc);
-  printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
+  // printf("进入译码时的 pc = %0lx\n", s->pc);
+  // printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
 
   vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
 
@@ -125,7 +125,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 111 ????? 00100 11", andi   , I, R(dest) = imm & src1);                                                    //把符号位扩展的立即数的值和寄存器 x[rs1]的值进行位与，结果写入 x[rd]。
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);                                                   //将寄存器 x[rs1]和寄存器 x[rs2]位与的结果写入 x[rd]。
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(src1 == src2) s->dnpc = s->pc + imm );                                 //若寄存器 x[rs1]和寄存器 x[rs2]的值相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
-  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm ,read_data = s->pc + imm);         //若寄存器 x[rs1]和寄存器 x[rs2]的值不相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。          
+  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm );         //若寄存器 x[rs1]和寄存器 x[rs2]的值不相等，把 pc 的值设为当前值加上符号位扩展的偏移 offset。          
   INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge    , B, if( (signed)src1 >= (signed)src2 ) s->dnpc = s->pc + imm );               //若寄存器 x[rs1]的值大于等于寄存器 x[rs2]的值（均视为 2 的补码）(即加强制转换)，把 pc 的值设为当前值加上符号位扩展的偏移 offset。
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", blt    , B, if( (signed)src1 < (signed)src2  ) s->dnpc = s->pc + imm );               //若寄存器 x[rs1]的值小于寄存器 x[rs2]的值（均视为 2 的补码），把 pc 的值设为当前值加上符号位扩展的偏移 offset。
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, if( src1 < src2  ) s->dnpc = s->pc + imm );                               //若寄存器 x[rs1]的值小于寄存器 x[rs2]的值（均视为无符号数），把pc的值设为当前值加上符号位扩展的偏移 offset。             
@@ -134,7 +134,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, t = s->dnpc, s->dnpc = ((imm + src1) & ~1), R(dest) = t);
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + imm, 4), 32));                                   //从地址 x[rs1] + sext(offset)读取四个字节,对于 RV64I，读取的内容要进行符号位扩展，再写入 x[rd]
   INSTPAT("??????? ????? ????? 001 ????? 00000 11", lh     , I, R(dest) = SEXT(Mr(src1 + imm, 2), 16));                                   //从地址 x[rs1] + sign-extend(offset)读取两个字节，经符号位扩展后写入 x[rd]。
-  INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, read_addr = src1 + imm, read_data = Mr(src1 + imm, 1), R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取一个字节，经零扩展后写入 x[rd]。
+  INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5)); 
+  // INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu , I, read_addr = src1 + imm, read_data = Mr(src1 + imm, 1), R(dest) = Mr(src1 + imm, 1) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取一个字节，经零扩展后写入 x[rd]。
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(dest) = Mr(src1 + imm, 2) + SEXT(BITS(s->isa.inst.val, 6, 2), 5));      //从地址 x[rs1] + sign-extend(offset)读取两个字节，经零扩展后写入 x[rd]。(零扩展的技巧)
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm & 0xfffffffffffff000); //
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(dest) = src1 * src2);                                                   //把寄存器 x[rs2]和寄存器 x[rs1]的值相乘，乘积写入 x[rd]。忽略算术溢出。
@@ -169,20 +170,20 @@ static int decode_exec(Decode *s) {
   R(0) = 0; // reset $zero to 0
   
 
-  printf("退出译码时的 pc = %0lx\n", s->pc);
-  printf("退出译码时的 snpc = %0lx\n", s->snpc);
-  printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
-  printf("退出译码时的 src1 = %0lx\n", src1);
-  printf("退出译码时的 src2 = %0lx\n", src2);
-  printf("退出译码时的 shamt = %d\n", shamt);
-  printf("read_addr = %0lx\n", read_addr);
-  printf("read_data = %0lx\n", read_data);
-  printf("imm = %0lx\n", imm);
+  // printf("退出译码时的 pc = %0lx\n", s->pc);
+  // printf("退出译码时的 snpc = %0lx\n", s->snpc);
+  // printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
+  // printf("退出译码时的 src1 = %0lx\n", src1);
+  // printf("退出译码时的 src2 = %0lx\n", src2);
+  // printf("退出译码时的 shamt = %d\n", shamt);
+  // printf("read_addr = %0lx\n", read_addr);
+  // printf("read_data = %0lx\n", read_data);
+  // printf("imm = %0lx\n", imm);
 
   t = 0; //每个jalr的t不同，因此清0
   shamt = 0;//每个shamt不同，因此清0
-  read_addr = 0;
-  read_data = 0;
+  // read_addr = 0;
+  // read_data = 0;
   return 0;
 }
 
