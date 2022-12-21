@@ -141,8 +141,10 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT(BITS(src1 * src2, 31, 0) , 32));                           //把寄存器 x[rs2]和寄存器 x[rs1]的值相乘，乘积截为 32 位，符号扩展后写入 x[rd]。忽略算术溢出。
   INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori   , I, R(dest) = src1 ^ imm);                                                    //将 x[rs1]和符号扩展的 immediate 按位异或，结果写入 x[rd]。
   INSTPAT("0000001 ????? ????? 110 ????? 01110 11", remw   , R, R(dest) = SEXT(((signed)BITS(src1, 31, 0) % (signed)BITS(src2, 31, 0)) , 32)); //把 x[rs1]和 x[rs2]的低 32 位都视为 2 的补码(即加强制转换)并把它们相除，向 0 舍入，将余数的符号扩展并写入 x[rd]。
-  INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, read_addr = src1 + imm, read_data = src1 + imm, Mw(src1 + imm, 1, BITS(src2, 7, 0)));                                     //将 x[rs2]的最低有效字节存入内存地址 x[rs1]+sign-extend(offset)。
-  INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, read_addr = src1 + imm, Mw(src1 + imm, 4, BITS(src2, 31, 0)));                                    // 将x[rs2]的最低四个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
+  INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, BITS(src2, 7, 0)));                                     //将 x[rs2]的最低有效字节存入内存地址 x[rs1]+sign-extend(offset)。
+  INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, BITS(src2, 31, 0)));                                    // 将x[rs2]的最低四个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
+  // INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, read_addr = src1 + imm, read_data = src1 + imm, Mw(src1 + imm, 1, BITS(src2, 7, 0)));                                     //将 x[rs2]的最低有效字节存入内存地址 x[rs1]+sign-extend(offset)。
+  // INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, read_addr = src1 + imm, Mw(src1 + imm, 4, BITS(src2, 31, 0)));                                    // 将x[rs2]的最低四个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                                   //把 x[rs1]减去 x[rs2]，结果写入 x[rd]。忽略算术溢出。
   INSTPAT("0100000 ????? ????? 000 ????? 01110 11", subw   , R, R(dest) = SEXT(BITS(src1 - src2, 31, 0) , 32));                           //把 x[rs1]减去 x[rs2]的结果截为 32 位，符号扩展后写入 x[rd]。忽略算术溢出。
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1, 31, 0) << BITS(src2, 4, 0), 64));
