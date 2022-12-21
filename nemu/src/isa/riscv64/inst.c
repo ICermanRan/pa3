@@ -155,7 +155,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, BITS(src2, 15, 0)));                                    //将 x[rs2]的最低两个有效字节存入内存地址 x[rs1]+sign-extend(offset)。
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = (sword_t)src1 >> shamt); //这里用了一个强制类型转换，在右移前把src1从无符号类型转为有符号类型，这样右移就会自动高位补符号位了                         
   INSTPAT("000000? ????? ????? 101 ????? 00100 11", srli   , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = src1 >> shamt);          //把寄存器 x[rs1]右移 shamt 位，空出的位置填零，结果写入 x[rd] 
-  INSTPAT("0000000 ????? ????? 101 ????? 00110 11", srliw  , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = SEXT(BITS(src1 >> shamt, 31, 0) , 32));//把寄存器 x[rs1]右移 shamt 位，空出的位置填零，结果截为 32 位，进行符号扩展后写入 x[rd]。仅当 shamt[5]=0 时，指令才是有效的。
+  INSTPAT("0000000 ????? ????? 101 ????? 00110 11", srliw  , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = SEXT( (BITS(src1, 31, 0) >> shamt) , 32)  );//把寄存器 x[rs1]右移 shamt 位，空出的位置填零，结果截为 32 位，进行符号扩展后写入 x[rd]。仅当 shamt[5]=0 时，指令才是有效的。
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, R(dest) = src1 | src2); 
  
           
