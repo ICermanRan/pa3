@@ -15,6 +15,11 @@ remove_quote = $(patsubst "%",%,$(1))
 # Extract variabls from menuconfig
 #remove_quote 函数用于去除可能存在的引号。
 #然后，NAME 变量被设置为 GUEST_ISA 和 ENGINE 的组合，中间用短横线连接。
+
+#?= 运算符用于为变量设置默认值。在这种情况下，如果 GUEST_ISA 和 ENGINE 变量尚未设置，
+#它们将被设置为 CONFIG_ISA 和 CONFIG_ENGINE 变量的值，而不是保留原来的值。
+#如果 GUEST_ISA 和 ENGINE 变量已经设置，则它们的值不会更改。
+
 GUEST_ISA ?= $(call remove_quote,$(CONFIG_ISA))
 ENGINE ?= $(call remove_quote,$(CONFIG_ENGINE))
 NAME    = $(GUEST_ISA)-nemu-$(ENGINE)
