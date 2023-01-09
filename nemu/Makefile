@@ -43,7 +43,13 @@ SRCS-BLACKLIST-y += $(SRCS-BLACKLIST) $(shell find $(DIRS-BLACKLIST-y) -name "*.
 SRCS-y += $(shell find $(DIRS-y) -name "*.c")
 SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y))
 
+#筛选文件列表的过程使用了 filter-out 函数。这个函数会将第二个参数中不在第一个参数中出现过的项目返回。
+
+
 # Extract compiler and options from menuconfig
+#这段代码用于从菜单配置中提取编译器和选项，并设置相应的编译器变量
+#首先设置 CC 变量为 CONFIG_CC 的值，并使用 remove_quote 函数去除可能存在的引号。
+#然后，它检查了菜单配置中的各种选项，并根据它们来设置 CFLAGS_BUILD 和 CFLAGS_TRACE 变量
 CC = $(call remove_quote,$(CONFIG_CC))
 CFLAGS_BUILD += $(call remove_quote,$(CONFIG_CC_OPT))
 CFLAGS_BUILD += $(if $(CONFIG_CC_LTO),-flto,)
