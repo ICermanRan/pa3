@@ -8,12 +8,15 @@ html:
 ## 1. Basic Setup and Checks
 
 ### Default to create a bare-metal kernel image
+#创建裸机内核映像。MAKECMDGOALS为空时，设置为image。
 ifeq ($(MAKECMDGOALS),)
   MAKECMDGOALS  = image
   .DEFAULT_GOAL = image
 endif
 
 ### Override checks when `make clean/clean-all/html`
+#利用findstring函数检查参数MAKECMDGOALS中是否包含clean，clean-all，html，
+#如果则返回值不为空，ifeq为假，后续内容不执行。
 ifeq ($(findstring $(MAKECMDGOALS),clean|clean-all|html),)
 
 ### Print build info message
@@ -25,12 +28,18 @@ ifeq ($(wildcard $(AM_HOME)/am/include/am.h),)
 endif
 
 ### Check: environment variable `$ARCH` must be in the supported list
+#通过shell指令获得$(AM_HOME)/scripts/目录下所有[.mk]文件
+#用notdir函数去掉目录部分，用basename函数去掉后缀
 ARCHS = $(basename $(notdir $(shell ls $(AM_HOME)/scripts/*.mk)))
+#再利用filter函数，如果ARCH变量不在ARCHS列表中，将报error。
 ifeq ($(filter $(ARCHS), $(ARCH)), )
   $(error Expected $$ARCH in {$(ARCHS)}, Got "$(ARCH)")
 endif
 
 ### Extract instruction set architecture (`ISA`) and platform from `$ARCH`. Example: `ARCH=x86_64-qemu -> ISA=x86_64; PLATFORM=qemu`
+#提取出ARCH中的各个关键字
+#首先用subst函数将ARCH中所有 '-' 替换成空格
+#再使用word函数，将架构和平台分别给到变量ISA和PLATFORM
 ARCH_SPLIT = $(subst -, ,$(ARCH))
 ISA        = $(word 1,$(ARCH_SPLIT))
 PLATFORM   = $(word 2,$(ARCH_SPLIT))
@@ -46,18 +55,26 @@ endif
 ## 2. General Compilation Targets
 
 ### Create the destination directory (`build/$ARCH`)
+#shell命令pwd为打印当前目录，将目录传入参数WORK_DIR
+#在当前目录下创建build/$(ARCH)作为目标目录，
+#再调用shell命令mkdir创建名为DST_DIR的目录。
 WORK_DIR  = $(shell pwd)
 DST_DIR   = $(WORK_DIR)/build/$(ARCH)
 $(shell mkdir -p $(DST_DIR))
 
 ### Compilation targets (a binary image or archive)
+#abspath函数将IMAGE_REL中的各路径转换成绝对路径，并将转换后的结果返回。
 IMAGE_REL = build/$(NAME)-$(ARCH)
 IMAGE     = $(abspath $(IMAGE_REL))
 ARCHIVE   = $(WORK_DIR)/build/$(NAME)-$(ARCH).a
 
 ### Collect the files to be linked: object files (`.o`) and libraries (`.a`)
+#将变量SRCS里所有文件后缀去掉，使用addsuffix函数添加[.d]后缀
 OBJS      = $(addprefix $(DST_DIR)/, $(addsuffix .o, $(basename $(SRCS))))
+#sort函数将LIBS内容重新排序
 LIBS     := $(sort $(LIBS) am klib) # lazy evaluation ("=") causes infinite recursions
+#在变量LINKAGE中，首先用addprefix(前缀)、addsuffix函数(后缀)为变量LIBS添加前后缀。
+#再用join函数将两个字串连接，再添加后缀ARCH.a
 LINKAGE   = $(OBJS) \
   $(addsuffix -$(ARCH).a, $(join \
     $(addsuffix /build/, $(addprefix $(AM_HOME)/, $(LIBS))), \
@@ -66,6 +83,7 @@ LINKAGE   = $(OBJS) \
 ## 3. General Compilation Flags
 
 ### (Cross) compilers, e.g., mips-linux-gnu-g++
+#交叉编译参数选项。
 AS        = $(CROSS_COMPILE)gcc
 CC        = $(CROSS_COMPILE)gcc
 CXX       = $(CROSS_COMPILE)g++
@@ -78,6 +96,8 @@ READELF   = $(CROSS_COMPILE)readelf
 INC_PATH += $(WORK_DIR)/include $(addsuffix /include/, $(addprefix $(AM_HOME)/, $(LIBS)))
 INCFLAGS += $(addprefix -I, $(INC_PATH))
 
+#tr函数为shell命令行中字符串替换函数
+#"tr a-z A-Z"即为将所有小写替换为大写字符。
 CFLAGS   += -O2 -MMD -Wall -Werror $(INCFLAGS) \
             -D__ISA__=\"$(ISA)\" -D__ISA_$(shell echo $(ISA) | tr a-z A-Z)__ \
             -D__ARCH__=$(ARCH) -D__ARCH_$(shell echo $(ARCH) | tr a-z A-Z | tr - _) \
@@ -89,17 +109,23 @@ CXXFLAGS +=  $(CFLAGS) -ffreestanding -fno-rtti -fno-exceptions
 ASFLAGS  += -MMD $(INCFLAGS)
 
 ## 4. Arch-Specific Configurations
+#特定架构配置
 
 ### Paste in arch-specific configurations (e.g., from `scripts/x86_64-qemu.mk`)
+#引用scripts中的makefile文件
+#‘-’的作用是，当所要包含的文件不存在时不提示错误同时make也不会退出继续进行。
 -include $(AM_HOME)/scripts/$(ARCH).mk
 
 ### Fall back to native gcc/binutils if there is no cross compiler
+#检查交叉编译器，如果没有将跳转回native。
 ifeq ($(wildcard $(shell which $(CC))),)
   $(info #  $(CC) not found; fall back to default gcc and binutils)
   CROSS_COMPILE :=
 endif
 
 ## 5. Compilation Rules
+
+#&&是左边返回0（执行成功）再执行右边，和编程语言的逻辑且比较像。
 
 ### Rule (compile): a single `.c` -> `.o` (gcc)
 $(DST_DIR)/%.o: %.c
