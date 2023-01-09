@@ -1,7 +1,7 @@
  import "DPI-C" function void pmem_read(input longint raddr);
 
 `include "vsrc/defines.v"
-module ysyx_220578_npc_onecycle 
+module ysyx_22050078_npc_onecycle 
 #(parameter ADDR_WIDTH = 5, 
             DATA_WIDTH = 64, 
             INST_WIDTH = 32, 
@@ -48,13 +48,13 @@ module ysyx_220578_npc_onecycle
     wire [DATA_WIDTH - 1:0] rd_data_EXU2regs;
     wire rd_wen_EXU2regs;
 
-    ysyx_220578_pc_reg ysyx_220578_pc_reg_inst(
+    ysyx_22050078_pc_reg ysyx_22050078_pc_reg_inst(
         .clk(clk),
         .rst(rst),
         .pc(pc_reg2_IFU)
     );
 
-    ysyx_220578_IFU ysyx_220578_IFU_inst(
+    ysyx_22050078_IFU ysyx_22050078_IFU_inst(
         .pc(pc_reg2_IFU),               //pc_reg to IFU     
         .inst_in(inst),                 //memory to IFU
         .inst_out(inst_IFU2IDU),
@@ -62,7 +62,7 @@ module ysyx_220578_npc_onecycle
         .pc_IFU2mem(inst_addr_cpu2mem)   //IFU to memory
     );
 
-    ysyx_220578_IDU ysyx_220578_IDU_inst(
+    ysyx_22050078_IDU ysyx_22050078_IDU_inst(
         .inst_in(inst_IFU2IDU),
         .pc_in(pc_IFU2IDU),
         .src1_in(src1_regs2IDU),
@@ -78,7 +78,7 @@ module ysyx_220578_npc_onecycle
         .func7(func7_IDU2EXU)
     );
 
-    ysyx_220578_EXU ysyx_220578_EXU_inst(
+    ysyx_22050078_EXU ysyx_22050078_EXU_inst(
         .inst_in(inst_IDU2EXU),
         .opcode(opcode_IDU2EXU),
         .rd_addr_in(rd_addr_IDU2EXU),
@@ -91,7 +91,7 @@ module ysyx_220578_npc_onecycle
         .rd_wen(rd_wen_EXU2regs) 
     );
 
-    ysyx_220578_register ysyx_220578_register_inst( 
+    ysyx_22050078_register ysyx_22050078_register_inst( 
         .clk(clk),
         .w_en(rd_wen_EXU2regs),
         .rs1_addr(rs1_addr_IDU2regs),

@@ -1,14 +1,14 @@
 #include <verilated.h>
 #include <verilated_vcd_c.h>
-#include "Vysyx_220578_npc_onecycle__Dpi.h"
+#include "Vysyx_22050078_npc_onecycle__Dpi.h"
 #include "svdpi.h"
-#include "Vysyx_220578_npc_onecycle.h"
+#include "Vysyx_22050078_npc_onecycle.h"
 #include "stdio.h"
 #include "stdlib.h"
 
 
 #define NMEM 4096 //inst_memory数组元素个数
-#define MAX_SIM_TIME 30  // 仿真总时钟边沿数
+#define MAX_SIM_TIME 50  // 仿真总时钟边沿数
 #define RESET_TIME 5
 
 // extern "C" void pmem_read(uint64_t raddr);
@@ -59,7 +59,7 @@ extern "C" void pmem_read(long long int raddr) // 内存
 
 VerilatedContext* contextp = NULL;  //仿真环境 
 VerilatedVcdC* tfp = NULL;  //  波形
-static Vysyx_220578_npc_onecycle *top; //单周期dut(例化模块)
+static Vysyx_22050078_npc_onecycle *top; //单周期dut(例化模块)
 
 //对dut的连接 只连接input
 void connect_dut()
@@ -83,7 +83,7 @@ void sim_init()
 {
     contextp = new VerilatedContext;
     tfp = new VerilatedVcdC;
-    top = new Vysyx_220578_npc_onecycle;
+    top = new Vysyx_22050078_npc_onecycle;
     contextp->traceEverOn(true);    //打开 波形 
     top -> trace(tfp, 20);
     tfp -> open("waveform.vcd");

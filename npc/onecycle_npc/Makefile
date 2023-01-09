@@ -29,11 +29,11 @@ VERILATOR_FLAGS += -Wno-UNDRIVEN
 VERILATOR_FLAGS += -Wno-INCABSPATH
 #包含的头文件
 VERILATOR_FLAGS += -I./vsrc  -y ./vsrc 
-VERILATOR_FLAGS += --top-module ysyx_220578_npc_onecycle
+VERILATOR_FLAGS += --top-module ysyx_22050078_npc_onecycle
 
 # Input files for Verilator    包括 c 与  v
-VERILATOR_INPUT +=  ./vsrc/ysyx_220578_npc_onecycle
-VERILATOR_INPUT +=	./vsrc/ysyx_220578_register.v  ./vsrc/ysyx_220578_pc_reg.v ./vsrc/ysyx_220578_IFU.v ./vsrc/ysyx_220578_IDU.v ./vsrc/ysyx_220578_EXU.v ./vsrc/defines.v
+VERILATOR_INPUT +=  ./vsrc/ysyx_22050078_npc_onecycle
+VERILATOR_INPUT +=	./vsrc/ysyx_22050078_register.v  ./vsrc/ysyx_22050078_pc_reg.v ./vsrc/ysyx_22050078_IFU.v ./vsrc/ysyx_22050078_IDU.v ./vsrc/ysyx_22050078_EXU.v ./vsrc/defines.v
 VERILATOR_INPUT +=  ./csrc/npc.cpp 
 
 all:
@@ -50,7 +50,7 @@ sim:
 	@echo
 	@echo "-- BUILD -------------------"	
 ###################################################
-	./obj_dir/Vysyx_220578_npc_onecycle
+	./obj_dir/Vysyx_22050078_npc_onecycle
 	gtkwave waveform.vcd
 
 clean:

@@ -3,7 +3,7 @@ author:ran
 description:取指模块(因为用c++写指令存储器，所以这里的取指只关心pc)
 *************************/
 `include "vsrc/defines.v"
-module ysyx_220578_IFU #(parameter ADDR_WIDTH = 64, INST_WIDTH = 32)
+module ysyx_22050078_IFU #(parameter ADDR_WIDTH = 64, INST_WIDTH = 32)
 (
     //from pc
     input [ADDR_WIDTH - 1:0] pc,

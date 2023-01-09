@@ -3,7 +3,7 @@ author:ran
 description:译码模块
 *************************/
 `include "vsrc/defines.v"
-module ysyx_220578_IDU 
+module ysyx_22050078_IDU 
 #(parameter ADDR_WIDTH = 5, 
             DATA_WIDTH = 64, 
             INST_WIDTH = 32, 
@@ -73,9 +73,9 @@ module ysyx_220578_IDU
 
     always@(*) begin
         case(opcode)
-            `ysyx_220578_INST_TYPE_I:begin
+            `ysyx_22050078_INST_TYPE_I:begin
                 case(func3)
-                    `ysyx_220578_INSTfunc3_addi:begin
+                    `ysyx_22050078_INSTfunc3_addi:begin
                         //rs1_addr = inst[19 : 15];
                         //rs2_addr = inst[24 : 20];
                         //rd = inst[11 : 7];

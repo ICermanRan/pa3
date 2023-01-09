@@ -5,7 +5,7 @@ description:pc寄存器
 
 `include "vsrc/defines.v"
 
-module ysyx_220578_pc_reg(
+module ysyx_22050078_pc_reg(
     input clk,
     input rst,
     //input [31:0] pc_new,
@@ -15,7 +15,7 @@ module ysyx_220578_pc_reg(
 always@(posedge clk) 
  begin
     if(rst)
-        pc <= `ysyx_220578_pc_rst;
+        pc <= `ysyx_22050078_pc_rst;
     else
         pc <= pc + 64'd4;
    

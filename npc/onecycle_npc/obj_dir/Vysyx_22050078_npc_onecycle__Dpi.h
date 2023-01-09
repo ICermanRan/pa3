@@ -13,7 +13,7 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at vsrc/ysyx_220578_npc_onecycle.v:1:31
+    // DPI import at vsrc/ysyx_22050078_npc_onecycle.v:1:31
     extern void pmem_read(long long raddr);
 
 #ifdef __cplusplus

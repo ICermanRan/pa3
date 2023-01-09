@@ -4,7 +4,7 @@ description:执行模块
 *************************/
 `include "vsrc/defines.v"
 
-module ysyx_220578_EXU #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64, INST_WIDTH = 32)
+module ysyx_22050078_EXU #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64, INST_WIDTH = 32)
 (
     //from IDU
     input [INST_WIDTH - 1:0] inst_in,          //32位指令
@@ -27,9 +27,9 @@ module ysyx_220578_EXU #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64, INST_WIDTH =
 
     always@(*) begin
         case(opcode)
-            `ysyx_220578_INST_TYPE_I:begin
+            `ysyx_22050078_INST_TYPE_I:begin
                 case(func3)
-                    `ysyx_220578_INSTfunc3_addi:begin
+                    `ysyx_22050078_INSTfunc3_addi:begin
                         rd_data_out = op1 + op2;
                         rd_addr_out = rd_addr_in;
                         rd_wen = 1'b1;

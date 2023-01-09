@@ -4,7 +4,7 @@ description:32个寄存器：x0-x31
 *************************/
 
 `include "vsrc/defines.v"
-module ysyx_220578_register #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64) 
+module ysyx_22050078_register #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64) 
 (
   input clk,
   input w_en,
@@ -27,7 +27,7 @@ module ysyx_220578_register #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64)
   end
 
 //read(读对应寄存器里的值)
-  assign rd_data1 = (rs1_addr == 5'd0) ? `ysyx_220578_zero_word : regs[rs1_addr]; //地址为0则读$0
-  assign rd_data2 = (rs2_addr == 5'd0) ? `ysyx_220578_zero_word : regs[rs2_addr]; //地址为0则读$0
+  assign rd_data1 = (rs1_addr == 5'd0) ? `ysyx_22050078_zero_word : regs[rs1_addr]; //地址为0则读$0
+  assign rd_data2 = (rs2_addr == 5'd0) ? `ysyx_22050078_zero_word : regs[rs2_addr]; //地址为0则读$0
 
 endmodule
