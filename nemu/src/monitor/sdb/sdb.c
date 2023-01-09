@@ -262,7 +262,7 @@ static int cmd_help(char *args) {
   return 0;
 }
 
-void sdb_set_batch_mode() {
+void sdb_set_batch_mode() { //开启批处理模式函数
   is_batch_mode = true;
 }
 

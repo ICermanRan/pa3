@@ -14,7 +14,7 @@
 #**************************************************************************************/
 
 # Sanity check
-ifeq ($(wildcard $(NEMU_HOME)/src/nemu-main.c),)
+ifeq ($(wildcard $(NEMU_HOME)/src/nemu-main.c),)    #获取目录下的nemu-main.c文件
   $(error NEMU_HOME=$(NEMU_HOME) is not a NEMU repo)
 endif
 
@@ -22,10 +22,10 @@ endif
 -include $(NEMU_HOME)/include/config/auto.conf
 -include $(NEMU_HOME)/include/config/auto.conf.cmd
 
-remove_quote = $(patsubst "%",%,$(1))
+remove_quote = $(patsubst "%",%,$(1)) #定义变量remove_quote
 
 # Extract variabls from menuconfig
-GUEST_ISA ?= $(call remove_quote,$(CONFIG_ISA))
+GUEST_ISA ?= $(call remove_quote,$(CONFIG_ISA)) 
 ENGINE ?= $(call remove_quote,$(CONFIG_ENGINE))
 NAME    = $(GUEST_ISA)-nemu-$(ENGINE)
 
