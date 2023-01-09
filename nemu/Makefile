@@ -1,4 +1,6 @@
 # Sanity check
+#通过 wildcard 命令查找 $(NEMU_HOME)/src/nemu-main.c 文件是否存在，
+#如果不存在，则通过 error 命令打印错误信息。
 ifeq ($(wildcard $(NEMU_HOME)/src/nemu-main.c),)
   $(error NEMU_HOME=$(NEMU_HOME) is not a NEMU repo)
 endif
