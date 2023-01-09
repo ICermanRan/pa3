@@ -13,6 +13,8 @@ endif
 remove_quote = $(patsubst "%",%,$(1))
 
 # Extract variabls from menuconfig
+#remove_quote 函数用于去除可能存在的引号。
+#然后，NAME 变量被设置为 GUEST_ISA 和 ENGINE 的组合，中间用短横线连接。
 GUEST_ISA ?= $(call remove_quote,$(CONFIG_ISA))
 ENGINE ?= $(call remove_quote,$(CONFIG_ENGINE))
 NAME    = $(GUEST_ISA)-nemu-$(ENGINE)
