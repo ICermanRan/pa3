@@ -67,9 +67,14 @@ LDFLAGS += $(CFLAGS_BUILD)
 #config.mk Makefile 中的规则，用于处理菜单配置选项。
 include $(NEMU_HOME)/scripts/config.mk
 
+#ifdef 语句检查 CONFIG_TARGET_AM 变量是否已定义。
 ifdef CONFIG_TARGET_AM
+
+#如果定义了，则执行 include $(AM_HOME)/Makefile 语句，
+#它包括了 AM_HOME 目录中的 Makefile 中的规则
 include $(AM_HOME)/Makefile
 LINKAGE += $(ARCHIVES)
+
 else
 # Include rules to build NEMU
 include $(NEMU_HOME)/scripts/native.mk
