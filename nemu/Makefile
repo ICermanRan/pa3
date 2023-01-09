@@ -72,10 +72,14 @@ ifdef CONFIG_TARGET_AM
 
 #如果定义了，则执行 include $(AM_HOME)/Makefile 语句，
 #它包括了 AM_HOME 目录中的 Makefile 中的规则
+#然后将 LINKAGE 变量附加上 ARCHIVES 变量。
 include $(AM_HOME)/Makefile
 LINKAGE += $(ARCHIVES)
 
+#如果 CONFIG_TARGET_AM 未定义，则执行 include $(NEMU_HOME)/scripts/native.mk 语句
 else
+#它包括了 native.mk Makefile 中的规则，用于构建 NEMU 程序。
+#这些规则用于编译程序并链接所有必要的对象文件，以创建最终的可执行文件
 # Include rules to build NEMU
 include $(NEMU_HOME)/scripts/native.mk
 endif
