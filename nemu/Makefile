@@ -24,7 +24,12 @@ GUEST_ISA ?= $(call remove_quote,$(CONFIG_ISA))
 ENGINE ?= $(call remove_quote,$(CONFIG_ENGINE))
 NAME    = $(GUEST_ISA)-nemu-$(ENGINE)
 
+
+
 # Include all filelist.mk to merge file lists
+
+#首先，查找所有名为 filelist.mk 的文件，并将它们包含到当前文件中。
+#filelist.mk 文件中包含了一些变量，用于指定要编译的源文件。
 FILELIST_MK = $(shell find ./src -name "filelist.mk")
 include $(FILELIST_MK)
 
