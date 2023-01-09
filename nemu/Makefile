@@ -50,6 +50,7 @@ SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y))
 #这段代码用于从菜单配置中提取编译器和选项，并设置相应的编译器变量
 #首先设置 CC 变量为 CONFIG_CC 的值，并使用 remove_quote 函数去除可能存在的引号。
 #然后，它检查了菜单配置中的各种选项，并根据它们来设置 CFLAGS_BUILD 和 CFLAGS_TRACE 变量
+#最后，它将这些变量用于设置 CFLAGS 和 LDFLAGS 变量，以便在编译时使用它们。这些变量包含了编译器和选项，用于编译程序。
 CC = $(call remove_quote,$(CONFIG_CC))
 CFLAGS_BUILD += $(call remove_quote,$(CONFIG_CC_OPT))
 CFLAGS_BUILD += $(if $(CONFIG_CC_LTO),-flto,)
