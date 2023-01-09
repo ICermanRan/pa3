@@ -61,6 +61,10 @@ CFLAGS  += $(CFLAGS_BUILD) $(CFLAGS_TRACE) -D__GUEST_ISA__=$(GUEST_ISA)
 LDFLAGS += $(CFLAGS_BUILD)
 
 # Include rules for menuconfig
+#这段代码包括了其他 Makefile 中的规则，用于构建 NEMU 程序
+
+#include $(NEMU_HOME)/scripts/config.mk 语句包括了
+#config.mk Makefile 中的规则，用于处理菜单配置选项。
 include $(NEMU_HOME)/scripts/config.mk
 
 ifdef CONFIG_TARGET_AM
