@@ -34,8 +34,12 @@ FILELIST_MK = $(shell find ./src -name "filelist.mk")
 include $(FILELIST_MK)
 
 # Filter out directories and files in blacklist to obtain the final set of source files
+#然后，定义一些黑名单变量，用于指定不需要编译的目录和文件。
+#它会先找出所有在黑名单中的目录，并将所有在这些目录中的 .c 文件都加入黑名单。
 DIRS-BLACKLIST-y += $(DIRS-BLACKLIST)
 SRCS-BLACKLIST-y += $(SRCS-BLACKLIST) $(shell find $(DIRS-BLACKLIST-y) -name "*.c")
+#最后，它会找出所有需要编译的目录，并从中提取所有 .c 文件，
+#最终将它们筛送出黑名单中的文件，得到最终的源文件列表。
 SRCS-y += $(shell find $(DIRS-y) -name "*.c")
 SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y))
 
