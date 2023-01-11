@@ -4,8 +4,18 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-size_t strlen(const char *s) {
-  panic("Not implemented");
+//计算字符串长度(不包括终止的空字节（“\0”）)，并返回s指向的字符串中的字节数
+size_t strlen(const char *s) 
+{                           
+  /*实现思路：通过指针访问字符串，计数器读取字符串长度*/
+  size_t cnt = 0;
+  while(*s != '\0')
+  {
+    cnt++;
+    s++;
+  }
+  return cnt;
+  //panic("Not implemented");
 }
 
 char *strcpy(char *dst, const char *src) {
