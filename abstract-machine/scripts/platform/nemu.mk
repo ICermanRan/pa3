@@ -25,6 +25,7 @@ image: $(IMAGE).elf
 
 run: image
 # $(MAKE) -C $(NEMU_HOME) 的意思是，切换到NEMU_HOME下再make
+# 传递给nemu main函数的参数为NEMUFLAGS
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 gdb: image
