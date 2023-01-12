@@ -165,10 +165,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 int sprintf(char *out, const char *fmt, ...) {
 //out是字符数组名，fmt是格式化字符串(像：”%3d%6.2f%#x%o”) 
 
-  va_list ap;       //这是一个 va_list 类型的对象，它用来存储通过 va_arg 获取额外参数时所必需的信息
+  va_list ap;       //是在C语言中解决变参问题的一组宏，用于获取不确定个数的参数
   va_start(ap,fmt); //void va_start(va_list ap, last_arg) 初始化 ap 变量，
-                    //它与 va_arg 和 va_end 宏是一起使用的.last_arg 是最后一个传递给函数的已知的固定参数，即省略号之前的参数
-  
+                    //读取可变参数的过程其实就是在栈区中，使用指针,遍历栈区中的参数列表,
+                    //从低地址到高地址一个一个地把参数内容读出来的过程
+  va_end(ap);
   return vsprintf(out, fmt, ap);
 }
 
