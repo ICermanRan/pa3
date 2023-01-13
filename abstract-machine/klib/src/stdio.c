@@ -31,7 +31,7 @@ inline static char* unum_to_str(char *st,unsigned int d,int base){
 	return st;
 }
 
-#define MAX_NUM_stdio (1<<20)
+#define MAX_NUM_stdio (1<<20) //把1按二进制方式向左移20位,十进制的1048576
 //static char temp[MAX_NUM_stdio];
 
 int printf(const char *fmt, ...) {
@@ -53,12 +53,18 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
   while(*fmt)
   {
+    //format specifier?  %[flags][width][.precision][length]
     if(*fmt != '%')
     {
+      //if not
       *st++ = *fmt++;
-      continue;
+      continue;     //如果满足这个if条件，直接进行下一次循环，本次循环不执行后面内容
     }
-    
+    else {
+      // yes, evaluate it
+      fmt++;
+    }
+
     int tag;
 
     enum flags_type{
@@ -73,7 +79,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     size_t flags = notype;
     tag = 0;
     while(!tag){
-      switch(*(++fmt)){
+      switch(*fmt){
         case '-' : flags |= left; break;
         case '+' : flags |= positive; break;  
         case ' ' : flags|=empty;panic("Not Implemented or Error happens!"); break;
