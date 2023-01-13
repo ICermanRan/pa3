@@ -40,7 +40,7 @@ int printf(const char *fmt, ...) {
   panic("Not implemented");
 }
 
-#define cao_arg(d,ap,ch) switch(ch){\
+#define li_arg(d,ap,ch) switch(ch){\
  case 'l':d=va_arg(ap,intptr_t);break;\
  case 'L':d=va_arg(ap,int64_t);break;\
  case 'h':\
@@ -56,6 +56,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   //用于存放转换过程中的字符串
   char *st = out;         //首先将字符指针指向out(buf)
   char * s;
+
+  //int precision;          // min 整数数字个数; max 字符串中字符个数
 
   //然后扫描格式字符串，对各个格式转换指示进行相应的处理
   while(*fmt)
@@ -74,19 +76,19 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       fmt++;        //++的作用是跳过第一个%
     }
 
-    //下面取得格式指示字符串中的标志域, 并将标志常量放入 flags 变量中
+    
     int tag;
 
     enum flags_type{
       notype,
-			zero=1,       // 用 '0' 填充
-			left=2,       // 左调整
-			positive=4,   // 显示 '+'
-			empty=8,      // 若为 '+', 则置为空格
-			special=16    // 0x
+			zero=1,       // 用 '0' 填充          'b0_0001
+			left=2,       // 左调整               'b0_0010 
+			positive=4,   // 显示'+'              'b0_0100 
+			empty=8,      // 若为 '+', 则置为空格   'b0_1000
+			special=16    // 0x                  'b1_0000
     };
 
-    size_t flags = notype;
+    size_t flags = notype;  //下面取得格式指示字符串中的标志域, 并将标志常量放入 flags 变量中
     tag = 0;
     while(!tag)     //如果tag=0，!tag = 1,就会使while无限循环
     {               //如果字符串里有满足条件的，就会用break终止循环
@@ -120,15 +122,19 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       {
          ++fmt;
         width = va_arg(ap, int);    // 因此调用 va_arg 取宽度值
+        // 若此时宽度值小于 0, 则该负数表示其带有标志域 '-' 标志(左对齐)
         if(width < 0) 
         {
+        //因此还需在标志变量中添入该标志, 并将字段宽度值取为其绝对值
           flags |= left;
           width = -width;
         }
       };
 
+    
     if(*fmt == '.') panic("Not Support float or Error happens!");
 
+    //下面这段代码分析长度修饰符, 并将其存入 length 变量
     char length = ' ';
     if(*fmt == 'h' || *fmt == 'l' || *fmt == 'L' || *fmt == 'Z' || *fmt == 'z')
     {
@@ -142,36 +148,52 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
     static char temp2[MAX_NUM_stdio];
     char* stt = temp2;
+
+    // 下面分析转换指示符
     switch (*(fmt++))
     {
+      // 如果转换指示符是 's', 则表示对应参数是字符串
       case 's' :
                 s = va_arg(ap, char *);
+                // 然后再放入参数字符串
                 for(char *ss = s; *ss; ++ss, ++stt)
                   *stt = *ss;
                 break;
+
+      // 如果格式转换字符是'd'则表示对应参数是整数
       case 'd' :
-                cao_arg(d, ap, length)
+                li_arg(d, ap, length)
                 stt = num_to_str(stt, d, flags & positive);
                 break;
+
+      // 如果转换指示符是'c', 则表示对应参数应是字符
       case 'c' :
                 c = (char)va_arg(ap, int);
                 *stt++ = c;
                 break;
+      // 若格式转换符不是 '%', 则表示格式字符串有错, 直接将一个 '%' 写入输出串中
       case '%' :
                 *stt++ = '%';
                 break;
+
+      // 如果转换指示符是'u', 则表示对应参数应是无符号整数
       case 'u' :
-                cao_arg(d,ap,length)
+                li_arg(d,ap,length)
 				        stt=unum_to_str(stt,(unsigned)d,10);
 				        break;
+
+      // 如果格式转换符是'o', 表示需将对应的参数转换成八进制数的字符串
       case 'o' :
-                cao_arg(d,ap,length)
+                li_arg(d,ap,length)
 				        stt=unum_to_str(stt,(unsigned)d,8);
 				        break;
+      // 若格式转换指示是 'x' 或 'X', 则表示对应参数需要打印成十六进制数输出
       case 'X' :
       case 'x' :
+
+      // 如果格式转换符是'p', 表示对应参数的一个指针类型
       case 'p' :
-                cao_arg(d,ap,length)
+                li_arg(d,ap,length)
 				        stt=unum_to_str(stt,(unsigned)d,16);
 				        break;
       default : 
@@ -179,6 +201,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 				        break;
     }
 
+   
     *stt = '\0';
     if( !(flags & left))
       for(int i = 0; i + strlen(temp2) < width; ++i)
@@ -190,7 +213,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         *(st++) = ' ';
   }
 
+   // 最后在转换好的字符串结尾处添上字符串结束标志
   *st = '\0';
+  // 返回转换好的字符串长度值
   return st - out;
 }
 
