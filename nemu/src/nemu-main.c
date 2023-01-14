@@ -17,6 +17,7 @@
 #include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/src/expr-test.h>
 
+void expr_test();
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
