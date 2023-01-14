@@ -4,6 +4,7 @@
 #include "isa/riscv64/local-include/reg.h"
 #include "../include/cpu/decode.h"
 #include "/home/ran/ysyx/ysyx-workbench/nemu/include/expr-test.h"
+#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
 
 void expr_test()
 {
@@ -15,7 +16,7 @@ void expr_test()
   	if(fp == NULL)
 	 {
 		printf("cannot open this file\n");
-   		return 0;
+   		exit(0);
 	 }
 	
   	_Bool * success = NULL;

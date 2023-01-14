@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 #endif
 
 
-//   expr_test();			//是否进行表达式求值测试
+   expr_test();			//是否进行表达式求值测试
   
   /* Start engine. */
   engine_start();
