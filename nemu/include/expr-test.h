@@ -1,4 +1,7 @@
+#ifndef __EPXR_TEST_
+#define __EPXR_TEST_
 
-#include<stdio.h>
 
 void expr_test();
+
+#endif

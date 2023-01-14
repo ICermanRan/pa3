@@ -1,12 +1,9 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <assert.h>
-#include <string.h>
-#include <signal.h>
-
-#include "/home/ran/ysyx/ysyx-workbench/nemu/src/expr-test.h"
+#include "../include/common.h"
+#include <../include/generated/autoconf.h>
+#include "../include/expr-test.h"
+#include "isa/riscv64/local-include/reg.h"
+#include "../include/cpu/decode.h"
+#include "/home/ran/ysyx/ysyx-workbench/nemu/include/expr-test.h"
 
 void expr_test()
 {
