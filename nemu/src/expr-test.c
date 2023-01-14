@@ -5,6 +5,7 @@
 #include "../include/cpu/decode.h"
 #include "/home/ran/ysyx/ysyx-workbench/nemu/include/expr-test.h"
 #include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
+#include </usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h>
 
 void expr_test()
 {
@@ -19,7 +20,7 @@ void expr_test()
    		exit(0);
 	 }
 	
-  	_Bool * success = NULL;
+  	bool success = false;
   	uint64_t result;
 	char buf[65536] = {};
 	char dtm[65536];
@@ -47,7 +48,8 @@ void expr_test()
 		expr_ready = expr_2;
 		printf("expr = %s\n", expr_ready);
 		printf("result = %lu\n", result);
-      	expr(expr_ready,success);
+      	expr(expr_ready,&success);
+		assert(success);
 		// printf("ans = %lu", ans);
 		// int pass_number = 0;
 
