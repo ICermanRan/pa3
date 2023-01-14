@@ -6,6 +6,7 @@
 #include <string.h>
 #include <signal.h>
 
+#include "/home/ran/ysyx/ysyx-workbench/nemu/src/expr-test.h"
 void expr_test()
 {
 
