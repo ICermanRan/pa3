@@ -116,7 +116,7 @@ static void execute(uint64_t n) {
     /*下面的代码与trace和difftest相关*/
     trace_and_difftest(&s, cpu.pc);
     
-    #ifdef   CONFIG_ITRACE
+    #ifdef CONFIG_ITRACE
     strcpy(iring_buf[now], (&s)->logbuf);
     now=(now + 1) % num_of_buf;
     if(now > tot) 
@@ -143,9 +143,9 @@ void show_iringbuf()
   for(int i = 0; i <= tot; ++i)
   {
     // printf("i = %d\n", i);
-    if(i == now)
-      printf("--> %s\n", iring_buf[i]);
-    else 
+    // if(i == now)
+    //   printf("--> %s\n", iring_buf[i]);
+    // else 
       printf("    %s\n", iring_buf[i]);
   }
 }
