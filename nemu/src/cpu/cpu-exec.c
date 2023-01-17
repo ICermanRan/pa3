@@ -77,6 +77,14 @@ static void exec_once(Decode *s, vaddr_t pc) {
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
 
   /*ITRACE*/
+        #ifdef CONFIG_ITRACE
+      printf("1 now = %d\n", now);
+      printf("tot = %d\n", tot);
+      strcpy(iring_buf[now], s->logbuf);
+      now = (now + 1) % num_of_buf;
+      if(now > tot) 
+      tot = now;
+
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
@@ -96,13 +104,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
- 
-  // strcpy(iring_buf[now],s->logbuf);
-  // now=(now + 1) % num_of_buf;
-  // if(now > tot) 
-  //   tot = now;
-  // printf("now = %d\n", now);
-  // printf("tot = %d\n", tot);
+
 #endif
 }
 
@@ -113,13 +115,7 @@ static void execute(uint64_t n) {
     
     exec_once(&s, cpu.pc);
 
-        #ifdef CONFIG_ITRACE
-      printf("1 now = %d\n", now);
-      printf("tot = %d\n", tot);
-      strcpy(iring_buf[now], (&s)->logbuf);
-      now = (now + 1) % num_of_buf;
-      if(now > tot) 
-      tot = now;
+
      
     #endif  
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
