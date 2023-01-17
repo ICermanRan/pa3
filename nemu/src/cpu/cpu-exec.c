@@ -95,9 +95,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-
-  strcpy(iring_buf[now], s->logbuf);//复制指令到iring_buf中
-  now = (now + 1) % num_of_buf;
+ 
+  strcpy(iring_buf[now],s->logbuf);
+  now=(now + 1) % num_of_buf;
   if(now > tot) tot = now;
 #endif
 }
@@ -120,6 +120,19 @@ static void execute(uint64_t n) {
   }
 }
 
+#ifdef CONFIG_ITRACE
+void show_iringbuf()
+{
+  for(int i = 0; i <= tot; i++)
+  {
+    if(i == now)
+      printf("--> %s\n", iring_buf[i]);
+    else 
+      printf("    %s\n", iring_buf[i]);
+  }
+}
+#endif
+
 static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
 #define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
@@ -129,8 +142,16 @@ static void statistic() {
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
 
-void assert_fail_msg() {
+static inline void all_fail()
+{
+  #ifdef CONFIG_ITRACE
+    show_iringbuf();
+  #endif
   isa_reg_display();
+}
+
+void assert_fail_msg() {
+  all_fail();
   statistic();
 }
 
@@ -138,7 +159,9 @@ void assert_fail_msg() {
 void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);   //判断传入的要单步执行的步数，不能大于10
   switch (nemu_state.state) {
-    case NEMU_END: case NEMU_ABORT:
+    case NEMU_ABORT:
+      all_fail();
+    case NEMU_END: 
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
       return;
     default: nemu_state.state = NEMU_RUNNING;
