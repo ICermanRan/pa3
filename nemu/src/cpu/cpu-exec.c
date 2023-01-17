@@ -78,6 +78,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC.
 
+    strcpy(iring_buf[now], s->logbuf);
+  now = (now + 1) % num_of_buf;
+  if(now > tot) 
+  tot = now;   
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
 
   /*下面的代码与trace相关*/
@@ -105,10 +109,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 
-  strcpy(iring_buf[now], s->logbuf);
-  now = (now + 1) % num_of_buf;
-  if(now > tot) 
-  tot = now;   
+  // strcpy(iring_buf[now], s->logbuf);
+  // now = (now + 1) % num_of_buf;
+  // if(now > tot) 
+  // tot = now;   
 
   //  int ind = 0;
   // ind += sprintf(iring_buf[iring_tail], "%lx: ",tmp);
