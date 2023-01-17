@@ -129,7 +129,7 @@ void show_iringbuf()
   for(int i = 0; i <= tot; ++i)
   {
     // printf("i = %d\n", i);
-    if(i == now)
+    if(i == now + 1)
       printf("--> %s\n", iring_buf[i]);
     else 
       printf("    %s\n", iring_buf[i]);
