@@ -33,6 +33,14 @@ static bool g_print_step = false;
 
 void device_update();
 
+#ifdef CONFIG_ITRACE
+int now, tot;
+char iring_buf[16][64];
+#define num_of_buf (sizeof(iring_buf) / sizeof(iring_buf[0]))
+#endif
+
+
+
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
