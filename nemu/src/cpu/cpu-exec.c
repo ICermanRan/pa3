@@ -124,9 +124,9 @@ static void execute(uint64_t n) {
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
      if (nemu_state.state != NEMU_RUNNING) 
      {
-      printf("此时now = %d\n", now);
-      printf("此时tot = %d\n", tot);
-      strcpy(iring_buf[now], (&s)->logbuf);
+      // printf("此时now = %d\n", now);
+      // printf("此时tot = %d\n", tot);
+      // strcpy(iring_buf[now], (&s)->logbuf);
       break;
      }
     IFDEF(CONFIG_DEVICE, device_update());
