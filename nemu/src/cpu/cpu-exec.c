@@ -85,7 +85,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
   /*ITRACE*/
 #ifdef CONFIG_ITRACE
-  vaddr_t tmp = pc;
+  // vaddr_t tmp = pc;
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
   int ilen = s->snpc - s->pc;
@@ -105,19 +105,21 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 
-  // strcpy(iring_buf[now], s->logbuf);
-  // now = (now + 1) % num_of_buf;
-  // if(now > tot) 
-  // tot = now;    
-   int ind = 0;
-  ind += sprintf(iring_buf[iring_tail], "%lx: ",tmp);
-  for (i = 0; i < ilen; i ++) {
-    ind += sprintf(iring_buf[iring_tail] + ind, " %02x ",inst[i]);
-  }
-  ind += sprintf(iring_buf[iring_tail] + ind, "%s",p);
-  if(!iring_tail && !first_inst)overburden = 1;
-  first_inst = 0;
-  iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
+  strcpy(iring_buf[now], s->logbuf);
+  now = (now + 1) % num_of_buf;
+  if(now > tot) 
+  tot = now;   
+
+  //  int ind = 0;
+  // ind += sprintf(iring_buf[iring_tail], "%lx: ",tmp);
+  // for (i = 0; i < ilen; i ++) 
+  // {
+  //   ind += sprintf(iring_buf[iring_tail] + ind, " %02x ",inst[i]);
+  // }
+  // ind += sprintf(iring_buf[iring_tail] + ind, "%s",p);
+  // if(!iring_tail && !first_inst)overburden = 1;
+  // first_inst = 0;
+  // iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
 #endif
 }
 
@@ -145,21 +147,22 @@ static void execute(uint64_t n) {
 #ifdef CONFIG_ITRACE
 void show_iringbuf()
 {
-  // for(int i = 0; i <= tot; i++)
-  // {
-  //   printf("i = %d\n", i);
-  //   if(i == now)
-  //     printf("--> %s\n", iring_buf[i]);
-  //   else 
-  //     printf("    %s\n", iring_buf[i]);
-  // }
-  int i = 0;
-  //printf("%d\n",overburden);
-  if(overburden)i = (iring_tail);
-  for(; (i + 1) % IRINGBUF_SIZE != iring_tail; i = (i + 1) % IRINGBUF_SIZE){
-    printf("    %s\n",iring_buf[i]);
+  for(int i = 0; i <= tot; i++)
+  {
+    printf("i = %d\n", i);
+    if(i == now)
+      printf("--> %s\n", iring_buf[i]);
+    else 
+      printf("    %s\n", iring_buf[i]);
   }
-  printf("--> %s\n",iring_buf[i]);
+
+  // int i = 0;
+  // //printf("%d\n",overburden);
+  // if(overburden)i = (iring_tail);
+  // for(; (i + 1) % IRINGBUF_SIZE != iring_tail; i = (i + 1) % IRINGBUF_SIZE){
+  //   printf("    %s\n",iring_buf[i]);
+  // }
+  // printf("--> %s\n",iring_buf[i]);
 }
 #endif
 
