@@ -48,16 +48,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
-#ifdef CONFIG_ITRACE 
- strcpy(iring_buf[now],_this->logbuf);
-  now=(now + 1) % num_of_buf;
-  if(now > tot) 
-    tot = now;
-  printf("now = %d\n", now);
-  printf("tot = %d\n", tot);
- #endif
-
-
 /*check watchpoint*/
  #ifdef CONFIG_WATCHPOINT
   int change = test_change();
@@ -158,7 +148,7 @@ static void statistic() {
 static inline void all_fail()
 {
    #ifdef CONFIG_ITRACE
-        show_iringbuf();
+    show_iringbuf();
    #endif
   isa_reg_display();
 }
@@ -173,7 +163,7 @@ void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);   //判断传入的要单步执行的步数，不能大于10
   switch (nemu_state.state) {
     case NEMU_ABORT:
-      all_fail();
+      // all_fail();
     case NEMU_END: 
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
       return;
@@ -191,6 +181,7 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
     
     case NEMU_ABORT:  case NEMU_END: 
+      all_fail();
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
