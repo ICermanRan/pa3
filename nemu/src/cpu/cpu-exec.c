@@ -40,7 +40,7 @@ char iring_buf[16][64];
 int overburden = 0; 
 int iring_tail = 0;
 int first_inst = 1;
-#define IRINGBUF_SIZE 8 
+#define IRINGBUF_SIZE 16
 #define num_of_buf (sizeof(iring_buf) / sizeof(iring_buf[0])) 
 #endif
 //数组的长度 = 数组所占的大小/单个数组元素所占的大小
