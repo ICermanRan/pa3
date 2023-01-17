@@ -98,7 +98,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
  
   strcpy(iring_buf[now],s->logbuf);
   now=(now + 1) % num_of_buf;
-  if(now > tot) tot = now;
+  if(now > tot) 
+    tot = now;
+  printf("now = %d\n", now);
+  printf("tot = %d\n", tot);
 #endif
 }
 
@@ -125,6 +128,7 @@ void show_iringbuf()
 {
   for(int i = 0; i <= tot; ++i)
   {
+
     if(i == now)
       printf("--> %s\n", iring_buf[i]);
     else 
