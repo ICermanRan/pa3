@@ -111,12 +111,13 @@ static void execute(uint64_t n) {
   for (;n > 0; n --)
   {
     #ifdef CONFIG_ITRACE
-    strcpy(iring_buf[now], (&s)->logbuf);
-    now=(now + 1) % num_of_buf;
-    if(now > tot) 
-    tot = now;
-    printf("now = %d\n", now);
-    printf("tot = %d\n", tot);
+      printf("now = %d\n", now);
+      printf("tot = %d\n", tot);
+      strcpy(iring_buf[now], (&s)->logbuf);
+      now = (now + 1) % num_of_buf;
+      if(now > tot) 
+      tot = now;
+     
     #endif
     
     exec_once(&s, cpu.pc);
