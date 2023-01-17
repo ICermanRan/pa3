@@ -37,9 +37,9 @@ void device_update();
 #ifdef CONFIG_ITRACE
 int now, tot;
 char iring_buf[16][64];
-#define num_of_buf (sizeof(iring_buf) / sizeof(iring_buf[0]))
+#define num_of_buf (sizeof(iring_buf) / sizeof(iring_buf[0])) 
 #endif
-
+//数组的长度 = 数组所占的大小/单个数组元素所占的大小
 
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
@@ -100,6 +100,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   now=(now + 1) % num_of_buf;
   if(now > tot) 
     tot = now;
+  printf("num_of_buf = %ld\n", num_of_buf);
   printf("now = %d\n", now);
   printf("tot = %d\n", tot);
 #endif
@@ -131,7 +132,7 @@ void show_iringbuf()
     if(i == now)
       printf("--> %s\n", iring_buf[i]);
     else 
-      printf("--> %s\n", iring_buf[i]);
+      printf("    %s\n", iring_buf[i]);
   }
 }
 #endif
