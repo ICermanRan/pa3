@@ -71,6 +71,14 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->snpc = pc;     //snpc先赋值为当前的pc
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC.
+  #ifdef CONFIG_ITRACE
+      printf("1 now = %d\n", now);
+      printf("tot = %d\n", tot);
+      strcpy(iring_buf[now], s->logbuf);
+      now = (now + 1) % num_of_buf;
+      if(now > tot) 
+      tot = now;
+  #endif
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
 
   /*下面的代码与trace相关*/
@@ -96,15 +104,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-
-      #ifdef CONFIG_ITRACE
-      printf("1 now = %d\n", now);
-      printf("tot = %d\n", tot);
-      strcpy(iring_buf[now], s->logbuf);
-      now = (now + 1) % num_of_buf;
-      if(now > tot) 
-      tot = now;
-      #endif
 #endif
 }
 
@@ -123,12 +122,8 @@ static void execute(uint64_t n) {
     /*检查NEMU的状态是否为NEMU_RUNNING*/
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
      if (nemu_state.state != NEMU_RUNNING) 
-     {
-      // printf("此时now = %d\n", now);
-      // printf("此时tot = %d\n", tot);
-      // strcpy(iring_buf[now], (&s)->logbuf);
       break;
-     }
+     
     IFDEF(CONFIG_DEVICE, device_update());
   }
 }
