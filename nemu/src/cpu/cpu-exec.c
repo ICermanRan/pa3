@@ -110,7 +110,10 @@ static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --)
   {
-    #ifdef CONFIG_ITRACE
+    
+    exec_once(&s, cpu.pc);
+
+        #ifdef CONFIG_ITRACE
       printf("1 now = %d\n", now);
       printf("tot = %d\n", tot);
       strcpy(iring_buf[now], (&s)->logbuf);
@@ -118,9 +121,7 @@ static void execute(uint64_t n) {
       if(now > tot) 
       tot = now;
      
-    #endif
-    
-    exec_once(&s, cpu.pc);
+    #endif  
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
 
     /*下面的代码与trace和difftest相关*/
