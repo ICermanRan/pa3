@@ -43,6 +43,14 @@ char iring_buf[16][64];
 
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
+#ifdef   CONFIG_ITRACE
+  strcpy(iring_buf[now], _this->logbuf);
+  now=(now + 1) % num_of_buf;
+  if(now > tot) 
+    tot = now;
+  printf("now = %d\n", now);
+  printf("tot = %d\n", tot);
+#endif
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
@@ -116,7 +124,6 @@ static void execute(uint64_t n) {
 
     /*检查NEMU的状态是否为NEMU_RUNNING*/
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
-    // if ((nemu_state.state != NEMU_RUNNING) && (nemu_state.state != NEMU_STOP)) break;
      if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
