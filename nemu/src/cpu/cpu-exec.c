@@ -48,6 +48,15 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+#ifdef CONFIG_ITRACE 
+ strcpy(iring_buf[now],_this->logbuf);
+  now=(now + 1) % num_of_buf;
+  if(now > tot) 
+    tot = now;
+  printf("now = %d\n", now);
+  printf("tot = %d\n", tot);
+ #endif
+
 
 /*check watchpoint*/
  #ifdef CONFIG_WATCHPOINT
@@ -96,12 +105,12 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
  
-  strcpy(iring_buf[now],s->logbuf);
-  now=(now + 1) % num_of_buf;
-  if(now > tot) 
-    tot = now;
-  printf("now = %d\n", now);
-  printf("tot = %d\n", tot);
+  // strcpy(iring_buf[now],s->logbuf);
+  // now=(now + 1) % num_of_buf;
+  // if(now > tot) 
+  //   tot = now;
+  // printf("now = %d\n", now);
+  // printf("tot = %d\n", tot);
 #endif
 }
 
@@ -150,7 +159,7 @@ static inline void all_fail()
 {
    #ifdef CONFIG_ITRACE
         show_iringbuf();
-      #endif
+   #endif
   isa_reg_display();
 }
 
