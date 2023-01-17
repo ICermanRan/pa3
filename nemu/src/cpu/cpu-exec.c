@@ -111,7 +111,7 @@ static void execute(uint64_t n) {
   for (;n > 0; n --)
   {
     #ifdef CONFIG_ITRACE
-      printf("now = %d\n", now);
+      printf("1 now = %d\n", now);
       printf("tot = %d\n", tot);
       strcpy(iring_buf[now], (&s)->logbuf);
       now = (now + 1) % num_of_buf;
