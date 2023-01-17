@@ -140,10 +140,10 @@ static void execute(uint64_t n) {
 #ifdef CONFIG_ITRACE
 void show_iringbuf()
 {
-  for(int i = 0; i <= tot+1; ++i)
+  for(int i = 0; i <= tot; ++i)
   {
     // printf("i = %d\n", i);
-    if(i == tot+1)
+    if(i == now)
       printf("--> %s\n", iring_buf[i]);
     else 
       printf("    %s\n", iring_buf[i]);
