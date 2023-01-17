@@ -37,6 +37,10 @@ void device_update();
 #ifdef CONFIG_ITRACE
 int now, tot;
 char iring_buf[16][64];
+int overburden = 0; 
+int iring_tail = 0;
+int first_inst = 1;
+#define IRINGBUF_SIZE 8 
 #define num_of_buf (sizeof(iring_buf) / sizeof(iring_buf[0])) 
 #endif
 //数组的长度 = 数组所占的大小/单个数组元素所占的大小
@@ -81,6 +85,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
   /*ITRACE*/
 #ifdef CONFIG_ITRACE
+  vaddr_t tmp = pc;
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
   int ilen = s->snpc - s->pc;
@@ -100,10 +105,19 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 
-  strcpy(iring_buf[now], s->logbuf);
-  now = (now + 1) % num_of_buf;
-  if(now > tot) 
-  tot = now;    
+  // strcpy(iring_buf[now], s->logbuf);
+  // now = (now + 1) % num_of_buf;
+  // if(now > tot) 
+  // tot = now;    
+   int ind = 0;
+  ind += sprintf(iring_buf[iring_tail], "%lx: ",tmp);
+  for (i = 0; i < ilen; i ++) {
+    ind += sprintf(iring_buf[iring_tail] + ind, " %02x ",inst[i]);
+  }
+  ind += sprintf(iring_buf[iring_tail] + ind, "%s",p);
+  if(!iring_tail && !first_inst)overburden = 1;
+  first_inst = 0;
+  iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
 #endif
 }
 
@@ -131,14 +145,21 @@ static void execute(uint64_t n) {
 #ifdef CONFIG_ITRACE
 void show_iringbuf()
 {
-  for(int i = 0; i <= tot; i++)
-  {
-    printf("i = %d\n", i);
-    if(i == now)
-      printf("--> %s\n", iring_buf[i]);
-    else 
-      printf("    %s\n", iring_buf[i]);
+  // for(int i = 0; i <= tot; i++)
+  // {
+  //   printf("i = %d\n", i);
+  //   if(i == now)
+  //     printf("--> %s\n", iring_buf[i]);
+  //   else 
+  //     printf("    %s\n", iring_buf[i]);
+  // }
+  int i = 0;
+  //printf("%d\n",overburden);
+  if(overburden)i = (iring_tail);
+  for(; (i + 1) % IRINGBUF_SIZE != iring_tail; i = (i + 1) % IRINGBUF_SIZE){
+    printf("    %s\n",iring_buf[i]);
   }
+  printf("--> %s\n",iring_buf[i]);
 }
 #endif
 
@@ -159,7 +180,9 @@ static inline void all_fail()
   isa_reg_display();
 }
 
-void assert_fail_msg() {
+//报错时就会调用这个函数
+void assert_fail_msg()  
+{
   all_fail();
   statistic();
 }
@@ -169,7 +192,6 @@ void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);   //判断传入的要单步执行的步数，不能大于10
   switch (nemu_state.state) {
     case NEMU_ABORT:
-      // all_fail();
     case NEMU_END: 
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
       return;
@@ -187,7 +209,6 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
     
     case NEMU_ABORT:  case NEMU_END: 
-      // all_fail();
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
