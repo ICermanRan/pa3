@@ -91,7 +91,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, "%02x ", inst[i]);
-    printf("指令: %s", p);
+    printf("指令: %s\n", p);
   }
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
   int space_len = ilen_max - ilen;
