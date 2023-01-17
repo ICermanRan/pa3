@@ -85,7 +85,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     case TYPE_B: src1R(); src2R(); immB();  break; //printf("Btype imm = %lx\n",*imm); break;
   }
 }
-/*译码(ID)*/
+/*译码(ID) + 执行(EX)*/
 static int decode_exec(Decode *s) {
   int dest = 0;
   unsigned int shamt = 0;
