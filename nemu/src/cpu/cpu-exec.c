@@ -110,12 +110,6 @@ static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --)
   {
-    exec_once(&s, cpu.pc);
-    g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
-
-    /*下面的代码与trace和difftest相关*/
-    trace_and_difftest(&s, cpu.pc);
-    
     #ifdef CONFIG_ITRACE
     strcpy(iring_buf[now], (&s)->logbuf);
     now=(now + 1) % num_of_buf;
@@ -124,6 +118,14 @@ static void execute(uint64_t n) {
     printf("now = %d\n", now);
     printf("tot = %d\n", tot);
     #endif
+    
+    exec_once(&s, cpu.pc);
+    g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
+
+    /*下面的代码与trace和difftest相关*/
+    trace_and_difftest(&s, cpu.pc);
+    
+    
     /*检查NEMU的状态是否为NEMU_RUNNING*/
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
      if (nemu_state.state != NEMU_RUNNING) 
