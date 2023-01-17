@@ -33,6 +33,7 @@ static bool g_print_step = false;
 
 void device_update();
 
+/*定义iring_buf*/
 #ifdef CONFIG_ITRACE
 int now, tot;
 char iring_buf[16][64];
@@ -73,6 +74,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
   /*下面的代码与trace相关*/
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
+
+  /*ITRACE*/
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
@@ -92,6 +95,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+
+  strcpy(iring_buf[now], s->logbuf);//复制指令到iring_buf中
+  now = (now + 1) % num_of_buf;
+  if(now > tot) tot = now;
 #endif
 }
 
