@@ -78,6 +78,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
   if(now>tot) tot=now;
+  printf("111\n");
 #endif
 
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
@@ -136,7 +137,7 @@ static void execute(uint64_t n) {
 #ifdef CONFIG_ITRACE
 void show_iringbuf()
 {
-  for(int i = 1; i <= tot; i++)
+  for(int i = 1; i <= tot; i++) //舍弃掉第0个乱码
   {
     if(i == tot)
       printf("--> %s\n", iring_buf[i]);
