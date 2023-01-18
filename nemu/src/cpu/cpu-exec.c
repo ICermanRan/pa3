@@ -74,8 +74,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
   printf("111 %s\n", s->logbuf);
+  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
+                    //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
+  cpu.pc = s->dnpc; //下一条指令的pc(动态)
+  /*下面的代码与trace相关*/
+  /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
 
-   /*ITRACE*/
+  /*ITRACE*/
 #ifdef CONFIG_ITRACE
   // vaddr_t tmp = pc;
   char *p = s->logbuf;
@@ -94,10 +99,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
                               //但是还没初始化
   p += space_len;
 
-  //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
-  // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  // disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  // void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 
   //存入iring_buf
   strcpy(iring_buf[now],s->logbuf);
@@ -105,43 +110,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   if(now>tot) tot=now;
  
 #endif
-
-  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
-                    //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
-  cpu.pc = s->dnpc; //下一条指令的pc(动态)
-  /*下面的代码与trace相关*/
-  /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
-
-//   /*ITRACE*/
-// #ifdef CONFIG_ITRACE
-//   // vaddr_t tmp = pc;
-//   char *p = s->logbuf;
-//   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc存入s->logbuf
-//   int ilen = s->snpc - s->pc;
-//   int i;
-//   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
-//   for (i = ilen - 1; i >= 0; i --) {
-//     p += snprintf(p, 4, "%02x ", inst[i]);
-//   } //循环的作用是把指令中的内存给翻译出来存入s->logbuf
-//   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
-//   int space_len = ilen_max - ilen;
-//   if (space_len < 0) space_len = 0;
-//   space_len = space_len * 3 + 1;
-//   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，例如addi        sp, sp, -4
-//                               //但是还没初始化
-//   p += space_len;
-
-  //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
-  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-
-//   //存入iring_buf
-//   strcpy(iring_buf[now],s->logbuf);
-//   now=(now+1)%num_of_buf;
-//   if(now>tot) tot=now;
- 
-// #endif
 }
 
 static void execute(uint64_t n) {
