@@ -91,6 +91,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #ifdef CONFIG_ITRACE
   // vaddr_t tmp = pc;
   char *p = s->logbuf;
+  printf("111 %s\n", s->logbuf);
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
   int ilen = s->snpc - s->pc;
   int i;
