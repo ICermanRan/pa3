@@ -102,7 +102,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
   space_len = space_len * 3 + 1;
-  memset(p, ' ', space_len);
+  memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，例如addi        sp, sp, -4
   printf("222 %s\n", s->logbuf);
   p += space_len;
  
