@@ -83,6 +83,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
+  printf("%s\n", s->logbuf);
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
 
   /*下面的代码与trace相关*/
@@ -119,7 +120,6 @@ static void execute(uint64_t n) {
   {
    
     exec_once(&s, cpu.pc); 
-     printf("%s\n", (&s)->logbuf);
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
 
     /*下面的代码与trace和difftest相关*/
