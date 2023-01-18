@@ -74,9 +74,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
-    isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
-                    //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
-  cpu.pc = s->dnpc; //下一条指令的pc(动态)
+  // isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
+  //                   //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
+  // cpu.pc = s->dnpc; //下一条指令的pc(动态)
   
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
@@ -100,6 +100,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
                               //例如addi        sp, sp, -4
   // printf("555 %s\n", s->logbuf); 
   p += space_len;
+
+  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
+                    //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
+  cpu.pc = s->dnpc; //下一条指令的pc(动态)
     // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
