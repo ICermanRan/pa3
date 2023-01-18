@@ -76,7 +76,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
-  uint32_t val = vaddr_ifetch(s->snpc, 4);  //为了在iringbuf功能把错误指令打出来，把isa_exec_once(s)放在
+  s->isa.inst.val = vaddr_ifetch(s->snpc, 4);  //为了在iringbuf功能把错误指令打出来，把isa_exec_once(s)放在
                                               //构建指令后面，并且在isa_exec_once(s)中屏蔽掉s->isa.inst.val = inst_fetch
                                               //放在这里提前调用
   #ifdef CONFIG_ITRACE
@@ -86,7 +86,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
   int i;
-  uint8_t *inst = (uint8_t *)&val;
+  uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   // printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, "%02x ", inst[i]);
