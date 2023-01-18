@@ -46,6 +46,11 @@
 #define __P_ONE_1  X,
 #define __P_ZERO_0 X,
 // define some selection functions based on the properties of BOOLEAN macro
+//宏MUXDEF调用了宏MUX_MACRO_PROPERTY，它的作用是使用宏concat为宏macro添加一个前缀__P_DEF_，
+//然后将处理过的宏传给宏MUX_WITH_COMMA。
+//如果布尔宏被定义了，那么加上前缀后将得到__P_DEF_0或__P_DEF_1，
+//然后再定义这两个宏，通过逗号控制最后传入CHOOSE2nd宏的第二个参数为X，最终选择结果为X；
+//如果宏没有被定义，那么加上前缀后的宏不会再进行解释，那么“contain_comma a”部分将作为传入CHOOSE2nd的第一个参数，最终选择结果为Y。
 #define MUXDEF(macro, X, Y)  MUX_MACRO_PROPERTY(__P_DEF_, macro, X, Y)
 #define MUXNDEF(macro, X, Y) MUX_MACRO_PROPERTY(__P_DEF_, macro, Y, X)
 #define MUXONE(macro, X, Y)  MUX_MACRO_PROPERTY(__P_ONE_, macro, X, Y)

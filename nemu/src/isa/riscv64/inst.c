@@ -85,7 +85,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     case TYPE_B: src1R(); src2R(); immB();  break; //printf("Btype imm = %lx\n",*imm); break;
   }
 }
-/*译码(ID)*/
+/*译码(ID) + 执行(EX)*/
 static int decode_exec(Decode *s) {
   int dest = 0;
   unsigned int shamt = 0;
@@ -168,6 +168,7 @@ static int decode_exec(Decode *s) {
  
           
           //inv的规则, 表示"若前面所有的模式匹配规则都无法成功匹配, 则将该指令视为非法指令
+          //指令执行错误时，也是这条语句！！！(它内部能修改nemu state)
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
@@ -196,11 +197,11 @@ static int decode_exec(Decode *s) {
 int isa_exec_once(Decode *s) {
   //函数inst_fetch()专门负责取指令的工作
   //传入s->snpc的地址
-  s->isa.inst.val = inst_fetch(&s->snpc, 4);//调用inst_fetch，对内存进行一次访问
+  // s->isa.inst.val = inst_fetch(&s->snpc, 4);//调用inst_fetch，对内存进行一次访问
     
   //把指令记录到s->isa.inst.val中             //还会根据len来更新s->snpc, 从而让s->snpc指向下一条指令
  
-  //进入decode_exec()函数，开始译码
+  //进入decode_exec()函数，开始译码+执行
   return decode_exec(s);
 }
 
