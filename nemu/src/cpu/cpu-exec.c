@@ -108,10 +108,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //存入iring_buf
-  printf("tot = %d; now = %d; num_of_buf = %ld\n",tot, now, num_of_buf);
+  printf("第一 tot = %d; now = %d; num_of_buf = %ld\n",tot, now, num_of_buf);
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
+  printf("第二 tot = %d; now = %d; num_of_buf = %ld\n",tot, now, num_of_buf);
   if(now>tot) tot=now;
+  printf("第三 tot = %d; now = %d; num_of_buf = %ld\n",tot, now, num_of_buf);
+  printf(" ");
   #endif
 
   
