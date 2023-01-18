@@ -78,7 +78,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
   if(now>tot) tot=now;
-  printf("%s\n", s->logbuf);
+  //printf("%s\n", s->logbuf);
 #endif
 
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
@@ -117,7 +117,7 @@ static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --)
   {
-    
+    printf("%s\n", (&s)->logbuf);
     exec_once(&s, cpu.pc); 
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
 
