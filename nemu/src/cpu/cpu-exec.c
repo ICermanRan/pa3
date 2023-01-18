@@ -103,6 +103,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   if(now>tot) tot=now;
   #endif
 
+
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
@@ -166,7 +167,7 @@ static void execute(uint64_t n) {
 #ifdef CONFIG_ITRACE
 void show_iringbuf()
 {
-  for(int i = 1; i <= tot; i++) //舍弃掉第0个乱码
+  for(int i = 0; i <= tot; i++) 
   {
     if(i == tot)
       printf("--> %s\n", iring_buf[i]);
