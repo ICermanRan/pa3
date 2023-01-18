@@ -197,7 +197,7 @@ static int decode_exec(Decode *s) {
 int isa_exec_once(Decode *s) {
   //函数inst_fetch()专门负责取指令的工作
   //传入s->snpc的地址
-   s->isa.inst.val = inst_fetch(&s->snpc, 4);//调用inst_fetch，对内存进行一次访问
+    s->isa.inst.val = inst_fetch(&s->snpc, 4);//调用inst_fetch，对内存进行一次访问
     
   //把指令记录到s->isa.inst.val中             //还会根据len来更新s->snpc, 从而让s->snpc指向下一条指令
  
