@@ -85,12 +85,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #ifdef CONFIG_ITRACE
   // vaddr_t tmp = pc;
   char *p = s->logbuf;
-
-    strcpy(iring_buf[now], s->logbuf);
-  now = (now + 1) % num_of_buf;
-  if(now > tot) 
-  tot = now;   
-
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
   int ilen = s->snpc - s->pc;
   int i;
@@ -104,6 +98,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
+
+      strcpy(iring_buf[now], s->logbuf);
+  now = (now + 1) % num_of_buf;
+  if(now > tot) 
+  tot = now;   
 
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
