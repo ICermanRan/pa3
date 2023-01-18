@@ -136,21 +136,13 @@ static void execute(uint64_t n) {
 #ifdef CONFIG_ITRACE
 void show_iringbuf()
 {
-  for(int i = 0; i <= tot; i++)
+  for(int i = 1; i <= tot; i++)
   {
     if(i == tot)
       printf("--> %s\n", iring_buf[i]);
     else 
       printf("    %s\n", iring_buf[i]);
   }
-
-  // int i = 0;
-  // //printf("%d\n",overburden);
-  // if(overburden)i = (iring_tail);
-  // for(; (i + 1) % IRINGBUF_SIZE != iring_tail; i = (i + 1) % IRINGBUF_SIZE){
-  //   printf("    %s\n",iring_buf[i]);
-  // }
-  // printf("--> %s\n",iring_buf[i]);
 }
 #endif
 
