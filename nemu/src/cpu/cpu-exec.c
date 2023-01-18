@@ -81,7 +81,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
-  printf("000 %s\n", s->logbuf);
+  // printf("000 %s\n", s->logbuf);
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入s->logbuf
   printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
