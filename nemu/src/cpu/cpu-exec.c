@@ -90,7 +90,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   /*ITRACE*/
 #ifdef CONFIG_ITRACE
   // vaddr_t tmp = pc;
-  printf("%s\n", s->logbuf);
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
   int ilen = s->snpc - s->pc;
