@@ -95,10 +95,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
   space_len = space_len * 3 + 1;
-    printf("111 %s\n", s->logbuf);
+    
   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，例如addi        sp, sp, -4
                               //但是还没初始化
-
+printf("111 %s\n", s->logbuf);
   p += space_len;
 
   // void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
