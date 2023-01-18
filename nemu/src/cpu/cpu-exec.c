@@ -78,7 +78,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
   if(now>tot) tot=now;
-  printf("111\n");
+  printf("%s\n", s->logbuf);
 #endif
 
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
