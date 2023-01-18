@@ -73,7 +73,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
                     //s存放在执行一条指令过程中所需的信息, 包括指令的PC, 下一条指令的PC等
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
-  printf("111 %s\n", s->logbuf);
+  
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
@@ -97,6 +97,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，例如addi        sp, sp, -4
                               //但是还没初始化
+  printf("111 %s\n", s->logbuf);
   p += space_len;
 
   // void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
