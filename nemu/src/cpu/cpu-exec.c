@@ -74,9 +74,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
-    void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(s->logbuf, s->logbuf + sizeof(s->logbuf) - s->logbuf,
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, s->snpc - s->pc);
+  //   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  // disassemble(s->logbuf, s->logbuf + sizeof(s->logbuf) - s->logbuf,
+  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, s->snpc - s->pc);
 
 #ifdef CONFIG_ITRACE
   strcpy(iring_buf[now],s->logbuf);
@@ -109,19 +109,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   memset(p, ' ', space_len);
   p += space_len;
  
-  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-  //  int ind = 0;
-  // ind += sprintf(iring_buf[iring_tail], "%lx: ",tmp);
-  // for (i = 0; i < ilen; i ++) 
-  // {
-  //   ind += sprintf(iring_buf[iring_tail] + ind, " %02x ",inst[i]);
-  // }
-  // ind += sprintf(iring_buf[iring_tail] + ind, "%s",p);
-  // if(!iring_tail && !first_inst)overburden = 1;
-  // first_inst = 0;
-  // iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
+  // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  // disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #endif
 }
 
