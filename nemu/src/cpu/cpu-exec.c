@@ -81,19 +81,19 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
-  printf("222 %s\n", s->logbuf);
+  // printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, "%02x ", inst[i]);
   } //循环的作用是把指令中的内存给翻译出来存入s->logbuf
-  printf("333 %s\n", s->logbuf);
+  // printf("333 %s\n", s->logbuf);
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
   space_len = space_len * 3 + 1;
-  printf("444 %s\n", s->logbuf);  
+  // printf("444 %s\n", s->logbuf);  
   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，存入iringbuf
                               //例如addi        sp, sp, -4
-  printf("555 %s\n", s->logbuf); 
+  // printf("555 %s\n", s->logbuf); 
   p += space_len;
     // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
