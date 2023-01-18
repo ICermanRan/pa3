@@ -74,10 +74,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
-  //   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  // disassemble(s->logbuf, s->logbuf + sizeof(s->logbuf) - s->logbuf,
-  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, s->snpc - s->pc);
-
 #ifdef CONFIG_ITRACE
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
@@ -109,9 +105,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   memset(p, ' ', space_len);
   p += space_len;
  
-  // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  // disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #endif
 }
 
