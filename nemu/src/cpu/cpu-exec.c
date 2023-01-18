@@ -98,14 +98,14 @@ static void exec_once(Decode *s, vaddr_t pc) {
     
   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，例如addi        sp, sp, -4
                               //但是还没初始化
-printf("111 %s\n", s->logbuf);
+
   p += space_len;
 
   // void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-
+   printf("111 %s\n", s->logbuf);
   //存入iring_buf
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
