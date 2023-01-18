@@ -104,12 +104,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，例如addi        sp, sp, -4
                               //但是还没初始化
-
   p += space_len;
-  printf("222 %s\n", s->logbuf);
- 
+
   //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+    printf("222 %s\n", s->logbuf);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #endif
