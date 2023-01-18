@@ -114,7 +114,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   printf("第二 tot = %d; now = %d; num_of_buf = %ld\n",tot, now, num_of_buf);
   if(now>tot) tot=now;
   printf("第三 tot = %d; now = %d; num_of_buf = %ld\n",tot, now, num_of_buf);
-  printf(" ");
+  printf("\n");
   #endif
 
   
