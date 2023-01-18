@@ -95,9 +95,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p += space_len;
 
   //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
-  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  // disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 
   //存入iring_buf
   strcpy(iring_buf[now],s->logbuf);
@@ -131,10 +131,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
 //                               //但是还没初始化
 //   p += space_len;
 
-//   //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
-//   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-//   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-//       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 
 //   //存入iring_buf
 //   strcpy(iring_buf[now],s->logbuf);
