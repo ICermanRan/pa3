@@ -84,7 +84,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
-   printf("%s\n", s->logbuf);
   /*下面的代码与trace相关*/
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
 
