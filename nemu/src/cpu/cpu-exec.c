@@ -81,11 +81,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
-  printf("222 %s\n", s->logbuf);
+  // printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, "%02x ", inst[i]);
   } //循环的作用是把指令中的内存给翻译出来存入s->logbuf
-  // printf("333 %s\n", s->logbuf);
+  printf("333 %s\n", s->logbuf);
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
