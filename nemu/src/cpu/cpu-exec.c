@@ -19,6 +19,7 @@
 #include <locale.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/include/cpu/ifetch.h>
+#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -75,10 +76,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
-  // isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
-  //                   //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
-  // cpu.pc = s->dnpc; //下一条指令的pc(动态)
-  s->isa.inst.val = inst_fetch(&s->snpc, 4);
+  s->isa.inst.val = paddr_read(*(&s->snpc), 4);//为了在iringbuf功能把错误指令打出来，把isa_exec_once(s)放在
+                                            //构建指令后面，并且在isa_exec_once(s)中屏蔽掉s->isa.inst.val = inst_fetch
+                                            //放在这里提前调用
 
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
