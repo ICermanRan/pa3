@@ -101,7 +101,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   // printf("444 %s\n", s->logbuf);  
   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，存入iringbuf
                               //例如addi        sp, sp, -4
-  printf("555 %s\n", s->logbuf); 
+  // printf("555 %s\n", s->logbuf); 
   p += space_len;
 
   // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
