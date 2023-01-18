@@ -71,7 +71,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
 /*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
 /*模拟了cpu的工作方式*/
-static void exec_once(Decode *s, vaddr_t pc) {
+static void exec_once(Decode *s, vaddr_t pc) 
+{
                     //s存放在执行一条指令过程中所需的信息, 包括指令的PC, 下一条指令的PC等
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
@@ -83,7 +84,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char *p = s->logbuf;
   // printf("000 %s\n", s->logbuf);
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入s->logbuf,并且去掉了最开始未定义的乱码pc
-  printf("111 %s\n", s->logbuf);
+  // printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
