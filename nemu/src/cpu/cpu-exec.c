@@ -78,12 +78,12 @@ static void exec_once(Decode *s, vaddr_t pc) {
   // isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
   //                   //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
   // cpu.pc = s->dnpc; //下一条指令的pc(动态)
-  
+  s->isa.inst.val = inst_fetch(&s->snpc, 4);
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   // printf("000 %s\n", s->logbuf);
-  p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入s->logbuf
-  printf("111 %s\n", s->logbuf);
+  p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入s->logbuf,并且去掉了最开始未定义的乱码pc
+  // printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
