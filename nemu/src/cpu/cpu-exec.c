@@ -79,6 +79,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   //                   //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
   // cpu.pc = s->dnpc; //下一条指令的pc(动态)
   s->isa.inst.val = inst_fetch(&s->snpc, 4);
+
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   // printf("000 %s\n", s->logbuf);
@@ -87,7 +88,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
-  // printf("222 %s\n", s->logbuf);
+  printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, "%02x ", inst[i]);
   } //循环的作用是把指令中的内存给翻译出来存入s->logbuf
