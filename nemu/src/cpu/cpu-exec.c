@@ -86,10 +86,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
   /*下面的代码与trace相关*/
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
-
+       printf("%s\n", s->logbuf);
   /*ITRACE*/
 #ifdef CONFIG_ITRACE
   // vaddr_t tmp = pc;
+
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //
   int ilen = s->snpc - s->pc;
