@@ -74,10 +74,18 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
+
+
+#ifdef CONFIG_ITRACE
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(s->logbuf, s->logbuf + sizeof(s->logbuf) - s->logbuf,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, s->snpc - s->pc);
+
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
   if(now>tot) tot=now;
-  
+#endif
+
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
   cpu.pc = s->dnpc; //下一条指令的pc(动态)

@@ -201,7 +201,7 @@ int isa_exec_once(Decode *s) {
     
   //把指令记录到s->isa.inst.val中             //还会根据len来更新s->snpc, 从而让s->snpc指向下一条指令
  
-  //进入decode_exec()函数，开始译码
+  //进入decode_exec()函数，开始译码+执行
   return decode_exec(s);
 }
 
