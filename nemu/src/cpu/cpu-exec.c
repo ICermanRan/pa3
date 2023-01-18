@@ -182,7 +182,7 @@ static void execute(uint64_t n) {
 void show_iringbuf()
 {
   
-  for(int i = 0; i <= tot; i++) 
+  for(int i = 0; i <= tot - 1; i++) 
   {
     
     if(i == now - 1)
