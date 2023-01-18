@@ -86,7 +86,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   // printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
   int i;
-  s->isa.inst.val = inst_fetch(&s->snpc, 4);
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   // printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
