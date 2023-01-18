@@ -117,8 +117,9 @@ static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --)
   {
-    printf("%s\n", (&s)->logbuf);
+   
     exec_once(&s, cpu.pc); 
+     printf("%s\n", (&s)->logbuf);
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
 
     /*下面的代码与trace和difftest相关*/
