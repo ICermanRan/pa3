@@ -102,8 +102,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
   space_len = space_len * 3 + 1;
-  printf("222 %s\n", s->logbuf);
   memset(p, ' ', space_len);
+  printf("222 %s\n", s->logbuf);
   p += space_len;
  
   //void disassemble：把指令翻译成反汇编内容(从数字——>字符串)
