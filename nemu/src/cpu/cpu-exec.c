@@ -93,6 +93,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
                               //例如addi        sp, sp, -4
   printf("111 %s\n", s->logbuf);
   p += space_len;
+    // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //存入iring_buf
   strcpy(iring_buf[now],s->logbuf);
   now=(now+1)%num_of_buf;
@@ -126,9 +130,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
 //   p += space_len;
 
   // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
-  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  // disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 
 //   //存入iring_buf
 //   strcpy(iring_buf[now],s->logbuf);
