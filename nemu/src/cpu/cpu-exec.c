@@ -50,6 +50,11 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+   
+  strcpy(iring_buf[now], _this->logbuf);
+  now = (now + 1) % num_of_buf;
+  if(now > tot) 
+  tot = now;  
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
@@ -98,18 +103,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
-
-
-    strcpy(iring_buf[now], s->logbuf);
-  now = (now + 1) % num_of_buf;
-  if(now > tot) 
-  tot = now;  
+ 
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-
- 
-
   //  int ind = 0;
   // ind += sprintf(iring_buf[iring_tail], "%lx: ",tmp);
   // for (i = 0; i < ilen; i ++) 
