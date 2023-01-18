@@ -86,6 +86,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   // printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
   int i;
+  s->isa.inst.val = inst_fetch(&s->snpc, 4);
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   // printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
@@ -113,9 +114,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   #endif
 
   
-  // isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
-  //                   //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
-  // cpu.pc = s->dnpc; //下一条指令的pc(动态)
+  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
+                    //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
+  cpu.pc = s->dnpc; //下一条指令的pc(动态)
   /*下面的代码与trace相关*/
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
 
