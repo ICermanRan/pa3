@@ -77,7 +77,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
-  s->isa.inst.val = inst_fetch(&s->snpc, 4);
+  // s->isa.inst.val = inst_fetch(&s->snpc, 4);
   // s->isa.inst.val = paddr_read(s->snpc, 4);  //为了在iringbuf功能把错误指令打出来，把isa_exec_once(s)放在
                                               //构建指令后面，并且在isa_exec_once(s)中屏蔽掉s->isa.inst.val = inst_fetch
                                               //放在这里提前调用
