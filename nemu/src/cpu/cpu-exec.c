@@ -74,6 +74,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;       //当前pc
   s->snpc = pc;     //snpc先赋值为当前的pc
 
+  strcpy(iring_buf[now],s->logbuf);
+  now=(now+1)%num_of_buf;
+  if(now>tot) tot=now;
+  
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
@@ -141,7 +145,6 @@ void show_iringbuf()
 {
   for(int i = 0; i <= tot; i++)
   {
-    // printf("i = %d\n", i);
     if(i == tot)
       printf("--> %s\n", iring_buf[i]);
     else 
