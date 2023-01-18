@@ -18,6 +18,7 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
+#include </home/ran/ysyx/ysyx-workbench/nemu/include/cpu/ifetch.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -85,6 +86,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   // printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
   int i;
+  s->isa.inst.val = inst_fetch(&s->snpc, 4);
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   // printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
@@ -101,10 +103,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   // printf("555 %s\n", s->logbuf); 
   p += space_len;
 
-  isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
-                    //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
-  cpu.pc = s->dnpc; //下一条指令的pc(动态)
-    // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
+  // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
