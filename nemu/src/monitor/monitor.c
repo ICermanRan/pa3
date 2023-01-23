@@ -23,7 +23,7 @@ void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb();
 void init_disasm(const char *triple);
-void parse_elf( char *elf_file);
+
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -82,89 +82,6 @@ int tot_func_num=-1;
 function_unit funcs[FUNC_NUM];
 static char name_all[2048];
 #define name_all_len (sizeof(name_all))
-
-Elf64_Sym *symtab = NULL;
-char* symstrtab = 0;
-uint64_t symtab_len = 0;
-
-void parse_elf(char *elf_file){
-  if(elf_file == NULL){
-    panic("Elf file missing\n");
-    return;
-  }
-  int l = strlen(elf_file);//.bin -> .elf
-  elf_file[l-3] = 'e';
-  elf_file[l-2] = 'l';
-  elf_file[l-1] = 'f';
-  FILE *fp;
-  fp = fopen(elf_file, "r");
-  if(fp){
-    Elf64_Ehdr header; //elf header
-    Elf64_Shdr* shdr;  //section header
-    int ret = fread(&header, 1, sizeof(header), fp);
-    if(!ret)panic("cannot read file");
-    // check so its really an elf file
-    //printf("%x %c %c %c\n",header.e_type, header.e_ident[1], header.e_ident[2], header.e_ident[3]);
-    if(header.e_type == ET_EXEC  &&
-       header.e_ident[1] == 'E' &&
-       header.e_ident[2] == 'L' &&
-       header.e_ident[3] == 'F') {
-       //printf("ok\n");
-    }
-    else printf("Unrecognized elf header format\n");
-    ret = fseek(fp, header.e_shoff, SEEK_SET);
-    if(ret != 0)panic("failed to seek header table's file offset");
-
-    shdr = (Elf64_Shdr*)malloc(sizeof(*shdr) * header.e_shnum);
-    if(shdr == NULL)panic("unable to allocate memory for section header");
-    
-    ret = fread(shdr, 1, header.e_shentsize * header.e_shnum, fp);
-
-    //This member holds the section header table index of the entry
-    //associated with the section name string table.
-    char* secstrtab = (char *)malloc(shdr[header.e_shstrndx].sh_size);
-
-    fseek(fp, shdr[header.e_shstrndx].sh_offset, SEEK_SET);//
-    ret = fread(secstrtab, shdr[header.e_shstrndx].sh_size, 1, fp);//section header string
-    //printf("%ld %ldoooo\n",shdr[header.e_shstrndx].sh_size,strlen(secstrtab));
-    if(ret == 0)panic("cannot read section");
-    for(int i = header.e_shnum; i >= 0; i--){
-      char *now = secstrtab + shdr[i].sh_name;
-      if(strcmp(now,".strtab") == 0){
-        symstrtab = (char *)malloc(shdr[i].sh_size);
-        printf("symstrtab %ld %ld\n", shdr[header.e_shstrndx].sh_size, shdr[i].sh_size);
-        fseek(fp, shdr[i].sh_offset, SEEK_SET);//
-        ret = fread(symstrtab, shdr[i].sh_size, 1, fp);//section header string
-        break;
-      }
-    }
-    //printf("%p %p\n",secstrtab, symstrtab);
-    if(!symstrtab)panic("symstrtab not found");
-    for(int i = header.e_shnum; i >= 0; i--){
-      char *now = secstrtab + shdr[i].sh_name;
-      // sh_name is an index into the section header string table section, giving
-      // the location of a null-terminated string.
-      // printf("section is %s\n",now);
-      if(strcmp(now,".symtab") == 0){
-        symtab = malloc(shdr[i].sh_size);//888
-        ret = fseek(fp, shdr[i].sh_offset, SEEK_SET);
-        ret = fread(symtab, shdr[i].sh_size, 1, fp);
-        symtab_len = shdr[i].sh_size / sizeof(Elf64_Sym);
-        /*
-        for(int j = 0;j < symtab_len; j++){
-          printf("%lx:%d %s\n",symtab[j].st_value, symtab[j].st_name, symstrtab + symtab[j].st_name);
-        }
-        */
-        break;
-      }
-    }
-    // finally close the file
-    fclose(fp);
-  }
-  else{
-    panic("elf file err");
-  }
-}
 
 
 /********************检查head********************/
@@ -265,6 +182,7 @@ static void load_elf()
   //遍历
   for(int i = 0; i < ehdr.e_shnum; i++)
   {
+    //e_shoff 字段表示节头表在文件中的偏移
     fseek(fp, (ehdr.e_shoff + i * ehdr.e_shentsize), SEEK_SET);//每次都重新定位指针位置
     ret = fread(&shdr, sizeof(Shdr), 1, fp);//根据指针所指地址读取数据放入shdr中
     assert(ret == 1);
@@ -280,8 +198,8 @@ static void load_elf()
 
     if(shdr.sh_type == SHT_SYMTAB)
     {
-      //包含了一个符号表。当前，一个ELF文件中只有一个符号表。
-      Sym sym;
+      //该类型包含了一个符号表。当前，一个ELF文件中只有一个符号表。
+      Sym sym;//定义符号表变量
       for(int j = 0; j < shdr.sh_size; j += shdr.sh_entsize)
       {
         fseek(fp, shdr.sh_offset + j, SEEK_SET);
@@ -365,9 +283,6 @@ void init_monitor(int argc, char *argv[]) {
   load_elf(elf_file);
   #endif
   
- #ifdef CONFIG_FTRACE
-  parse_elf(elf_file);
-#endif 
   /* Initialize memory. */
   init_mem();
 
