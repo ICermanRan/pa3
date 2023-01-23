@@ -76,46 +76,157 @@ static long load_img() {
 }
 
 #ifdef CONFIG_FTRACE
-static char * elf_file = NULL; //通过makefile -e选项加载elf文件
+static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
 int tot_func_num=-1;
 function_unit funcs[FUNC_NUM];
 static char name_all[2048];
 #define name_all_len (sizeof(name_all))
 
+Elf64_Sym *symtab = NULL;
+char* symstrtab = 0;
+uint64_t symtab_len = 0;
+
+void parse_elf(char *elf_file){
+  if(elf_file == NULL){
+    panic("Elf file missing\n");
+    return;
+  }
+  int l = strlen(elf_file);//.bin -> .elf
+  elf_file[l-3] = 'e';
+  elf_file[l-2] = 'l';
+  elf_file[l-1] = 'f';
+  FILE *fp;
+  fp = fopen(elf_file, "r");
+  if(fp){
+    Elf64_Ehdr header; //elf header
+    Elf64_Shdr* shdr;  //section header
+    int ret = fread(&header, 1, sizeof(header), fp);
+    if(!ret)panic("cannot read file");
+    // check so its really an elf file
+    //printf("%x %c %c %c\n",header.e_type, header.e_ident[1], header.e_ident[2], header.e_ident[3]);
+    if(header.e_type == ET_EXEC  &&
+       header.e_ident[1] == 'E' &&
+       header.e_ident[2] == 'L' &&
+       header.e_ident[3] == 'F') {
+       //printf("ok\n");
+    }
+    else printf("Unrecognized elf header format\n");
+    ret = fseek(fp, header.e_shoff, SEEK_SET);
+    if(ret != 0)panic("failed to seek header table's file offset");
+
+    shdr = (Elf64_Shdr*)malloc(sizeof(*shdr) * header.e_shnum);
+    if(shdr == NULL)panic("unable to allocate memory for section header");
+    
+    ret = fread(shdr, 1, header.e_shentsize * header.e_shnum, fp);
+
+    //This member holds the section header table index of the entry
+    //associated with the section name string table.
+    char* secstrtab = (char *)malloc(shdr[header.e_shstrndx].sh_size);
+
+    fseek(fp, shdr[header.e_shstrndx].sh_offset, SEEK_SET);//
+    ret = fread(secstrtab, shdr[header.e_shstrndx].sh_size, 1, fp);//section header string
+    //printf("%ld %ldoooo\n",shdr[header.e_shstrndx].sh_size,strlen(secstrtab));
+    if(ret == 0)panic("cannot read section");
+    for(int i = header.e_shnum; i >= 0; i--){
+      char *now = secstrtab + shdr[i].sh_name;
+      if(strcmp(now,".strtab") == 0){
+        symstrtab = (char *)malloc(shdr[i].sh_size);
+        printf("symstrtab %ld %ld\n", shdr[header.e_shstrndx].sh_size, shdr[i].sh_size);
+        fseek(fp, shdr[i].sh_offset, SEEK_SET);//
+        ret = fread(symstrtab, shdr[i].sh_size, 1, fp);//section header string
+        break;
+      }
+    }
+    //printf("%p %p\n",secstrtab, symstrtab);
+    if(!symstrtab)panic("symstrtab not found");
+    for(int i = header.e_shnum; i >= 0; i--){
+      char *now = secstrtab + shdr[i].sh_name;
+      // sh_name is an index into the section header string table section, giving
+      // the location of a null-terminated string.
+      // printf("section is %s\n",now);
+      if(strcmp(now,".symtab") == 0){
+        symtab = malloc(shdr[i].sh_size);//888
+        ret = fseek(fp, shdr[i].sh_offset, SEEK_SET);
+        ret = fread(symtab, shdr[i].sh_size, 1, fp);
+        symtab_len = shdr[i].sh_size / sizeof(Elf64_Sym);
+        /*
+        for(int j = 0;j < symtab_len; j++){
+          printf("%lx:%d %s\n",symtab[j].st_value, symtab[j].st_name, symstrtab + symtab[j].st_name);
+        }
+        */
+        break;
+      }
+    }
+    // finally close the file
+    fclose(fp);
+  }
+  else{
+    panic("elf file err");
+  }
+}
+
+
+/********************检查head********************/
 static bool check_elf(FILE * fp)
 {
-  fseek(fp, 0, SEEK_SET);
-  Ehdr ehdr;
-  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);
-  assert(ret == 1);
 
+  //int fseek(FILE *stream, long int offset, int whence)
+  //函数设置流stream的文件位置为给定的偏移 offset，参数 offset 意味着从给定的 whence 位置偏移的字节数
+  //SEEK_SET	0	/* Seek from beginning of file.  */
+  //SEEK_CUR	1	/* Seek from current position.  */
+  //SEEK_END	2 /* Seek from end of file.  */
+  
+  fseek(fp, 0, SEEK_SET);/* 查找文件的开头 */
+  Ehdr ehdr;//定义ELF文件头(描述整个文件的组织结构)
+  
+  //size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+  //函数从给定流 stream 读取数据到 ptr 所指向的数组中。
+  /*
+    ptr -- 这是指向带有最小尺寸 size*nmemb 字节的内存块的指针。
+    size -- 这是要读取的每个元素的大小，以字节为单位。
+    nmemb -- 这是元素的个数，每个元素的大小为 size 字节。
+    stream -- 这是指向 FILE 对象的指针，该 FILE 对象指定了一个输入流。
+  */
+  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
+  assert(ret == 1);//如果ret !=1,则终止程序
+  
+  //判断elf文件类型
+  //e_ident前4个字节是ELF的Magic Number 
+  //e_ident 字段前四位为文件标识，一般为“\x7fELF”，通过这四位，可以查看该文件是否为ELF文件
   if(ehdr.e_ident[0] != 0x7f || ehdr.e_ident[1] != 'E' || ehdr.e_ident[2] != 'L' || ehdr.e_ident[3] != 'F')
   {
-    Log("Input is not a elf, error!");
+    Log_red("Load a non-ELF file, error!");
     return 0;
   }
 
+  //判断ELF文件是32位还是64位(肯定是64位)
   if(ehdr.e_ident[4] != MUXDEF(CONFIG_ISA64, ELFCLASS64, ELFCLASS32))
   {
-    Log("Elf refers to not suppored ISA, elf is ignored");
+    Log_red("Elf refers to not suppored ISA, elf is ignored");
     return 0;
   }
 
+  //第6个字节指明了数据的编码方式
+  //little endian：将低序字节存储在起始地址（低位编址）
   if(ehdr.e_ident[5] != ELFDATA2LSB)
   {
-    Log("Not supported edian, elf is ignored");
+    Log_red("Not supported little edian, elf is ignored");
     return 0;
   }
 
-  if(!ehdr.e_shoff) 
+  //ehdr.e_shoff表示section header table在文件中的 offset，如果这个 table 不存在，则值为0。
+  if(ehdr.e_shoff == 0) 
   {
-    Log("No Sections. Elf is ignored.");
+    Log_red("No Sections header table. Elf is ignored.");
     return 0;
   }
 
+  //ehdr.e_shnum表示section header table中header的数目
+  //如果文件没有section header table, e_shnum的值为0。
+  //e_shentsize乘以e_shnum，就得到了整个section header table的大小。
   if(!ehdr.e_shnum) 
   {
-    Log("Too many sections. Elf is ignored.");
+    Log_red("Too many sections. Elf is ignored.");
     return 0;
   }
 
@@ -129,38 +240,46 @@ static void load_elf()
     return;
   
   Log_magenta("进入load_elf");
-  FILE * fp = fopen(elf_file, "rb");//rb :读方式打开一个二进制文件，不允许写数据，文件必须存在
+
+  //打开文件
+  FILE * fp = fopen(elf_file, "rb");//rb:读方式打开一个二进制文件，不允许写数据，文件必须存在
   if(fp == NULL)
     {
       Log_red("Can not open '%s' ,treated as no elf file.",elf_file);
       return;
     }
 
-  if(!check_elf(fp))
+  if(!check_elf(fp))  //初步检查elf文件是否有问题
     return;
-  Ehdr ehdr;
-  fseek(fp, 0, SEEK_SET);
-  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);
-  assert(ret == 1);
 
-  Shdr shdr;
+  Ehdr ehdr;//定义ELF文件头(描述整个文件的组织结构)
+  fseek(fp, 0, SEEK_SET);/*回到文件的开头*/
+  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
+  assert(ret == 1);//如果ret !=1,则终止程序
+
+  Shdr shdr;//定义ELF文件节头(section header)
   tot_func_num = 0;
   int name_len = 0;
 
+  //遍历
   for(int i = 0; i < ehdr.e_shnum; i++)
   {
-    fseek(fp, (ehdr.e_shoff + i * ehdr.e_shentsize), SEEK_SET);
-    ret = fread(&shdr, sizeof(Shdr), 1, fp);
+    fseek(fp, (ehdr.e_shoff + i * ehdr.e_shentsize), SEEK_SET);//每次都重新定位指针位置
+    ret = fread(&shdr, sizeof(Shdr), 1, fp);//根据指针所指地址读取数据放入shdr中
     assert(ret == 1);
 
-    if(shdr.sh_type == SHT_STRTAB)
+    //sh_type, 4字节, 描述了section的类型 
+
+    if(shdr.sh_type == SHT_STRTAB)  
     {
+      //该类型包含一个字符串表
       fseek(fp, shdr.sh_offset, SEEK_SET);
-      name_len = fread(name_all, 1, name_all_len, fp);
+      name_len = fread(name_all, 1, name_all_len, fp);//将字符串表内容存储在name_all数组
     }
 
     if(shdr.sh_type == SHT_SYMTAB)
     {
+      //包含了一个符号表。当前，一个ELF文件中只有一个符号表。
       Sym sym;
       for(int j = 0; j < shdr.sh_size; j += shdr.sh_entsize)
       {
@@ -245,6 +364,9 @@ void init_monitor(int argc, char *argv[]) {
   load_elf(elf_file);
   #endif
   
+ #ifdef CONFIG_FTRACE
+  parse_elf(elf_file);
+#endif 
   /* Initialize memory. */
   init_mem();
 
