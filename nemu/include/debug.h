@@ -25,7 +25,7 @@
         __FILE__, __LINE__, __func__, ## __VA_ARGS__)
 
 #define Log_red(format, ...) \
-    _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_BG_WHITE) "\n", \
+    _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_MAGENTA) "\n", \
         __FILE__, __LINE__, __func__, ## __VA_ARGS__)
 
 #define Assert(cond, format, ...) \
