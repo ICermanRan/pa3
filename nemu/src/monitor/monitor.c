@@ -128,11 +128,11 @@ static void load_elf()
   if(!elf_file)
     return;
   
-  Log_red("进入load_elf");
+  Log_magenta("进入load_elf");
   FILE * fp = fopen(elf_file, "rb");//rb :读方式打开一个二进制文件，不允许写数据，文件必须存在
   if(fp == NULL)
     {
-      Log_red("Can not open '%s' ,treated as no elf file.",elf_file);
+      Log("Can not open '%s' ,treated as no elf file.",elf_file);
       return;
     }
 
@@ -183,7 +183,7 @@ static void load_elf()
   }
 
   fclose(fp);
-  Log_red("ELF_file = %s loading ready!", elf_file);
+  Log_magenta("ELF_file = %s loading ready!", elf_file);
 
 } 
 #endif
