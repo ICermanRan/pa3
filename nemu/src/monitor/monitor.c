@@ -75,12 +75,125 @@ static long load_img() {
   return size;
 }
 
+#ifdef CONFIG_FTRACE
+static char * elf_file = NULL;
+int tot_func_num=-1;
+function_unit funcs[FUNC_NUM];
+static char name_all[2048];
+#define name_all_len (sizeof(name_all))
+
+static bool check_elf(FILE * fp)
+{
+  fseek(fp, 0, SEEK_SET);
+  Ehdr ehdr;
+  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);
+  assert(ret == 1);
+
+  if(ehdr.e_ident[0] != 0x7f || ehdr.e_ident[1] != 'E' || ehdr.e_ident[2] != 'L' || ehdr.e_ident[3] != 'F')
+  {
+    Log("Input is not a elf, error!");
+    return 0;
+  }
+
+  if(ehdr.e_ident[4] != MUXDEF(CONFIG_ISA64, ELFCLASS64, ELFCLASS32))
+  {
+    Log("Elf refers to not suppored ISA, elf is ignored");
+    return 0;
+  }
+
+  if(ehdr.e_ident[5] != ELFDATA2LSB)
+  {
+    Log("Not supported edian, elf is ignored");
+    return 0;
+  }
+
+  if(!ehdr.e_shoff) 
+  {
+    Log("No Sections. Elf is ignored.");
+    return 0;
+  }
+
+  if(!ehdr.e_shnum) 
+  {
+    Log("Too many sections. Elf is ignored.");
+    return 0;
+  }
+
+  return 1;
+}
+
+
+static void load_elf()
+{
+  if(!elf_file)
+    return;
+  
+  FILE * fp = fopen(elf_file, "rb");//rb :读方式打开一个二进制文件，不允许写数据，文件必须存在
+  if(fp == NULL)
+    {
+      Log("Can not open '%s' ,treated as no elf file.",elf_file);
+      return;
+    }
+
+  if(!check_elf(fp))
+    return;
+  Ehdr ehdr;
+  fseek(fp, 0, SEEK_SET);
+  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);
+  assert(ret == 1);
+
+  Shdr shdr;
+  tot_func_num = 0;
+  int name_len = 0;
+
+  for(int i = 0; i < ehdr.e_shnum; i++)
+  {
+    fseek(fp, (ehdr.e_shoff + i * ehdr.e_shentsize), SEEK_SET);
+    ret = fread(&shdr, sizeof(Shdr), 1, fp);
+    assert(ret == 1);
+
+    if(shdr.sh_type == SHT_STRTAB)
+    {
+      fseek(fp, shdr.sh_offset, SEEK_SET);
+      name_len = fread(name_all, 1, name_all_len, fp);
+    }
+
+    if(shdr.sh_type == SHT_SYMTAB)
+    {
+      Sym sym;
+      for(int j = 0; j < shdr.sh_size; j += shdr.sh_entsize)
+      {
+        fseek(fp, shdr.sh_offset + j, SEEK_SET);
+        ret = fread(&sym, sizeof(Sym), 1, fp);
+        assert(ret == 1);
+
+        if(sym.st_info == STT_FUNC)
+        {
+          if( (sym.st_name > name_len) || (tot_func_num == FUNC_NUM) ) 
+            continue;
+
+          funcs[tot_func_num].name = sym.st_name + name_all;
+          funcs[tot_func_num].st = sym.st_value;
+          funcs[tot_func_num].ed = sym.st_value + sym.st_size;
+          ++tot_func_num;
+        }
+      }
+    }
+  }
+
+  fclose(fp);
+  Log("ELF_file = %s loading ready!", elf_file);
+
+} 
+#endif
+
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
     {"log"      , required_argument, NULL, 'l'},
     {"diff"     , required_argument, NULL, 'd'},
     {"port"     , required_argument, NULL, 'p'},
+    {"elf"      , required_argument, NULL, 'e'},
     {"help"     , no_argument      , NULL, 'h'},
     {0          , 0                , NULL,  0 },
   };
@@ -91,6 +204,14 @@ static int parse_args(int argc, char *argv[]) {
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      case 'e':
+               #ifdef CONFIG_FTRACE
+               elf_file = optarg; 
+               #else
+               printf("System do not support function trace unless it is enabled.\n");
+               #endif
+              break;
+
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
@@ -117,6 +238,10 @@ void init_monitor(int argc, char *argv[]) {
   /* Open the log file. */
   init_log(log_file);
 
+  /* Open the elf file  */
+  IFDEF(CONFIG_FTRACE, load_elf(elf_file));
+
+  
   /* Initialize memory. */
   init_mem();
 
