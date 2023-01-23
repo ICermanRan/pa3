@@ -76,8 +76,8 @@ static long load_img() {
 }
 
 #ifdef CONFIG_FTRACE
-// static char * elf_file = NULL;
-static char * elf_file = "/home/ran/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/recursion-riscv64-nemu.elf";
+static char * elf_file = NULL;
+// static char * elf_file = "/home/ran/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/recursion-riscv64-nemu.elf";
 int tot_func_num=-1;
 function_unit funcs[FUNC_NUM];
 static char name_all[2048];
@@ -241,8 +241,9 @@ void init_monitor(int argc, char *argv[]) {
   init_log(log_file);
 
   /* Open the elf file  */
-  IFDEF(CONFIG_FTRACE, load_elf(elf_file));
-
+  #ifdef CONFIG_FTRACE
+  load_elf(elf_file);
+  #endif
   
   /* Initialize memory. */
   init_mem();
