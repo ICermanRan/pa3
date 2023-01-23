@@ -76,7 +76,8 @@ static long load_img() {
 }
 
 #ifdef CONFIG_FTRACE
-static char * elf_file = NULL;
+// static char * elf_file = NULL;
+static char * elf_file = "/home/ran/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/recursion-riscv64-nemu.elf";
 int tot_func_num=-1;
 function_unit funcs[FUNC_NUM];
 static char name_all[2048];
