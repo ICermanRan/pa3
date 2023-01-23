@@ -63,4 +63,6 @@ typedef MUXDEF(CONFIG_ISA64, Elf64_Ehdr, Elf32_Ehdr) Ehdr;
 typedef MUXDEF(CONFIG_ISA64, Elf64_Shdr, Elf32_Shdr) Shdr; 
 typedef MUXDEF(CONFIG_ISA64, Elf64_Sym, Elf32_Sym) Sym;
 #endif
+
+
 #endif
