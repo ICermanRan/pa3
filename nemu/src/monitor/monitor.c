@@ -180,7 +180,8 @@ static void load_elf()
   int name_len = 0;
 
   //遍历
-  printf("开始遍历，ehdr.e_shnum = %d\n", ehdr.e_shnum);
+  printf("开始遍历，ehdr.e_shnum = %dd\n", ehdr.e_shnum);
+  printf("ehdr.e_shoff = %ld, ehdr.e_shentsize = %d\n", ehdr.e_shoff, ehdr.e_shentsize);
   for(int i = 0; i < ehdr.e_shnum; i++)
   {
     //e_shoff 字段表示节头表在文件中的偏移
