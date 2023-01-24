@@ -180,10 +180,10 @@ static void load_elf()
   int name_len = 0;
 
   //遍历
+  printf("开始遍历，ehdr.e_shnum = %d\n", ehdr.e_shnum);
   for(int i = 0; i < ehdr.e_shnum; i++)
   {
     //e_shoff 字段表示节头表在文件中的偏移
-    printf("开始遍历，ehdr.e_shnum = %d\n", ehdr.e_shnum);
     fseek(fp, (ehdr.e_shoff + i * ehdr.e_shentsize), SEEK_SET);//每次都重新定位指针位置
     ret = fread(&shdr, sizeof(Shdr), 1, fp);//根据指针所指地址读取数据放入shdr中
     assert(ret == 1);
