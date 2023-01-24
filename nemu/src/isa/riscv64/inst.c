@@ -179,11 +179,18 @@ static int decode_exec(Decode *s) {
   #ifdef CONFIG_FTRACE
   if(tot_func_num > 0 && (BITS(s->isa.inst.val,6,0)==0b1100111 || BITS(s->isa.inst.val,6,0)==0b1101111))
   {
-    for(int i=0;i<tot_func_num;++i) if(s->dnpc>=funcs[i].st&&s->dnpc<funcs[i].ed){
-      for(int i=0;i<now;++i) putchar(' ');
-      if(s->isa.inst.val==0xA067) printf("ftrace: Ret[%s]\n",funcs[i].name),now-=4;
-      else printf("ftrace: call[%s]\n",funcs[i].name),now+=4;
-      break;
+    for(int i = 0;i < tot_func_num; i++) 
+    {
+      if(s->dnpc >= funcs[i].st && s->dnpc < funcs[i].ed)
+      {
+        for(int i=0; i < now; i++) 
+          putchar(' ');
+        if(s->isa.inst.val==0xA067) 
+          printf("ftrace: Ret[%s]\n",funcs[i].name),now-=4;
+        else 
+          printf("ftrace: call[%s]\n",funcs[i].name),now+=4;
+        break;
+      }
     }
   }
   #endif

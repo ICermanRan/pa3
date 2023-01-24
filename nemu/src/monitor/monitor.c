@@ -194,6 +194,7 @@ static void load_elf()
       //该类型包含一个字符串表
       fseek(fp, shdr.sh_offset, SEEK_SET);
       name_len = fread(name_all, 1, name_all_len, fp);//将字符串表内容存储在name_all数组
+      printf("name_len = %d\n", name_len);
     }
 
     if(shdr.sh_type == SHT_SYMTAB)
@@ -209,7 +210,7 @@ static void load_elf()
         if(sym.st_info == STT_FUNC)
         {
           if( (sym.st_name > name_len) || (tot_func_num == FUNC_NUM) ) 
-            continue;
+            continue;//结束本次循环
 
           funcs[tot_func_num].name = sym.st_name + name_all;
           funcs[tot_func_num].st = sym.st_value;
