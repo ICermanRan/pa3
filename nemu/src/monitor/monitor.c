@@ -190,7 +190,7 @@ static void load_elf()
     assert(ret == 1);
 
     //sh_type, 4字节, 描述了section的类型 
-
+    printf(" i = %d, shdr.sh_type = %d\n", i, shdr.sh_type);
     if(shdr.sh_type == SHT_STRTAB)  
     {
       //该类型包含一个字符串表
