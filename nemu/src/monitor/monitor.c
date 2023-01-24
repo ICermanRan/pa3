@@ -201,6 +201,7 @@ static void load_elf()
 
     if(shdr.sh_type == SHT_SYMTAB)
     {
+      printf("section类型为符号表\n");
       //该类型包含了一个符号表。当前，一个ELF文件中只有一个符号表。
       Sym sym;//定义符号表变量
       for(int j = 0; j < shdr.sh_size; j += shdr.sh_entsize)
@@ -209,6 +210,7 @@ static void load_elf()
         ret = fread(&sym, sizeof(Sym), 1, fp);
         assert(ret == 1);
 
+        printf(" j = %d, sym.st_info = %d\n", j, sym.st_info);
         if(sym.st_info == STT_FUNC)
         {
           if( (sym.st_name > name_len) || (tot_func_num == FUNC_NUM) ) 
