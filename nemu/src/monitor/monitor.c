@@ -216,6 +216,7 @@ static void load_elf()
           funcs[tot_func_num].st = sym.st_value;
           funcs[tot_func_num].ed = sym.st_value + sym.st_size;
           ++tot_func_num;
+          printf("tot_func_num = %d\n", tot_func_num);
         }
       }
     }
