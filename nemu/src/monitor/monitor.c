@@ -77,7 +77,7 @@ static long load_img() {
 }
 
 // #ifdef CONFIG_FTRACE
- static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
+//  static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
 // int tot_func_num=-1;
 // function_unit funcs[FUNC_NUM];
 // static char name_all[2048];
@@ -233,6 +233,13 @@ static long load_img() {
 // } 
 // #endif
 
+typedef struct{
+  char* name;
+  uint64_t addr_start;
+  uint64_t addr_end;
+}func_info;
+extern func_info* decode_elf(char* elf_file_name);
+
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
@@ -251,12 +258,32 @@ static int parse_args(int argc, char *argv[]) {
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
       case 'e':
-               #ifdef CONFIG_FTRACE
-               elf_file = optarg; 
-               #else
-               printf("System do not support function trace unless it is enabled.\n");
-               #endif
-              break;
+              //  #ifdef CONFIG_FTRACE
+              //  elf_file = optarg; 
+              //  #else
+              //  printf("System do not support function trace unless it is enabled.\n");
+              //  #endif
+              // break;
+              img_file = optarg;
+              #ifdef CONFIG_FTRACE
+                // load elf file name to elf_file (define in cpu-exec.c)
+                char* elf_file;
+                int img_name_size = strlen(img_file);
+                elf_file =(char*)malloc(img_name_size + 1);
+                strcpy(elf_file, img_file);
+                elf_file[img_name_size-3] = 'e';
+                elf_file[img_name_size-2] = 'l';
+                elf_file[img_name_size-1] = 'f';
+                // decode elf
+                extern func_info* fc;
+                fc = decode_elf(elf_file);
+                free(elf_file);
+                // open ftrace log file
+                extern char* ftrace_log;
+                extern FILE* ftrace_fp;
+                ftrace_fp = fopen(ftrace_log, "w");
+              #endif
+                return 0;
 
       case 1: img_file = optarg; return 0;
       default:

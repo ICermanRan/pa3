@@ -195,7 +195,19 @@ static int decode_exec(Decode *s) {
   // }
   // #endif
 
-
+// int is_call(uint64_t pc, uint32_t inst)
+// {    // return index of fc
+//   uint64_t imm = immJ(inst);
+//   uint64_t jump_pc = imm + pc;
+//   if((inst & 0xfff) == 0x0ef){
+//     int i;
+//     for(i = 0; i < func_num; i++){
+//       if(fc[i].addr_start == jump_pc) break;
+//     }
+//     if(i < func_num) return i;
+//   }
+//   return -1;
+// }
 
 
   R(0) = 0; // reset $zero to 0
