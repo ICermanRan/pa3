@@ -25,9 +25,9 @@
 static int unsigned_compare(uint64_t num1, uint64_t num2);
 static int signed_compare(sword_t num1, sword_t num2);
 
-// #ifdef CONFIG_FTRACE
-// static int now=0;
-// #endif
+#ifdef CONFIG_FTRACE
+static int now=0;
+#endif
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
@@ -194,6 +194,17 @@ static int decode_exec(Decode *s) {
   //   }
   // }
   // #endif
+  #ifdef CONFIG_FTRACE
+    if(tot_func_num > 0)
+    {
+      for(int i = 0;i < tot_func_num; i++)
+      {
+        printf("ftrace: Ret[%s]\n",funcs[i].name),now-=4;
+        printf("ftrace: call[%s]\n",funcs[i].name),now+=4;
+      }
+
+    }
+  #endif
 
 // int is_call(uint64_t pc, uint32_t inst)
 // {    // return index of fc
