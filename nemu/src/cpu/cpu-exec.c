@@ -273,13 +273,13 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 void ftrace(uint64_t pc, uint32_t inst){
   if(inst == 0x00008067){
     // assert(ftrace_fp);
-    printf("%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
+    printf("%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times,  find_func_name(cpu.gpr[1]));
     call_times--;
   }
   int fc_index = is_call(pc, inst);
   if(fc_index != -1){
     call_times++;
-    fprintf("%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+    printf("%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times,  fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
   }
 }
 #endif
