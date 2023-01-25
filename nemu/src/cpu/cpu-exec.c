@@ -225,23 +225,23 @@ function_info * decode_elf(char* elf_file)
       func_number++;
   }
   //记录FUNC
-  function_info* fc;
-  fc = (function_info*)malloc(sizeof(function_info) * func_number);
+  function_info* fc_decode;
+  fc_decode = (function_info*)malloc(sizeof(function_info) * func_number);
   for(int i = 0, j = 0; i < symtab_num; i++)
   {
     if(sym[i].st_info == STT_FUNC)
     {
-      fc[j].addr_start = sym[i].st_value;
-      fc[j].addr_end = sym[i].st_value + sym[i].st_size;
+      fc_decode[j].addr_start = sym[i].st_value;
+      fc_decode[j].addr_end = sym[i].st_value + sym[i].st_size;
       char * str = elf + shdr_str.sh_offset + sym[i].st_name;
       char * name = (char*)malloc(strlen(str) + 1); //'0'
       strcpy(name, str);
-      fc[j].name = name;
+      fc_decode[j].name = name;
       j++;
     }
   }
   Log_magenta("ELF_file = %s decoding ready!\n", elf_file);
-  return fc;
+  return fc_decode;
 
  
 } 
