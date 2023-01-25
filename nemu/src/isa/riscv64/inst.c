@@ -25,9 +25,6 @@
 static int unsigned_compare(uint64_t num1, uint64_t num2);
 static int signed_compare(sword_t num1, sword_t num2);
 
-#ifdef CONFIG_FTRACE
-static int now=0;
-#endif
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
