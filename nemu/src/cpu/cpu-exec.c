@@ -221,7 +221,8 @@ function_info * decode_elf(char* elf_file)
   //计算有多少个FUNC
   for(int i = 0; i < symtab_num; i++)
   {
-    if(sym[i].st_info == STT_FUNC)
+    // if(sym[i].st_info == STT_FUNC)
+    if(sym[i].st_info == 18)
       func_number++;
   }
   //记录FUNC
@@ -229,7 +230,8 @@ function_info * decode_elf(char* elf_file)
   fc_decode = (function_info*)malloc(sizeof(function_info) * func_number);
   for(int i = 0, j = 0; i < symtab_num; i++)
   {
-    if(sym[i].st_info == STT_FUNC)
+    // if(sym[i].st_info == STT_FUNC)
+    if(sym[i].st_info == 18)
     {
       fc_decode[j].addr_start = sym[i].st_value;
       fc_decode[j].addr_end = sym[i].st_value + sym[i].st_size;
