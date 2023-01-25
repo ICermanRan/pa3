@@ -161,9 +161,9 @@ static bool check_elf(FILE * fp)
 
 static void load_elf()
 {
-  // if(!elf_file)
-  //   return;
-  assert(elf_file != NULL);
+  if(!elf_file)
+    return;
+  
   Log_magenta("进入load_elf");
 
   //打开文件
