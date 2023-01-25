@@ -109,9 +109,13 @@ static int parse_args(int argc, char *argv[]) {
                static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
                elf_file = optarg; 
                // decode elf
-               decode_elf(elf_file);
-               #else
-               printf("System do not support function trace unless it is enabled.\n");
+               extern function_info* fc;
+               fc = decode_elf(elf_file);
+               free(elf_file);
+               // open ftrace log file
+               extern char* ftrace_log;
+               extern FILE* ftrace_fp;
+                ftrace_fp = fopen(ftrace_log, "w");
                #endif
                break;
 

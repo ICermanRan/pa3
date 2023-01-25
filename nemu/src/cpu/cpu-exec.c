@@ -79,7 +79,8 @@ typedef struct{
 function_info *fc = NULL;
 int func_number = 0;
 int call_times = 0;
-
+char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
+FILE* ftrace_fp; 
 
 static bool check_elf(FILE * fp)
 {
@@ -173,7 +174,9 @@ function_info * decode_elf(char* elf_file)
   //copy elf file to char *
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
-  fread(&elf, 1, elf_size, fp);//将整个elf文件内容复制到char elf
+  int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
+  assert(ret == 1);
+  
   fclose(fp);
 
   // read elf header table(读ELF头)
@@ -272,14 +275,14 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 
 void ftrace(uint64_t pc, uint32_t inst){
   if(inst == 0x00008067){
-    // assert(ftrace_fp);
-    printf("%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times,  find_func_name(cpu.gpr[1]));
+     assert(ftrace_fp);
+    fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
     call_times--;
   }
   int fc_index = is_call(pc, inst);
   if(fc_index != -1){
     call_times++;
-    printf("%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times,  fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+    fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
   }
 }
 #endif
