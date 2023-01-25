@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#include <elf.h>
 
 void init_rand();
 void init_log(const char *log_file);
@@ -77,177 +78,14 @@ static long load_img() {
 }
 
 
-/****************************************************************/
-/************************ ftrace ******************************/
-#include <stdio.h>
-#include <elf.h>
-#include <assert.h>
-
-#ifdef CONFIG_FTRACE
-int tot_func_num = -1;
-function_info funcs[FUNC_NUM];
-static char name_all[2048];
-#define name_all_len (sizeof(name_all))
+typedef struct{
+  char* name;
+  uint64_t addr_start;
+  uint64_t addr_end;
+}function_info;
+extern function_info* decode_elf(char* elf_file_name);
 
 
-
-static bool check_elf(FILE * fp)
-{
-
-  //int fseek(FILE *stream, long int offset, int whence)
-  //函数设置流stream的文件位置为给定的偏移 offset，参数 offset 意味着从给定的 whence 位置偏移的字节数
-  //SEEK_SET	0	/* Seek from beginning of file.  */
-  //SEEK_CUR	1	/* Seek from current position.  */
-  //SEEK_END	2 /* Seek from end of file.  */
-  
-  fseek(fp, 0, SEEK_SET);/* 查找文件的开头 */
-  Ehdr ehdr;//定义ELF文件头(描述整个文件的组织结构)
-  
-  //size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
-  //函数从给定流 stream 读取数据到 ptr 所指向的数组中。
-  /*
-    ptr -- 这是指向带有最小尺寸 size*nmemb 字节的内存块的指针。
-    size -- 这是要读取的每个元素的大小，以字节为单位。
-    nmemb -- 这是元素的个数，每个元素的大小为 size 字节。
-    stream -- 这是指向 FILE 对象的指针，该 FILE 对象指定了一个输入流。
-  */
-  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
-  assert(ret == 1);//如果ret !=1,则终止程序
-  
-  //判断elf文件类型
-  //e_ident前4个字节是ELF的Magic Number 
-  //e_ident 字段前四位为文件标识，一般为“\x7fELF”，通过这四位，可以查看该文件是否为ELF文件
-  if(ehdr.e_ident[0] != 0x7f || ehdr.e_ident[1] != 'E' || ehdr.e_ident[2] != 'L' || ehdr.e_ident[3] != 'F')
-  {
-    Log_red("Load a non-ELF file, error!");
-    return 0;
-  }
-
-  //判断ELF文件是32位还是64位(肯定是64位)
-  if(ehdr.e_ident[4] != MUXDEF(CONFIG_ISA64, ELFCLASS64, ELFCLASS32))
-  {
-    Log_red("Elf refers to not suppored ISA, elf is ignored");
-    return 0;
-  }
-
-  //第6个字节指明了数据的编码方式
-  //little endian：将低序字节存储在起始地址（低位编址）
-  if(ehdr.e_ident[5] != ELFDATA2LSB)
-  {
-    Log_red("Not supported little edian, elf is ignored");
-    return 0;
-  }
-
-  //ehdr.e_shoff表示section header table在文件中的 offset，如果这个 table 不存在，则值为0。
-  //根据这个变量能找到节头表
-  if(ehdr.e_shoff == 0) 
-  {
-    Log_red("No Sections header table. Elf is ignored.");
-    return 0;
-  }
-
-  //ehdr.e_shnum表示节头表中header的数目
-  //如果文件没有节头表, e_shnum的值为0。
-  //e_shentsize乘以e_shnum，就得到了整个section header table的大小。
-  if(!ehdr.e_shnum) 
-  {
-    Log_red("Too many sections. Elf is ignored.");
-    return 0;
-  }
-
-  return 1;
-}
-
-
-static void decode_elf(char* elf_file)
-{
-  assert(elf_file != NULL);
-  
-  Log_magenta("进入load_elf");
-
-  //打开文件
-  FILE * fp;
-  fp = fopen(elf_file, "rb");//rb:读方式打开一个二进制文件，不允许写数据，文件必须存在
-  if(fp == NULL)
-    {
-      Log_red("Can not open '%s' ,treated as no elf file.",elf_file);
-      return;
-    }
-
-  if(!check_elf(fp))  //初步检查是否是elf文件
-    return;
-
-  // read elf header table(读ELF头)
-  Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
-  fseek(fp, 0, SEEK_SET);/*回到文件的开头*/
-  int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
-  assert(ret == 1);//如果ret !=1,则终止程序
-
-  // read section header table(读节头表)
-  Shdr shdr;//定义ELF文件节头(section header)
-  tot_func_num = 0;
-  int name_len = 0;
-
-  // find the offset of strtab and symtab(解析节头表，找到符号表和字符串表)
-  printf("开始遍历，ehdr.e_shnum = %d\n", ehdr.e_shnum);
-  printf("ehdr.e_shoff = %ld, ehdr.e_shentsize = %d\n", ehdr.e_shoff, ehdr.e_shentsize);
-  for(int i = 0; i < ehdr.e_shnum; i++)
-  {
-    //e_shoff 字段表示节头表在文件中的偏移
-    fseek(fp, (ehdr.e_shoff + i * ehdr.e_shentsize), SEEK_SET);//每次都重新定位指针位置
-    ret = fread(&shdr, sizeof(Shdr), 1, fp);//根据指针所指地址读取数据放入shdr中
-    assert(ret == 1);
-
-    //sh_type, 4字节, 描述了section的类型 
-    printf(" i = %d, shdr.sh_type = %d\n", i, shdr.sh_type);
-    if(shdr.sh_type == SHT_STRTAB)  
-    {
-      //该类型包含一个字符串表
-      fseek(fp, shdr.sh_offset, SEEK_SET);
-      name_len = fread(name_all, 1, name_all_len, fp);//将字符串表内容存储在name_all数组
-      printf("name_len = %d\n", name_len);
-    }
-
-    if(shdr.sh_type == SHT_SYMTAB)
-    {
-      printf("section类型为符号表\n");
-      printf("shdr.sh_size = %ld\n", shdr.sh_size);
-      //该类型包含了一个符号表。当前，一个ELF文件中只有一个符号表。
-      Sym sym;//定义符号表变量
-      for(int j = 0; j < shdr.sh_size; j += shdr.sh_entsize)
-      {
-        fseek(fp, shdr.sh_offset + j, SEEK_SET);
-        ret = fread(&sym, sizeof(Sym), 1, fp);
-        assert(ret == 1);
-
-        printf(" j = %d, sym.st_info = %d\n", j, sym.st_info);
-        if(sym.st_info == STT_FUNC)
-        {
-          if( (sym.st_name > name_len) || (tot_func_num == FUNC_NUM) ) 
-            continue;//结束本次循环
-
-          funcs[tot_func_num].name = sym.st_name + name_all;
-          funcs[tot_func_num].addr_start = sym.st_value;
-          funcs[tot_func_num].addr_end = sym.st_value + sym.st_size;
-          tot_func_num++;
-          printf("tot_func_num = %d\n", tot_func_num);
-        }
-      }
-    }
-  }
-
-  fclose(fp);
-  Log_magenta("ELF_file = %s loading ready!", elf_file);
-
-} 
-#endif
-
-// typedef struct{
-//   char* name;
-//   uint64_t addr_start;
-//   uint64_t addr_end;
-// }func_info;
-// extern func_info* decode_elf(char* elf_file_name);
 
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
@@ -272,31 +110,10 @@ static int parse_args(int argc, char *argv[]) {
                elf_file = optarg; 
                // decode elf
                decode_elf(elf_file);
-  
                #else
                printf("System do not support function trace unless it is enabled.\n");
                #endif
                break;
-              // img_file = optarg;
-              // #ifdef CONFIG_FTRACE
-              //   // load elf file name to elf_file (define in cpu-exec.c)
-              //   char* elf_file;
-              //   int img_name_size = strlen(img_file);
-              //   elf_file =(char*)malloc(img_name_size + 1);
-              //   strcpy(elf_file, img_file);
-              //   elf_file[img_name_size-3] = 'e';
-              //   elf_file[img_name_size-2] = 'l';
-              //   elf_file[img_name_size-1] = 'f';
-              //   // decode elf
-              //   extern func_info* fc;
-              //   fc = decode_elf(elf_file);
-              //   free(elf_file);
-              //   // open ftrace log file
-              //   extern char* ftrace_log;
-              //   extern FILE* ftrace_fp;
-              //   ftrace_fp = fopen(ftrace_log, "w");
-              // #endif
-              //   return 0;
 
       case 1: img_file = optarg; return 0;
       default:

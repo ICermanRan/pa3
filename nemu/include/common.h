@@ -51,15 +51,6 @@ typedef uint16_t ioaddr_t;
 #ifdef CONFIG_FTRACE
 #include <elf.h>
 
-typedef struct{
-  char* name;
-  uint64_t addr_start;
-  uint64_t addr_end;
-}function_info;
-#define FUNC_NUM (128)
-extern function_info funcs[FUNC_NUM];
-
-extern int tot_func_num;
 typedef MUXDEF(CONFIG_ISA64, Elf64_Ehdr, Elf32_Ehdr) Ehdr;
 typedef MUXDEF(CONFIG_ISA64, Elf64_Shdr, Elf32_Shdr) Shdr; 
 typedef MUXDEF(CONFIG_ISA64, Elf64_Sym, Elf32_Sym) Sym;
