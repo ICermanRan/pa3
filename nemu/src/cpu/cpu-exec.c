@@ -90,7 +90,7 @@ int func_num = 0;
 func_info *fc;
 int call_times = 0;
 // ftrace
-char* ftrace_log = "/home/zgs/project/ysyx-workbench/nemu/build/ftrace-log.txt";
+char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
 FILE* ftrace_fp;
 func_info* decode_elf(char* elf_file_name)
 {
