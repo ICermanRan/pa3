@@ -177,7 +177,7 @@ function_info * decode_elf(char* elf_file)
 
   // read elf header table(读ELF头)
   Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
-  // memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
+  memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
       // fseek(fp, 0, SEEK_SET);/*回到文件的开头*/
       // int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
       // assert(ret == 1);//如果ret !=1,则终止程序
