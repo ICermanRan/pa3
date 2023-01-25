@@ -127,7 +127,6 @@ static int parse_args(int argc, char *argv[]) {
                extern FILE* ftrace_fp;
                ftrace_fp = fopen(ftrace_log, "w");
                #endif
-              //  return 0;
                break;
 
       case 1: img_file = optarg; return 0;

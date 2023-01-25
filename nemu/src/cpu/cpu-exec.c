@@ -104,7 +104,7 @@ func_info* decode_elf(char* elf_file_name)
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);
   int ret = fread(&elf, elf_size, 1, fp);
-  printf("ret = %d\n", ret);
+  // printf("ret = %d\n", ret);
   assert(ret == 1);
   fclose(fp);
   // read elf header table
@@ -341,7 +341,7 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 }
 
 void ftrace(uint64_t pc, uint32_t inst){
-  printf("进入ftrace\n");
+  // printf("进入ftrace\n");
   if(inst == 0x00008067){
     assert(ftrace_fp);
     // fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
