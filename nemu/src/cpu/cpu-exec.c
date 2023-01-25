@@ -273,6 +273,7 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 }
 
 void ftrace(uint64_t pc, uint32_t inst){
+  printf("进入ftrace\n");
   if(inst == 0x00008067)  //对应反汇编中指令ret(实际被扩展为jalr)，是每个函数的结尾
   {
      assert(ftrace_fp);
