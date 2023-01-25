@@ -313,9 +313,9 @@ void init_monitor(int argc, char *argv[]) {
   init_log(log_file);
 
   /* Open the elf file  */
-  // #ifdef CONFIG_FTRACE
-  // load_elf(elf_file);
-  // #endif
+  #ifdef CONFIG_FTRACE
+  load_elf(elf_file);
+  #endif
   
   /* Initialize memory. */
   init_mem();
