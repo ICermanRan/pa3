@@ -76,15 +76,22 @@ static long load_img() {
   return size;
 }
 
+
+/****************************************************************/
+/************************ ftrace ******************************/
+#include <stdio.h>
+#include <elf.h>
+#include <assert.h>
+
 #ifdef CONFIG_FTRACE
  static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
 int tot_func_num=-1;
-function_unit funcs[FUNC_NUM];
+function_info funcs[FUNC_NUM];
 static char name_all[2048];
 #define name_all_len (sizeof(name_all))
 
 
-/********************检查head********************/
+
 static bool check_elf(FILE * fp)
 {
 
@@ -154,23 +161,24 @@ static bool check_elf(FILE * fp)
 
 static void load_elf()
 {
-  if(!elf_file)
-    return;
-  
+  // if(!elf_file)
+  //   return;
+  assert(elf_file != NULL);
   Log_magenta("进入load_elf");
 
   //打开文件
-  FILE * fp = fopen(elf_file, "rb");//rb:读方式打开一个二进制文件，不允许写数据，文件必须存在
+  FILE * fp;
+  fp = fopen(elf_file, "rb");//rb:读方式打开一个二进制文件，不允许写数据，文件必须存在
   if(fp == NULL)
     {
       Log_red("Can not open '%s' ,treated as no elf file.",elf_file);
       return;
     }
 
-  if(!check_elf(fp))  //初步检查elf文件是否有问题
+  if(!check_elf(fp))  //初步检查是否是elf文件
     return;
 
-  Ehdr ehdr;//定义ELF文件头(描述整个文件的组织结构)
+  Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   fseek(fp, 0, SEEK_SET);/*回到文件的开头*/
   int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
   assert(ret == 1);//如果ret !=1,则终止程序
@@ -218,9 +226,9 @@ static void load_elf()
             continue;//结束本次循环
 
           funcs[tot_func_num].name = sym.st_name + name_all;
-          funcs[tot_func_num].st = sym.st_value;
-          funcs[tot_func_num].ed = sym.st_value + sym.st_size;
-          ++tot_func_num;
+          funcs[tot_func_num].addr_start = sym.st_value;
+          funcs[tot_func_num].addr_end = sym.st_value + sym.st_size;
+          tot_func_num++;
           printf("tot_func_num = %d\n", tot_func_num);
         }
       }

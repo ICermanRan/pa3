@@ -53,10 +53,11 @@ typedef uint16_t ioaddr_t;
 
 typedef struct{
   char* name;
-  uintptr_t st,ed;
-}function_unit;
+  uint64_t addr_start;
+  uint64_t addr_end;
+}function_info;
 #define FUNC_NUM (128)
-extern function_unit funcs[FUNC_NUM];
+extern function_info funcs[FUNC_NUM];
 
 extern int tot_func_num;
 typedef MUXDEF(CONFIG_ISA64, Elf64_Ehdr, Elf32_Ehdr) Ehdr;
