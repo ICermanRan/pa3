@@ -239,9 +239,10 @@ function_info * decode_elf(char* elf_file)
       j++;
     }
   }
+  Log_magenta("ELF_file = %s decoding ready!\n", elf_file);
   return fc;
 
-  Log_magenta("ELF_file = %s decoding ready!\n", elf_file);
+ 
 } 
 
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
