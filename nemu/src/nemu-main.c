@@ -40,20 +40,20 @@ int main(int argc, char *argv[]) {
   
   /* Start engine. */
   engine_start();
-  // free ftrace
-  #ifdef CONFIG_FTRACE
-  typedef struct{
-    char* name;
-    uint64_t addr_start;
-    uint64_t addr_end;
-  }func_info;
-  extern func_info* fc;
-  extern int func_num;
-  for(int i = 0; i < func_num; i++) free(fc[i].name);
-  free(fc);
-  extern FILE* ftrace_fp;
-  fclose(ftrace_fp);
-  #endif
+  // // free ftrace
+  // #ifdef CONFIG_FTRACE
+  // typedef struct{
+  //   char* name;
+  //   uint64_t addr_start;
+  //   uint64_t addr_end;
+  // }func_info;
+  // extern func_info* fc;
+  // extern int func_num;
+  // for(int i = 0; i < func_num; i++) free(fc[i].name);
+  // free(fc);
+  // extern FILE* ftrace_fp;
+  // fclose(ftrace_fp);
+  // #endif
   /* */
   return is_exit_status_bad();
 }
