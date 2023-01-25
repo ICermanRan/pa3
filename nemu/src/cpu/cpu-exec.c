@@ -345,14 +345,14 @@ void ftrace(uint64_t pc, uint32_t inst){
   if(inst == 0x00008067){
     assert(ftrace_fp);
     // fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
-    fprintf(ftrace_fp,"%x: %*cret  [%s]\n", (uint32_t)pc,  call_times,' ',find_func_name(cpu.gpr[1]));
+    printf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(cpu.gpr[1]));
     call_times--;
   }
   int fc_index = is_call(pc, inst);
   if(fc_index != -1){
     call_times++;
     // fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
-    fprintf(ftrace_fp,"%x: %*ccall [%s@%x]\n", (uint32_t)pc, call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+    printf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
   }
 }
 // int is_call(uint64_t pc, uint32_t inst){    // return index of function_info
