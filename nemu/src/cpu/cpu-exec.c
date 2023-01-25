@@ -340,6 +340,7 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 }
 
 void ftrace(uint64_t pc, uint32_t inst){
+  printf("进入ftrace\n");
   if(inst == 0x00008067){
     assert(ftrace_fp);
     // fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
