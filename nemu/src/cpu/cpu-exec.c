@@ -104,7 +104,7 @@ func_info* decode_elf(char* elf_file_name)
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);
   int ret = fread(&elf, 1, elf_size, fp);
-  assert(ret == 1);
+  assert(ret == 0);
   fclose(fp);
   // read elf header table
   Elf64_Ehdr ehdr;
