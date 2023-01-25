@@ -140,14 +140,15 @@ static bool check_elf(FILE * fp)
   }
 
   //ehdr.e_shoff表示section header table在文件中的 offset，如果这个 table 不存在，则值为0。
+  //根据这个变量能找到节头表
   if(ehdr.e_shoff == 0) 
   {
     Log_red("No Sections header table. Elf is ignored.");
     return 0;
   }
 
-  //ehdr.e_shnum表示section header table中header的数目
-  //如果文件没有section header table, e_shnum的值为0。
+  //ehdr.e_shnum表示节头表中header的数目
+  //如果文件没有节头表, e_shnum的值为0。
   //e_shentsize乘以e_shnum，就得到了整个section header table的大小。
   if(!ehdr.e_shnum) 
   {
