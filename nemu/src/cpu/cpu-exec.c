@@ -154,7 +154,7 @@ function_info * decode_elf(char* elf_file)
 {
   assert(elf_file != NULL);
   
-  Log_magenta("进入load_elf");
+  // Log_magenta("进入load_elf");
 
   //get elf size
   FILE * fp;
@@ -168,6 +168,7 @@ function_info * decode_elf(char* elf_file)
   int elf_size = ftell(fp);//该函数用于得到文件位置指针fp当前位置相对于文件首的偏移字节数
 
   //copy elf file to char *
+  Log_magenta("copy elf file to char");
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
   int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
