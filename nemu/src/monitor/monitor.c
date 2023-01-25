@@ -106,8 +106,13 @@ static int parse_args(int argc, char *argv[]) {
       case 'd': diff_so_file = optarg; break;
       case 'e':
                #ifdef CONFIG_FTRACE
-               static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
-               elf_file = optarg; 
+              //  static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
+              //  elf_file = optarg; 
+
+              img_file = optarg;
+              char* elf_file;
+              int img_name_size = strlen(img_file);
+              elf_file =(char*)malloc(img_name_size + 1);
                // decode elf
                extern function_info* fc;
                fc = decode_elf(elf_file);
