@@ -345,7 +345,7 @@ void ftrace(uint64_t pc, uint32_t inst){
   if(inst == 0x00008067){
     assert(ftrace_fp);
     // fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
-    printf("%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ',find_func_name(cpu.gpr[1]));
+    printf("%x: %*cret  [%s]\n", (uint32_t)pc,  ' ',find_func_name(cpu.gpr[1]));
     call_times--;
   }
   int fc_index = is_call(pc, inst);
