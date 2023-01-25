@@ -105,11 +105,12 @@ static int parse_args(int argc, char *argv[]) {
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
       case 'e':
+               img_file = optarg;
                #ifdef CONFIG_FTRACE
               //  static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
               //  elf_file = optarg; 
 
-              img_file = optarg;
+              
               char* elf_file;
               int img_name_size = strlen(img_file);
               elf_file =(char*)malloc(img_name_size + 1);
@@ -126,7 +127,8 @@ static int parse_args(int argc, char *argv[]) {
                extern FILE* ftrace_fp;
                ftrace_fp = fopen(ftrace_log, "w");
                #endif
-               break;
+               return 0;
+              //  break;
 
       case 1: img_file = optarg; return 0;
       default:

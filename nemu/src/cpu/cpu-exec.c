@@ -71,17 +71,83 @@ void show_iringbuf()
 
 
 #ifdef CONFIG_FTRACE
+// typedef struct{
+//   char* name;
+//   uint64_t addr_start;
+//   uint64_t addr_end;
+// }function_info;
+// function_info *fc;
+// int func_number = 0;
+// int call_times = 0;
+// char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
+// FILE* ftrace_fp; 
 typedef struct{
   char* name;
   uint64_t addr_start;
   uint64_t addr_end;
-}function_info;
-function_info *fc;
-int func_number = 0;
+}func_info;
+int func_num = 0;
+func_info *fc;
 int call_times = 0;
-char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
-FILE* ftrace_fp; 
-
+// ftrace
+char* ftrace_log = "/home/zgs/project/ysyx-workbench/nemu/build/ftrace-log.txt";
+FILE* ftrace_fp;
+func_info* decode_elf(char* elf_file_name)
+{
+  assert(elf_file_name != NULL);
+  FILE *fp;
+  // get elf size
+  fp = fopen(elf_file_name, "r");
+  fseek(fp, 0L, SEEK_END);
+  int elf_size = ftell(fp);
+  // copy elf file to char *
+  char elf[elf_size];
+  fseek(fp, 0, SEEK_SET);
+  fread(&elf, 1, elf_size, fp);
+  fclose(fp);
+  // read elf header table
+  Elf64_Ehdr ehdr;
+  memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
+  // read section header table
+  Elf64_Shdr shdr[ehdr.e_shnum];
+  memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);
+  // find the offset of strtab and symtab
+  Elf64_Shdr shdr_sym;
+  for(int i = 0; i < ehdr.e_shnum; i++) {
+    if(shdr[i].sh_type == SHT_SYMTAB) shdr_sym = shdr[i];
+  }
+  Elf64_Shdr shdr_str;
+  for(int i = 0; i < ehdr.e_shnum; i++) {
+    if(shdr[i].sh_type == SHT_STRTAB) {
+      shdr_str = shdr[i];
+      break;
+    }
+  }
+  // read symtab
+  int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);
+  Elf64_Sym sym[symtab_num];
+  memcpy(&sym, elf + shdr_sym.sh_offset, shdr_sym.sh_size);
+  // find FUNC in symtab, find the name of FUNC and the addr of FUNC
+  // 计算有多少个FUNC
+  for(int i = 0; i < symtab_num; i++) {   
+    if(sym[i].st_info == 18)  func_num++; // is FUNC
+  }
+  // 记录FUNC
+  func_info* fc;
+  fc = (func_info*)malloc(sizeof(func_info) * func_num);
+  for(int i = 0, j = 0; i < symtab_num; i++) {   
+    if(sym[i].st_info == 18){   // is FUNC
+      fc[j].addr_start = sym[i].st_value;
+      fc[j].addr_end = sym[i].st_value + sym[i].st_size; 
+      char* str = elf + shdr_str.sh_offset + sym[i].st_name;
+      char* name = (char*)malloc(strlen(str) + 1);  // '0'
+      strcpy(name, str);
+      fc[j].name = name;
+      j++;
+    }  
+  }
+  return fc;
+}
 // static bool check_elf(FILE * fp)
 // {
 
@@ -150,145 +216,178 @@ FILE* ftrace_fp;
 // }
 
 
-function_info * decode_elf(char* elf_file)
-{
-  assert(elf_file != NULL);
+// function_info * decode_elf(char* elf_file)
+// {
+//   assert(elf_file != NULL);
   
-  // Log_magenta("进入load_elf");
+//   // Log_magenta("进入load_elf");
 
-  //get elf size
-  FILE * fp;
-  fp = fopen(elf_file, "r");//rb:读方式打开一个二进制文件，不允许写数据，文件必须存在
+//   //get elf size
+//   FILE * fp;
+//   fp = fopen(elf_file, "r");//rb:读方式打开一个二进制文件，不允许写数据，文件必须存在
 
 
-  // if(check_elf(fp) == 0)  //初步检查是否是elf文件
-  //   assert(0);
+//   // if(check_elf(fp) == 0)  //初步检查是否是elf文件
+//   //   assert(0);
 
-  fseek(fp, 0, SEEK_END);//fp移动到elf文件末尾
-  int elf_size = ftell(fp);//该函数用于得到文件位置指针fp当前位置相对于文件首的偏移字节数
+//   fseek(fp, 0, SEEK_END);//fp移动到elf文件末尾
+//   int elf_size = ftell(fp);//该函数用于得到文件位置指针fp当前位置相对于文件首的偏移字节数
 
-  //copy elf file to char *
-  printf("copy elf file to char\n");
-  char elf[elf_size];
-  fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
-  int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
-  assert(ret == 1);
+//   //copy elf file to char *
+//   printf("copy elf file to char\n");
+//   char elf[elf_size];
+//   fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
+//   int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
+//   assert(ret == 1);
 
-  fclose(fp);
+//   fclose(fp);
 
-  // read elf header table(读ELF头)
-  Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
-  memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
-      // fseek(fp, 0, SEEK_SET);/*回到文件的开头*/
-      // int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
-      // assert(ret == 1);//如果ret !=1,则终止程序
+//   // read elf header table(读ELF头)
+//   Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
+//   memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
+//       // fseek(fp, 0, SEEK_SET);/*回到文件的开头*/
+//       // int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
+//       // assert(ret == 1);//如果ret !=1,则终止程序
 
-  // read section header table(读节头表)
-  // ehdr.e_shnum表示节头表中共有多少个节
-  Elf64_Shdr shdr[ehdr.e_shnum];//定义ELF文件节头表(section header table)
-  memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);//从elf数组起始+节头表对应偏置，复制所有节大小的内容到shdr
+//   // read section header table(读节头表)
+//   // ehdr.e_shnum表示节头表中共有多少个节
+//   Elf64_Shdr shdr[ehdr.e_shnum];//定义ELF文件节头表(section header table)
+//   memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);//从elf数组起始+节头表对应偏置，复制所有节大小的内容到shdr
   
 
-  // find the offset of strtab and symtab(解析节头表，找到符号表和字符串表)
-  Elf64_Shdr shdr_sym;
-  for(int i = 0; i < ehdr.e_shnum; i++)
-  {
-    if(shdr[i].sh_type == SHT_SYMTAB)
-    {
-      printf("section类型为符号表\n");
-      shdr_sym = shdr[i];
-      break;
-    }
-  }
+//   // find the offset of strtab and symtab(解析节头表，找到符号表和字符串表)
+//   Elf64_Shdr shdr_sym;
+//   for(int i = 0; i < ehdr.e_shnum; i++)
+//   {
+//     if(shdr[i].sh_type == SHT_SYMTAB)
+//     {
+//       printf("section类型为符号表\n");
+//       shdr_sym = shdr[i];
+//       break;
+//     }
+//   }
 
-  Elf64_Shdr shdr_str;
-  for(int i = 0; i < ehdr.e_shnum; i++)
-  {
-    if(shdr[i].sh_type == SHT_STRTAB)
-    {
-      printf("section类型为字符串表\n");
-      shdr_str = shdr[i];
-      break;
-    }
-  }
+//   Elf64_Shdr shdr_str;
+//   for(int i = 0; i < ehdr.e_shnum; i++)
+//   {
+//     if(shdr[i].sh_type == SHT_STRTAB)
+//     {
+//       printf("section类型为字符串表\n");
+//       shdr_str = shdr[i];
+//       break;
+//     }
+//   }
 
-  // read symtab(读符号表)
-  int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);//计算出符号表数目
-  Elf64_Sym sym[symtab_num];//定义‘符号表结构体’数组
-  memcpy(&sym, elf + shdr_sym.sh_offset, shdr_sym.sh_size);
+//   // read symtab(读符号表)
+//   int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);//计算出符号表数目
+//   Elf64_Sym sym[symtab_num];//定义‘符号表结构体’数组
+//   memcpy(&sym, elf + shdr_sym.sh_offset, shdr_sym.sh_size);
 
-  // find FUNC in symtab, find the name of FUNC and the addr of FUNC
-  //计算有多少个FUNC
-  for(int i = 0; i < symtab_num; i++)
-  {
-    // if(sym[i].st_info == STT_FUNC)
-    if(sym[i].st_info == 18)
-      func_number++;
-  }
-  //记录FUNC
-  function_info* fc_decode;
-  fc_decode = (function_info*)malloc(sizeof(function_info) * func_number);
-  for(int i = 0, j = 0; i < symtab_num; i++)
-  {
-    // if(sym[i].st_info == STT_FUNC)
-    if(sym[i].st_info == 18)
-    {
-      fc_decode[j].addr_start = sym[i].st_value;
-      fc_decode[j].addr_end = sym[i].st_value + sym[i].st_size;
-      char * str = elf + shdr_str.sh_offset + sym[i].st_name;
-      char * name = (char*)malloc(strlen(str) + 1); //'0'
-      strcpy(name, str);
-      fc_decode[j].name = name;
-      j++;
-    }
-  }
-  Log_magenta("ELF_file = %s decoding ready!\n", elf_file);
-  return fc_decode;
+//   // find FUNC in symtab, find the name of FUNC and the addr of FUNC
+//   //计算有多少个FUNC
+//   for(int i = 0; i < symtab_num; i++)
+//   {
+//     // if(sym[i].st_info == STT_FUNC)
+//     if(sym[i].st_info == 18)
+//       func_number++;
+//   }
+//   //记录FUNC
+//   function_info* fc_decode;
+//   fc_decode = (function_info*)malloc(sizeof(function_info) * func_number);
+//   for(int i = 0, j = 0; i < symtab_num; i++)
+//   {
+//     // if(sym[i].st_info == STT_FUNC)
+//     if(sym[i].st_info == 18)
+//     {
+//       fc_decode[j].addr_start = sym[i].st_value;
+//       fc_decode[j].addr_end = sym[i].st_value + sym[i].st_size;
+//       char * str = elf + shdr_str.sh_offset + sym[i].st_name;
+//       char * name = (char*)malloc(strlen(str) + 1); //'0'
+//       strcpy(name, str);
+//       fc_decode[j].name = name;
+//       j++;
+//     }
+//   }
+//   Log_magenta("ELF_file = %s decoding ready!\n", elf_file);
+//   return fc_decode;
 
  
-} 
+// } 
 
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 word_t immj(uint32_t i) { return SEXT(BITS(i, 31, 31), 1) << 20 | (BITS(i, 30, 21) << 1) | (BITS(i, 20, 20) << 11) | (BITS(i, 19, 12) << 12); }
 
-int is_call(uint64_t pc, uint32_t inst){    // return index of function_info
+int is_call(uint64_t pc, uint32_t inst){    // return index of fc
   uint64_t imm = immj(inst);
   uint64_t jump_pc = imm + pc;
   if((inst & 0xfff) == 0x0ef){
     int i;
-    for(i = 0; i < func_number; i++){
+    for(i = 0; i < func_num; i++){
       if(fc[i].addr_start == jump_pc) break;
     }
-    if(i < func_number) return i;
+    if(i < func_num) return i;
   }
   return -1;
 }
 
 char* find_func_name(uint64_t addr){    // find func name according to addr
   int i;
-  for(i = 0; i < func_number; i++)
-  {
-    if(fc[i].addr_start <= addr && fc[i].addr_end > addr) 
-      return fc[i].name;
+  for(i = 0; i < func_num; i++){
+    if(fc[i].addr_start <= addr && fc[i].addr_end > addr) return fc[i].name;
   }
   return NULL;
 }
 
 void ftrace(uint64_t pc, uint32_t inst){
-  printf("进入ftrace\n");
-  if(inst == 0x00008067)  //对应反汇编中指令ret(实际被扩展为jalr)，是每个函数的结尾
-  {
+  if(inst == 0x00008067){
     assert(ftrace_fp);
     fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
     call_times--;
   }
   int fc_index = is_call(pc, inst);
-  if(fc_index != -1)
-  {
+  if(fc_index != -1){
     call_times++;
     fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
   }
 }
+// int is_call(uint64_t pc, uint32_t inst){    // return index of function_info
+//   uint64_t imm = immj(inst);
+//   uint64_t jump_pc = imm + pc;
+//   if((inst & 0xfff) == 0x0ef){
+//     int i;
+//     for(i = 0; i < func_number; i++){
+//       if(fc[i].addr_start == jump_pc) break;
+//     }
+//     if(i < func_number) return i;
+//   }
+//   return -1;
+// }
+
+// char* find_func_name(uint64_t addr){    // find func name according to addr
+//   int i;
+//   for(i = 0; i < func_number; i++)
+//   {
+//     if(fc[i].addr_start <= addr && fc[i].addr_end > addr) 
+//       return fc[i].name;
+//   }
+//   return NULL;
+// }
+
+// void ftrace(uint64_t pc, uint32_t inst){
+//   printf("进入ftrace\n");
+//   if(inst == 0x00008067)  //对应反汇编中指令ret(实际被扩展为jalr)，是每个函数的结尾
+//   {
+//     assert(ftrace_fp);
+//     fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
+//     call_times--;
+//   }
+//   int fc_index = is_call(pc, inst);
+//   if(fc_index != -1)
+//   {
+//     call_times++;
+//     fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+//   }
+// }
 #endif
 
 
