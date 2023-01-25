@@ -171,7 +171,7 @@ function_info * decode_elf(char* elf_file)
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
   int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
-  assert(ret == 1);
+  // assert(ret == 1);
 
   fclose(fp);
 

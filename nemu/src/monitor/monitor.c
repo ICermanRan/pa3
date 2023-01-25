@@ -115,7 +115,6 @@ static int parse_args(int argc, char *argv[]) {
               elf_file =(char*)malloc(img_name_size + 1);
                // decode elf
                extern function_info* fc;    //修饰符extern用在变量或者函数的声明前，用来说明“此变量/函数是在别处定义的，要在此处引用
-               Log_magenta("eee");
                fc = decode_elf(elf_file);
                free(elf_file);
                // open ftrace log file
