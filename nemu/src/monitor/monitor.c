@@ -85,7 +85,7 @@ static long load_img() {
 
 #ifdef CONFIG_FTRACE
  static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
-int tot_func_num=-1;
+int tot_func_num = -1;
 function_info funcs[FUNC_NUM];
 static char name_all[2048];
 #define name_all_len (sizeof(name_all))
@@ -160,7 +160,7 @@ static bool check_elf(FILE * fp)
 }
 
 
-static void load_elf()
+static void load_elf(char* elf_file)
 {
   if(!elf_file)
     return;
@@ -179,16 +179,18 @@ static void load_elf()
   if(!check_elf(fp))  //初步检查是否是elf文件
     return;
 
+  // read elf header table(读ELF头)
   Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   fseek(fp, 0, SEEK_SET);/*回到文件的开头*/
   int ret = fread(&ehdr, sizeof(Ehdr), 1, fp);//从fp读取数据存储到ehdr
   assert(ret == 1);//如果ret !=1,则终止程序
 
+  // read section header table(读节头表)
   Shdr shdr;//定义ELF文件节头(section header)
   tot_func_num = 0;
   int name_len = 0;
 
-  //遍历
+  // find the offset of strtab and symtab(解析节头表，找到符号表和字符串表)
   printf("开始遍历，ehdr.e_shnum = %d\n", ehdr.e_shnum);
   printf("ehdr.e_shoff = %ld, ehdr.e_shentsize = %d\n", ehdr.e_shoff, ehdr.e_shentsize);
   for(int i = 0; i < ehdr.e_shnum; i++)
