@@ -159,20 +159,15 @@ function_info * decode_elf(char* elf_file)
   //get elf size
   FILE * fp;
   fp = fopen(elf_file, "r");//rb:读方式打开一个二进制文件，不允许写数据，文件必须存在
-  if(fp == NULL)
-    {
-      Log_red("Can not open '%s' ,treated as no elf file.",elf_file);
-      assert(0);
-    }
 
-  if(!check_elf(fp))  //初步检查是否是elf文件
-    assert(0);
+
+  // if(!check_elf(fp))  //初步检查是否是elf文件
+  //   assert(0);
 
   fseek(fp, 0, SEEK_END);//fp移动到elf文件末尾
   int elf_size = ftell(fp);//该函数用于得到文件位置指针fp当前位置相对于文件首的偏移字节数
 
   //copy elf file to char *
-  Log_magenta("copy elf file to char");
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
   int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
