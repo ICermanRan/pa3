@@ -84,7 +84,6 @@ static long load_img() {
 #include <assert.h>
 
 #ifdef CONFIG_FTRACE
- static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
 int tot_func_num = -1;
 function_info funcs[FUNC_NUM];
 static char name_all[2048];
@@ -160,10 +159,9 @@ static bool check_elf(FILE * fp)
 }
 
 
-static void load_elf(char* elf_file)
+static void decode_elf(char* elf_file)
 {
-  if(!elf_file)
-    return;
+  assert(elf_file != NULL);
   
   Log_magenta("进入load_elf");
 
@@ -270,7 +268,11 @@ static int parse_args(int argc, char *argv[]) {
       case 'd': diff_so_file = optarg; break;
       case 'e':
                #ifdef CONFIG_FTRACE
+               static char * elf_file = NULL; //通过makefile -e选项加载elf文件(根据在/am-kernels/tests/cpu-tests目录下，ALL = 指定哪个elf)
                elf_file = optarg; 
+               // decode elf
+               decode_elf(elf_file);
+  
                #else
                printf("System do not support function trace unless it is enabled.\n");
                #endif
@@ -323,11 +325,6 @@ void init_monitor(int argc, char *argv[]) {
   /* Open the log file. */
   init_log(log_file);
 
-  /* Open the elf file  */
-  #ifdef CONFIG_FTRACE
-  load_elf(elf_file);
-  #endif
-  
   /* Initialize memory. */
   init_mem();
 
