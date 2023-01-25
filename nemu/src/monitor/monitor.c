@@ -113,6 +113,10 @@ static int parse_args(int argc, char *argv[]) {
               char* elf_file;
               int img_name_size = strlen(img_file);
               elf_file =(char*)malloc(img_name_size + 1);
+               strcpy(elf_file, img_file);
+                elf_file[img_name_size-3] = 'e';
+                elf_file[img_name_size-2] = 'l';
+                elf_file[img_name_size-1] = 'f';
                // decode elf
                extern function_info* fc;    //修饰符extern用在变量或者函数的声明前，用来说明“此变量/函数是在别处定义的，要在此处引用
                fc = decode_elf(elf_file);
