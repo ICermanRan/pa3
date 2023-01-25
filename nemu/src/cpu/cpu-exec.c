@@ -76,7 +76,7 @@ typedef struct{
   uint64_t addr_start;
   uint64_t addr_end;
 }function_info;
-function_info *fc = NULL;
+function_info *fc;
 int func_number = 0;
 int call_times = 0;
 char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
