@@ -211,6 +211,7 @@ function_info* decode_elf(char* elf_file_name)
     if(ELF64_ST_TYPE(sym[i].st_info) == STT_FUNC)
     {   // is FUNC
       fc[j].addr_start = sym[i].st_value;
+      printf("fc[%d].addr_start = %x\n", j, fc[j].addr_start);
       fc[j].addr_end = sym[i].st_value + sym[i].st_size; 
       char* str = elf + shdr_str.sh_offset + sym[i].st_name;
       char* name = (char*)malloc(strlen(str) + 1);  // '0'
@@ -267,7 +268,7 @@ void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
     // fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
     fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
   }
-  
+
   if(BITS(inst,6,0)==0b1100111)  
     //对应反汇编文件中每个函数最后一个指令ret
     //实际被扩展为jalr x0,0(x1)或jal，是每个函数的结尾
