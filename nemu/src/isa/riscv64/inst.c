@@ -268,7 +268,7 @@ void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
     {
       assert(ftrace_fp);
       // fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(pc));
-      fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(cpu.gpr[1]));
+      fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(pc));
       call_times--;
     }
     
