@@ -86,7 +86,7 @@ FILE* ftrace_fp;
 function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
-  // Log_magenta("进入decode_elf");
+  Log_magenta("进入decode_elf");
 
   FILE *fp;
   // get elf size
