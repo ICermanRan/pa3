@@ -223,8 +223,8 @@ function_info* decode_elf(char* elf_file_name)
   // 计算有多少个FUNC
   for(int i = 0; i < symtab_num; i++) 
   {   
-    // printf("sym[i].st_info = %d\n", sym[i].st_info);
-    if(sym[i].st_info == 18) //根据printf结果，结合readelf -s看到的，sym[i].st_info == 18时是调用了一个函数
+    printf("ELF64_ST_TYPE(sym[i].st_info) = %d\n", ELF64_ST_TYPE(sym[i].st_info));
+    if(ELF64_ST_TYPE(sym[i].st_info) == STT_FUNC) //根据printf结果，结合readelf -s看到的，sym[i].st_info == 18时是调用了一个函数
     {
     //  printf("sym[%d].st_value = %lx\n", i,sym[i].st_value);
     //  printf("sym[%d].st_size = %ld\n", i,sym[i].st_size);
@@ -238,7 +238,7 @@ function_info* decode_elf(char* elf_file_name)
   fc = (function_info*)malloc(sizeof(function_info) * func_number);
   for(int i = 0, j = 0; i < symtab_num; i++) 
   {   
-    if(sym[i].st_info == 18)
+    if(ELF64_ST_TYPE(sym[i].st_info) == STT_FUNC)
     {   // is FUNC
       fc[j].addr_start = sym[i].st_value;
       fc[j].addr_end = sym[i].st_value + sym[i].st_size; 
@@ -278,8 +278,10 @@ int is_call(uint64_t pc, uint32_t inst){    // return index of fc
 
 char* find_func_name(uint64_t addr){    // find func name according to addr
   int i;
-  for(i = 0; i < func_number; i++){
-    if(fc[i].addr_start <= addr && fc[i].addr_end > addr) return fc[i].name;
+  for(i = 0; i < func_number; i++)
+  {
+    if(fc[i].addr_start <= addr && fc[i].addr_end > addr) 
+      return fc[i].name;
   }
   return NULL;
 }
