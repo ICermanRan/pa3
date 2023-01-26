@@ -71,11 +71,7 @@ void show_iringbuf()
 
 
 #ifdef CONFIG_FTRACE
-// typedef struct{
-//   char* name;
-//   uint64_t addr_start;
-//   uint64_t addr_end;
-// }function_info;
+
 // function_info *fc;
 // int func_number = 0;
 // int call_times = 0;
@@ -85,14 +81,14 @@ typedef struct{
   char* name;
   uint64_t addr_start;
   uint64_t addr_end;
-}func_info;
+}function_info;
 int func_num = 0;
-func_info *fc;
+function_info *fc;
 int call_times = 0;
 // ftrace
 char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
 FILE* ftrace_fp;
-func_info* decode_elf(char* elf_file_name)
+function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
   FILE *fp;
@@ -135,8 +131,8 @@ func_info* decode_elf(char* elf_file_name)
     if(sym[i].st_info == 18)  func_num++; // is FUNC
   }
   // 记录FUNC
-  func_info* fc;
-  fc = (func_info*)malloc(sizeof(func_info) * func_num);
+  function_info* fc;
+  fc = (function_info*)malloc(sizeof(function_info) * func_num);
   for(int i = 0, j = 0; i < symtab_num; i++) {   
     if(sym[i].st_info == 18){   // is FUNC
       fc[j].addr_start = sym[i].st_value;
