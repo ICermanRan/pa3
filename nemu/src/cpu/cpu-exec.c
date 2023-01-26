@@ -178,7 +178,7 @@ function_info* decode_elf(char* elf_file_name)
   // read elf header table(读ELF头)
   Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
-  printf("ehdr.e_type = %s\n",ehdr.e_type);
+  printf("ehdr.e_type = %d\n",ehdr.e_type);
   
   // read section header table(读节头表)
   // ehdr.e_shnum表示节头表中共有多少个节
