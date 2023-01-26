@@ -88,7 +88,7 @@ function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
   // Log("进入decode_elf\n");
-  // printf("进入decode_elf\n");
+  printf("进入 %s\n", ANSI_FMT("decode_elf", ANSI_FG_GREEN));
 
   FILE *fp;
   // get elf size
