@@ -215,6 +215,7 @@ function_info* decode_elf(char* elf_file_name)
 
   // read symtab(读符号表)
   int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);//计算出符号表数目
+  printf("symtab_num = %d\n", symtab_num);
   Elf64_Sym sym[symtab_num];//定义‘符号表结构体’数组
   memcpy(&sym, elf + shdr_sym.sh_offset, shdr_sym.sh_size);
   
@@ -232,7 +233,8 @@ function_info* decode_elf(char* elf_file_name)
   fc = (function_info*)malloc(sizeof(function_info) * func_number);
   for(int i = 0, j = 0; i < symtab_num; i++) 
   {   
-    if(sym[i].st_info == 18){   // is FUNC
+    if(sym[i].st_info == 18)
+    {   // is FUNC
       fc[j].addr_start = sym[i].st_value;
       fc[j].addr_end = sym[i].st_value + sym[i].st_size; 
       char* str = elf + shdr_str.sh_offset + sym[i].st_name;
