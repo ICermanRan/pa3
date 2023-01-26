@@ -178,7 +178,7 @@ function_info* decode_elf(char* elf_file_name)
   // read elf header table(读ELF头)
   Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
-  printf("ehdr.e_type = %d\n",ehdr.e_type);
+  printf("ehdr.e_shnum = %d\n",ehdr.e_shnum);
   
   // read section header table(读节头表)
   // ehdr.e_shnum表示节头表中共有多少个节
@@ -189,7 +189,7 @@ function_info* decode_elf(char* elf_file_name)
   Elf64_Shdr shdr_sym;
   for(int i = 0; i < ehdr.e_shnum; i++) 
   {
-    printf("section类型为符号表\n");
+    // printf("section类型为符号表\n");
     if(shdr[i].sh_type == SHT_SYMTAB) 
       shdr_sym = shdr[i];
   }
@@ -198,7 +198,7 @@ function_info* decode_elf(char* elf_file_name)
   {
     if(shdr[i].sh_type == SHT_STRTAB)
     {
-      printf("section类型为字符串表\n");
+      // printf("section类型为字符串表\n");
       shdr_str = shdr[i];
       break;
     }
