@@ -227,7 +227,7 @@ function_info* decode_elf(char* elf_file_name)
     if(sym[i].st_info == 18) //根据printf结果，结合readelf -s看到的，sym[i].st_info == 18时是调用了一个函数
     {
      printf("sym[%d].st_value = %lx\n", i,sym[i].st_value);
-     printf("sym[%d].st_size = %lx\n", i,sym[i].st_size);
+     printf("sym[%d].st_size = %ld\n", i,sym[i].st_size);
      func_number++; // is FUNC
     }
       
