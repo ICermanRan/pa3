@@ -106,7 +106,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'd': diff_so_file = optarg; break;
       case 'e':
                img_file = optarg;
-               printf("%s\n",img_file);
+               printf("img_file = %s\n",img_file);
                #ifdef CONFIG_FTRACE
                char* elf_file;
                int img_name_size = strlen(img_file);
