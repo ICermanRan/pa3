@@ -261,22 +261,14 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
   
 void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
 {
-  
-  // int fc_index = is_call(pc, dnpc,inst);
-  // if(fc_index != -1)
-  // {
-  //   call_times++;
-  //   // fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
-  //   fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
-  // }
   if(BITS(inst,6,0)==0b1100111 || BITS(inst,6,0)==0b1101111)
   {
-    uint64_t imm = imm_j(inst);
-    uint64_t jump_pc = imm + pc;
+    // uint64_t imm = imm_j(inst);
+    // uint64_t jump_pc = imm + pc;
     
     for(int i = 0; i < func_number; i++)
     {
-      if(fc[i].addr_start == jump_pc) //判断为call
+      if(fc[i].addr_start == dnpc) //判断为call
       {
         assert(ftrace_fp);
         call_times++;
@@ -292,21 +284,6 @@ void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
     }
     
   }
-
-
-  // if(BITS(inst,6,0)==0b1100111)  
-  //   //对应反汇编文件中每个函数最后一个指令ret
-  //   //实际被扩展为jalr x0,0(x1)或jal，是每个函数的结尾
-  // {
-  //   if(dnpc == (cpu.gpr[1] & ~1))
-  //   {
-  //     assert(ftrace_fp);
-  //     // fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(pc));
-  //     fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(pc));
-  //     call_times--;
-  //   }
-    
-  // }
   
 }
 
