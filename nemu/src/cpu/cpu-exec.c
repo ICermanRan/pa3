@@ -178,19 +178,20 @@ function_info* decode_elf(char* elf_file_name)
   // read elf header table(读ELF头)
   Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
-  printf("ehdr.e_shnum = %d\n",ehdr.e_shnum);
-  printf("ehdr.e_shoff = %ld\n",ehdr.e_shoff);
+  printf("ehdr.e_shnum = %d\n",ehdr.e_shnum);//符合elf头中内容
+  printf("ehdr.e_shoff = %ld\n",ehdr.e_shoff);//符合elf头中内容
   
   // read section header table(读节头表)
   // ehdr.e_shnum表示节头表中共有多少个节
   Elf64_Shdr shdr[ehdr.e_shnum];//定义ELF文件节头表(section header table)
-  memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);//从elf数组起始+节头表对应偏置，复制所有节大小的内容到shdr
+  memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);
+   //从elf数组起始+节头表对应偏置，复制所有节大小的内容到shdr，形成节头表
   
   // find the offset of strtab and symtab
   Elf64_Shdr shdr_sym;
   for(int i = 0; i < ehdr.e_shnum; i++) 
   {
-    // printf("section类型为符号表\n");
+    printf("section类型为符号表\n");
     if(shdr[i].sh_type == SHT_SYMTAB) 
       shdr_sym = shdr[i];
   }
@@ -199,9 +200,9 @@ function_info* decode_elf(char* elf_file_name)
   {
     if(shdr[i].sh_type == SHT_STRTAB)
     {
-      // printf("section类型为字符串表\n");
+      printf("section类型为字符串表\n");
       shdr_str = shdr[i];
-      break;
+      // break;
     }
   }
 
