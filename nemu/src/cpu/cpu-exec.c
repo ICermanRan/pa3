@@ -187,18 +187,20 @@ function_info* decode_elf(char* elf_file_name)
   memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);
    //从elf数组起始+节头表对应偏置，复制所有节大小的内容到shdr，形成节头表
   
-  for(int i = 0; i < ehdr.e_shnum; i++)
-  {
-    printf("i = %d,shdr[i].sh_type = %d\n", i,shdr[i].sh_type);
-  }
+  // for(int i = 0; i < ehdr.e_shnum; i++)
+  // {
+  //   printf("i = %d,shdr[i].sh_type = %d\n", i,shdr[i].sh_type);
+  // }
 
   // find the offset of strtab and symtab
   Elf64_Shdr shdr_sym;
   for(int i = 0; i < ehdr.e_shnum; i++) 
   {
-    printf("section类型为符号表\n");
     if(shdr[i].sh_type == SHT_SYMTAB) 
+    {
+      printf("section类型为符号表\n");
       shdr_sym = shdr[i];
+    }
   }
   Elf64_Shdr shdr_str;
   for(int i = 0; i < ehdr.e_shnum; i++)
