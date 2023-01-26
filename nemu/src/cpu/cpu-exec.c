@@ -226,8 +226,8 @@ function_info* decode_elf(char* elf_file_name)
     // printf("sym[i].st_info = %d\n", sym[i].st_info);
     if(sym[i].st_info == 18) //根据printf结果，结合readelf -s看到的，sym[i].st_info == 18时是调用了一个函数
     {
-     printf("sym[%d].st_value = %lx\n", i,sym[i].st_value);
-     printf("sym[%d].st_size = %ld\n", i,sym[i].st_size);
+    //  printf("sym[%d].st_value = %lx\n", i,sym[i].st_value);
+    //  printf("sym[%d].st_size = %ld\n", i,sym[i].st_size);
      func_number++; // is FUNC
     }
       
@@ -262,12 +262,16 @@ word_t immj(uint32_t i) { return SEXT(BITS(i, 31, 31), 1) << 20 | (BITS(i, 30, 2
 int is_call(uint64_t pc, uint32_t inst){    // return index of fc
   uint64_t imm = immj(inst);
   uint64_t jump_pc = imm + pc;
-  if((inst & 0xfff) == 0x0ef){
+  if((inst & 0xfff) == 0x0ef)
+  {
     int i;
-    for(i = 0; i < func_number; i++){
-      if(fc[i].addr_start == jump_pc) break;
+    for(i = 0; i < func_number; i++)
+    {
+      if(fc[i].addr_start == jump_pc) 
+        break;
     }
-    if(i < func_number) return i;
+    if(i < func_number) 
+      return i;
   }
   return -1;
 }
@@ -282,57 +286,22 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 
 void ftrace(uint64_t pc, uint32_t inst){
   // printf("进入ftrace\n");
-  if(inst == 0x00008067){
+  if(inst == 0x00008067)  //对应反汇编文件中每个函数最后一个指令ret
+                          //(实际被扩展为jalr)，是每个函数的结尾
+  {
     assert(ftrace_fp);
-    // fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
-    fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(cpu.gpr[1]));
+    fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
+    // fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(cpu.gpr[1]));
     call_times--;
   }
   int fc_index = is_call(pc, inst);
   if(fc_index != -1){
     call_times++;
-    // fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
-    fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+    fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+    // fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
   }
 }
-// int is_call(uint64_t pc, uint32_t inst){    // return index of function_info
-//   uint64_t imm = immj(inst);
-//   uint64_t jump_pc = imm + pc;
-//   if((inst & 0xfff) == 0x0ef){
-//     int i;
-//     for(i = 0; i < func_number; i++){
-//       if(fc[i].addr_start == jump_pc) break;
-//     }
-//     if(i < func_number) return i;
-//   }
-//   return -1;
-// }
 
-// char* find_func_name(uint64_t addr){    // find func name according to addr
-//   int i;
-//   for(i = 0; i < func_number; i++)
-//   {
-//     if(fc[i].addr_start <= addr && fc[i].addr_end > addr) 
-//       return fc[i].name;
-//   }
-//   return NULL;
-// }
-
-// void ftrace(uint64_t pc, uint32_t inst){
-//   printf("进入ftrace\n");
-//   if(inst == 0x00008067)  //对应反汇编中指令ret(实际被扩展为jalr)，是每个函数的结尾
-//   {
-//     assert(ftrace_fp);
-//     fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
-//     call_times--;
-//   }
-//   int fc_index = is_call(pc, inst);
-//   if(fc_index != -1)
-//   {
-//     call_times++;
-//     fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
-//   }
-// }
 #endif
 
 
