@@ -124,7 +124,6 @@ function_info* decode_elf(char* elf_file_name)
     printf("section类型为符号表\n");
     if(shdr[i].sh_type == SHT_SYMTAB) 
       shdr_sym = shdr[i];
-      break;
   }
   Elf64_Shdr shdr_str;
   for(int i = 0; i < ehdr.e_shnum; i++) {
