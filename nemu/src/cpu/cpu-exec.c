@@ -71,8 +71,6 @@ void show_iringbuf()
 
 
 #ifdef CONFIG_FTRACE
-
-// function_info *fc;
 // int func_number = 0;
 // int call_times = 0;
 // char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
@@ -82,7 +80,7 @@ typedef struct{
   uint64_t addr_start;
   uint64_t addr_end;
 }function_info;
-int func_num = 0;
+int func_number = 0;
 function_info *fc;
 int call_times = 0;
 // ftrace
@@ -128,11 +126,11 @@ function_info* decode_elf(char* elf_file_name)
   // find FUNC in symtab, find the name of FUNC and the addr of FUNC
   // 计算有多少个FUNC
   for(int i = 0; i < symtab_num; i++) {   
-    if(sym[i].st_info == 18)  func_num++; // is FUNC
+    if(sym[i].st_info == 18)  func_number++; // is FUNC
   }
   // 记录FUNC
   function_info* fc;
-  fc = (function_info*)malloc(sizeof(function_info) * func_num);
+  fc = (function_info*)malloc(sizeof(function_info) * func_number);
   for(int i = 0, j = 0; i < symtab_num; i++) {   
     if(sym[i].st_info == 18){   // is FUNC
       fc[j].addr_start = sym[i].st_value;
@@ -320,17 +318,17 @@ int is_call(uint64_t pc, uint32_t inst){    // return index of fc
   uint64_t jump_pc = imm + pc;
   if((inst & 0xfff) == 0x0ef){
     int i;
-    for(i = 0; i < func_num; i++){
+    for(i = 0; i < func_number; i++){
       if(fc[i].addr_start == jump_pc) break;
     }
-    if(i < func_num) return i;
+    if(i < func_number) return i;
   }
   return -1;
 }
 
 char* find_func_name(uint64_t addr){    // find func name according to addr
   int i;
-  for(i = 0; i < func_num; i++){
+  for(i = 0; i < func_number; i++){
     if(fc[i].addr_start <= addr && fc[i].addr_end > addr) return fc[i].name;
   }
   return NULL;
