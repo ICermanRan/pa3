@@ -71,10 +71,6 @@ void show_iringbuf()
 
 
 #ifdef CONFIG_FTRACE
-// int func_number = 0;
-// int call_times = 0;
-// char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
-// FILE* ftrace_fp; 
 typedef struct{
   char* name;
   uint64_t addr_start;
@@ -86,12 +82,19 @@ int call_times = 0;
 // ftrace
 char* ftrace_log = "/home/ran/ysyx/ysyx-workbench/nemu/build/ftrace-log.txt";
 FILE* ftrace_fp;
+
 function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
+  Log_magenta("进入decode_elf");
+
   FILE *fp;
   // get elf size
   fp = fopen(elf_file_name, "r");
+
+    // if(check_elf(fp) == 0)  //初步检查是否是elf文件
+    // assert(0);
+
   fseek(fp, 0L, SEEK_END);
   int elf_size = ftell(fp);
   // copy elf file to char *
