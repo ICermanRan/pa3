@@ -202,7 +202,7 @@ function_info* decode_elf(char* elf_file_name)
     {
       printf("section类型为字符串表\n");
       shdr_str = shdr[i];
-      // break;
+      break;
     }
   }
 
