@@ -103,21 +103,28 @@ function_info* decode_elf(char* elf_file_name)
   // copy elf file to char *
   printf("copy elf file to char\n");
   char elf[elf_size];
-  fseek(fp, 0, SEEK_SET);
-  int ret = fread(&elf, elf_size, 1, fp);
-  // printf("ret = %d\n", ret);
+  fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
+  int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
   assert(ret == 1);
   fclose(fp);
-  // read elf header table
-  Elf64_Ehdr ehdr;
+
+  // read elf header table(读ELF头)
+  Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
-  // read section header table
-  Elf64_Shdr shdr[ehdr.e_shnum];
-  memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);
+  
+  // read section header table(读节头表)
+  // ehdr.e_shnum表示节头表中共有多少个节
+  Elf64_Shdr shdr[ehdr.e_shnum];//定义ELF文件节头表(section header table)
+  memcpy(&shdr, elf + ehdr.e_shoff, sizeof(Elf64_Shdr)*ehdr.e_shnum);//从elf数组起始+节头表对应偏置，复制所有节大小的内容到shdr
+  
   // find the offset of strtab and symtab
   Elf64_Shdr shdr_sym;
-  for(int i = 0; i < ehdr.e_shnum; i++) {
-    if(shdr[i].sh_type == SHT_SYMTAB) shdr_sym = shdr[i];
+  for(int i = 0; i < ehdr.e_shnum; i++) 
+  {
+    printf("section类型为符号表\n");
+    if(shdr[i].sh_type == SHT_SYMTAB) 
+      shdr_sym = shdr[i];
+      break;
   }
   Elf64_Shdr shdr_str;
   for(int i = 0; i < ehdr.e_shnum; i++) {
