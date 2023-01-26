@@ -231,14 +231,18 @@ int is_call(uint64_t pc, int64_t dnpc,uint32_t inst){    // return index of fc
   uint64_t jump_pc = imm + pc;
   if(BITS(inst,6,0)==0b1100111 || BITS(inst,6,0)==0b1101111) //call:jal x1 或 jalr x1,
   {
-    int i;
-    for(i = 0; i < func_number; i++)
+    if(jump_pc == dnpc)
     {
-      if(fc[i].addr_start == jump_pc) 
-        break;
-    }
-    if(i < func_number) 
+      int i;
+      for(i = 0; i < func_number; i++)
+      {
+        if(fc[i].addr_start == jump_pc) 
+          break;
+      }
+      if(i < func_number) 
       return i;
+    }
+    
   }
   return -1;
 }
