@@ -68,6 +68,7 @@ void show_iringbuf()
 /************************ ftrace ******************************/
 #include <stdio.h>
 #include <elf.h>
+#include <debug.h>
 
 
 #ifdef CONFIG_FTRACE
@@ -86,8 +87,8 @@ FILE* ftrace_fp;
 function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
-  // Log_magenta("进入decode_elf\n");
-  printf("进入decode_elf\n");
+  Log_magenta("进入decode_elf\n");
+  // printf("进入decode_elf\n");
 
   FILE *fp;
   // get elf size
