@@ -169,7 +169,6 @@ function_info* decode_elf(char* elf_file_name)
   int elf_size = ftell(fp);//该函数用于得到文件位置指针fp当前位置相对于文件首的偏移字节数
   
   // copy elf file to char *
-  printf("copy elf file to char\n");
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);//fp移动到elf文件开始
   int ret = fread(&elf, elf_size, 1, fp);//将整个elf文件内容复制到char elf
@@ -179,6 +178,7 @@ function_info* decode_elf(char* elf_file_name)
   // read elf header table(读ELF头)
   Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
+  printf("ehdr = %s\n",ehdr);
   
   // read section header table(读节头表)
   // ehdr.e_shnum表示节头表中共有多少个节

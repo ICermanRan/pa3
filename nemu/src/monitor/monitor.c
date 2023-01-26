@@ -106,13 +106,11 @@ static int parse_args(int argc, char *argv[]) {
       case 'd': diff_so_file = optarg; break;
       case 'e':
                img_file = optarg;
-              //  printf("img_file = %s\n",img_file);
                #ifdef CONFIG_FTRACE
                char* elf_file;
                int img_name_size = strlen(img_file);
                elf_file =(char*)malloc(img_name_size + 1);
                strcpy(elf_file, img_file);
-               printf("elf_file = %s\n",elf_file);
                 elf_file[img_name_size-3] = 'e';
                 elf_file[img_name_size-2] = 'l';
                 elf_file[img_name_size-1] = 'f';
