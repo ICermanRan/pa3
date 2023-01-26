@@ -256,8 +256,9 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
 {
   // printf("进入ftrace\n");
-  if(inst == 0x00008067)  //对应反汇编文件中每个函数最后一个指令ret
-                          //实际被扩展为jalr x0,0(x1)，是每个函数的结尾
+  if(BITS(inst,6,0)==0b1100111 || BITS(inst,6,0)==0b1101111)  
+    //对应反汇编文件中每个函数最后一个指令ret
+    //实际被扩展为jalr x0,0(x1)或jal，是每个函数的结尾
   {
     if(dnpc == (cpu.gpr[1] & ~1))
     {
