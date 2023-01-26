@@ -135,14 +135,19 @@ function_info* decode_elf(char* elf_file_name)
       break;
     }
   }
-  // read symtab
-  int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);
-  Elf64_Sym sym[symtab_num];
+
+  // read symtab(读符号表)
+  int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);//计算出符号表数目
+  Elf64_Sym sym[symtab_num];//定义‘符号表结构体’数组
   memcpy(&sym, elf + shdr_sym.sh_offset, shdr_sym.sh_size);
+  
   // find FUNC in symtab, find the name of FUNC and the addr of FUNC
   // 计算有多少个FUNC
-  for(int i = 0; i < symtab_num; i++) {   
-    if(sym[i].st_info == 18)  func_number++; // is FUNC
+  for(int i = 0; i < symtab_num; i++) 
+  {   
+    // if(sym[i].st_info == 18) 
+    if(sym[i].st_info == STT_FUNC) 
+      func_number++; // is FUNC
   }
   // 记录FUNC
   function_info* fc;
