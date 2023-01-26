@@ -147,8 +147,8 @@ function_info* decode_elf(char* elf_file_name)
   // read elf header table(读ELF头)
   Elf64_Ehdr ehdr;//定义ELF头(描述整个文件的组织结构)
   memcpy(&ehdr, elf, sizeof(Elf64_Ehdr));
-  printf("ehdr.e_shnum = %d\n",ehdr.e_shnum);//符合elf头中内容
-  printf("ehdr.e_shoff = %ld\n",ehdr.e_shoff);//符合elf头中内容
+  // printf("ehdr.e_shnum = %d\n",ehdr.e_shnum);//符合elf头中内容
+  // printf("ehdr.e_shoff = %ld\n",ehdr.e_shoff);//符合elf头中内容
   
   // read section header table(读节头表)
   // ehdr.e_shnum表示节头表中共有多少个节
@@ -167,7 +167,7 @@ function_info* decode_elf(char* elf_file_name)
   {
     if(shdr[i].sh_type == SHT_SYMTAB) 
     {
-      printf("section类型为符号表\n");
+      // printf("section类型为符号表\n");
       shdr_sym = shdr[i];
     }
   }
@@ -176,7 +176,7 @@ function_info* decode_elf(char* elf_file_name)
   {
     if(shdr[i].sh_type == SHT_STRTAB)
     {
-      printf("section类型为字符串表\n");
+      // printf("section类型为字符串表\n");
       shdr_str = shdr[i];
       break;
     }
@@ -184,7 +184,7 @@ function_info* decode_elf(char* elf_file_name)
 
   // read symtab(读符号表)
   int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);//计算出符号表数目,符合readelf -s看到的Num
-  printf("symtab_num = %d\n", symtab_num);
+  // printf("symtab_num = %d\n", symtab_num);
   Elf64_Sym sym[symtab_num];//定义‘符号表结构体’数组
   memcpy(&sym, elf + shdr_sym.sh_offset, shdr_sym.sh_size);
   
@@ -260,7 +260,7 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
   
 void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
 {
-  // printf("进入ftrace\n");
+  
   int fc_index = is_call(pc, dnpc,inst);
   if(fc_index != -1)
   {
