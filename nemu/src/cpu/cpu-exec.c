@@ -189,7 +189,7 @@ function_info* decode_elf(char* elf_file_name)
   
   for(int i = 0; i < ehdr.e_shnum; i++)
   {
-    printf("i = %d,shdr[i].sh_type = %lx\n", i,shdr[i].sh_type);
+    printf("i = %d,shdr[i].sh_type = %x\n", i,shdr[i].sh_type);
   }
 
   // find the offset of strtab and symtab
