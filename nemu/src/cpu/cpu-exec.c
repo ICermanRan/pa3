@@ -165,7 +165,7 @@ function_info* decode_elf(char* elf_file_name)
       j++;
     }  
   }
-  Log_magenta("ELF_file = %s decoding ready!\n", elf_file_name);
+  // Log_magenta("ELF_file = %s decoding ready!\n", elf_file_name);
   return fc;
 }
 // static bool check_elf(FILE * fp)
