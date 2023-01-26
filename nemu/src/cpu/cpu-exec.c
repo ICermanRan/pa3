@@ -104,7 +104,7 @@ function_info* decode_elf(char* elf_file_name)
   printf("copy elf file to char\n");
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);
-  int ret = fread(&elf, 1, elf_size, fp);
+  int ret = fread(&elf, elf_size, 1, fp);
   // printf("ret = %d\n", ret);
   assert(ret == 1);
   fclose(fp);
