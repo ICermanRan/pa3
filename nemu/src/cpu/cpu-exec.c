@@ -223,7 +223,7 @@ function_info* decode_elf(char* elf_file_name)
   // 计算有多少个FUNC
   for(int i = 0; i < symtab_num; i++) 
   {   
-    printf("ELF64_ST_TYPE(sym[i].st_info) = %d\n", ELF64_ST_TYPE(sym[i].st_info));
+    // printf("ELF64_ST_TYPE(sym[i].st_info) = %d\n", ELF64_ST_TYPE(sym[i].st_info));
     if(ELF64_ST_TYPE(sym[i].st_info) == STT_FUNC) //根据printf结果，结合readelf -s看到的，sym[i].st_info == 18时是调用了一个函数
     {
     //  printf("sym[%d].st_value = %lx\n", i,sym[i].st_value);
@@ -232,7 +232,8 @@ function_info* decode_elf(char* elf_file_name)
     }
       
   }
-  printf("func_number = %d\n", func_number);
+  // printf("func_number = %d\n", func_number);
+
   // 记录FUNC
   function_info* fc;
   fc = (function_info*)malloc(sizeof(function_info) * func_number);
@@ -262,7 +263,7 @@ word_t immj(uint32_t i) { return SEXT(BITS(i, 31, 31), 1) << 20 | (BITS(i, 30, 2
 int is_call(uint64_t pc, uint32_t inst){    // return index of fc
   uint64_t imm = immj(inst);
   uint64_t jump_pc = imm + pc;
-  if((inst & 0xfff) == 0x0ef)
+  if((inst & 0xfff) == 0x0ef) //对应jalr指令call函数的情况
   {
     int i;
     for(i = 0; i < func_number; i++)
@@ -289,15 +290,16 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 void ftrace(uint64_t pc, uint32_t inst){
   // printf("进入ftrace\n");
   if(inst == 0x00008067)  //对应反汇编文件中每个函数最后一个指令ret
-                          //(实际被扩展为jalr)，是每个函数的结尾
+                          //实际被扩展为jalr x0,0(x1)，是每个函数的结尾
   {
     assert(ftrace_fp);
-    fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[1]));
+    fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[0]));
     // fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(cpu.gpr[1]));
     call_times--;
   }
   int fc_index = is_call(pc, inst);
-  if(fc_index != -1){
+  if(fc_index != -1)
+  {
     call_times++;
     fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
     // fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
