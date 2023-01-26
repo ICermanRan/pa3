@@ -293,7 +293,7 @@ void ftrace(uint64_t pc, uint32_t inst){
                           //实际被扩展为jalr x0,0(x1)，是每个函数的结尾
   {
     assert(ftrace_fp);
-    fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(cpu.gpr[0]));
+    fprintf(ftrace_fp, "%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ', find_func_name(pc));
     // fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(cpu.gpr[1]));
     call_times--;
   }
