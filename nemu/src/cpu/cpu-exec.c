@@ -97,12 +97,14 @@ function_info* decode_elf(char* elf_file_name)
     // if(check_elf(fp) == 0)  //初步检查是否是elf文件
     // assert(0);
 
-  fseek(fp, 0, SEEK_END);
-  int elf_size = ftell(fp);
+  fseek(fp, 0, SEEK_END);//fp移动到elf文件末尾
+  int elf_size = ftell(fp);//该函数用于得到文件位置指针fp当前位置相对于文件首的偏移字节数
+  
   // copy elf file to char *
+  printf("copy elf file to char\n");
   char elf[elf_size];
   fseek(fp, 0, SEEK_SET);
-  int ret = fread(&elf, elf_size, 1, fp);
+  int ret = fread(&elf, 1, elf_size, fp);
   // printf("ret = %d\n", ret);
   assert(ret == 1);
   fclose(fp);
