@@ -87,7 +87,7 @@ FILE* ftrace_fp;
 function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
-  Log("进入decode_elf\n");
+  // Log("进入decode_elf\n");
   // printf("进入decode_elf\n");
 
   FILE *fp;
