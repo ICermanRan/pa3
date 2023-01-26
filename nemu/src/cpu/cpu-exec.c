@@ -87,7 +87,7 @@ FILE* ftrace_fp;
 function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
-  // Log("进入decode_elf\n");
+  // Log("进入decode_elf\n");//会导致段错误(疑惑？？)
   printf("%s\n", ANSI_FMT("进入 decode_elf", ANSI_FG_GREEN));
 
   FILE *fp;
@@ -97,7 +97,7 @@ function_info* decode_elf(char* elf_file_name)
     // if(check_elf(fp) == 0)  //初步检查是否是elf文件
     // assert(0);
 
-  fseek(fp, 0L, SEEK_END);
+  fseek(fp, 0, SEEK_END);
   int elf_size = ftell(fp);
   // copy elf file to char *
   char elf[elf_size];
