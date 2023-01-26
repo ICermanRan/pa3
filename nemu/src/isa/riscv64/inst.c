@@ -41,7 +41,7 @@ typedef struct{
 void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst);
 static bool check_elf(FILE * fp);
 function_info* decode_elf(char* elf_file_name);
-int is_call(uint64_t pc, uint32_t inst);
+int is_call(uint64_t pc, int64_t dnpc,uint32_t inst);
 char* find_func_name(uint64_t addr);
 
 
@@ -226,10 +226,10 @@ function_info* decode_elf(char* elf_file_name)
 
 word_t imm_j(uint32_t i) { return SEXT(BITS(i, 31, 31), 1) << 20 | (BITS(i, 30, 21) << 1) | (BITS(i, 20, 20) << 11) | (BITS(i, 19, 12) << 12); }
 
-int is_call(uint64_t pc, uint32_t inst){    // return index of fc
+int is_call(uint64_t pc, int64_t dnpc,uint32_t inst){    // return index of fc
   uint64_t imm = imm_j(inst);
   uint64_t jump_pc = imm + pc;
-  if((inst & 0xfff) == 0x0ef) //对应jalr指令call函数的情况
+  if(BITS(inst,6,0)==0b1100111 || BITS(inst,6,0)==0b1101111) //call:jal x1 或 jalr x1,
   {
     int i;
     for(i = 0; i < func_number; i++)
@@ -269,7 +269,7 @@ void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
     }
     
   }
-  int fc_index = is_call(pc, inst);
+  int fc_index = is_call(pc, dnpc,inst);
   if(fc_index != -1)
   {
     call_times++;
