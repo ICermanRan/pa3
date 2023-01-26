@@ -162,8 +162,8 @@ function_info* decode_elf(char* elf_file_name)
   // get elf size
   fp = fopen(elf_file_name, "r");
 
-    if(check_elf(fp) == 0)  //初步检查是否是elf文件
-    assert(0);
+  if(check_elf(fp) == 0)  //初步检查是否是elf文件
+   assert(0);
 
   fseek(fp, 0, SEEK_END);//fp移动到elf文件末尾
   int elf_size = ftell(fp);//该函数用于得到文件位置指针fp当前位置相对于文件首的偏移字节数
