@@ -214,7 +214,7 @@ function_info* decode_elf(char* elf_file_name)
   }
 
   // read symtab(读符号表)
-  int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);//计算出符号表数目
+  int symtab_num = shdr_sym.sh_size / sizeof(Elf64_Sym);//计算出符号表数目,符合
   printf("symtab_num = %d\n", symtab_num);
   Elf64_Sym sym[symtab_num];//定义‘符号表结构体’数组
   memcpy(&sym, elf + shdr_sym.sh_offset, shdr_sym.sh_size);
@@ -223,9 +223,12 @@ function_info* decode_elf(char* elf_file_name)
   // 计算有多少个FUNC
   for(int i = 0; i < symtab_num; i++) 
   {   
+    printf("sym[i].st_info = %d\n", sym[i].st_info);
     if(sym[i].st_info == 18) 
-    // if(sym[i].st_info == STT_FUNC) 
-      func_number++; // is FUNC
+    {
+     func_number++; // is FUNC
+    }
+      
   }
 
   // 记录FUNC
