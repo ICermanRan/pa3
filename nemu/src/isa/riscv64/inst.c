@@ -230,7 +230,7 @@ word_t imm_j(uint32_t i) { return SEXT(BITS(i, 31, 31), 1) << 20 | (BITS(i, 30, 
 int is_call(uint64_t pc, int64_t dnpc,uint32_t inst){    // return index of fc
   uint64_t imm = imm_j(inst);
   uint64_t jump_pc = imm + pc;
-  printf("dnpc = %lx, jump_pc = %lx\n", dnpc, jump_pc);
+  printf("pc = %lx, dnpc = %lx, jump_pc = %lx\n", pc, dnpc, jump_pc);
   if(BITS(inst,6,0)==0b1100111 || BITS(inst,6,0)==0b1101111) //call:jal x1 或 jalr x1,
   {
     if(jump_pc == dnpc)
