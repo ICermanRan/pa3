@@ -240,7 +240,7 @@ int is_call(uint64_t pc, int64_t dnpc,uint32_t inst){    // return index of fc
           break;
       }
       if(i < func_number) 
-      return i;
+       return i;
     }
     
   }
@@ -260,6 +260,14 @@ char* find_func_name(uint64_t addr){    // find func name according to addr
 void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
 {
   // printf("进入ftrace\n");
+  int fc_index = is_call(pc, dnpc,inst);
+  if(fc_index != -1)
+  {
+    call_times++;
+    // fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+    fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
+  }
+  
   if(BITS(inst,6,0)==0b1100111)  
     //对应反汇编文件中每个函数最后一个指令ret
     //实际被扩展为jalr x0,0(x1)或jal，是每个函数的结尾
@@ -273,13 +281,7 @@ void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
     }
     
   }
-  int fc_index = is_call(pc, dnpc,inst);
-  if(fc_index != -1)
-  {
-    call_times++;
-    // fprintf(ftrace_fp, "%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
-    fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[fc_index].name, (uint32_t)fc[fc_index].addr_start);
-  }
+  
 }
 
 
