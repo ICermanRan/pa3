@@ -228,6 +228,7 @@ void cpu_exec(uint64_t n) {
   switch (nemu_state.state) {
     case NEMU_ABORT:
     case NEMU_END: 
+      assert_fail_msg();
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
       return;
     default: nemu_state.state = NEMU_RUNNING;
