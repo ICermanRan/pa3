@@ -361,8 +361,8 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
-  // printf("进入译码时的 pc = %0lx\n", s->pc);
-  // printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
+  printf("进入译码时的 pc = %0lx\n", s->pc);
+  printf("进入译码时的 dnpc = %0lx\n", s->dnpc);
 
   vaddr_t t;//暂存jalr中原本的pc+4 = s->dnpc
 
@@ -446,9 +446,9 @@ static int decode_exec(Decode *s) {
   R(0) = 0; // reset $zero to 0
   
 
-  // printf("退出译码时的 pc = %0lx\n", s->pc);
-  // printf("退出译码时的 snpc = %0lx\n", s->snpc);
-  // printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
+  printf("退出译码时的 pc = %0lx\n", s->pc);
+  printf("退出译码时的 snpc = %0lx\n", s->snpc);
+  printf("退出译码时的 dnpc = %0lx\n", s->dnpc);
   // printf("退出译码时的 src1 = %0lx\n", src1);
   // printf("退出译码时的 src2 = %0lx\n", src2);
   // printf("退出译码时的 shamt = %d\n", shamt);
