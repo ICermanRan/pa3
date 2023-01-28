@@ -103,25 +103,19 @@ static void exec_once(Decode *s, vaddr_t pc)
   // s->snpc += 4;                            //s->snpc进行了操作，而单纯的paddr则不行
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
-  // printf("000 %s\n", s->logbuf);
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入s->logbuf,并且去掉了最开始未定义的乱码pc
-  // printf("111 %s\n", s->logbuf);
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
-  // printf("222 %s\n", s->logbuf);
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, "%02x ", inst[i]);
   } //循环的作用是把指令中的内存给翻译出来存入s->logbuf
-  // printf("333 %s\n", s->logbuf);
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
-  space_len = space_len * 3 + 1;
-  // printf("444 %s\n", s->logbuf);  
+  space_len = space_len * 3 + 1; 
   memset(p, ' ', space_len);  //从循环结束到这一句结束的作用，是把指令内容翻译出来，存入iringbuf
                               //例如addi        sp, sp, -4
-  // printf("555 %s\n", s->logbuf); 
   p += space_len;
 
   // void disassemble：把0x0000000080000000的乱码翻译成反汇编内容(从乱码——>字符串)
@@ -138,6 +132,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
+  printf("传递给cpu.pc的值 = %0lx\n", s->dnpc);
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
   /*下面的代码与trace相关*/
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
@@ -184,6 +179,7 @@ static void execute(uint64_t n) {
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
 
     /*下面的代码与trace和difftest相关*/
+     printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
     trace_and_difftest(&s, cpu.pc);
     
     
@@ -227,6 +223,7 @@ void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);   //判断传入的要单步执行的步数，不能大于10
   switch (nemu_state.state) {
     case NEMU_ABORT:
+      all_fail();
     case NEMU_END: 
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
       return;

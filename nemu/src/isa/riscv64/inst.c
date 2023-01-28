@@ -211,7 +211,7 @@ function_info* decode_elf(char* elf_file_name)
     if(ELF64_ST_TYPE(sym[i].st_info) == STT_FUNC)
     {   // is FUNC
       fc[j].addr_start = sym[i].st_value;
-      printf("fc[%d].addr_start = %lx\n", j, fc[j].addr_start);
+      // printf("fc[%d].addr_start = %lx\n", j, fc[j].addr_start);
       fc[j].addr_end = sym[i].st_value + sym[i].st_size; 
       char* str = elf + shdr_str.sh_offset + sym[i].st_name;
       char* name = (char*)malloc(strlen(str) + 1);  // '0'

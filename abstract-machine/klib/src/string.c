@@ -132,8 +132,7 @@ void *memset(void *s, int c, size_t n)
 
   return s;
  
- 
- // panic("Not implemented");
+
 }
 
 //将n个字节从内存区域src复制到内存区域dst

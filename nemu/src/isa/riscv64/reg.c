@@ -23,7 +23,7 @@ const char *regs[] = {
   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6",
   /*add a name*/
-  "pc"
+
 };
 
 void isa_reg_display() {
@@ -34,6 +34,7 @@ void isa_reg_display() {
 		temp = regs[i];
 		printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
 	}
+  printf("pc = %lx\n", cpu.pc);
 
 }
 

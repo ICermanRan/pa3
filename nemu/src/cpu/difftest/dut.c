@@ -59,7 +59,17 @@ void difftest_skip_dut(int nr_ref, int nr_dut) {
   }
 }
 
-void init_difftest(char *ref_so_file, long img_size, int port) {
+void init_difftest(char *ref_so_file, long img_size, int port) 
+{
+  //进行以下初始化工作
+  // 打开传入的动态库文件ref_so_file.
+  // 通过动态链接对动态库中的上述API符号进行符号解析和重定位, 返回它们的地址.
+  // 对REF的DIffTest功能进行初始化, 具体行为因REF而异.
+  // 将DUT的guest memory拷贝到REF中.
+  // 将DUT的寄存器状态拷贝到REF中.
+
+  //进行了上述初始化工作之后, DUT和REF就处于相同的状态了
+
   assert(ref_so_file != NULL);
 
   void *handle;
@@ -92,19 +102,29 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 }
 
 static void checkregs(CPU_state *ref, vaddr_t pc) {
-  if (!isa_difftest_checkregs(ref, pc)) {
+  if (!isa_difftest_checkregs(ref, pc)) 
+  {
     nemu_state.state = NEMU_ABORT;
     nemu_state.halt_pc = pc;
     isa_reg_display();
   }
 }
 
-void difftest_step(vaddr_t pc, vaddr_t npc) {
+/*实现逐条指令执行后的状态对比*/
+//会在cpu_exec()的主循环中被调用, 在NEMU中执行完一条指令后,
+//就在difftest_step()中让REF执行相同的指令, 然后读出REF中的寄存器, 并进行对比
+void difftest_step(vaddr_t pc, vaddr_t npc) 
+{
   CPU_state ref_r;
+  printf("pc = %lx, npc = %lx\n", pc, npc);
+  printf("skip_dut_nr_inst = %d\n", skip_dut_nr_inst);
 
-  if (skip_dut_nr_inst > 0) {
+  if (skip_dut_nr_inst > 0) 
+  {
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-    if (ref_r.pc == npc) {
+    printf("进入第一种情况\n");
+    if (ref_r.pc == npc) 
+    {
       skip_dut_nr_inst = 0;
       checkregs(&ref_r, npc);
       return;
@@ -115,17 +135,22 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
     return;
   }
 
-  if (is_skip_ref) {
+  if (is_skip_ref) 
+  {
+    printf("进入第二种情况\n");
     // to skip the checking of an instruction, just copy the reg state to reference design
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
     is_skip_ref = false;
     return;
   }
 
+  printf("进入第三种情况\n");
+
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
-  checkregs(&ref_r, pc);
+  // checkregs(&ref_r, pc);
+   checkregs(&ref_r, npc);
 }
 #else
 void init_difftest(char *ref_so_file, long img_size, int port) { }
