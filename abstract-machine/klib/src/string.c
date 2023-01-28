@@ -100,7 +100,7 @@ int strcmp(const char *s1, const char *s2)
   }
   
   return *s1 - *s2;
-  //panic("Not implemented");
+  
 }
 
 //与strcmp()类似，但最多只比较前n个字节
@@ -132,8 +132,7 @@ void *memset(void *s, int c, size_t n)
 
   return s;
  
- 
- // panic("Not implemented");
+
 }
 
 //将n个字节从内存区域src复制到内存区域dst
