@@ -59,7 +59,17 @@ void difftest_skip_dut(int nr_ref, int nr_dut) {
   }
 }
 
-void init_difftest(char *ref_so_file, long img_size, int port) {
+void init_difftest(char *ref_so_file, long img_size, int port) 
+{
+  //进行以下初始化工作
+  // 打开传入的动态库文件ref_so_file.
+  // 通过动态链接对动态库中的上述API符号进行符号解析和重定位, 返回它们的地址.
+  // 对REF的DIffTest功能进行初始化, 具体行为因REF而异.
+  // 将DUT的guest memory拷贝到REF中.
+  // 将DUT的寄存器状态拷贝到REF中.
+
+  //进行了上述初始化工作之后, DUT和REF就处于相同的状态了
+
   assert(ref_so_file != NULL);
 
   void *handle;
@@ -99,7 +109,11 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
   }
 }
 
-void difftest_step(vaddr_t pc, vaddr_t npc) {
+/*实现逐条指令执行后的状态对比*/
+//会在cpu_exec()的主循环中被调用, 在NEMU中执行完一条指令后,
+//就在difftest_step()中让REF执行相同的指令, 然后读出REF中的寄存器, 并进行对比
+void difftest_step(vaddr_t pc, vaddr_t npc) 
+{
   CPU_state ref_r;
 
   if (skip_dut_nr_inst > 0) {
