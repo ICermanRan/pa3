@@ -227,8 +227,8 @@ void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);   //判断传入的要单步执行的步数，不能大于10
   switch (nemu_state.state) {
     case NEMU_ABORT:
+       all_fail();
     case NEMU_END: 
-      assert_fail_msg();
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
       return;
     default: nemu_state.state = NEMU_RUNNING;
