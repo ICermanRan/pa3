@@ -100,7 +100,7 @@ int strcmp(const char *s1, const char *s2)
   }
   
   return *s1 - *s2;
-  //panic("Not implemented");
+  
 }
 
 //与strcmp()类似，但最多只比较前n个字节

@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#include <elf.h>
 
 void init_rand();
 void init_log(const char *log_file);
@@ -23,6 +24,7 @@ void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb();
 void init_disasm(const char *triple);
+
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -75,22 +77,54 @@ static long load_img() {
   return size;
 }
 
+
+typedef struct{
+  char* name;
+  uint64_t addr_start;
+  uint64_t addr_end;
+}function_info;
+extern function_info* decode_elf(char* elf_file_name);
+
+
+
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
     {"log"      , required_argument, NULL, 'l'},
     {"diff"     , required_argument, NULL, 'd'},
     {"port"     , required_argument, NULL, 'p'},
+    {"elf"      , required_argument, NULL, 'e'},
     {"help"     , no_argument      , NULL, 'h'},
     {0          , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      case 'e':
+               img_file = optarg;
+               #ifdef CONFIG_FTRACE
+               char* elf_file;
+               int img_name_size = strlen(img_file);
+               elf_file =(char*)malloc(img_name_size + 1);
+               strcpy(elf_file, img_file);
+                elf_file[img_name_size-3] = 'e';
+                elf_file[img_name_size-2] = 'l';
+                elf_file[img_name_size-1] = 'f';
+               // decode elf
+               extern function_info* fc;    //修饰符extern用在变量或者函数的声明前，用来说明“此变量/函数是在别处定义的，要在此处引用
+               fc = decode_elf(elf_file);
+               free(elf_file);
+               // open ftrace log file
+               extern char* ftrace_log;
+               extern FILE* ftrace_fp;
+               ftrace_fp = fopen(ftrace_log, "w");
+               #endif
+               break;
+
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
@@ -98,6 +132,7 @@ static int parse_args(int argc, char *argv[]) {
         printf("\t-l,--log=FILE           output log to FILE\n");
         printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
         printf("\t-p,--port=PORT          run DiffTest with port PORT\n");
+        printf("\t-e,--elf=elf            read function symbols from elf (only when enable ftrace)\n");
         printf("\n");
         exit(0);
     }

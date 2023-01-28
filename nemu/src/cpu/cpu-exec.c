@@ -35,7 +35,8 @@ static bool g_print_step = false;
 
 void device_update();
 
-/*定义iring_buf*/
+/****************************************************************/
+/************************ 定义iring_buf ************************/
 #ifdef CONFIG_ITRACE
 int now, tot;
 char iring_buf[16][64];
@@ -47,6 +48,23 @@ int first_inst = 1;
 #endif
 //数组的长度 = 数组所占的大小/单个数组元素所占的大小
 
+#ifdef CONFIG_ITRACE
+void show_iringbuf()
+{
+  Log_red("-----------------iringbuf---------------\n");
+  for(int i = 0; i <= tot; i++) 
+  {
+    
+    if(i == now - 1)
+      printf("--> %s\n", iring_buf[i]);
+    else 
+      printf("    %s\n", iring_buf[i]);
+  }
+  Log_red("----------------------------------------\n");
+}
+#endif
+
+// /****************************************************************/
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
@@ -178,20 +196,7 @@ static void execute(uint64_t n) {
   }
 }
 
-#ifdef CONFIG_ITRACE
-void show_iringbuf()
-{
-  
-  for(int i = 0; i <= tot; i++) 
-  {
-    
-    if(i == now - 1)
-      printf("--> %s\n", iring_buf[i]);
-    else 
-      printf("    %s\n", iring_buf[i]);
-  }
-}
-#endif
+
 
 static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
