@@ -34,7 +34,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
     }
   }
 
-  if(ref_r->pc != pc)
+  if(ref_r->pc != pc + 4)
   {
     Log_red("Difftest: different on pc, ref-right = %lx, dut-wrong = %lx \n", ref_r->pc, pc);
     res = false;
