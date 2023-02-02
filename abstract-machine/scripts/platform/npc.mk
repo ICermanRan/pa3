@@ -9,7 +9,7 @@ NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 
-.PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c run gdb
+.PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c 
 
 image: $(IMAGE).elf
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
@@ -17,6 +17,6 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
-	$(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS) -b" IMG=$(IMAGE).bin  
+	$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin  
 
 
