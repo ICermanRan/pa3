@@ -86,7 +86,8 @@ typedef struct{
 extern function_info* decode_elf(char* elf_file_name);
 
 
-
+//进入 parse_args函数
+//函数内的while循环，首先是switch到case 'l',设置log_file=nemu-log.txt的路径
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
@@ -102,7 +103,7 @@ static int parse_args(int argc, char *argv[]) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
-      case 'l': log_file = optarg; break; //表示成功识别了给NEMU输入的--log参数
+      case 'l': log_file = optarg; break; //表示成功识别了给NEMU输入的--log参数，nemu-log.txt
       case 'd': diff_so_file = optarg; break;
       case 'e':
                img_file = optarg;
