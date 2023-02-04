@@ -11,6 +11,7 @@ SEARCHPATH := ./vsrc
 
 
 # 2.verilator flags:
+#--trace:输出目标被构建的原因和执行的命令.
 VERILATOR_FLAGS += -Wall --trace --cc --exe --build
 VERILATOR_FLAGS += -I${SEARCHPATH}
 VERILATOR_FLAGS += --top ${TOP_MODULE}

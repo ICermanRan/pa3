@@ -13,6 +13,7 @@
 # See the Mulan PSL v2 for more details.
 #**************************************************************************************/
 
+###该文件是一些用于运行和清除编译结果的伪目标
 -include $(NEMU_HOME)/../Makefile
 include $(NEMU_HOME)/scripts/build.mk
 
