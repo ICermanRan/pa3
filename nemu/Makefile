@@ -40,7 +40,7 @@ DIRS-BLACKLIST-y += $(DIRS-BLACKLIST)
 SRCS-BLACKLIST-y += $(SRCS-BLACKLIST) $(shell find $(DIRS-BLACKLIST-y) -name "*.c")
 #最后，它会找出所有需要编译的目录，并从中提取所有 .c 文件，
 #最终将它们筛送出黑名单中的文件，得到最终的源文件列表。
-SRCS-y += $(shell find $(DIRS-y) -name "*.c")
+SRCS-y += $(shell find $(DIRS-y) -name "*.c") #将shell命令的运行结果赋值给变量
 SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y))
 
 #筛选文件列表的过程使用了 filter-out 函数。这个函数会将第二个参数中不在第一个参数中出现过的项目返回。
