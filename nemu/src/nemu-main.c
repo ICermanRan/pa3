@@ -38,6 +38,8 @@ int main(int argc, char *argv[]) {
 //   expr_test();			//是否进行表达式求值测试
   
   /* Start engine. */
+  // engine_start() -> sdb_mainloop()
+  // 其中会输出命令提示符, 提示用户输出SDB的命令
   engine_start();
 
   return is_exit_status_bad();

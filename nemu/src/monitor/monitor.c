@@ -103,7 +103,7 @@ static int parse_args(int argc, char *argv[]) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
-      case 'l': log_file = optarg; break; //表示成功识别了给NEMU输入的--log参数，nemu-log.txt
+      case 'l': log_file = optarg; break; //表示成功识别了给NEMU输入的--log参数，nemu-log.txt记录Log宏输出的信息
       case 'd': diff_so_file = optarg; break;
       case 'e':
                img_file = optarg;
@@ -163,6 +163,7 @@ void init_monitor(int argc, char *argv[]) {
   init_isa();
 
   /* Load the image to memory. This will overwrite the built-in image. */
+  // 加载命令行指定的镜像文件
   long img_size = load_img();
 
   /* Initialize differential testing. */
@@ -171,6 +172,7 @@ void init_monitor(int argc, char *argv[]) {
   /* Initialize the simple debugger. */
   init_sdb();
 
+  // init_disasm() - 初始化LLVM提供的用于反汇编的库函数
   IFDEF(CONFIG_ITRACE, init_disasm(
     MUXDEF(CONFIG_ISA_x86,     "i686",
     MUXDEF(CONFIG_ISA_mips32,  "mipsel",
@@ -179,6 +181,7 @@ void init_monitor(int argc, char *argv[]) {
   ));
 
   /* Display welcome message. */
+  // 输出欢迎信息以及trace的状态信息,还输出了编译的时间和日期
   welcome();
 }
 #else // CONFIG_TARGET_AM

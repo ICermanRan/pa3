@@ -30,6 +30,9 @@ typedef struct Decode {
 __attribute__((always_inline))
 
 /*pattern_decode()函数用于将模式字符串转换成3个整型变量*/
+//该函数采用循环展开而不是for循环来从字符串中计算出key,mask,shift属性
+//输入都是常量, 在一定优化等级下编译器可将计算过程全部优化掉
+//调用时传递STRLEN(pattern)而不是strlen(pattern)
 static inline void pattern_decode(const char *str, int len,
     uint64_t *key, uint64_t *mask, uint64_t *shift) {
   uint64_t __key = 0, __mask = 0, __shift = 0;

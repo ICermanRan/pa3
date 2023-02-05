@@ -47,6 +47,8 @@ static void out_of_bound(paddr_t addr) {
       addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
 }
 
+//init_mem()-初始化状态机的M
+//将M中的内容设置为随机数，可以暴露访问未初始化内存的Undefined Behavior
 void init_mem() {
 #if   defined(CONFIG_PMEM_MALLOC)
   pmem = malloc(CONFIG_MSIZE);
