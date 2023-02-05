@@ -132,7 +132,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   
   isa_exec_once(s); //它会随着取指的过程修改s->snpc的值, 
                     //使得从isa_exec_once()返回后s->snpc正好为下一条指令的PC. 
-  printf("传递给cpu.pc的值 = %0lx\n", s->dnpc);
+  // printf("传递给cpu.pc的值 = %0lx\n", s->dnpc);
   cpu.pc = s->dnpc; //下一条指令的pc(动态)
   /*下面的代码与trace相关*/
   /*当用sdb 单步执行si功能的时候，这里会把当前的:地址、指令、指令名称、操作数 等打印出来*/
@@ -179,7 +179,7 @@ static void execute(uint64_t n) {
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
 
     /*下面的代码与trace和difftest相关*/
-     printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
+    //  printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
     trace_and_difftest(&s, cpu.pc);
     
     
