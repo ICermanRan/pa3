@@ -18,6 +18,7 @@
 
 // this is not consistent with uint8_t
 // but it is ok since we do not access the array directly
+// 这就是所谓的内置程序
 static const uint32_t img [] = {
   0x00000297,  // auipc t0,0
   0x0002b823,  // sd  zero,16(t0)
@@ -34,6 +35,10 @@ static void restart() {
   cpu.gpr[0] = 0;
 }
 
+//init_isa()-设置状态机的初始状态，干了两件事
+//第一件事：往Memory中存放程序-通过memcpy()往M中拷贝一段内置程序img
+//第二件事：调用restart()-设置cpu.pc = RESET_VECTOR, 该值可通过menuconfig配置, 默认为0x80000000
+                      //-设置cpu.gpr[0] = 0, 0号寄存器恒为0
 void init_isa() {
   /* Load built-in image. */
   memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img));

@@ -1,3 +1,8 @@
+###该文件的作用主要有两个
+#1、编译规则 
+#2、包含源文件与头文件的依赖关系(由gcc的-MMD选项生成，并通过fixdep工具处理)
+
+
 .DEFAULT_GOAL = app
 
 # Add necessary options if the target is a shared library

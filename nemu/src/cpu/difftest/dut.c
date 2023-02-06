@@ -116,13 +116,13 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
 void difftest_step(vaddr_t pc, vaddr_t npc) 
 {
   CPU_state ref_r;
-  printf("pc = %lx, npc = %lx\n", pc, npc);
-  printf("skip_dut_nr_inst = %d\n", skip_dut_nr_inst);
+  // printf("pc = %lx, npc = %lx\n", pc, npc);
+  // printf("skip_dut_nr_inst = %d\n", skip_dut_nr_inst);
 
   if (skip_dut_nr_inst > 0) 
   {
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-    printf("进入第一种情况\n");
+    // printf("进入第一种情况\n");
     if (ref_r.pc == npc) 
     {
       skip_dut_nr_inst = 0;
@@ -137,14 +137,14 @@ void difftest_step(vaddr_t pc, vaddr_t npc)
 
   if (is_skip_ref) 
   {
-    printf("进入第二种情况\n");
+    // printf("进入第二种情况\n");
     // to skip the checking of an instruction, just copy the reg state to reference design
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
     is_skip_ref = false;
     return;
   }
 
-  printf("进入第三种情况\n");
+  // printf("进入第三种情况\n");
 
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
