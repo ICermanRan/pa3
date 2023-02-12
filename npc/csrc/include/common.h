@@ -2,6 +2,7 @@
 #define __COMMON_H__
 
 #include <stdint.h>
+#include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -56,7 +57,7 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_RTOS 1
 #define CONFIG_SOC_SIMULATOR 1
 
-#define CONFIG_DEVICE 1
+// #define CONFIG_DEVICE 1
 #define CONFIG_HAS_TIMER 1
 #define CONFIG_TIMER_GETTIMEOFDAY 1
 #define CONFIG_HAS_SERIAL 1

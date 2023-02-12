@@ -45,7 +45,7 @@
 `define EXU_SUB         6'h2
 `define EXU_ADDW        6'h3
 `define EXU_SUBW        6'h4
-`define EXU_AND         6'h6
+`define EXU_AND         6'h5
 `define EXU_OR          6'h6
 `define EXU_XOR         6'h7
 `define EXU_SLL         6'h8
@@ -66,17 +66,62 @@
 `define EXU_DIVW        6'h23
 `define EXU_DIVUW       6'h24
 `define EXU_REMW        6'h25
+`define EXU_REMUW       6'h26
 `define EXU_SLT         6'h27
 `define EXU_SLTU        6'h28
+`define EXU_BEQ         6'h29
+`define EXU_BNE         6'h30
+`define EXU_BLT         6'h31
+`define EXU_BGE         6'h32
+`define EXU_BLTU        6'h33
+`define EXU_BGEU        6'h34
 
 
 
+//  ALU opreator:
+`define ALU_ADD         6'h1
+`define ALU_SUB         6'h2  //use for sub,slt,beq,bne,blt,bge
+`define ALU_ADDW        6'h3
+`define ALU_SUBW        6'h4
+`define ALU_AND         6'h5
+`define ALU_OR          6'h6
+`define ALU_XOR         6'h7
+`define ALU_SLL         6'h8
+`define ALU_SRL         6'h9
+`define ALU_SRA         6'h10
+`define ALU_SLLW        6'h11
+`define ALU_SRLW        6'h12
+`define ALU_SRAW        6'h13
+`define ALU_MUL         6'h14
+`define ALU_MULH        6'h15
+`define ALU_MULHSU      6'h16
+`define ALU_MULHU       6'h17
+`define ALU_DIV         6'h18
+`define ALU_DIVU        6'h19
+`define ALU_REM         6'h20
+`define ALU_REMU        6'h21
+`define ALU_MULW        6'h22
+`define ALU_DIVW        6'h23
+`define ALU_DIVUW       6'h24
+`define ALU_REMW        6'h25
 
 
+`define ALU_SUBU        6'h35
 
 //  LSU selection:
 `define LSU_OPT_WIDTH   4
-`define LSU_NOP         `LSU_OPT_WIDTH'b1111    //1111 for nop!! "lowest bit = 0" <=> "this is an load ins"
+`define LSU_LB          4'b0000    // 000 for FUNC3_LB_SB, 0 for load
+`define LSU_LH          4'b0010    // 001 for FUNC3_LH_SH, 0 for load
+`define LSU_LW          4'b0100    // 010 for FUNC3_LW_SW, 0 for load
+`define LSU_LD          4'b0110    // 011 for FUNC3_LD_SD, 0 for load
+`define LSU_LBU         4'b1000    // 100 for FUNC3_LBU,   0 for load
+`define LSU_LHU         4'b1010    // 101 for FUNC3_LHU,   0 for load
+`define LSU_LWU         4'b1100    // 110 for FUNC3_LWU,   0 for load
+`define LSU_SB          4'b0001    // 000 for FUNC3_LB_SB, 1 for store
+`define LSU_SH          4'b0011    // 001 for FUNC3_LH_SH, 1 for store
+`define LSU_SW          4'b0101    // 010 for FUNC3_LW_SW, 1 for store
+`define LSU_SD          4'b0111    // 011 for FUNC3_LD_SD, 1 for store
+`define LSU_NOP         4'b1111    //1111 for nop!! "lowest bit = 0" <=> "this is an load ins"
 
 
 

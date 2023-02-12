@@ -18,6 +18,9 @@ void putch(char ch) {
 }
 
 void halt(int code) {
+  //从abstract-machine/am/src/platform/nemu/include/nemu.h
+  //根据对应宏设定，复制进来
+  asm volatile("mv a0, %0; ebreak" : :"r"(code));
   while (1);
 }
 

@@ -12,7 +12,7 @@ module ysyx_22050078_IDU
     //from IFU
     input [`INST_WIDTH - 1:0]         inst_in,          //32位指令
     
-    //to regs
+    //to regfile
     output reg [`REG_ADDRW - 1:0]     o_rs1_addr,           //源寄存器1(地址)
     output reg [`REG_ADDRW - 1:0]     o_rs2_addr,           //源寄存器2(地址)
     output reg [`REG_ADDRW - 1:0]     o_rd_addr,            //目标寄存器(地址)
@@ -63,7 +63,7 @@ module ysyx_22050078_IDU
 
 
 //把指令及指令地址传给EXU 
-    assign inst_out = inst_in;
+    // assign inst_out = inst_in;
     //assign inst_addr_out = inst_addr_in;
 
 
@@ -270,7 +270,7 @@ module ysyx_22050078_IDU
               `FUNC3_SLL_MULH:
                 case(func7)
                   7'b0000000:o_exu_opt = `EXU_SLL;
-                  7'b0000000:o_exu_opt = `EXU_MULH;
+                  7'b0000001:o_exu_opt = `EXU_MULH;
                   default:   s_id_err[2] = 1'b1;
                 endcase
 

@@ -12,9 +12,7 @@
 Vysyx_22050078_npc::Vysyx_22050078_npc(VerilatedContext* _vcontextp__, const char* _vcname__)
     : vlSymsp{new Vysyx_22050078_npc__Syms(_vcontextp__, _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
-    , rst{vlSymsp->TOP.rst}
-    , inst{vlSymsp->TOP.inst}
-    , inst_addr_cpu2mem{vlSymsp->TOP.inst_addr_cpu2mem}
+    , rst_n{vlSymsp->TOP.rst_n}
     , rootp{&(vlSymsp->TOP)}
 {
 }

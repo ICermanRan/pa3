@@ -4,6 +4,7 @@
 #include "Vysyx_22050078_npc___024root.cpp"
 #include "Vysyx_22050078_npc__Dpi.cpp"
 #include "Vysyx_22050078_npc__Trace.cpp"
+#include "Vysyx_22050078_npc__ConstPool_0.cpp"
 #include "Vysyx_22050078_npc___024root__Slow.cpp"
 #include "Vysyx_22050078_npc__Syms.cpp"
 #include "Vysyx_22050078_npc__Trace__Slow.cpp"
