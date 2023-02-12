@@ -2,18 +2,19 @@
 #define __UTILS_H__
 
 #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
+#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
 
 // ----------- state -----------
 
-// enum { NEMU_RUNNING, NEMU_STOP, NEMU_END, NEMU_ABORT, NEMU_QUIT };
-//   //     运行            停止       结束        终止        退出
-// typedef struct {
-//   int state;
-//   vaddr_t halt_pc;
-//   uint32_t halt_ret;
-// } NEMUState;
+enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
+  //     运行            停止       结束        终止        退出
+typedef struct {
+  int state;
+  vaddr_t halt_pc;
+  uint32_t halt_ret;
+} NPCState;
 
-// extern NEMUState nemu_state;
+extern NPCState npc_state;
 
 // ----------- timer -----------
 
@@ -41,22 +42,22 @@ uint64_t get_time();
 
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 
-#define log_write(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, \
-  do { \
-    extern FILE* log_fp; \
-    extern bool log_enable(); \
-    if (log_enable()) { \
-      fprintf(log_fp, __VA_ARGS__); \
-      fflush(log_fp); \
-    } \
-  } while (0) \
-)
+// #define log_write(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, \
+//   do { \
+//     extern FILE* log_fp; \
+//     extern bool log_enable(); \
+//     if (log_enable()) { \
+//       fprintf(log_fp, __VA_ARGS__); \
+//       fflush(log_fp); \
+//     } \
+//   } while (0) \
+// )
 
-#define _Log(...) \
-  do { \
-    printf(__VA_ARGS__); \
-    log_write(__VA_ARGS__); \
-  } while (0)
+// #define _Log(...) \
+//   do { \
+//     printf(__VA_ARGS__); \
+//     log_write(__VA_ARGS__); \
+//   } while (0)
 
 
 #endif

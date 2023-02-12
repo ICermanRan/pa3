@@ -23,9 +23,9 @@ GCC_LDFLAGS := -LDFLAGS -ldl
 # 3.run info:
 OBJ_DIR := ./obj_dir
 BIN := ${OBJ_DIR}/V${TOP_MODULE}
-IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
-DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
-RUN_FLAGS := --img=${IMG} --diff=${DIFFTEST}
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin #?= 是如果没有被赋值过就赋予等号后面的值,所以如果没有被赋予.bin文件，就会运行dummy.bin
+# DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
+RUN_FLAGS := --img=${IMG} 
 
 .PHONY:sim wave clean
 

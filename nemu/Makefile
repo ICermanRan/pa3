@@ -38,9 +38,13 @@ include $(FILELIST_MK)
 #它会先找出所有在黑名单中的目录，并将所有在这些目录中的 .c 文件都加入黑名单。
 DIRS-BLACKLIST-y += $(DIRS-BLACKLIST)
 SRCS-BLACKLIST-y += $(SRCS-BLACKLIST) $(shell find $(DIRS-BLACKLIST-y) -name "*.c")
+#SRCS-BLACKLIST-y:不参与编译的源文件的黑名单集合
+#DIRS-BLACKLIST-y:不参与编译的目录集合, 该目录下的所有文件都会被加入到SRCS-BLACKLIST-y中
 #最后，它会找出所有需要编译的目录，并从中提取所有 .c 文件，
 #最终将它们筛送出黑名单中的文件，得到最终的源文件列表。
 SRCS-y += $(shell find $(DIRS-y) -name "*.c") #将shell命令的运行结果赋值给变量
+#SRCS-y:参与编译的源文件的候选集合。
+#DIRS-y:参与编译的目录集合, 该目录下的所有文件都会被加入到SRCS-y中
 SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y)) #SRCS：需要编译的源文件
 
 #筛选文件列表的过程使用了 filter-out 函数。这个函数会将第二个参数中不在第一个参数中出现过的项目返回。

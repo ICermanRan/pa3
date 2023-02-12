@@ -28,6 +28,9 @@ image: $(IMAGE).elf
 #$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 的意义：切换到$(NPC_HOME)目录下执行makefile
 #以dummy为例：make -C /home/ran/ysyx/ysyx-workbench/npc run IMG=/home/ran/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
 run: image
+	@echo run npc $(IMAGE).elf
+	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
+	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
 	$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin  
 
 

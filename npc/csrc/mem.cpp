@@ -10,7 +10,7 @@ uint8_t* guest_to_host(uint64_t paddr) { return pmem + paddr - PMEM_START; }
 //将nemu中主机的虚拟地址转化成客户程序中的物理地址
 uint64_t host_to_guest(uint8_t *haddr) { return haddr - pmem + PMEM_START; }
 
-static void pmem_write(paddr_t addr, int len, word_t data) 
+void pmem_write(uint64_t addr, uint64_t data, int len) 
 {
    uint8_t * paddr = guest_to_host(addr);
    switch(len)
