@@ -30,7 +30,7 @@ module ysyx_22050078_IFU
         rtl_pmem_read(i_pc, inst, rst_n);
 
         $display("inst = %h", inst);
-        $display("pc = %h", i_pc);
+        $display("pc = %h\n", i_pc);
         // diff_read_pc(i_pc);
      end
 

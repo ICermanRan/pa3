@@ -1,12 +1,12 @@
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __npc_COMMON_H__
+#define __npc_COMMON_H__
 
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
-
 #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/macro.h"
+#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/utils.h"
 
 
 #ifdef CONFIG_TARGET_AM
@@ -16,12 +16,13 @@
 #include <stdlib.h>
 #endif
 
+
 #if CONFIG_MBASE + CONFIG_MSIZE > 0x100000000ul
 #define PMEM64 1
 #endif
 
-typedef __uint128_t word_t;
-typedef __uint128_t sword_t;
+typedef uint64_t word_t;
+typedef uint64_t  sword_t;
 
 
 #define FMT_WORD MUXDEF(CONFIG_ISA64, "0x%016lx", "0x%08x")
@@ -35,8 +36,9 @@ typedef uint16_t ioaddr_t;
 #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/debug.h"
 
 #define __GUEST_ISA__ riscv64
-#define CONFIG_ISA64 1
+
 #define CONFIG_ISA_riscv64 1
+#define CONFIG_ISA64 1
 #define CONFIG_ISA "riscv64"
 #define CONFIG_CC_GCC 1
 #define CONFIG_MODE_SYSTEM 1

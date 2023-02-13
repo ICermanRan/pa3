@@ -3,6 +3,10 @@
 # 学号：ysyx_220578
 ######################################################################
 
+#gcc flags
+GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/	\
+										-I/usr/include/SDL2 
+
 # 1.files info:
 CSRC +=  $(shell find $(abspath ./csrc) -name "*.cpp")
 VSRC +=  $(shell find $(abspath ./vsrc) -name "*.v" -or -name "*.sv")
@@ -12,13 +16,20 @@ SEARCHPATH := ./vsrc
 
 # 2.verilator flags:
 #--trace:输出目标被构建的原因和执行的命令.
-VERILATOR_FLAGS += -Wall --trace --cc --exe --build
+VERILATOR_FLAGS += -Wall --trace --cc --exe --build -MMD
 VERILATOR_FLAGS += -I${SEARCHPATH}
 VERILATOR_FLAGS += --top ${TOP_MODULE}
 VERILATOR_FLAGS += -Wno-UNUSED
 VERILATOR_FLAGS += -Wno-UNDRIVEN
 VERILATOR_FLAGS += -Wno-INCABSPATH
-GCC_LDFLAGS := -LDFLAGS -ldl
+
+GCC_LIB = -lreadline \
+		  -ldl \
+		  -lSDL2 
+
+GCC_LDFLAGS := $(addprefix -LDFLAGS ,${GCC_LIB})
+GCC_CFLAGS :=  $(addprefix -CFLAGS ,${GCC_INCLUDE_PATH})
+GCC_FLAGS := ${GCC_CFLAGS} ${GCC_LDFLAGS}
 
 # 3.run info:
 OBJ_DIR := ./obj_dir
@@ -65,9 +76,9 @@ RUN_FLAGS := --img=${IMG}
 
 
 com:$(CSRC) $(VSRC)
-	@verilator ${VERILATOR_FLAGS} ${CSRC} ${VSRC} ${GCC_LDFLAGS}
+	@verilator ${VERILATOR_FLAGS} ${CSRC} ${VSRC} ${GCC_FLAGS}
 
-run:com
+run: com
 	@${BIN} ${RUN_FLAGS}
 	#$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!	
 ###################################################

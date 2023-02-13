@@ -1,35 +1,39 @@
+// // #include "Vysyx_22050078_npc__Dpi.h"
+// // #include "Vysyx_22050078_npc.h"
+// // #include "verilated.h"
+// // #include "verilated_vcd_c.h"
 // #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
 // #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
 // #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/macro.h"
 // #include <locale.h>
 
 
-// #define MAX_INST_TO_PRINT 10
+// // #define MAX_INST_TO_PRINT 10
 
 // uint64_t g_nr_guest_inst = 0;
 // static uint64_t g_timer = 0; // unit: us
 // static bool g_print_step = false;
 
-// static void trace_and_difftest() {
+// // static void trace_and_difftest() {
 
-// #ifdef CONFIG_ITRACE_COND
-//   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
-// #endif
-//   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
-//   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+// // #ifdef CONFIG_ITRACE_COND
+// //   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+// // #endif
+// //   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+// //   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
-// /*check watchpoint*/
-//  #ifdef CONFIG_WATCHPOINT
-//   int change = test_change();
+// // /*check watchpoint*/
+// //  #ifdef CONFIG_WATCHPOINT
+// //   int change = test_change();
   
-//   if(change == 1) //发生了变化，要暂停
-//     {
-//       nemu_state.state = NEMU_STOP;
-//       printf("监视点已被触发\n");
-//       return ; //返回到sdb_mainloop()循环中等待用户的命令.
-//     }
-//  #endif
-// }
+// //   if(change == 1) //发生了变化，要暂停
+// //     {
+// //       nemu_state.state = NEMU_STOP;
+// //       printf("监视点已被触发\n");
+// //       return ; //返回到sdb_mainloop()循环中等待用户的命令.
+// //     }
+// //  #endif
+// // }
 
 
 
@@ -61,7 +65,7 @@
 
 //     /*下面的代码与trace和difftest相关*/
 //     //  printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
-//     trace_and_difftest(get_this_iringbuf());
+//     // trace_and_difftest(get_this_iringbuf());
      
 //     // IFDEF(CONFIG_DEVICE, device_update());
 //   }

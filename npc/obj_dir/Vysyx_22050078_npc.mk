@@ -35,16 +35,25 @@ VM_PREFIX = Vysyx_22050078_npc
 VM_MODPREFIX = Vysyx_22050078_npc
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
+	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/ \
+	-I/usr/include/SDL2 \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
+	-lreadline \
 	-ldl \
+	-lSDL2 \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	cpu-exec \
+	map \
+	mmio \
+	port-io \
+	timer \
 	difftest \
 	dpic \
+	hostcall \
 	init \
 	main \
 	mem \
@@ -59,6 +68,8 @@ VM_USER_CLASSES = \
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/device \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/device/io \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/sdb \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/utils \
@@ -75,9 +86,19 @@ VPATH += $(VM_USER_DIR)
 
 cpu-exec.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/cpu-exec.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+map.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/map.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mmio.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/mmio.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+port-io.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/port-io.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+timer.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/timer.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 difftest.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/difftest.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 dpic.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/dpic.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+hostcall.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/hostcall.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/init.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

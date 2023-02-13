@@ -9,22 +9,22 @@ static char *diff_so_file = NULL;
 
 // void init_log(const char *log_file);
 
-// static void welcome() {
-//   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
-//         "to record the trace. This may lead to a large log file. "
-//         "If it is not necessary, you can disable it in menuconfig"));
-//   #ifdef CONFIG_TRACE
-//   Log("ITRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   Log("MTRACE: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   Log("FTRACE: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   // Log("DTRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   #endif
-//   // Log("Build time: %s, %s", __TIME__, __DATE__);
-//   printf("Welcome to %s-npc!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
-//   printf("👽😡🤡🥶😎😭😵🤤🥵😄🤣🥳💩🤖😱😴😀🥰😅😫\n");
-//   printf("For help, type \"help\"\n");
-// }
+static void welcome() {
+  Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
+        "to record the trace. This may lead to a large log file. "
+        "If it is not necessary, you can disable it in menuconfig"));
+  #ifdef CONFIG_TRACE
+  Log("ITRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("MTRACE: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("FTRACE: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  // Log("DTRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  #endif
+  // Log("Build time: %s, %s", __TIME__, __DATE__);
+  printf("Welcome to %s-npc!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
+  printf("👽😡🤡🥶😎😭😵🤤🥵😄🤣🥳💩🤖😱😴😀🥰😅😫\n");
+  printf("For help, type \"help\"\n");
+}
 
 extern uint8_t pmem[PMEM_MSIZE];  // use for load_img
 static long load_img()
@@ -84,7 +84,7 @@ void init_monitor(int argc, char *argv[])
 
   /* Open the log file. */
   //init log.
-  // init_log(log_file);
+  init_log(log_file);
 
   /* Load the image to memory. This will overwrite the built-in image. */
   // 加载命令行指定的镜像文件
@@ -96,10 +96,10 @@ void init_monitor(int argc, char *argv[])
   // #endif
 
   // /* Initialize the simple debugger. */
-  // init_sdb();
+  init_sdb();
 
   // /* Display welcome message. */
   // // 输出欢迎信息以及trace的状态信息,还输出了编译的时间和日期
-  // welcome();
+  welcome();
 
 }

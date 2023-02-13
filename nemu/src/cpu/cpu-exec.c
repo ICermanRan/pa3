@@ -19,7 +19,7 @@
 #include <locale.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/include/cpu/ifetch.h>
-#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
+
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.

@@ -134,7 +134,7 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root___sequent__TOP__1(Vysyx_22050078
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__pc, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__3__rdata, (IData)(vlSelf->ysyx_22050078_npc__DOT__u_stdrst__DOT__rst_n_r2));
     vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst 
         = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__3__rdata;
-    VL_WRITEF("inst = %x\npc = %x\n",64,vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst,
+    VL_WRITEF("inst = %x\npc = %x\n\n",64,vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst,
               64,vlSelf->ysyx_22050078_npc__DOT__pc);
     vlSelf->ysyx_22050078_npc__DOT__rd_addr_IDU2regs = 0U;
     if ((1U & (IData)((vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst 
