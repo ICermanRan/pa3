@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include <common.h>
-#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
+#include "/home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h"
 #include "/home/ran/ysyx/ysyx-workbench/nemu/include/expr-test.h"
 
 void expr_test();
