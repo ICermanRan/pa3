@@ -499,7 +499,7 @@ static word_t eval(int start, int end)  //p=开始位置，q=结束位置
      const char *s;
      _Bool * success = NULL;
      s = tokens[p].str + 1;//为了舍弃掉表示读寄存器的$符号
-    //  printf("s = %s\n", s);
+     printf("s = %s\n", s);
      word_t value = isa_reg_str2val(s, success);
       // printf("value = %#010lx\n", value);
       // printf("读取到的value = 0x%lx \n", value);
