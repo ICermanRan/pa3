@@ -60,9 +60,9 @@ static int find_string(const char *strs[], const char *str, int len)
 word_t isa_reg_str2val(const char *s, bool *success) {
   int len,j;
   GET_ARRAY_LEN(regs,len);
-  printf("len = %d\n", len);
+  // printf("len = %d\n", len);
   j = find_string(regs, s, len);
-  printf("j = %d\n", j);
+  // printf("j = %d\n", j);
   word_t reg_value;
 
   if(j == 33)
@@ -70,8 +70,8 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   else
     {
     reg_value = cpu.gpr[j];
-    printf("cpu.gpr[j] = %lx\n", cpu.gpr[j]);
-    printf("reg_value = %lx\n", reg_value);
+    // printf("cpu.gpr[j] = %lx\n", cpu.gpr[j]);
+    // printf("reg_value = %lx\n", reg_value);
     }
   
   return reg_value;

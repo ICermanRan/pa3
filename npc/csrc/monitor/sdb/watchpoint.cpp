@@ -1,5 +1,8 @@
 #include "sdb.h"
 #include "isa.h"
+#include "include.h"
+#include "macro.h"
+#include "common.h"
 
 #define NR_WP 32
 
@@ -23,46 +26,46 @@ void init_wp_pool() {
 
 // /* TODO: Implement the functionality of watchpoint */
 
-// /*函数功能:从free_链表中返回一个空闲的监视点结构给head链表，且将表达式及结果赋给该监视点结构体*/
-// WP* new_wp(char *exp)
-// {
-//   if(free_ == NULL) //没有空闲监视点结构
-//   {
-//     printf("Erro!free is null\n");
-//     assert(0);
-//   }
+/*函数功能:从free_链表中返回一个空闲的监视点结构给head链表，且将表达式及结果赋给该监视点结构体*/
+WP* new_wp(char *exp)
+{
+  if(free_ == NULL) //没有空闲监视点结构
+  {
+    printf("Erro!free is null\n");
+    assert(0);
+  }
     
-//   WP *temp = free_;
-//   free_ =  free_->next;
-//   temp->next = NULL;
+  WP *temp = free_;
+  free_ =  free_->next;
+  temp->next = NULL;
 
-//   // printf("pc = %lu\n", pc);
-//   // printf("pc = %#010lx\n", pc);
+  // printf("pc = %lu\n", pc);
+  // printf("pc = %#010lx\n", pc);
 
-//   // printf("成功从free链表截取了一个节点出来\n");
+  // printf("成功从free链表截取了一个节点出来\n");
 
-//   bool success = false;
-//   strcpy(temp->exp, exp);//将存储的表达式传给返回的空闲的监视点结构
-//   temp->old_value = expr(temp->exp, &success); //调用expr函数计算传入temp的表达式,并返回结果赋给new_value
-//   assert(success);
-//   // temp->NO = NO;//存储创建的监视点的序号
+  bool success = false;
+  strcpy(temp->exp, exp);//将存储的表达式传给返回的空闲的监视点结构
+  temp->old_value = expr(temp->exp, &success); //调用expr函数计算传入temp的表达式,并返回结果赋给new_value
+  assert(success);
+  // temp->NO = NO;//存储创建的监视点的序号
 
-//   if(head == NULL)  //若head链表为空表
-//   {
-//     head = temp;    //将该节点设为头节点
-//   }
-//   else              //head != NULL,则将该节点接到head链表的最后一个位置
-//   {
-//     WP *p = head;
-//     while(p->next != NULL)  //一直移动到head链表表尾
-//       {
-//         p = p->next;
-//       }
-//     p->next = temp; //将该节点接到head链表的最后一个位置
-//   }
+  if(head == NULL)  //若head链表为空表
+  {
+    head = temp;    //将该节点设为头节点
+  }
+  else              //head != NULL,则将该节点接到head链表的最后一个位置
+  {
+    WP *p = head;
+    while(p->next != NULL)  //一直移动到head链表表尾
+      {
+        p = p->next;
+      }
+    p->next = temp; //将该节点接到head链表的最后一个位置
+  }
 
-//   return temp;
-// }
+  return temp;
+}
 
 
 /*函数功能:将形式参数wp所指的节点归还到free_链表中,本质就是删除监视点*/
@@ -116,49 +119,49 @@ int free_wp(int num)
 
 }
 
-// /*函数功能:扫描所有head链表的监视点，对相应表达式求值，并比较值是否发生变化*/
-// int test_change()
-// {
-//   WP *p = head;
+/*函数功能:扫描所有head链表的监视点，对相应表达式求值，并比较值是否发生变化*/
+int test_change()
+{
+  WP *p = head;
   
-//   if(p == NULL)     //如果head链表为空
-//     return 0;
+  if(p == NULL)     //如果head链表为空
+    return 0;
 
-//   while(p != NULL)  //一直移动到head链表表尾才退出，检测到有变化也会退出
-//     {
-//       bool success = false;
-//       p->new_value = expr(p->exp,&success);//取出每个节点的exp，利用expr()函数对其进行求值
+  while(p != NULL)  //一直移动到head链表表尾才退出，检测到有变化也会退出
+    {
+      bool success = false;
+      p->new_value = expr(p->exp,&success);//取出每个节点的exp，利用expr()函数对其进行求值
 
-//       if(p->new_value != p->old_value)
-//       {
-//         //表达式求的新值与旧值不相等
-//         printf("old value = %lu\n", p->old_value);
-//         printf("new value = %lu\n", p->new_value);
-//         return 1;
-//       }
+      if(p->new_value != p->old_value)
+      {
+        //表达式求的新值与旧值不相等
+        printf("old value = %lu\n", p->old_value);
+        printf("new value = %lu\n", p->new_value);
+        return 1;
+      }
       
-//       if(p->new_value == p->old_value)
-//       {
-//         //表达式求的新值与旧值相等
-//         // p->old_value = p->new_value;//old_value更替为新值
-//         p = p->next;                //移动到head链表下一个位置
-//       }  
+      if(p->new_value == p->old_value)
+      {
+        //表达式求的新值与旧值相等
+        // p->old_value = p->new_value;//old_value更替为新值
+        p = p->next;                //移动到head链表下一个位置
+      }  
        
-//     }   
+    }   
 
-//   return 0;
-// }
+  return 0;
+}
 
 
-// /*函数功能:打印所有head链表的监视点信息*/
-// void print_wp()
-// {
-//   WP *p = head;
-//   printf("WP_NO\tEXPR\t\tDEX_Value\t\tHEX_Value\n");
-//   while(p != NULL)
-//   {
-//     printf("%d\t%-11s\t%-20lu\t%#010lx\n", p->NO, p->exp, p->old_value, p->old_value);
-//     p = p->next;
-//   }
+/*函数功能:打印所有head链表的监视点信息*/
+void print_wp()
+{
+  WP *p = head;
+  printf("WP_NO\tEXPR\t\tDEX_Value\t\tHEX_Value\n");
+  while(p != NULL)
+  {
+    printf("%d\t%-11s\t%-20lu\t%#010lx\n", p->NO, p->exp, p->old_value, p->old_value);
+    p = p->next;
+  }
 
-// }
+}

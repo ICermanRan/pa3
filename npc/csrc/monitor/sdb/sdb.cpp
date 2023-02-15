@@ -3,9 +3,9 @@
 #include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/isa.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/sdb.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
+#include "isa.h"
+#include "sdb.h"
+#include "include.h"
 
 static int is_batch_mode = false;
 
@@ -180,30 +180,30 @@ static int cmd_p(char *args) {
   return 0;
 }
 
-// static int cmd_w(char *args) {
+static int cmd_w(char *args) {
   
-//   WP *n_wp = NULL;
-//   // n_wp = new_wp(args);//调用这个函数，从free链表中返回一个空闲的监视点结构
-//   n_wp = new_wp();//调用这个函数，从free链表中返回一个空闲的监视点结构
-//   printf("watchpoint %d: %s is set successfully\n", n_wp->NO, n_wp->exp);
-//   return 0;
-// }
+  WP *n_wp = NULL;
+  // n_wp = new_wp(args);//调用这个函数，从free链表中返回一个空闲的监视点结构
+  n_wp = new_wp();//调用这个函数，从free链表中返回一个空闲的监视点结构
+  printf("watchpoint %d: %s is set successfully\n", n_wp->NO, n_wp->exp);
+  return 0;
+}
 
-// static int cmd_d(char *args) {
-//   // printf("args =%s\n",args);
-//   int num = 0;
-//   // char *arg = strtok(NULL," ");
-//   // printf("arg =%s\n",arg);
-//   sscanf(args, "%d", &num);
-//   int d = free_wp(num);//调用这个函数，从head链表中删除一个节点返回到free链表中
+static int cmd_d(char *args) {
+  // printf("args =%s\n",args);
+  int num = 0;
+  // char *arg = strtok(NULL," ");
+  // printf("arg =%s\n",arg);
+  sscanf(args, "%d", &num);
+  int d = free_wp(num);//调用这个函数，从head链表中删除一个节点返回到free链表中
 
-//   if(d == 1)
-//     printf("delete watchpoint %d successfully\n", num);
-//   else
-//     printf("there is no watchpoint %d\n", num);
+  if(d == 1)
+    printf("delete watchpoint %d successfully\n", num);
+  else
+    printf("there is no watchpoint %d\n", num);
   
-//   return 0;
-// }
+  return 0;
+}
 
 static struct {
   const char *name;
@@ -219,8 +219,8 @@ static struct {
   { "info", "printf message", cmd_info},
   { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
   { "p", "eval the expr", cmd_p},//表达式求值
-  // { "w", "set the watchpoint", cmd_w},
-  // { "d", "delet the watchpoint", cmd_d}
+  { "w", "set the watchpoint", cmd_w},
+  { "d", "delet the watchpoint", cmd_d}
 };
 
 #define NR_CMD ARRLEN(cmd_table)

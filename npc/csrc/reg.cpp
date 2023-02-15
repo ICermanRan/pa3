@@ -61,7 +61,7 @@ regfile pack_dut_regfile(uint64_t *dut_reg, uint64_t pc)
 
 static int find_string(const char *strs[], const char *str, int len)
 {
-    int i = 1;
+    int i = 0;
     while(i < len + 1){
         if(strcmp(*strs, str) == 0){
             break;

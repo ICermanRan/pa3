@@ -29,7 +29,7 @@
 //   /* TODO: Add more members if necessary */
 // } WP;
 
-
+WP* new_wp(char *exp);
 
 static WP wp_pool[NR_WP] = {};        //本质就是一个WP类型的数组？
 static WP *head = NULL, *free_ = NULL;

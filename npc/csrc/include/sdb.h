@@ -16,7 +16,8 @@
 #ifndef __SDB_H__
 #define __SDB_H__
 
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
+#include "common.h"
+#include "sdb.h"
 
 word_t expr(char *e, bool *success);
 
