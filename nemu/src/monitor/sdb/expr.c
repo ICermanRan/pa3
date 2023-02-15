@@ -47,7 +47,8 @@ static struct rule {
     {"\\*", '*'},         // multiply,        token_type == 42
     {"\\*", TK_DEREF},       //指针解引用(dereference)
     {"\\/", '/'},         // minus,           token_type == 47
-    {"%",TK_REG},
+    {"\\$[\\$]?[a-z0-9]+", TK_REG},
+    // {"%",TK_REG},
     {"\\+", '+'},         // plus,            token_type == 43
     {"==", TK_EQ},        // equal
     {"!=", TK_UNEQ},      // unequal
@@ -57,7 +58,7 @@ static struct rule {
     {"[0-9]+", TK_num}, // number(和十六进制开头的0x冲突)
     // {"^[0-9]*$", TK_num}, // number
     {" +", TK_NOTYPE},    // spaces(空格串)
-    // {"\\$[\\$]?[a-z0-9]+", TK_REG}
+    
 
     //  {"\\$", '$'}
 };
