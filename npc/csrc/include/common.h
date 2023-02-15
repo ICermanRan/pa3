@@ -5,8 +5,8 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/macro.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/utils.h"
+#include "macro.h"
+#include "utils.h"
 
 
 #ifdef CONFIG_TARGET_AM

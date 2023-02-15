@@ -37,6 +37,7 @@ VM_MODPREFIX = Vysyx_22050078_npc
 VM_USER_CFLAGS = \
 	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/ \
 	-I/usr/include/SDL2 \
+	-I./obj_dir \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
@@ -57,6 +58,8 @@ VM_USER_CLASSES = \
 	init \
 	main \
 	mem \
+	paddr \
+	vaddr \
 	monitor \
 	expr \
 	sdb \
@@ -64,12 +67,14 @@ VM_USER_CLASSES = \
 	reg \
 	sim_init \
 	log \
+	state \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/device \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/device/io \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/memory \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/sdb \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/utils \
@@ -104,7 +109,11 @@ init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/init.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-mem.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/mem.cpp
+mem.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/memory/mem.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+paddr.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/memory/paddr.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+vaddr.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/memory/vaddr.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 monitor.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/monitor.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
@@ -119,6 +128,8 @@ reg.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/reg.cpp
 sim_init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/sim_init.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 log.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/log.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+state.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/state.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)

@@ -1,7 +1,7 @@
-#include "../include/include.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/macro.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/utils.h"
+#include "include.h"
+#include "common.h"
+#include "macro.h"
+#include "utils.h"
 
 void set_nemu_state(int state, vaddr_t pc, int halt_ret) {
   // difftest_skip_ref();

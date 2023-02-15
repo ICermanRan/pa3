@@ -3,12 +3,22 @@
 # 学号：ysyx_220578
 ######################################################################
 
+OBJ_DIR := ./obj_dir
 #gcc flags
 GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/	\
-										-I/usr/include/SDL2 
+										-I/usr/include/SDL2 \
+										-I${OBJ_DIR}
 
 # 1.files info:
-CSRC +=  $(shell find $(abspath ./csrc) -name "*.cpp")
+CSRC +=  $(shell find $(abspath ./csrc/memory) -name "*.cpp")  
+CSRC +=  $(shell find $(abspath ./csrc) -name "*.cpp") 
+
+
+
+CSRC +=  $(shell find $(abspath ./csrc/monitor) -name "*.cpp")
+CSRC +=  $(shell find $(abspath ./csrc/monitor/sdb) -name "*.cpp")
+CSRC +=  $(shell find $(abspath ./csrc/utils) -name "*.cpp")
+
 VSRC +=  $(shell find $(abspath ./vsrc) -name "*.v" -or -name "*.sv")
 TOP_MODULE := ysyx_22050078_npc
 SEARCHPATH := ./vsrc
@@ -32,7 +42,7 @@ GCC_CFLAGS :=  $(addprefix -CFLAGS ,${GCC_INCLUDE_PATH})
 GCC_FLAGS := ${GCC_CFLAGS} ${GCC_LDFLAGS}
 
 # 3.run info:
-OBJ_DIR := ./obj_dir
+
 BIN := ${OBJ_DIR}/V${TOP_MODULE}
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin #?= 是如果没有被赋值过就赋予等号后面的值,所以如果没有被赋予.bin文件，就会运行dummy.bin
 # DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so

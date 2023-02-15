@@ -5,9 +5,9 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/debug.h"
+#include "common.h"
+#include "include.h"
+#include "debug.h"
 
 typedef uint64_t vaddr_t;
 

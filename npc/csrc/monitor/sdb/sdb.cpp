@@ -83,7 +83,7 @@ static int cmd_info(char *args) {
 
 //	printf("%s\n", arg);
 	if(*arg == 'r')       //打印寄存器
-		isa_reg_display();
+		reg_display();
   else if(*arg == 'w')  //打印所有监视点
     print_wp();
 	else
