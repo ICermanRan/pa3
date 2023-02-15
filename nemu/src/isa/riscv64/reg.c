@@ -65,7 +65,11 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   if(j == 33)
     reg_value = cpu.pc;
   else
+    {
     reg_value = cpu.gpr[j];
+    printf("cpu.gpr[j] = %lx\n", cpu.gpr[j]);
+    printf("reg_value = %lx\n", reg_value);
+    }
   
   return reg_value;
 }
