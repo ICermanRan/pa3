@@ -55,8 +55,8 @@ static struct rule {
     {"&&", TK_AND},        //and
     {"-", TK_NEG},         //negative
     {"\\*", TK_DEREF},       //指针解引用(dereference)
-    {"\\$[\\$]?[a-z0-9]+", TK_REG}
-    // {"$[a-z0-9$]{1,3}", TK_REG}
+    // {"\\$[\\$]?[a-z0-9]+", TK_REG}
+    {"%",TK_REG}
     //  {"\\$", '$'}
 };
 
