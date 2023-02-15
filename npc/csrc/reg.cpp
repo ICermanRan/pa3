@@ -1,5 +1,7 @@
 #include "include/include.h"
 #include "include/debug.h"
+#define GET_ARRAY_LEN(array,len) {len = (sizeof(array) / sizeof(array[0]));}
+
 
 uint64_t *npc_reg = NULL;
 uint64_t npc_pc;
@@ -55,4 +57,35 @@ regfile pack_dut_regfile(uint64_t *dut_reg, uint64_t pc)
   
   dut.pc = pc;
   return dut;
+}
+
+static int find_string(const char *strs[], const char *str, int len)
+{
+    int i = 1;
+    while(i < len + 1){
+        if(strcmp(*strs, str) == 0){
+            break;
+        }
+        i++;
+        strs++;
+    }
+    if(i == len + 1){
+        return -1;
+    }
+    return i;
+}
+
+word_t isa_reg_str2val(const char *s, bool *success) {
+  int len,j;
+  GET_ARRAY_LEN(regs,len);
+  j = find_string(regs, s, len);
+  // printf("j = %d\n", j);
+  word_t reg_value;
+
+  if(j == 33)
+    reg_value = npc_pc;
+  else
+    reg_value = npc_reg[j];
+  
+  return reg_value;
 }

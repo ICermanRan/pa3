@@ -160,25 +160,25 @@ static int cmd_x(char *args) {
   {
     //value = vaddr_read(base_addr + j*offset_addr, len);
     value = vaddr_read(base_addr + 4*j*offset_addr, len);
-    printf("addr = %#llx ", base_addr + 4*j*offset_addr);
+    printf("addr = %#llx, ", base_addr + 4*j*offset_addr);
     printf("value = %#010lx\n", value);
   }
 
   return 0;
 }
 
-// static int cmd_p(char *args) {
-//   bool  success = false;
+static int cmd_p(char *args) {
+  bool  success = false;
 
-//   //printf("%s\n", args);//数学表达式以字符串存在args里
-//   // uint64_t result =  expr(args,&success);
-//   word_t result =  expr(args,&success);
-//   // printf("DEX = %lu or HEX = %#010lx\n", result, result);
-//   printf("DEX = %lu or HEX = 0x%lx\n", result, result);
+  //printf("%s\n", args);//数学表达式以字符串存在args里
+  // uint64_t result =  expr(args,&success);
+  word_t result =  expr(args,&success);
+  // printf("DEX = %lu or HEX = %#010lx\n", result, result);
+  printf("DEX = %lu or HEX = 0x%lx\n", result, result);
 
 
-//   return 0;
-// }
+  return 0;
+}
 
 // static int cmd_w(char *args) {
   
@@ -217,8 +217,8 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Step", cmd_s},
   { "info", "printf message", cmd_info},
-  { "x", "printf memory message, example:x 10 0x80000000", cmd_x}
-  // { "p", "eval the expr", cmd_p},//表达式求值
+  { "x", "printf memory message, example:x 10 0x80000000", cmd_x},
+  { "p", "eval the expr", cmd_p},//表达式求值
   // { "w", "set the watchpoint", cmd_w},
   // { "d", "delet the watchpoint", cmd_d}
 };
