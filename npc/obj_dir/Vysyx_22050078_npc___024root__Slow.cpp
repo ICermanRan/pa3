@@ -55,8 +55,6 @@ void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_npc___024root*
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__pc, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__3__rdata, (IData)(vlSelf->ysyx_22050078_npc__DOT__u_stdrst__DOT__rst_n_r2));
     vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst 
         = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__3__rdata;
-    VL_WRITEF("inst = %x\npc = %x\n\n",64,vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst,
-              64,vlSelf->ysyx_22050078_npc__DOT__pc);
     vlSelf->ysyx_22050078_npc__DOT__rd_addr_IDU2regs = 0U;
     if ((1U & (IData)((vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst 
                        >> 6U)))) {
@@ -1243,7 +1241,7 @@ void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_npc___024root*
                   32,(((0ULL == vlSelf->ysyx_22050078_npc__DOT__u_regfile__DOT__regs
                         [0xaU]) ? 1U : 0U) ? 0x474f4f44U
                        : 0x424144U));
-        VL_FINISH_MT("/home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v", 156, "");
+        VL_FINISH_MT("/home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v", 157, "");
     }
     if (VL_UNLIKELY((((IData)(vlSelf->ysyx_22050078_npc__DOT__u_stdrst__DOT__rst_n_r2) 
                       & (0U != (IData)(vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst))) 

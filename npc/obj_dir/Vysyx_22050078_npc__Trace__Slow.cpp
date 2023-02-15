@@ -71,6 +71,7 @@ void Vysyx_22050078_npc___024root__traceInitSub0(Vysyx_22050078_npc___024root* v
         tracep->declBit(c+28,"ysyx_22050078_npc u_regfile s_a0zero", false,-1);
         {int i; for (i=0; i<32; i++) {
                 tracep->declQuad(c+31+i*2,"ysyx_22050078_npc u_regfile regs", true,(i+0), 63,0);}}
+        tracep->declBit(c+212,"ysyx_22050078_npc u_IFU clk", false,-1);
         tracep->declQuad(c+2,"ysyx_22050078_npc u_IFU i_pc", false,-1, 63,0);
         tracep->declBit(c+1,"ysyx_22050078_npc u_IFU rst_n", false,-1);
         tracep->declBus(c+4,"ysyx_22050078_npc u_IFU inst_out", false,-1, 31,0);

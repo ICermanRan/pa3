@@ -23,7 +23,7 @@ static char* rl_gets() {
     line_read = NULL;
   }
 
-  line_read = readline("(nemu) ");
+  line_read = readline("(npc) ");
 
   if (line_read && *line_read) {
     add_history(line_read);
@@ -38,10 +38,10 @@ static int cmd_c(char *args) {
 }
 
 
-// static int cmd_q(char *args) {
-//   npc_state.state = NPC_QUIT;   //优雅的退出NEMU标准答案
-//   return -1;
-// }
+static int cmd_q(char *args) {
+  npc_state.state = NPC_QUIT;   //优雅的退出NEMU标准答案
+  return -1;
+}
 
 static int cmd_help(char *args);
 
@@ -84,8 +84,8 @@ static int cmd_info(char *args) {
 //	printf("%s\n", arg);
 	if(*arg == 'r')       //打印寄存器
 		reg_display();
-  else if(*arg == 'w')  //打印所有监视点
-    print_wp();
+  // else if(*arg == 'w')  //打印所有监视点
+  //   print_wp();
 	else
 		printf("Unknown command '%s'\n", arg);
 	
@@ -212,7 +212,7 @@ static struct {
 } cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
-  // { "q", "Exit NEMU", cmd_q },
+  { "q", "Exit NEMU", cmd_q },
 	
   /* TODO: Add more commands */
   { "si", "Step", cmd_s},

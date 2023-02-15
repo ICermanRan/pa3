@@ -30,6 +30,7 @@ word_t expr(char *e, bool *success);
 int test_change();
 void print_wp();
 
+// 把监视点结构体定义放在了sdb.h中，方便各个.c文件调用
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;

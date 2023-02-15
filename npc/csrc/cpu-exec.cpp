@@ -89,6 +89,7 @@ static void statistic() {
 //   if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
 //   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
   Log("npc quit");
+  printf("npc quit\n");
 }
 
 //报错时就会调用这个函数

@@ -1,53 +1,25 @@
-// /***************************************************************************************
-// * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-// *
-// * NEMU is licensed under Mulan PSL v2.
-// * You can use this software according to the terms and conditions of the Mulan PSL v2.
-// * You may obtain a copy of Mulan PSL v2 at:
-// *          http://license.coscl.org.cn/MulanPSL2
-// *
-// * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-// * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-// * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-// *
-// * See the Mulan PSL v2 for more details.
-// ***************************************************************************************/
+#include "sdb.h"
+#include "isa.h"
 
-// #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/sdb.h"
-// #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/isa.h"
+#define NR_WP 32
 
-// #define NR_WP 32
 
-// //把监视点结构体定义放在了sdb.h中，方便各个.c文件调用
-// // typedef struct watchpoint {
-// //   int NO;
-// //   struct watchpoint *next;
-// //   char exp[32];          //存储算数表达式
-// //   // uint64_t old_value;          //旧值
-// //   uint64_t new_value;          //新值
-
-// //   /* TODO: Add more members if necessary */
-// // } WP;
+static WP wp_pool[NR_WP] = {};        //本质就是一个WP类型的数组？
+static WP *head = NULL, *free_ = NULL;
 
 
 
-// static WP wp_pool[NR_WP] = {};        //本质就是一个WP类型的数组？
-// static WP *head = NULL, *free_ = NULL;
+/*函数功能:初始化wp_pool、free、head*/
+void init_wp_pool() {
+  int i;
+  for (i = 0; i < NR_WP; i ++) {
+    wp_pool[i].NO = i;
+    wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+  }
 
-// // WP* new_wp();
-// // int free_wp(WP *wp);
-
-// /*函数功能:初始化wp_pool、free、head*/
-// void init_wp_pool() {
-//   int i;
-//   for (i = 0; i < NR_WP; i ++) {
-//     wp_pool[i].NO = i;
-//     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
-//   }
-
-//   head = NULL;      //初始化完后，head为空指针
-//   free_ = wp_pool;  //free链表链接完成，但没有存储任何表达式和计算结果
-// }
+  head = NULL;      //初始化完后，head为空指针
+  free_ = wp_pool;  //free链表链接完成，但没有存储任何表达式和计算结果
+}
 
 // /* TODO: Implement the functionality of watchpoint */
 
@@ -93,56 +65,56 @@
 // }
 
 
-// /*函数功能:将形式参数wp所指的节点归还到free_链表中,本质就是删除监视点*/
-// int free_wp(int num)
-// {
-//   WP *p = head;
-//   WP *q = head;
+/*函数功能:将形式参数wp所指的节点归还到free_链表中,本质就是删除监视点*/
+int free_wp(int num)
+{
+  WP *p = head;
+  WP *q = head;
 
   
-//   if(p == NULL) 
-//   { 
-//     printf("Erro!监视点列表为空\n");
-//     assert(0);
-//   } 
+  if(p == NULL) 
+  { 
+    printf("Erro!监视点列表为空\n");
+    assert(0);
+  } 
   
-//   while(num != p->NO && p->next != NULL)  //未找到且未到表尾
-//   {
-//     q = p;
-//     p = p->next;
-//   } //找到要删除的目标节点才会退出循环
+  while(num != p->NO && p->next != NULL)  //未找到且未到表尾
+  {
+    q = p;
+    p = p->next;
+  } //找到要删除的目标节点才会退出循环
 
 
-//   if(num == p->NO)     //若 num == p->NO ，找到待删除的节点
-//   {
-//     if(p == head)     //若待删除节点为头节点
-//     {
-//       head = p->next;     //让头指针指向待删除节点p的下一节点
-//     }
-//     else                  //若待删除节点不是头节点
-//     {
-//       q->next = p->next;  ////让前一节点的指针指向待删除节点p的下一节点
-//     }
+  if(num == p->NO)     //若 num == p->NO ，找到待删除的节点
+  {
+    if(p == head)     //若待删除节点为头节点
+    {
+      head = p->next;     //让头指针指向待删除节点p的下一节点
+    }
+    else                  //若待删除节点不是头节点
+    {
+      q->next = p->next;  ////让前一节点的指针指向待删除节点p的下一节点
+    }
     
-//     p->old_value = 0;
-//     p->new_value = 0;
-//     memset(p->exp,0,sizeof(p->exp)); //清空删除节点的数据域
-//     /*待补充的结构体元素*/
-//     p->next = free_;     //再将wp所指的节点连到free_链表的第一个位置
-//     free_ = p;           //让free_指针指向该节点
+    p->old_value = 0;
+    p->new_value = 0;
+    memset(p->exp,0,sizeof(p->exp)); //清空删除节点的数据域
+    /*待补充的结构体元素*/
+    p->next = free_;     //再将wp所指的节点连到free_链表的第一个位置
+    free_ = p;           //让free_指针指向该节点
 
-//     // printf("Free the %d",p->NO);
-//   }
-//   else                   //若找到head表尾但仍为找到节点序号为num要删除的节点
-//   {
-//     printf("遍历整个监视点列表也没找到要删除的节点\n");
-//     return 0;
-//   }
+    // printf("Free the %d",p->NO);
+  }
+  else                   //若找到head表尾但仍为找到节点序号为num要删除的节点
+  {
+    printf("遍历整个监视点列表也没找到要删除的节点\n");
+    return 0;
+  }
 
  
-//   return 1;
+  return 1;
 
-// }
+}
 
 // /*函数功能:扫描所有head链表的监视点，对相应表达式求值，并比较值是否发生变化*/
 // int test_change()

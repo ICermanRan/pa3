@@ -20,6 +20,7 @@ module stdrst(
   end
 
   assign o_rst_n_sync = rst_n_r2;
+  // assign o_rst_n_sync = rst_n;
 
 
 endmodule

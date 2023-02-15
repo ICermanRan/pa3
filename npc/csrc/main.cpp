@@ -20,7 +20,7 @@
 //函数声明
 static inline void all_fail();
 
-#define RESET_TIME 5
+#define RESET_TIME 0
 #define MAX_INST_TO_PRINT 10
 
 bool rst_n_sync = false; //read from rtl by dpi-c.
@@ -73,6 +73,13 @@ int main(int argc, char* argv[]) {
   // 其中会输出命令提示符, 提示用户输出SDB的命令
   engine_start();
 
+  ///////////////////////////////// exit: /////////////////////////////////
+  //退出仿真
+  step_and_dump_wave();
+  tfp->close();
+  delete tfp;
+  delete top;
+  delete contextp;
   return is_exit_status_bad();
 
 //     //复位

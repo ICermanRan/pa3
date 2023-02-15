@@ -7,6 +7,7 @@
 #include <string.h>
 #include "macro.h"
 #include "utils.h"
+#include "debug.h"
 
 
 #ifdef CONFIG_TARGET_AM
@@ -17,23 +18,6 @@
 #endif
 
 
-#if CONFIG_MBASE + CONFIG_MSIZE > 0x100000000ul
-#define PMEM64 1
-#endif
-
-typedef uint64_t word_t;
-typedef uint64_t  sword_t;
-
-
-#define FMT_WORD MUXDEF(CONFIG_ISA64, "0x%016lx", "0x%08x")
-
-typedef uint64_t vaddr_t;
-typedef uint64_t paddr_t;
-
-#define FMT_PADDR MUXDEF(PMEM64, "0x%016lx", "0x%08x")
-typedef uint16_t ioaddr_t;
-
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/debug.h"
 
 #define __GUEST_ISA__ riscv64
 
@@ -85,3 +69,21 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_SB_SIZE 0x10000
 
 #endif
+
+#if CONFIG_MBASE + CONFIG_MSIZE > 0x100000000ul
+#define PMEM64 1
+#endif
+
+typedef uint64_t word_t;
+typedef uint64_t  sword_t;
+
+
+#define FMT_WORD MUXDEF(CONFIG_ISA64, "0x%016lx", "0x%08x")
+
+
+typedef uint64_t vaddr_t;
+typedef uint64_t paddr_t;
+
+#define FMT_PADDR MUXDEF(PMEM64, "0x%016lx", "0x%08x")
+
+typedef uint16_t ioaddr_t;

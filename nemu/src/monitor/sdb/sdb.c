@@ -55,7 +55,8 @@ static int cmd_c(char *args) {
 
 static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;   //优雅的退出NEMU标准答案
-  return -1;
+  // return -1;
+   return 0;
 }
 
 static int cmd_help(char *args);
