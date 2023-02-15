@@ -37,10 +37,11 @@ bool checkregs(regfile *ref_r, regfile *dut)
 void reg_display() 
 {
   printf("npc pc = 0x%lx\n", npc_pc);
-  for(int i = 0; i < 32; i++)
+  for(int i = 0; i < 32; i = i+2)
   {
 	// printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
-     printf("npc reg[%d] %3s = 0x%lx\n", i, regs[i], npc_reg[i]);
+     printf("reg[%3d] \t%-3s = 0x%10lx or %10ld |", i, regs[i], npc_reg[i], npc_reg[i]);
+     printf("reg[%3d] \t%-3s = 0x%10lx or %10ld \n", i+1, regs[i+1], npc_reg[i+1], npc_reg[i+1]);
   }
 }
 
