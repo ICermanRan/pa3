@@ -44,14 +44,17 @@ extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
    *rdata = 0;
 }
 
-extern uint64_t *dut_reg;
-// extern uint64_t dut_pc;
+extern uint64_t *npc_reg;
+extern uint64_t npc_pc;
+
+//用于获取npc的regs的值，方便在sdb中调用
 extern "C" void set_reg_ptr(const svOpenArrayHandle r) 
 {
-  dut_reg = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
+  npc_reg = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
 
-// extern "C" void diff_read_pc(uint64_t rtl_pc)
-// {
-//   dut_pc = rtl_pc;
-// }
+//用于获取npc的pc值，方便在sdb中调用
+extern "C" void diff_read_pc(uint64_t rtl_pc)
+{
+  npc_pc = rtl_pc;
+}

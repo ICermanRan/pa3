@@ -1,8 +1,8 @@
 #include "include/include.h"
 #include "include/debug.h"
 
-uint64_t *dut_reg = NULL;
-uint64_t dut_pc;
+uint64_t *npc_reg = NULL;
+uint64_t npc_pc;
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -36,11 +36,11 @@ bool checkregs(regfile *ref_r, regfile *dut)
 
 void reg_display() 
 {
-  printf("dut pc = 0x%lx\n",dut_pc);
+  printf("npc pc = 0x%lx\n", npc_pc);
   for(int i = 0; i < 32; i++)
   {
 	// printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
-     printf("dut reg %3s = 0x%lx\n", regs[i], dut_reg[i]);
+     printf("npc reg[%d] %3s = 0x%lx\n", i, regs[i], npc_reg[i]);
   }
 }
 

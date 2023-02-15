@@ -17,6 +17,8 @@ extern "C" {
     extern svBit check_finish(int finish_flag);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:149:32
     extern void check_rst(svBit rst_flag);
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IFU.v:24:34
+    extern void diff_read_pc(long long rtl_pc);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IFU.v:23:34
     extern void rtl_pmem_read(long long raddr, long long* rdata, svBit ren);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_LSU.v:66:32
