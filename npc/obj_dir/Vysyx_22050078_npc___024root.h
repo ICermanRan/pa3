@@ -69,7 +69,7 @@ VL_MODULE(Vysyx_22050078_npc___024root) {
     VlWide<5>/*135:0*/ ysyx_22050078_npc__DOT__u_LSU__DOT____Vcellout__u_stdreg__o_dout;
     QData/*63:0*/ __Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__3__rdata;
     QData/*63:0*/ __Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__5__rdata;
-    VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
+    VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
 
     // INTERNAL VARIABLES
     Vysyx_22050078_npc__Syms* vlSymsp;  // Symbol table

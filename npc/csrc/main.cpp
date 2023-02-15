@@ -20,7 +20,7 @@
 //函数声明
 static inline void all_fail();
 
-#define RESET_TIME 0
+#define RESET_TIME 1
 #define MAX_INST_TO_PRINT 10
 
 bool rst_n_sync = false; //read from rtl by dpi-c.
@@ -47,12 +47,6 @@ int main(int argc, char* argv[]) {
   contextp->traceEverOn(true);    //打开波形 
   top -> trace(tfp, 0);
   tfp -> open("waveform.vcd");
-
-///////////////////////////////// init npc software: ////////////////////////////////   
-  npc_init(argc, argv);
-
-
-
 ///////////////////////////////// init npc hardware status: ////////////////////////////////    
   //对dut的连接,只连接input;init npc status:
   top->rst_n = 0;
@@ -71,6 +65,9 @@ int main(int argc, char* argv[]) {
     rst_time++;
   }
   top->rst_n = 1;
+
+///////////////////////////////// init npc software: ////////////////////////////////   
+  npc_init(argc, argv);
 
  /////////////////////////////////  /* Start engine. */ ////////////////////////////////    
   // engine_start() -> sdb_mainloop()
