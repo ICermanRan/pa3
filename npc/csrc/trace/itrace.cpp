@@ -5,6 +5,7 @@
 char iring_buf[16][64];
 char logbuf[100];
 int  iring_tail = 0;
+#define IRINGBUF_SIZE (sizeof(iring_buf) / sizeof(iring_buf[0]))
 
 void show_iringbuf()
 {

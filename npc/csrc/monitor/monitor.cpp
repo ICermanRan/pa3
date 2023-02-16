@@ -1,5 +1,6 @@
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/isa.h"
+#include "include.h"
+#include "isa.h"
+#include "itrace.h"
 #include <getopt.h>
 
 
@@ -97,6 +98,10 @@ void init_monitor(int argc, char *argv[])
 
   // /* Initialize the simple debugger. */
   init_sdb();
+
+  // init_disasm() - 初始化LLVM提供的用于反汇编的库函数
+  init_disasm("riscv64-pc-linux-gnu");
+
 
   // /* Display welcome message. */
   // // 输出欢迎信息以及trace的状态信息,还输出了编译的时间和日期
