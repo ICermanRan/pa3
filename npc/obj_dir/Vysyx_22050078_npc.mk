@@ -38,12 +38,22 @@ VM_USER_CFLAGS = \
 	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/ \
 	-I/usr/include/SDL2 \
 	-I./obj_dir \
+	-I/usr/lib/llvm-14/include \
+	-std=c++14 \
+	-fno-exceptions \
+	-D_GNU_SOURCE \
+	-D__STDC_CONSTANT_MACROS \
+	-D__STDC_LIMIT_MACROS \
+	-Ofast \
+	-fexceptions \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
+	-lSDL2 \
 	-lreadline \
 	-ldl \
-	-lSDL2 \
+	-lLLVM-14 \
+	-flto \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
@@ -66,6 +76,7 @@ VM_USER_CLASSES = \
 	watchpoint \
 	reg \
 	sim_init \
+	disasm \
 	log \
 	state \
 
@@ -126,6 +137,8 @@ watchpoint.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/sdb/watchpoint.cpp
 reg.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/reg.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 sim_init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/sim_init.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+disasm.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/disasm.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 log.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/log.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

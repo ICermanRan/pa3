@@ -1,4 +1,4 @@
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
+#include "include.h"
 #include "verilated_dpi.h"
 
 extern bool rst_n_sync;

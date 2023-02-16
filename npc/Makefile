@@ -9,15 +9,22 @@ GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/	\
 										-I/usr/include/SDL2 \
 										-I${OBJ_DIR}
 
+
+#llvm
+LLVM_LIB = $(shell llvm-config --libs)
+LLVM_FLAGS = $(filter-out -D__STDC_FORMAT_MACROS, $(shell llvm-config --cxxflags))
+LLVM_FLAGS += -Ofast  -fexceptions
+#-lasan(内存检查)
+
+
+
 # 1.files info:
 CSRC +=  $(shell find $(abspath ./csrc/memory) -name "*.cpp")  
 CSRC +=  $(shell find $(abspath ./csrc) -name "*.cpp") 
-
-
-
 CSRC +=  $(shell find $(abspath ./csrc/monitor) -name "*.cpp")
 CSRC +=  $(shell find $(abspath ./csrc/monitor/sdb) -name "*.cpp")
 CSRC +=  $(shell find $(abspath ./csrc/utils) -name "*.cpp")
+CSRC +=  $(shell find $(abspath ./csrc/trace) -name "*.cpp")
 
 VSRC +=  $(shell find $(abspath ./vsrc) -name "*.v" -or -name "*.sv")
 TOP_MODULE := ysyx_22050078_npc
@@ -33,12 +40,14 @@ VERILATOR_FLAGS += -Wno-UNUSED
 VERILATOR_FLAGS += -Wno-UNDRIVEN
 VERILATOR_FLAGS += -Wno-INCABSPATH
 
-GCC_LIB = -lreadline \
-		  -ldl \
-		  -lSDL2 
+GCC_LIB = -lSDL2	-lreadline -ldl #-lSDL2_image
+GCC_LIB += ${LLVM_LIB} -flto		   
+
+
 
 GCC_LDFLAGS := $(addprefix -LDFLAGS ,${GCC_LIB})
 GCC_CFLAGS :=  $(addprefix -CFLAGS ,${GCC_INCLUDE_PATH})
+GCC_CFLAGS += $(addprefix -CFLAGS ,${LLVM_FLAGS})
 GCC_FLAGS := ${GCC_CFLAGS} ${GCC_LDFLAGS}
 
 # 3.run info:
@@ -75,14 +84,7 @@ RUN_FLAGS := --img=${IMG}
 # VERILATOR_FLAGS += -Wno-PINCONNECTEMPTY
 # VERILATOR_FLAGS += -Wno-UNDRIVEN
 # VERILATOR_FLAGS += -Wno-INCABSPATH
-# #包含的头文件
-# VERILATOR_FLAGS += -I./vsrc  -y ./vsrc 
-# VERILATOR_FLAGS += --top-module ysyx_22050078_npc_onecycle
 
-# Input files for Verilator    包括 c 与  v
-# VERILATOR_INPUT +=  ./vsrc/ysyx_22050078_npc_onecycle
-# VERILATOR_INPUT +=	./vsrc/ysyx_22050078_register.v  ./vsrc/ysyx_22050078_pc_reg.v ./vsrc/ysyx_22050078_IFU.v ./vsrc/ysyx_22050078_IDU.v ./vsrc/ysyx_22050078_EXU.v ./vsrc/defines.v
-# VERILATOR_INPUT +=  ./csrc/npc.cpp 
 
 
 com:$(CSRC) $(VSRC)
