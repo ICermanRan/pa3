@@ -20,6 +20,8 @@
 
 
 #define __GUEST_ISA__ riscv64
+#define true	1
+#define false	0
 
 #define CONFIG_ISA_riscv64 1
 #define CONFIG_ISA64 1

@@ -23,12 +23,12 @@ uint64_t g_nr_guest_inst = 0;
 // static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
-static void trace_and_difftest() {
+static void trace_and_difftest(char* logbuf, uint64_t pc) {
 
 // #ifdef CONFIG_ITRACE_COND
 //   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 // #endif
-//   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+  if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
 //   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
 /*check watchpoint*/
@@ -47,6 +47,7 @@ static void trace_and_difftest() {
 
 extern uint64_t npc_pc;
 uint32_t npc_inst;
+extern char logbuf[100];
 
 /*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
 /*模拟了cpu的工作方式*/
@@ -79,7 +80,7 @@ static void execute(uint64_t n) {
 
     /*下面的代码与trace和difftest相关*/
     //  printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
-    trace_and_difftest();
+    trace_and_difftest(logbuf, npc_pc);
      
     // IFDEF(CONFIG_DEVICE, device_update());
   }
