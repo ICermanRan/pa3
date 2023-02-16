@@ -71,6 +71,7 @@ static void execute(uint64_t n) {
   for (;n > 0; n --)
   {
    
+    trace_and_difftest(logbuf, npc_pc);
     exec_once(); 
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
     
@@ -81,7 +82,7 @@ static void execute(uint64_t n) {
 
     /*下面的代码与trace和difftest相关*/
     //  printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
-    trace_and_difftest(logbuf, npc_pc);
+    
      
     // IFDEF(CONFIG_DEVICE, device_update());
   }
