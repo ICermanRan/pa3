@@ -106,7 +106,7 @@ void assert_fail_msg()
 static inline void all_fail()
 {
    #ifdef CONFIG_ITRACE
-    // show_iringbuf();
+    show_iringbuf();
    #endif
     void reg_display();
 }
