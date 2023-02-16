@@ -43,7 +43,6 @@ void step_and_dump_wave()
 int main(int argc, char* argv[]) {
     
 ///////////////////////////////// 初始化波形文件: //////////////////////////////// 
-  // printf("%s %s %s\n",argv[0],argv[1],argv[2]);
   contextp->traceEverOn(true);    //打开波形 
   top -> trace(tfp, 0);
   tfp -> open("waveform.vcd");
