@@ -41,7 +41,7 @@ VERILATOR_FLAGS += -Wno-UNDRIVEN
 VERILATOR_FLAGS += -Wno-INCABSPATH
 
 GCC_LIB = -lSDL2	-lreadline -ldl #-lSDL2_image
-GCC_LIB += ${LLVM_LIB} -flto		   
+GCC_LIB += ${LLVM_LIB} 		   
 
 
 
