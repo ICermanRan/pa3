@@ -1,5 +1,5 @@
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
+#include "common.h"
+#include "include.h"
 
 extern uint64_t g_nr_guest_inst;
 FILE *log_fp = NULL;

@@ -77,6 +77,7 @@ VM_USER_CLASSES = \
 	reg \
 	sim_init \
 	disasm \
+	itrace \
 	log \
 	state \
 
@@ -88,6 +89,7 @@ VM_USER_DIR = \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/memory \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/sdb \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/trace \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/utils \
 
 
@@ -138,7 +140,9 @@ reg.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/reg.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 sim_init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/sim_init.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-disasm.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/disasm.cpp
+disasm.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/trace/disasm.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+itrace.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/trace/itrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 log.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/log.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

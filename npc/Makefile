@@ -23,7 +23,7 @@ CSRC +=  $(shell find $(abspath ./csrc/memory) -name "*.cpp")
 CSRC +=  $(shell find $(abspath ./csrc) -name "*.cpp") 
 CSRC +=  $(shell find $(abspath ./csrc/monitor) -name "*.cpp")
 CSRC +=  $(shell find $(abspath ./csrc/monitor/sdb) -name "*.cpp")
-CSRC +=  $(shell find $(abspath ./csrc/utils) -name "*.cpp")
+#CSRC +=  $(shell find $(abspath ./csrc/utils) -name "*.cpp")
 CSRC +=  $(shell find $(abspath ./csrc/trace) -name "*.cpp")
 
 VSRC +=  $(shell find $(abspath ./vsrc) -name "*.v" -or -name "*.sv")
