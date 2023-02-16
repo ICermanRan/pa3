@@ -29,11 +29,11 @@ module ysyx_22050078_IFU
         diff_read_pc(i_pc);
      end
 
-    always @(posedge clk) begin
-      $display("inst = %h", inst[31:0]);
-      $display("pc = %h\n", i_pc);
+    // always @(posedge clk) begin
+    //   $display("inst = %h", inst[31:0]);
+    //   $display("pc = %h\n", i_pc);
       
-    end
+    // end
 
     //保留低32位作为指令输出
     assign inst_out = inst[`INST_WIDTH - 1:0];
