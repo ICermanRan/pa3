@@ -11,7 +11,6 @@ static WP wp_pool[NR_WP] = {};        //本质就是一个WP类型的数组？
 static WP *head = NULL, *free_ = NULL;
 
 
-
 /*函数功能:初始化wp_pool、free、head*/
 void init_wp_pool() {
   int i;

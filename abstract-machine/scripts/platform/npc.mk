@@ -30,7 +30,7 @@ image: $(IMAGE).elf
 run: image
 	@echo run npc $(IMAGE).elf
 	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
-	#@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
-	$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin  
+	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
+
 
 

@@ -184,7 +184,7 @@ static int cmd_w(char *args) {
   
   WP *n_wp = NULL;
   // n_wp = new_wp(args);//调用这个函数，从free链表中返回一个空闲的监视点结构
-  n_wp = new_wp();//调用这个函数，从free链表中返回一个空闲的监视点结构
+  n_wp = new_wp(args);//调用这个函数，从free链表中返回一个空闲的监视点结构
   printf("watchpoint %d: %s is set successfully\n", n_wp->NO, n_wp->exp);
   return 0;
 }

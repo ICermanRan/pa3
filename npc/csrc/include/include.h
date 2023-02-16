@@ -4,6 +4,7 @@
 #include "common.h"
 #include "debug.h"
 #include "utils.h"
+#include "sdb.h"
 // #include "Vysyx_22050078_npc__Dpi.h"
 // #include "Vysyx_22050078_npc.h"
 // #include "verilated.h"
@@ -27,6 +28,8 @@ typedef struct {
   uint64_t x[32];
   uint64_t pc;
 } regfile;
+
+
 
 //vaddr.cpp
 //word_t vaddr_ifetch(vaddr_t addr, int len);
