@@ -4,7 +4,7 @@ module stdrst(
   output wire o_rst_n_sync
 );
 
-  reg rst_n_r1, rst_n_r2;
+  // reg rst_n_r1, rst_n_r2;
 
   // always @(posedge clk) begin
   //   if(!rst_n) 

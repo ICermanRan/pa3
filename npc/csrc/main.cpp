@@ -63,6 +63,7 @@ int main(int argc, char* argv[]) {
     top->eval();
     rst_time++;
   }
+  top->clk = !top->clk;
   top->rst_n = 1;
 
 ///////////////////////////////// init npc software: ////////////////////////////////   
