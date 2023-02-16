@@ -24,6 +24,7 @@
 #define CONFIG_ISA_riscv64 1
 #define CONFIG_ISA64 1
 #define CONFIG_ISA "riscv64"
+#define CONFIG_WATCHPOINT 1
 #define CONFIG_CC_GCC 1
 #define CONFIG_MODE_SYSTEM 1
 #define CONFIG_TARGET_NATIVE_ELF 1

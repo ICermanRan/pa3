@@ -24,11 +24,11 @@ static bool g_print_step = false;
 
 static void trace_and_difftest() {
 
-#ifdef CONFIG_ITRACE_COND
-  if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
-#endif
-  if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
-  IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+// #ifdef CONFIG_ITRACE_COND
+//   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+// #endif
+//   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+//   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
 /*check watchpoint*/
  #ifdef CONFIG_WATCHPOINT
@@ -36,7 +36,7 @@ static void trace_and_difftest() {
   
   if(change == 1) //发生了变化，要暂停
     {
-      nemu_state.state = NEMU_STOP;
+      npc_state.state = NPC_STOP;
       printf("监视点已被触发\n");
       return ; //返回到sdb_mainloop()循环中等待用户的命令.
     }
@@ -75,7 +75,7 @@ static void execute(uint64_t n) {
 
     /*下面的代码与trace和difftest相关*/
     //  printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
-    // trace_and_difftest(get_this_iringbuf());
+    trace_and_difftest();
      
     // IFDEF(CONFIG_DEVICE, device_update());
   }
