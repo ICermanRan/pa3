@@ -5,6 +5,7 @@
 #include "include.h"
 #include "common.h"
 #include "macro.h"
+#include "itrace.h"
 #include <locale.h>
 
   //仿真环境初始化;
@@ -44,6 +45,8 @@ static void trace_and_difftest() {
 }
 
 
+extern uint64_t npc_pc;
+uint32_t npc_inst;
 
 /*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
 /*模拟了cpu的工作方式*/
@@ -57,6 +60,7 @@ static void exec_once() {
   top->eval();
   step_and_dump_wave();
 
+  itrace(npc_pc, npc_inst);
 }
 
 

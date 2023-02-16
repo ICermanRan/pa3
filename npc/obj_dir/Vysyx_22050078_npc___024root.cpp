@@ -66,6 +66,16 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc_
     diff_read_pc(rtl_pc__Vcvt);
 }
 
+extern "C" void sdb_read_pc(int rtl_inst);
+
+VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IDU__DOT__sdb_read_pc_TOP(IData/*31:0*/ rtl_inst) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IDU__DOT__sdb_read_pc_TOP\n"); );
+    // Body
+    int rtl_inst__Vcvt;
+    for (size_t rtl_inst__Vidx = 0; rtl_inst__Vidx < 1; ++rtl_inst__Vidx) rtl_inst__Vcvt = rtl_inst;
+    sdb_read_pc(rtl_inst__Vcvt);
+}
+
 extern "C" void rtl_pmem_write(long long waddr, long long wdata, char wmask);
 
 VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_write_TOP(QData/*63:0*/ waddr, QData/*63:0*/ wdata, CData/*7:0*/ wmask) {
@@ -152,6 +162,7 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_
     vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst 
         = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__3__rdata;
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__diff_read_pc_TOP(vlSelf->ysyx_22050078_npc__DOT__pc);
+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IDU__DOT__sdb_read_pc_TOP((IData)(vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst));
     vlSelf->ysyx_22050078_npc__DOT__rd_addr_IDU2regs = 0U;
     if ((1U & (IData)((vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst 
                        >> 6U)))) {
@@ -2040,11 +2051,11 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_
                  ? 1U : 0U) ? (vlSelf->ysyx_22050078_npc__DOT__rs1_data 
                                + vlSelf->ysyx_22050078_npc__DOT__imm)
                 : (4ULL + vlSelf->ysyx_22050078_npc__DOT__pc)));
-    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__exu_res, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__5__rdata, 
+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__exu_res, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__6__rdata, 
                                                                                 (1U 
                                                                                 & (~ (IData)(vlSelf->ysyx_22050078_npc__DOT__lsu_opt))));
     vlSelf->ysyx_22050078_npc__DOT__u_LSU__DOT__rdata 
-        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__5__rdata;
+        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__6__rdata;
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_write_TOP(
                                                                                 (((QData)((IData)(
                                                                                 vlSelf->ysyx_22050078_npc__DOT__u_LSU__DOT____Vcellout__u_stdreg__o_dout[4U])) 

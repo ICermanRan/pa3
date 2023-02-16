@@ -356,4 +356,9 @@ module ysyx_22050078_IDU
   assign o_jal  = (opcode == `ysyx_22050078_INST_TYPE_J) ? 1:0;
   assign o_jalr  = (opcode == `ysyx_22050078_INST_TYPE_I_JALR) ? 1:0;
 
+  import "DPI-C" function void sdb_read_pc(input int rtl_inst);
+  always @(*) begin
+    sdb_read_pc(inst_in);
+  end
+
 endmodule

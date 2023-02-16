@@ -23,6 +23,7 @@ module ysyx_22050078_IFU
     import "DPI-C" function void rtl_pmem_read(input longint raddr, output longint rdata, input bit ren);
     import "DPI-C" function void diff_read_pc(input longint rtl_pc);
 
+
     always @(*) begin
         rtl_pmem_read(i_pc, inst, rst_n);
         diff_read_pc(i_pc);
@@ -36,6 +37,7 @@ module ysyx_22050078_IFU
 
     //保留低32位作为指令输出
     assign inst_out = inst[`INST_WIDTH - 1:0];
+ 
 
 
 

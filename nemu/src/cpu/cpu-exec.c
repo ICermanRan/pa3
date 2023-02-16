@@ -103,7 +103,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   // s->snpc += 4;                            //s->snpc进行了操作，而单纯的paddr则不行
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
-  p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入s->logbuf,并且去掉了最开始未定义的乱码pc
+  p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入p,并且去掉了最开始未定义的乱码pc
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
