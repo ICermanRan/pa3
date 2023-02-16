@@ -12,7 +12,7 @@ GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/	\
 
 #llvm
 LLVM_LIB = $(shell llvm-config --libs)
-LLVM_FLAGS = $(filter-out -D__STDC_FORMAT_MACROS, $(shell llvm-config --cxxflags))
+LLVM_FLAGS = $(shell llvm-config --cxxflags) -fPIE
 LLVM_FLAGS += -Ofast  -fexceptions
 #-lasan(内存检查)
 

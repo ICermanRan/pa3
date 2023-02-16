@@ -1,3 +1,10 @@
+/*什么是LLVM
+
+    广义：LLVM是一个包括了很多模块的编译器框架。
+    狭义：LLVM特指LLVM项目中的LLVM Core和Clang子模块。
+    简单来说，可以将LLVM理解成为一个现代化、可扩展的编译器。
+*/
+
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
