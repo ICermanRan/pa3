@@ -53,15 +53,15 @@ extern char logbuf[100];
 /*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
 /*模拟了cpu的工作方式*/
 static void exec_once() {
+  
+  top->clk = !top->clk; 
+  top->eval();
+  step_and_dump_wave();
+
+  top->clk = !top->clk; 
+  top->eval();
+  step_and_dump_wave();
   itrace(npc_pc, npc_inst);
-  top->clk = !top->clk; 
-  top->eval();
-  step_and_dump_wave();
-
-  top->clk = !top->clk; 
-  top->eval();
-  step_and_dump_wave();
-
   
 }
 
