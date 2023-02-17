@@ -1,4 +1,7 @@
 #include "include.h"
+#include "isa.h"
+#include "itrace.h"
+#include <getopt.h>
 #include "common.h"
 #include "debug.h"
 #include "verilated_dpi.h"
@@ -43,6 +46,8 @@ extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
     *rdata = pmem_read(raddr, 8);
     #ifdef CONFIG_MTRACE
     Log("MTRACE_read:addr = %lx, data = %lx", raddr, *rdata);
+    // Log("ITRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+    // printf("MTRACE_read:addr = %lx, data = %lx\n", raddr, *rdata,ANSI_FG_MAGENTA ANSI_BG_CYAN );
     #endif
     // printf("addr = %lx, data = %lx\n", raddr, *rdata);
   }

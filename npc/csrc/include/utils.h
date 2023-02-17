@@ -46,6 +46,7 @@ uint64_t get_time();
 #define ANSI_BG_CYAN    "\33[1;46m"
 #define ANSI_BG_WHITE   "\33[1;47m"
 #define ANSI_NONE       "\33[0m"
+#define CONFIG_TARGET_NATIVE_ELF 1
 
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 

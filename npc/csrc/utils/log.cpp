@@ -1,5 +1,6 @@
 #include "common.h"
 #include "include.h"
+#include "utils.h"
 
 extern uint64_t g_nr_guest_inst;
 FILE *log_fp = NULL;
