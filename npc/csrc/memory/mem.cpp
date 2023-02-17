@@ -36,7 +36,6 @@ uint64_t pmem_read(uint64_t addr, int len)
             printf("wuyule\n");
             #ifdef CONFIG_MTRACE
             Log("MTRACE_read:addr = %lx, data = %lx\n", addr, *(uint64_t *)paddr); 
-            Log("aaaaaa"); 
             #endif
             return *(uint64_t *)paddr;
   }
