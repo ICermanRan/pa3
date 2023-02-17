@@ -57,10 +57,11 @@ int main(int argc, char* argv[]) {
   while(rst_time < RESET_TIME)
   {
     //时钟翻转
-    printf("复位中now time is  %ld, clk is %d\n", contextp->time(), top->clk);
+    printf("复位1 now time is  %ld, clk is %d\n", contextp->time(), top->clk);
     //  printf("\n");
     top->clk = !top->clk;
     step_and_dump_wave();
+    printf("复位2 now time is  %ld, clk is %d\n", contextp->time(), top->clk);
     // top->eval();
     rst_time++;
   }
