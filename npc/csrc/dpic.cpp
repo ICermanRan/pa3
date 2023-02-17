@@ -39,8 +39,7 @@ extern "C" void rtl_pmem_write(uint64_t waddr, uint64_t wdata, uint8_t wmask)
 
 extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
 {
-  // printf("raddr = %08lx, rdata = %016lx, ren = %d,\n",raddr, *rdata, ren);
-  // printf("result = %d\n", ren && raddr >= PMEM_START && raddr<=PMEM_END);
+  
   if(ren && raddr >= PMEM_START && raddr<=PMEM_END)
   {
     *rdata = pmem_read(raddr, 8);

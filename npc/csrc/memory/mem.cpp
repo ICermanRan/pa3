@@ -25,11 +25,16 @@ void pmem_write(uint64_t addr, uint64_t data, int len)
 uint64_t pmem_read(uint64_t addr, int len) 
 {
   uint8_t * paddr = (uint8_t*) guest_to_host(addr);
+  
   switch (len) {
     case 1: return *(uint8_t  *)paddr;
     case 2: return *(uint16_t *)paddr;
     case 4: return *(uint32_t *)paddr;
-    case 8: return *(uint64_t *)paddr;
+    case 8: 
+            #ifdef CONFIG_MTRACE
+            Log("MTRACE_read:addr = %lx, data = %lx\n", addr, *(uint64_t *)paddr);   
+            #endif
+            return *(uint64_t *)paddr;
   }
   assert(0);
 }
