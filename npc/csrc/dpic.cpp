@@ -1,5 +1,6 @@
 #include "include.h"
 #include "common.h"
+#include "debug.h"
 #include "verilated_dpi.h"
 
 extern bool rst_n_sync;
@@ -40,10 +41,10 @@ extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
   if(ren && raddr >= PMEM_START && raddr<=PMEM_END)
   {
     *rdata = pmem_read(raddr, 8);
-    // #ifdef CONFIG_MTRACE
-    // Log("MTRACE_read:addr = %lx, data = %lu", raddr, *rdata);
-    // #endif
-    printf("addr = %lx, data = %lx\n", raddr, *rdata);
+    #ifdef CONFIG_MTRACE
+    Log("MTRACE_read:addr = %lx, data = %lx", raddr, *rdata);
+    #endif
+    // printf("addr = %lx, data = %lx\n", raddr, *rdata);
   }
   else //avoid latch.
    *rdata = 0;
