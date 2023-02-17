@@ -76,6 +76,20 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc_
     sdb_read_pc(rtl_inst__Vcvt);
 }
 
+extern "C" void rtl_lsu_pmem_read(long long raddr, long long* rdata, svBit ren);
+
+VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read_TOP(QData/*63:0*/ raddr, QData/*63:0*/ &rdata, CData/*0:0*/ ren) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read_TOP\n"); );
+    // Body
+    long long raddr__Vcvt;
+    for (size_t raddr__Vidx = 0; raddr__Vidx < 1; ++raddr__Vidx) raddr__Vcvt = raddr;
+    long long rdata__Vcvt;
+    svBit ren__Vcvt;
+    for (size_t ren__Vidx = 0; ren__Vidx < 1; ++ren__Vidx) ren__Vcvt = ren;
+    rtl_lsu_pmem_read(raddr__Vcvt, &rdata__Vcvt, ren__Vcvt);
+    rdata = rdata__Vcvt;
+}
+
 extern "C" void rtl_pmem_write(long long waddr, long long wdata, char wmask);
 
 VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_write_TOP(QData/*63:0*/ waddr, QData/*63:0*/ wdata, CData/*7:0*/ wmask) {
@@ -2049,11 +2063,11 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_
                  ? 1U : 0U) ? (vlSelf->ysyx_22050078_npc__DOT__rs1_data 
                                + vlSelf->ysyx_22050078_npc__DOT__imm)
                 : (4ULL + vlSelf->ysyx_22050078_npc__DOT__pc)));
-    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__exu_res, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__6__rdata, 
+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__exu_res, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read__6__rdata, 
                                                                                 (1U 
                                                                                 & (~ (IData)(vlSelf->ysyx_22050078_npc__DOT__lsu_opt))));
     vlSelf->ysyx_22050078_npc__DOT__u_LSU__DOT__rdata 
-        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__6__rdata;
+        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read__6__rdata;
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_write_TOP(
                                                                                 (((QData)((IData)(
                                                                                 vlSelf->ysyx_22050078_npc__DOT__u_LSU__DOT____Vcellout__u_stdreg__o_dout[4U])) 
