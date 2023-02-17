@@ -59,6 +59,7 @@ static void exec_once() {
   // step_and_dump_wave();
 
   itrace(npc_pc, npc_inst);
+  trace_and_difftest(logbuf, npc_pc);
 
   top->clk = !top->clk; 
   top->eval();
@@ -84,7 +85,7 @@ static void execute(uint64_t n) {
 
     /*下面的代码与trace和difftest相关*/
     //  printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
-    trace_and_difftest(logbuf, npc_pc);
+    // trace_and_difftest(logbuf, npc_pc);
     // IFDEF(CONFIG_DEVICE, device_update());
   }
 }
