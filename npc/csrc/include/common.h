@@ -43,6 +43,11 @@
 #define CONFIG_MEM_RANDOM 1
 #define CONFIG_MBASE 0x80000000
 
+//mtrace
+#define CONFIG_MTRACE 1
+
+
+
 #define CONFIG_RTOS 1
 #define CONFIG_SOC_SIMULATOR 1
 
