@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
   top->rst_n = 0;
   top->clk = 0;
   step_and_dump_wave(); //init reg status,use for difftest_init.
-  printf("连接后, time is %ld\n", contextp->time());
+  printf("连接后, time is %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   //复位
   while(rst_time < RESET_TIME)
   {
