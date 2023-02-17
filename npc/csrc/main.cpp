@@ -30,7 +30,7 @@ vluint64_t rst_time = 0;
 
 void step_and_dump_wave()
 {
-  top->eval();
+  // top->eval();
   contextp->timeInc(1);//经过一个时间精度
   tfp->dump(contextp->time());
 }

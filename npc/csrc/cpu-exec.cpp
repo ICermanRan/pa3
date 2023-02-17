@@ -56,7 +56,7 @@ static void exec_once() {
   
   top->clk = !top->clk; 
   top->eval();
-  // step_and_dump_wave();
+  step_and_dump_wave();
 
   itrace(npc_pc, npc_inst);
   trace_and_difftest(logbuf, npc_pc);
