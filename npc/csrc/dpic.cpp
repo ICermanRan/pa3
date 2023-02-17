@@ -43,9 +43,9 @@ extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
   if(ren && raddr >= PMEM_START && raddr<=PMEM_END)
   {
     *rdata = pmem_read(raddr, 8);
-    #ifdef CONFIG_MTRACE
-    printf("MTRACE_read:addr = %lx, data = %lx\n", raddr, *rdata);   
-    #endif
+    // #ifdef CONFIG_MTRACE
+    // printf("MTRACE_read:addr = %lx, data = %lx\n", raddr, *rdata);   
+    // #endif
   }
   else //avoid latch.
    *rdata = 0;
@@ -56,7 +56,7 @@ extern "C" void rtl_lsu_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
   
   if(ren && raddr >= PMEM_START && raddr<=PMEM_END)
   {
-    *rdata = pmem_read(raddr, 8);
+    *rdata = lsu_pmem_read(raddr, 8);
   }
   else //avoid latch.
    *rdata = 0;
