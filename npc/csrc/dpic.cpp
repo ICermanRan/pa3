@@ -48,7 +48,7 @@ extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
     // Log("MTRACE_read:addr = %lx, data = %lx", raddr, *rdata);
     // Log("ITRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
     // printf("MTRACE_read:addr = %lx, data = %lx\n", raddr, *rdata,ANSI_FG_MAGENTA ANSI_BG_CYAN );
-    printf("MTRACE_read:addr = %lx, data = %lx\n", ANSI_FMT(str(raddr), ANSI_FG_MAGENTA), ANSI_FMT(str(*rdata), ANSI_BG_CYAN));   
+    printf("MTRACE_read:addr = %lx, data = %lx\n", ANSI_FMT(raddr, ANSI_FG_MAGENTA), ANSI_FMT(*rdata, ANSI_BG_CYAN));   
     #endif
     // printf("addr = %lx, data = %lx\n", raddr, *rdata);
   }
