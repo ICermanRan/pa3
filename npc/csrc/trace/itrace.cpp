@@ -33,7 +33,7 @@ void itrace(uint32_t pc, uint32_t inst)
   disassemble(p, logbuf + sizeof(logbuf) - p,
     pc, (uint8_t *)&inst, 4);//仿照nemu中的写法
 
-  //存入iring_buf
+  //存入iring_buf(update iringbuf)
   strcpy(iring_buf[iring_tail], logbuf);
   iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
 
