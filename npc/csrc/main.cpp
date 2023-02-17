@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
   while(rst_time < RESET_TIME)
   {
     //时钟翻转
-    //  printf("now time is  %ld, clk is %d\n", contextp->time(), top->clk);
+    printf("复位中now time is  %ld, clk is %d\n", contextp->time(), top->clk);
     //  printf("\n");
     top->clk = !top->clk;
     step_and_dump_wave();
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
   }
   
   top->rst_n = 1;
-  printf("初始化后，rst_n = %d, clk = %d\n", top->rst_n, top->clk);
+  printf("初始化后，time is  %ld, rst_n = %d, clk = %d\n", contextp->time(), top->rst_n, top->clk);
 ///////////////////////////////// init npc software: ////////////////////////////////   
   npc_init(argc, argv);
 
