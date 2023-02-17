@@ -31,8 +31,6 @@ VL_MODULE(Vysyx_22050078_npc___024root) {
     CData/*1:0*/ ysyx_22050078_npc__DOT__exu_src_sel_IDU2EXU;
     CData/*3:0*/ ysyx_22050078_npc__DOT__lsu_opt;
     CData/*2:0*/ ysyx_22050078_npc__DOT__s_id_err;
-    CData/*0:0*/ ysyx_22050078_npc__DOT__u_stdrst__DOT__rst_n_r1;
-    CData/*0:0*/ ysyx_22050078_npc__DOT__u_stdrst__DOT__rst_n_r2;
     CData/*0:0*/ ysyx_22050078_npc__DOT__u_EXU__DOT__mux_src1__DOT__i0__DOT__hit;
     CData/*0:0*/ ysyx_22050078_npc__DOT__u_EXU__DOT__mux_src2__DOT__i0__DOT__hit;
     CData/*7:0*/ ysyx_22050078_npc__DOT__u_LSU__DOT__mask;
