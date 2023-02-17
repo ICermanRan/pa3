@@ -48,10 +48,11 @@ int main(int argc, char* argv[]) {
   tfp -> open("waveform.vcd");
 ///////////////////////////////// init npc hardware status: ////////////////////////////////    
   //对dut的连接,只连接input;init npc status:
+  printf("连接前, time is %d\n", contextp->time());
   top->rst_n = 0;
   top->clk = 0;
   step_and_dump_wave(); //init reg status,use for difftest_init.
-
+  printf("连接后, time is %d\n", contextp->time());
   //复位
   while(rst_time < RESET_TIME)
   {
