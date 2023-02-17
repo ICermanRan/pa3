@@ -8,7 +8,7 @@ char *img_file = NULL;
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 
-// void init_log(const char *log_file);
+void init_log(const char *log_file);
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -66,11 +66,23 @@ static int parse_args(int argc, char *argv[]) {
     {0          , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-d:i:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:i:", table, NULL)) != -1) {
     switch (o) {
       case 'i': img_file     = optarg; break;
       case 'd': diff_so_file = optarg; break;
-      case 'l': log_file     = optarg; break;
+      case 'l': log_file     = optarg; 
+                printf("log_file = %s\n", log_file);
+                break;//表示成功识别了给npc输入的--log参数，npc-log.txt记录Log宏输出的信息
+      
+      default:
+        printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+        printf("\t-b,--batch              run with batch mode\n");
+        printf("\t-l,--log=FILE           output log to FILE\n");
+        printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
+        printf("\t-p,--port=PORT          run DiffTest with port PORT\n");
+        printf("\t-e,--elf=elf            read function symbols from elf (only when enable ftrace)\n");
+        printf("\n");
+        exit(0);
     }
   }
   return 0;

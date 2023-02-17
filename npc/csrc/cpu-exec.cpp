@@ -25,9 +25,9 @@ static bool g_print_step = false;
 
 static void trace_and_difftest(char* logbuf, uint64_t pc) {
 
-// #ifdef CONFIG_ITRACE_COND
-//   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
-// #endif
+#ifdef CONFIG_ITRACE_COND
+  if (ITRACE_COND) { log_write("%s\n", logbuf); }
+#endif
   // if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
 if (g_print_step) { IFDEF(CONFIG_ITRACE, printf("0x%s\n",logbuf)); }
 //   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));

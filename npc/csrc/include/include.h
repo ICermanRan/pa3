@@ -47,7 +47,7 @@ int is_exit_status_bad();
 void set_nemu_state(int state, vaddr_t pc, int halt_ret);
 
 //log.cpp
-void init_log(const char *log_file);
+// void init_log(const char *log_file);
 
 //mem.cpp
 /* convert the guest physical address in the guest program to host virtual address in NEMU */

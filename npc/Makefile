@@ -3,7 +3,10 @@
 # 学号：ysyx_220578
 ######################################################################
 
+#BUILD_DIR = $(NPC_HOME)/build
+BUILD_DIR = ./build
 OBJ_DIR := ./obj_dir
+ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 #gcc flags
 GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/	\
 										-I/usr/include/SDL2 \
@@ -48,7 +51,7 @@ GCC_LIB += ${LLVM_LIB}
 GCC_LDFLAGS := $(addprefix -LDFLAGS ,${GCC_LIB})
 GCC_CFLAGS :=  $(addprefix -CFLAGS ,${GCC_INCLUDE_PATH})
 GCC_CFLAGS += $(addprefix -CFLAGS ,${LLVM_FLAGS})
-GCC_FLAGS := ${GCC_CFLAGS} ${GCC_LDFLAGS}
+GCC_FLAGS := ${GCC_CFLAGS} ${GCC_LDFLAGS} 
 
 # 3.run info:
 
@@ -56,6 +59,7 @@ BIN := ${OBJ_DIR}/V${TOP_MODULE}
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin #?= 是如果没有被赋值过就赋予等号后面的值,所以如果没有被赋予.bin文件，就会运行dummy.bin
 # DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
 RUN_FLAGS := --img=${IMG} 
+RUN_FLAGS += ${ARGS}
 
 .PHONY:sim wave clean
 
@@ -88,7 +92,7 @@ RUN_FLAGS := --img=${IMG}
 
 
 com:$(CSRC) $(VSRC)
-	@verilator ${VERILATOR_FLAGS} ${CSRC} ${VSRC} ${GCC_FLAGS}
+	@verilator ${VERILATOR_FLAGS} ${CSRC} ${VSRC} ${GCC_FLAGS} 
 
 run: com
 	@${BIN} ${RUN_FLAGS}
