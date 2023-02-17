@@ -58,6 +58,8 @@ static void exec_once() {
   top->eval();
   step_and_dump_wave();
 
+
+
   top->clk = !top->clk; 
   top->eval();
   step_and_dump_wave();
@@ -71,19 +73,18 @@ static void execute(uint64_t n) {
   for (;n > 0; n --)
   {
    
-    // trace_and_difftest(logbuf, npc_pc);
+    
     exec_once(); 
     g_nr_guest_inst ++;     //一个用于记录客户指令的计数器，自加1
     
     /*检查NPC的状态是否为NPC_RUNNING*/
     /*若是, 则继续执行下一条指令, 否则则退出执行指令的循环.*/
-     if (npc_state.state != NPC_RUNNING) 
+    if (npc_state.state != NPC_RUNNING) 
       break;
 
     /*下面的代码与trace和difftest相关*/
     //  printf("传递给trace_and_difftest 的cpu.pc的值 = %0lx\n", cpu.pc);
     trace_and_difftest(logbuf, npc_pc);
-     
     // IFDEF(CONFIG_DEVICE, device_update());
   }
 }
