@@ -1,4 +1,6 @@
 #include "include.h"
+#include "debug.h"
+#include "utils.h"
 
 uint8_t pmem[PMEM_MSIZE] = {};
 
