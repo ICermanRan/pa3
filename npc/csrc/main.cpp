@@ -60,12 +60,12 @@ int main(int argc, char* argv[]) {
     //  printf("\n");
     top->clk = !top->clk;
     step_and_dump_wave();
-    top->eval();
+    // top->eval();
     rst_time++;
   }
   // top->clk = !top->clk;
   top->rst_n = 1;
-
+  // step_and_dump_wave();
 ///////////////////////////////// init npc software: ////////////////////////////////   
   npc_init(argc, argv);
 
