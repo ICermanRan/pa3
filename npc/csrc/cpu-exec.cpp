@@ -55,8 +55,8 @@ extern char logbuf[100];
 static void exec_once() {
   
   top->clk = !top->clk; 
-  top->eval();
-  step_and_dump_wave();
+  // top->eval();
+  // step_and_dump_wave();
 
   itrace(npc_pc, npc_inst);
 
