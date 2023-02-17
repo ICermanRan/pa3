@@ -24,7 +24,7 @@ module ysyx_22050078_IFU
     import "DPI-C" function void diff_read_pc(input longint rtl_pc);
 
 
-    always @(*) begin
+    always @(i_pc) begin
         rtl_pmem_read(i_pc, inst, rst_n);
         diff_read_pc(i_pc);
      end
