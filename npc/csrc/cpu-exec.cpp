@@ -61,7 +61,7 @@ static void exec_once() {
   itrace(npc_pc, npc_inst);
 
   top->clk = !top->clk; 
-  // top->eval();
+  top->eval();
   // step_and_dump_wave();
   
 }
