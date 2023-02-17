@@ -57,7 +57,8 @@ static void exec_once() {
   top->clk = !top->clk; 
   // top->eval();
   step_and_dump_wave();
-
+  printf("now time is  %ld, clk is %d\n", contextp->time(), top->clk);
+  // printf("rst_n = %d, clk = %d\n", top->rst_n, top->clk);
   itrace(npc_pc, npc_inst);
   trace_and_difftest(logbuf, npc_pc);
 

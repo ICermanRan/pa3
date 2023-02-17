@@ -63,9 +63,9 @@ int main(int argc, char* argv[]) {
     // top->eval();
     rst_time++;
   }
-  // top->clk = !top->clk;
+  
   top->rst_n = 1;
-  // step_and_dump_wave();
+  printf("初始化后，rst_n = %d, clk = %d\n", top->rst_n, top->clk);
 ///////////////////////////////// init npc software: ////////////////////////////////   
   npc_init(argc, argv);
 
