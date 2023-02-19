@@ -79,7 +79,7 @@ extern "C" void diff_read_pc(uint64_t rtl_pc)
 }
 
 //用于获取npc的指令inst,方便在sdb中调用
-extern "C" void sdb_read_pc(uint32_t rtl_inst)
+extern "C" void sdb_read_inst(uint32_t rtl_inst)
 {
   npc_inst = rtl_inst;
 }
