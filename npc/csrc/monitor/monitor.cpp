@@ -91,7 +91,7 @@ static int parse_args(int argc, char *argv[]) {
                 }
       case 'e':
                {
-               printf("先进入--elf\n");
+               printf("进入--elf\n");
                ftrace_file = optarg;
                printf("ftrace_file = %s\n", ftrace_file);
                #ifdef CONFIG_FTRACE
