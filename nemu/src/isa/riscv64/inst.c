@@ -272,7 +272,7 @@ void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
       {
         assert(ftrace_fp);
         call_times++;
-        fprintf(ftrace_fp,"%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ',fc[i].name, (uint32_t)fc[i].addr_start);
+        fprintf(ftrace_fp,"%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ', fc[i].name, (uint32_t)fc[i].addr_start);
       }
     }
 
