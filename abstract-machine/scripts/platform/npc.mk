@@ -6,8 +6,8 @@ LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
 			 --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 
-#NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt -e $(IMAGE).elf
-NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt 
+NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt -e $(IMAGE).elf
+#NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt 
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 
@@ -32,7 +32,7 @@ image: $(IMAGE).elf
 run: image
 	@echo run npc $(IMAGE).elf
 	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
-	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
+	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run ARGS="$(NPCFLAGS)"
 
 
 
