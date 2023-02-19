@@ -272,14 +272,14 @@ void ftrace(uint64_t pc, uint64_t dnpc, uint32_t inst)
       {
         assert(ftrace_fp);
         call_times++;
-        fprintf(ftrace_fp,"%x: call [%s@%x]\n", (uint32_t)pc, fc[i].name, (uint32_t)fc[i].addr_start);
+        fprintf(ftrace_fp,"%x: %*ccall [%s@%x]\n", (uint32_t)pc, 2*call_times, ' ',fc[i].name, (uint32_t)fc[i].addr_start);
       }
     }
 
     if(BITS(inst, 11, 7) == 0b00000)
     {
       assert(ftrace_fp);
-      fprintf(ftrace_fp,"%x: ret  [%s]\n", (uint32_t)pc, find_func_name(pc));
+      fprintf(ftrace_fp,"%x: %*cret  [%s]\n", (uint32_t)pc, 2*call_times, ' ',find_func_name(pc));
       call_times--;
     }
     
