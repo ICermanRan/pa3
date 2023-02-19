@@ -4,7 +4,7 @@
 ######################################################################
 
 #BUILD_DIR = $(NPC_HOME)/build
-BUILD_DIR = ./build
+BUILD_DIR = /home/ran/ysyx/ysyx-workbench/npc/build
 OBJ_DIR := ./obj_dir
 ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 #gcc flags
