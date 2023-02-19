@@ -26,7 +26,7 @@ extern "C" {
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_LSU.v:66:32
     extern void rtl_pmem_write(long long waddr, long long wdata, char wmask);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IDU.v:359:32
-    extern void sdb_read_pc(int rtl_inst);
+    extern void sdb_read_inst(int rtl_inst);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_regfile.v:53:32
     extern void set_reg_ptr(const svOpenArrayHandle a);
 
