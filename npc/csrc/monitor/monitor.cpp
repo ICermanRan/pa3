@@ -6,6 +6,7 @@
 
 
 char *img_file = NULL;
+char *ftrace_file = NULL;
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 
@@ -91,12 +92,12 @@ static int parse_args(int argc, char *argv[]) {
       case 'e':
                {
                 printf("先进入--elf\n");
-               img_file = optarg;
+               ftrace_file = optarg;
                #ifdef CONFIG_FTRACE
                char* elf_file;
-               int img_name_size = strlen(img_file);
+               int img_name_size = strlen(ftrace_file);
                elf_file =(char*)malloc(img_name_size + 1);
-               strcpy(elf_file, img_file);
+               strcpy(elf_file, ftrace_file);
                 elf_file[img_name_size-3] = 'e';
                 elf_file[img_name_size-2] = 'l';
                 elf_file[img_name_size-1] = 'f';
