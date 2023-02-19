@@ -57,12 +57,14 @@ static void exec_once() {
   top->clk = !top->clk; 
   step_and_dump_wave();
   printf("now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
-  // printf("rst_n = %d, clk = %d\n", top->rst_n, top->clk);
   itrace(npc_pc, npc_inst);
   trace_and_difftest(logbuf, npc_pc);
 
   top->clk = !top->clk; 
   step_and_dump_wave();
+  // printf("now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  // itrace(npc_pc, npc_inst);
+  // trace_and_difftest(logbuf, npc_pc);
   
 }
 
