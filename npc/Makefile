@@ -106,5 +106,6 @@ wave:
 clean:
 	rm -rf ${OBJ_DIR}
 	rm waveform.vcd
+	rm ${BUILD_DIR}/npc-log.txt
 
 include ../Makefile
