@@ -1,6 +1,7 @@
 #include "include.h"
 #include "isa.h"
 #include "itrace.h"
+#include "ftrace.h"
 #include <getopt.h>
 
 
@@ -58,24 +59,62 @@ static long load_img()
   return size;
 }
 
+
+
+
+
+
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"img"      , required_argument, NULL, 'i'},
     {"diff"     , required_argument, NULL, 'd'},
     {"log"      , required_argument, NULL, 'l'},
+    {"elf"      , required_argument, NULL, 'e'},
     {0          , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:i:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:i:e:", table, NULL)) != -1) {
     switch (o) {
-      case 'i': img_file     = optarg; break;
+      case 'i': 
+                {
+                  printf("先进入--img\n");
+                  img_file     = optarg; 
+                  break;
+                }
       case 'd': diff_so_file = optarg; break;
-      case 'l': log_file     = optarg; 
-                printf("log_file = %s\n", log_file);
-                break;//表示成功识别了给npc输入的--log参数，npc-log.txt记录Log宏输出的信息
-      
+      case 'l': 
+                {
+                  log_file     = optarg; 
+                  printf("log_file = %s\n", log_file);
+                  break;//表示成功识别了给npc输入的--log参数，npc-log.txt记录Log宏输出的信息
+                }
+      case 'e':
+               {
+                printf("先进入--elf\n");
+               img_file = optarg;
+               #ifdef CONFIG_FTRACE
+               char* elf_file;
+               int img_name_size = strlen(img_file);
+               elf_file =(char*)malloc(img_name_size + 1);
+               strcpy(elf_file, img_file);
+                elf_file[img_name_size-3] = 'e';
+                elf_file[img_name_size-2] = 'l';
+                elf_file[img_name_size-1] = 'f';
+               // decode elf
+               extern function_info* fc;    //修饰符extern用在变量或者函数的声明前，用来说明“此变量/函数是在别处定义的，要在此处引用
+               fc = decode_elf(elf_file);
+               free(elf_file);
+               // open ftrace log file
+               extern char* ftrace_log;
+               extern FILE* ftrace_fp;
+               ftrace_fp = fopen(ftrace_log, "w");
+               #endif
+               break;
+               }
+
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+        printf("\t-i,--img                load npc imge\n");
         printf("\t-b,--batch              run with batch mode\n");
         printf("\t-l,--log=FILE           output log to FILE\n");
         printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");

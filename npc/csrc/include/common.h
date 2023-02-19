@@ -47,6 +47,9 @@
 //mtrace
 #define CONFIG_MTRACE 1
 
+//ftrace
+#define CONFIG_FTRACE 1
+
 
 
 #define CONFIG_RTOS 1
