@@ -6,6 +6,7 @@
 #include "isa.h"
 #include "sdb.h"
 #include "include.h"
+#include "itrace.h"
 
 static int is_batch_mode = false;
 
@@ -34,6 +35,7 @@ static char* rl_gets() {
 
 static int cmd_c(char *args) {
   cpu_exec(-1);
+  // show_iringbuf();
   return 0;
 }
 
