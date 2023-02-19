@@ -91,11 +91,13 @@ static int parse_args(int argc, char *argv[]) {
                 }
       case 'e':
                {
-                printf("先进入--elf\n");
+               printf("先进入--elf\n");
                ftrace_file = optarg;
+               printf("ftrace_file = %s\n", ftrace_file);
                #ifdef CONFIG_FTRACE
                char* elf_file;
                int img_name_size = strlen(ftrace_file);
+               printf("img_name_size = %d\n", img_name_size);
                elf_file =(char*)malloc(img_name_size + 1);
                strcpy(elf_file, ftrace_file);
                 elf_file[img_name_size-3] = 'e';
