@@ -24,8 +24,9 @@ compile_git:
 $(BINARY): compile_git
 
 # Some convenient rules
-
+#加载日志文件
 override ARGS ?= --log=$(BUILD_DIR)/nemu-log.txt
+#加载difftest动态库
 override ARGS += $(ARGS_DIFF)
 
 
