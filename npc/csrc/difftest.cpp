@@ -1,5 +1,6 @@
 #include "include.h"
 #include "debug.h"
+#include <stdbool.h>
 #include <dlfcn.h>
 
 
@@ -50,7 +51,7 @@ void init_difftest(char *ref_so_file, long img_size)
 
   void (*ref_difftest_init)() = (void (*)())dlsym(handle, "difftest_init");
   assert(ref_difftest_init);
-
+  
   Log("Differential testing: %s", ANSI_FMT("ON", ANSI_FG_GREEN));
   Log("The result of every instruction will be compared with %s. "
       "This will help you a lot for debugging, but also significantly reduce the performance. "
