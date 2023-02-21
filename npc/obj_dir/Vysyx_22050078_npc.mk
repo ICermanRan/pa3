@@ -35,24 +35,23 @@ VM_PREFIX = Vysyx_22050078_npc
 VM_MODPREFIX = Vysyx_22050078_npc
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/ \
-	-I/usr/include/SDL2 \
-	-I./obj_dir \
+	-O0 \
+	g \
+	-lasan \
 	-I/usr/lib/llvm-14/include \
 	-std=c++14 \
 	-fno-exceptions \
 	-D_GNU_SOURCE \
 	-D__STDC_CONSTANT_MACROS \
+	-D__STDC_FORMAT_MACROS \
 	-D__STDC_LIMIT_MACROS \
 	-fPIE \
-	-Ofast \
-	-fexceptions \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
-	-lSDL2 \
-	-lreadline \
 	-ldl \
+	-lSDL2 \
+	-lSDL2_image \
 	-lLLVM-14 \
 
 # User .cpp files (from .cpp's on Verilator command line)
