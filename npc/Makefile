@@ -54,7 +54,7 @@ RUN_FLAGS += ${NPC_LOG}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator ${VERILATOR_FLAGS} \
+	@verilator ${VERILATOR_FLAGS} \
 	-I${CSRC} \
 	-I${VSRC} \
 	$(addprefix -CFLAGS , -O0 $(CFLAGS)) \
@@ -64,7 +64,7 @@ sim:
 
 
 run: sim
-	${RUN_FLAGS}
+	@${RUN_FLAGS}
 	
 	
 wave:
