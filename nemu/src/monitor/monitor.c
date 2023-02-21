@@ -107,7 +107,7 @@ static int parse_args(int argc, char *argv[]) {
                 printf("log_file = %s\n", log_file);
                 break; //表示成功识别了给NEMU输入的--log参数，nemu-log.txt记录Log宏输出的信息
       case 'd': diff_so_file = optarg; 
-                Log_red("nemu的diff_so_file = %s", diff_so_file);
+                printf("nemu的diff_so_file = %s\n", diff_so_file);
                 break;
       case 'e':
                img_file = optarg;
