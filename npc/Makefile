@@ -16,6 +16,7 @@ NPC_LOG ?= --log=$(BUILD_DIR)/npc-log.txt
 CSRC +=  $(shell find $(abspath ./csrc) -name "*.cpp") 
 VSRC +=  $(shell find $(abspath ./vsrc) -name "*.v" -or -name "*.sv")
 TOP_MODULE := ysyx_22050078_npc
+SEARCHPATH := ./vsrc
 
 
 # 2.verilator flags:
@@ -24,6 +25,7 @@ VERILATOR_FLAGS += -Wall --trace --cc --exe --build -MMD
 VERILATOR_FLAGS += -Wno-UNUSED
 VERILATOR_FLAGS += -Wno-UNDRIVEN
 VERILATOR_FLAGS += -Wno-INCABSPATH
+VERILATOR_FLAGS += -I${SEARCHPATH}
 VERILATOR_FLAGS += --top ${TOP_MODULE}
 
 
