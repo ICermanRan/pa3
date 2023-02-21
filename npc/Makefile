@@ -8,7 +8,7 @@ BUILD_DIR = /home/ran/ysyx/ysyx-workbench/npc/build
 OBJ_DIR := ./obj_dir
 DIFF_DIR = $(NPC_HOME)/diff-so
 
-NPC_LOG ?= --log=$(BUILD_DIR)/npc-log.txt
+NPC_LOG ?= $(BUILD_DIR)/npc-log.txt
  
 
 
@@ -29,9 +29,6 @@ VERILATOR_FLAGS += -I${SEARCHPATH}
 VERILATOR_FLAGS += --top ${TOP_MODULE}
 
 
-
-
-#
 CFLAGS += g
 CFLAGS += -lasan
 CFLAGS += $(shell llvm-config --cxxflags) -fPIE
@@ -39,34 +36,32 @@ CFLAGS += $(shell llvm-config --cxxflags) -fPIE
 LDFLAGS += -ldl
 LDFLAGS += -lSDL2 -lSDL2_image
 LDFLAGS += $(shell llvm-config --libs)
-DIFFTEST := ${DIFF_DIR}/riscv64-nemu-interpreter-so
 
 
 # 3.run info:
-
+BIN := ${OBJ_DIR}/V${TOP_MODULE}
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin #?= 是如果没有被赋值过就赋予等号后面的值,所以如果没有被赋予.bin文件，就会运行dummy.bin
+DIFFTEST := ${DIFF_DIR}/riscv64-nemu-interpreter-so
 
 RUN_FLAGS := --img=${IMG} 
 RUN_FLAGS += --diff=${DIFFTEST}
-RUN_FLAGS += ${NPC_LOG}
+RUN_FLAGS += --log=${NPC_LOG}
 
 .PHONY:sim wave clean
 
 
 
-sim:
+sim:${CSRC} ${VSRC}
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@verilator ${VERILATOR_FLAGS} \
-	-I${CSRC} \
-	-I${VSRC} \
+	${CSRC} \
+	${VSRC} \
 	$(addprefix -CFLAGS , -O0 $(CFLAGS)) \
-	$(addprefix -LDFLAGS , $(LDFLAGS)) \
-	$(CSRC)	\
-	$(VSRC)
+	$(addprefix -LDFLAGS , $(LDFLAGS)) 
 
 
 run: sim
-	@${RUN_FLAGS}
+	@${BIN} ${RUN_FLAGS}
 	
 	
 wave:
