@@ -1,8 +1,8 @@
 #ifndef __CPU_DIFFTEST_H__
 #define __CPU_DIFFTEST_H__
 
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/difftest-def.h"
+#include "common.h"
+#include "difftest-def.h"
 
 #ifdef CONFIG_DIFFTEST
 void difftest_skip_ref();

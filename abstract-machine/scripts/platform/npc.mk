@@ -7,6 +7,8 @@ LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
 LDFLAGS   += --gc-sections -e _start
 
 NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt -e $(IMAGE).elf
+#DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
+#NPCFLAGS	+= --diff=${DIFFTEST}
 #NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt
 #NPCFLAGS  += -e $(IMAGE).elf 
 

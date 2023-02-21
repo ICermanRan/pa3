@@ -82,7 +82,11 @@ static int parse_args(int argc, char *argv[]) {
                   img_file     = optarg; 
                   break;
                 }
-      case 'd': diff_so_file = optarg; break;
+      case 'd': 
+                printf("进入--diff\n");
+                diff_so_file = optarg; 
+                printf("diff_so_file = %s\n", diff_so_file);
+                break;
       case 'l': 
                 {
                   log_file     = optarg; 
@@ -145,10 +149,10 @@ void init_monitor(int argc, char *argv[])
   // 加载命令行指定的镜像文件
   long img_size = load_img();
 
-  // #ifdef  DIFFTEST_ON
-  //  /* Initialize differential testing. */
-  // difftest_init(diff_so_file, img_size);
-  // #endif
+  #ifdef  DIFFTEST_ON
+   /* Initialize differential testing. */
+  init_difftest(diff_so_file, img_size);
+  #endif
 
   // /* Initialize the simple debugger. */
   init_sdb();
