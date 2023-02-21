@@ -1,4 +1,4 @@
-AM_SRCS:=  platform/dummy/vme.c \
+AM_SRCS	+=  platform/dummy/vme.c \
            platform/dummy/mpe.c
 
 CFLAGS    += -fdata-sections -ffunction-sections

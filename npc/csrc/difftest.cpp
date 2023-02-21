@@ -1,7 +1,7 @@
 #include "include.h"
 #include "debug.h"
 #include <stdbool.h>
-#include <dlfcn.h>
+#include <dlfcn.h> // 显式加载需要用到的头文件
 
 
 
@@ -31,7 +31,7 @@ void init_difftest(char *ref_so_file, long img_size)
   //进行了上述初始化工作之后, DUT和REF就处于相同的状态了
 
   assert(ref_so_file != NULL);
-  printf("assert(ref_so_file != NULL) 成功！\n");
+  Log("assert(ref_so_file != NULL) 成功!");
 
   void *handle;
   handle = dlopen(ref_so_file, RTLD_LAZY);

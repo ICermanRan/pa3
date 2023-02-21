@@ -3,9 +3,11 @@
 # 学号：ysyx_220578
 ######################################################################
 
-#BUILD_DIR = $(NPC_HOME)/build
+
 BUILD_DIR = /home/ran/ysyx/ysyx-workbench/npc/build
 OBJ_DIR := ./obj_dir
+DIFF_DIR = $(NPC_HOME)/diff-so
+
 ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 #gcc flags
 GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/	\
@@ -13,22 +15,8 @@ GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/	\
 										-I${OBJ_DIR}
 
 
-#llvm
-LLVM_LIB = $(shell llvm-config --libs)
-LLVM_FLAGS = $(filter-out -D__STDC_FORMAT_MACROS, $(shell llvm-config --cxxflags)) -fPIE
-LLVM_FLAGS += -Ofast  -fexceptions
-#-lasan(内存检查)
-
-
-
 # 1.files info:
-CSRC +=  $(shell find $(abspath ./csrc/memory) -name "*.cpp")  
 CSRC +=  $(shell find $(abspath ./csrc) -name "*.cpp") 
-CSRC +=  $(shell find $(abspath ./csrc/monitor) -name "*.cpp")
-CSRC +=  $(shell find $(abspath ./csrc/monitor/sdb) -name "*.cpp")
-#CSRC +=  $(shell find $(abspath ./csrc/utils) -name "*.cpp")
-CSRC +=  $(shell find $(abspath ./csrc/trace) -name "*.cpp")
-
 VSRC +=  $(shell find $(abspath ./vsrc) -name "*.v" -or -name "*.sv")
 TOP_MODULE := ysyx_22050078_npc
 SEARCHPATH := ./vsrc
@@ -42,6 +30,21 @@ VERILATOR_FLAGS += --top ${TOP_MODULE}
 VERILATOR_FLAGS += -Wno-UNUSED
 VERILATOR_FLAGS += -Wno-UNDRIVEN
 VERILATOR_FLAGS += -Wno-INCABSPATH
+
+
+
+#
+CFLAGS += g
+CFLAGS += -lasan
+CFLAGS += $(shell llvm-config --cxxflags) -fPIE
+
+LDFLAGS += -ldl
+LDFLAGS += -lSDL2 -lSDL2_image
+LDFLAGS += $(shell llvm-config --libs)
+#LLVM_LIB = $(shell llvm-config --libs)
+#LLVM_FLAGS = $(filter-out -D__STDC_FORMAT_MACROS, $(shell llvm-config --cxxflags)) -fPIE
+#LLVM_FLAGS += -Ofast  -fexceptions
+#-lasan(内存检查)
 
 GCC_LIB = -lSDL2	-lreadline -ldl #-lSDL2_image
 GCC_LIB += ${LLVM_LIB} 		   
