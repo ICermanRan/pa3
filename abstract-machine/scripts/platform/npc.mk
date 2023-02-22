@@ -10,8 +10,8 @@ NPCLOG   += -l $(shell dirname $(IMAGE).elf)/npc-log.txt
 #NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt 
 #DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
 #NPCFLAGS	+= --diff=${DIFFTEST}
-#NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt
-#NPCFLAGS  += -e $(IMAGE).elf 
+NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt
+NPCFLAGS  += -e $(IMAGE).elf 
 NPCELF  = -e $(IMAGE).elf 
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
