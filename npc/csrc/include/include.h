@@ -1,14 +1,11 @@
 #ifndef _INCLUDE_H_
 #define _INCLUDE_H_
 
-<<<<<<< HEAD
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/debug.h"
-=======
 #include "common.h"
 #include "debug.h"
 #include "utils.h"
 #include "sdb.h"
->>>>>>> test
+
 // #include "Vysyx_22050078_npc__Dpi.h"
 // #include "Vysyx_22050078_npc.h"
 // #include "verilated.h"
@@ -24,13 +21,11 @@
 
 #define DIFFTEST_ON  1
 
-<<<<<<< HEAD
-=======
+
 typedef uint64_t vaddr_t;
 typedef uint64_t word_t;
 typedef uint64_t paddr_t;
 
->>>>>>> test
 typedef struct {
   uint64_t x[32];
   uint64_t pc;
@@ -38,12 +33,6 @@ typedef struct {
 
 
 
-<<<<<<< HEAD
-//mem.cpp
-uint8_t* guest_to_host(uint64_t paddr);
-uint64_t host_to_guest(uint8_t *haddr);
-uint64_t pmem_read(uint64_t addr, int len);
-=======
 //vaddr.cpp
 //word_t vaddr_ifetch(vaddr_t addr, int len);
 //word_t vaddr_read(vaddr_t addr, int len);
@@ -71,18 +60,15 @@ uint8_t* guest_to_host(uint64_t paddr);
 uint64_t host_to_guest(uint8_t *haddr);
 uint64_t pmem_read(uint64_t addr, int len);
 uint64_t lsu_pmem_read(uint64_t addr, int len);
->>>>>>> test
 void pmem_write(uint64_t addr, uint64_t data, int len);
 
 //sim_init.cpp
 void sim_init();
-<<<<<<< HEAD
-// void step_and_dump_wave(VerilatedContext* contextp, VerilatedVcdC* tfp, Vysyx_22050078_npc * top);
-=======
+
 
 //main.cpp
 void step_and_dump_wave();
->>>>>>> test
+
 
 //init.cpp
 void npc_init(int argc, char *argv[]);
@@ -96,30 +82,23 @@ void init_sdb();
 //monitor.cpp
 void init_monitor(int argc, char *argv[]);
 
-<<<<<<< HEAD
-=======
+
 //cpu-exec.cpp
 void cpu_exec(uint64_t n);
 
 //reg.cpp
->>>>>>> test
+
 // void print_regs();
 void reg_display();
 bool checkregs(regfile *ref, regfile *dut);
 regfile pack_dut_regfile(uint64_t *dut_reg,uint64_t pc);
 
-<<<<<<< HEAD
-// #ifdef DIFFTEST_ON
-// void difftest_init(char *ref_so_file, long img_size);
-// bool difftest_check();
-// void difftest_step();
-// #endif
-=======
+
 #ifdef DIFFTEST_ON
 void init_difftest(char *ref_so_file, long img_size);
 bool difftest_check();
 void difftest_step();
 #endif
->>>>>>> test
+
 
 #endif

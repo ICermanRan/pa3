@@ -1,15 +1,10 @@
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
 
-<<<<<<< HEAD
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
-#include <stdio.h>
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/utils.h"
-=======
 #include "common.h"
 #include <stdio.h>
 #include "utils.h"
->>>>>>> test
+
 
 #define Log(format, ...) \
     _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \

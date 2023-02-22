@@ -16,16 +16,6 @@ void npc_init(int argc, char *argv[])
 }
 
 
-<<<<<<< HEAD
-// void engine_start() {
-// #ifdef CONFIG_TARGET_AM
-//   cpu_exec(-1);
-// #else
-//   /* Receive commands from user. */
-//   sdb_mainloop();
-// #endif
-// }
-=======
 void engine_start() {
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
@@ -34,4 +24,4 @@ void engine_start() {
   sdb_mainloop();
 #endif
 }
->>>>>>> test
+

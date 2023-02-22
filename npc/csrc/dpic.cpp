@@ -1,13 +1,9 @@
-<<<<<<< HEAD
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
-=======
 #include "include.h"
 #include "isa.h"
 #include "itrace.h"
 #include <getopt.h>
 #include "common.h"
 #include "debug.h"
->>>>>>> test
 #include "verilated_dpi.h"
 
 extern bool rst_n_sync;
@@ -43,39 +39,17 @@ extern "C" void rtl_pmem_write(uint64_t waddr, uint64_t wdata, uint8_t wmask)
 
 extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
 {
-<<<<<<< HEAD
-  // printf("raddr = %08lx, rdata = %016lx, ren = %d,\n",raddr, *rdata, ren);
-  // printf("result = %d\n", ren && raddr >= PMEM_START && raddr<=PMEM_END);
-  if(ren && raddr >= PMEM_START && raddr<=PMEM_END)
-  {
-    *rdata = pmem_read(raddr, 8);
-=======
-  
   if(ren && raddr >= PMEM_START && raddr<=PMEM_END)
   {
     *rdata = pmem_read(raddr, 8);
     // #ifdef CONFIG_MTRACE
     // printf("MTRACE:addr = %lx, data = %lx\n", raddr, *rdata);   
     // #endif
->>>>>>> test
   }
   else //avoid latch.
    *rdata = 0;
 }
 
-<<<<<<< HEAD
-extern uint64_t *dut_reg;
-// extern uint64_t dut_pc;
-extern "C" void set_reg_ptr(const svOpenArrayHandle r) 
-{
-  dut_reg = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
-}
-
-// extern "C" void diff_read_pc(uint64_t rtl_pc)
-// {
-//   dut_pc = rtl_pc;
-// }
-=======
 extern "C" void rtl_lsu_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
 {
   
@@ -108,4 +82,4 @@ extern "C" void sdb_read_inst(uint32_t rtl_inst)
 {
   npc_inst = rtl_inst;
 }
->>>>>>> test
+

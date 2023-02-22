@@ -1,23 +1,16 @@
-<<<<<<< HEAD
-#ifndef __COMMON_H__
-#define __COMMON_H__
-=======
 #ifndef __npc_COMMON_H__
 #define __npc_COMMON_H__
->>>>>>> test
+
 
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
-<<<<<<< HEAD
 
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/macro.h"
-=======
 #include "macro.h"
 #include "utils.h"
 #include "debug.h"
->>>>>>> test
+
 
 
 #ifdef CONFIG_TARGET_AM
@@ -27,30 +20,6 @@
 #include <stdlib.h>
 #endif
 
-<<<<<<< HEAD
-#if CONFIG_MBASE + CONFIG_MSIZE > 0x100000000ul
-#define PMEM64 1
-#endif
-
-typedef __uint128_t word_t;
-typedef __uint128_t sword_t;
-
-
-#define FMT_WORD MUXDEF(CONFIG_ISA64, "0x%016lx", "0x%08x")
-
-typedef uint64_t vaddr_t;
-typedef uint64_t paddr_t;
-
-#define FMT_PADDR MUXDEF(PMEM64, "0x%016lx", "0x%08x")
-typedef uint16_t ioaddr_t;
-
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/debug.h"
-
-#define __GUEST_ISA__ riscv64
-#define CONFIG_ISA64 1
-#define CONFIG_ISA_riscv64 1
-#define CONFIG_ISA "riscv64"
-=======
 
 
 #define __GUEST_ISA__ riscv64
@@ -61,7 +30,6 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_ISA64 1
 #define CONFIG_ISA "riscv64"
 #define CONFIG_WATCHPOINT 1
->>>>>>> test
 #define CONFIG_CC_GCC 1
 #define CONFIG_MODE_SYSTEM 1
 #define CONFIG_TARGET_NATIVE_ELF 1
@@ -72,18 +40,14 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_TRACE_EXECCOUNT 1
 #define CONFIG_ITRACE 1
 #define CONFIG_ITRACE_COND "true"
-<<<<<<< HEAD
-=======
 #define ITRACE_COND "true"
->>>>>>> test
 #define CONFIG_PC_RESET_OFFSET 0x0
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_PMEM_GARRAY 1
 #define CONFIG_MEM_RANDOM 1
 #define CONFIG_MBASE 0x80000000
 
-<<<<<<< HEAD
-=======
+
 //mtrace
 #define CONFIG_MTRACE 1
 
@@ -91,8 +55,6 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_FTRACE 1
 
 
-
->>>>>>> test
 #define CONFIG_RTOS 1
 #define CONFIG_SOC_SIMULATOR 1
 
@@ -122,8 +84,7 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_SB_SIZE 0x10000
 
 #endif
-<<<<<<< HEAD
-=======
+
 
 #if CONFIG_MBASE + CONFIG_MSIZE > 0x100000000ul
 #define PMEM64 1
@@ -142,4 +103,4 @@ typedef uint64_t paddr_t;
 #define FMT_PADDR MUXDEF(PMEM64, "0x%016lx", "0x%08x")
 
 typedef uint16_t ioaddr_t;
->>>>>>> test
+

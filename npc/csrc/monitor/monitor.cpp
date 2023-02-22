@@ -1,39 +1,11 @@
-<<<<<<< HEAD
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
-#include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/isa.h"
-=======
 #include "include.h"
 #include "isa.h"
 #include "itrace.h"
 #include "ftrace.h"
->>>>>>> test
 #include <getopt.h>
 
 
 char *img_file = NULL;
-<<<<<<< HEAD
-static char *log_file = NULL;
-static char *diff_so_file = NULL;
-
-// void init_log(const char *log_file);
-
-// static void welcome() {
-//   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
-//         "to record the trace. This may lead to a large log file. "
-//         "If it is not necessary, you can disable it in menuconfig"));
-//   #ifdef CONFIG_TRACE
-//   Log("ITRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   Log("MTRACE: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   Log("FTRACE: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   // Log("DTRACE: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-//   #endif
-//   // Log("Build time: %s, %s", __TIME__, __DATE__);
-//   printf("Welcome to %s-npc!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
-//   printf("👽😡🤡🥶😎😭😵🤤🥵😄🤣🥳💩🤖😱😴😀🥰😅😫\n");
-//   printf("For help, type \"help\"\n");
-// }
-=======
 char *ftrace_file = NULL;
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
@@ -56,7 +28,7 @@ static void welcome() {
   printf("👽😡🤡🥶😎😭😵🤤🥵😄🤣🥳💩🤖😱😴😀🥰😅😫\n");
   printf("For help, type \"help\"\n");
 }
->>>>>>> test
+
 
 extern uint8_t pmem[PMEM_MSIZE];  // use for load_img
 static long load_img()
@@ -89,29 +61,13 @@ static long load_img()
   return size;
 }
 
-<<<<<<< HEAD
-=======
 
 
-
-
-
->>>>>>> test
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"img"      , required_argument, NULL, 'i'},
     {"diff"     , required_argument, NULL, 'd'},
     {"log"      , required_argument, NULL, 'l'},
-<<<<<<< HEAD
-    {0          , 0                , NULL,  0 },
-  };
-  int o;
-  while ( (o = getopt_long(argc, argv, "-d:i:", table, NULL)) != -1) {
-    switch (o) {
-      case 'i': img_file     = optarg; break;
-      case 'd': diff_so_file = optarg; break;
-      case 'l': log_file     = optarg; break;
-=======
     {"elf"      , required_argument, NULL, 'e'},
     {0          , 0                , NULL,  0 },
   };
@@ -171,7 +127,6 @@ static int parse_args(int argc, char *argv[]) {
         printf("\t-e,--elf=elf            read function symbols from elf (only when enable ftrace)\n");
         printf("\n");
         exit(0);
->>>>>>> test
     }
   }
   return 0;
@@ -186,29 +141,14 @@ void init_monitor(int argc, char *argv[])
 
   /* Open the log file. */
   //init log.
-<<<<<<< HEAD
-  // init_log(log_file);
-=======
   init_log(log_file);
->>>>>>> test
+
 
   /* Load the image to memory. This will overwrite the built-in image. */
   // 加载命令行指定的镜像文件
   long img_size = load_img();
 
-<<<<<<< HEAD
-  // #ifdef  DIFFTEST_ON
-  //  /* Initialize differential testing. */
-  // difftest_init(diff_so_file, img_size);
-  // #endif
 
-  // /* Initialize the simple debugger. */
-  // init_sdb();
-
-  // /* Display welcome message. */
-  // // 输出欢迎信息以及trace的状态信息,还输出了编译的时间和日期
-  // welcome();
-=======
   #ifdef  DIFFTEST_ON
    /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size);
@@ -224,6 +164,6 @@ void init_monitor(int argc, char *argv[])
   // /* Display welcome message. */
   // // 输出欢迎信息以及trace的状态信息,还输出了编译的时间和日期
   welcome();
->>>>>>> test
+
 
 }
