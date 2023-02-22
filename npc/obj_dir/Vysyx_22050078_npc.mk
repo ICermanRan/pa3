@@ -36,6 +36,9 @@ VM_MODPREFIX = Vysyx_22050078_npc
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 	-O0 \
+	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/ \
+	-I/usr/include/SDL2 \
+	-I./obj_dir \
 	g \
 	-lasan \
 	-I/usr/lib/llvm-14/include \
