@@ -30,7 +30,9 @@ paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 static word_t pmem_read(paddr_t addr, int len) {
   word_t ret = host_read(guest_to_host(addr), len);
   #ifdef CONFIG_MTRACE
-    Log("MTRACE_read:addr = %x, len = %d, data = %lu",addr,len,ret);
+
+    Log("MTRACE_read:addr = %x, len = %d, data = %lx",addr,len,ret);
+
   #endif
   return ret;
 }
@@ -71,6 +73,7 @@ word_t paddr_read(paddr_t addr, int len) {
   return 0;
 }
 
+//往nemu内存地址中写入内容
 void paddr_write(paddr_t addr, int len, word_t data) {
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);

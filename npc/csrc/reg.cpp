@@ -1,8 +1,16 @@
 #include "include/include.h"
 #include "include/debug.h"
+<<<<<<< HEAD
 
 uint64_t *dut_reg = NULL;
 uint64_t dut_pc;
+=======
+#define GET_ARRAY_LEN(array,len) {len = (sizeof(array) / sizeof(array[0]));}
+
+
+uint64_t *npc_reg = NULL;
+uint64_t npc_pc;
+>>>>>>> test
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -36,11 +44,20 @@ bool checkregs(regfile *ref_r, regfile *dut)
 
 void reg_display() 
 {
+<<<<<<< HEAD
   printf("dut pc = 0x%lx\n",dut_pc);
   for(int i = 0; i < 32; i++)
   {
 	// printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
      printf("dut reg %3s = 0x%lx\n", regs[i], dut_reg[i]);
+=======
+  printf("npc pc = 0x%lx\n", npc_pc);
+  for(int i = 0; i < 32; i = i+2)
+  {
+	// printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
+     printf("reg[%3d] \t%-3s = 0x%10lx or %10ld |", i, regs[i], npc_reg[i], npc_reg[i]);
+     printf("reg[%3d] \t%-3s = 0x%10lx or %10ld \n", i+1, regs[i+1], npc_reg[i+1], npc_reg[i+1]);
+>>>>>>> test
   }
 }
 
@@ -54,4 +71,39 @@ regfile pack_dut_regfile(uint64_t *dut_reg, uint64_t pc)
   
   dut.pc = pc;
   return dut;
+<<<<<<< HEAD
 }
+=======
+}
+
+static int find_string(const char *strs[], const char *str, int len)
+{
+    int i = 0;
+    while(i < len + 1){
+        if(strcmp(*strs, str) == 0){
+            break;
+        }
+        i++;
+        strs++;
+    }
+    if(i == len + 1){
+        return -1;
+    }
+    return i;
+}
+
+word_t isa_reg_str2val(const char *s, bool *success) {
+  int len,j;
+  GET_ARRAY_LEN(regs,len);
+  j = find_string(regs, s, len);
+  // printf("j = %d\n", j);
+  word_t reg_value;
+
+  if(j == 33)
+    reg_value = npc_pc;
+  else
+    reg_value = npc_reg[j];
+  
+  return reg_value;
+}
+>>>>>>> test

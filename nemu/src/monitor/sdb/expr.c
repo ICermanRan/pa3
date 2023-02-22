@@ -41,22 +41,22 @@ static struct rule {
      */
     {"\\(", '('},          // left brackets,   token_type == 40
     {"\\)", ')'},         // right brackets,  token_type == 41
-    {"\\/", '/'},         // minus,           token_type == 47
+    {"\\-", '-'},         // reduce,          token_type == 45
+    {"-", TK_NEG},         //negative
     {"\\*", '*'},         // multiply,        token_type == 42
+    {"\\*", TK_DEREF},       //指针解引用(dereference)
+    {"\\/", '/'},         // minus,           token_type == 47
+    {"\\$[\\$]?[a-z0-9]+", TK_REG},
+    // {"%",TK_REG},
+    {"\\+", '+'},         // plus,            token_type == 43
+    {"==", TK_EQ},        // equal
+    {"!=", TK_UNEQ},      // unequal
+    {"&&", TK_AND},        //and
     // {"[1-9][0-9]*", TK_num}, // number(无法检测0)
     {"0[xX][0-9a-fA-F]+", TK_HEX}, //hexadecimal-number    为什么把十六进制放在十进制前面呢？  因为匹配规则是从ruls数组从头开始一个一个试，先遇见且匹配的就先认定
     {"[0-9]+", TK_num}, // number(和十六进制开头的0x冲突)
     // {"^[0-9]*$", TK_num}, // number
-    {"\\-", '-'},         // reduce,          token_type == 45
-    {"\\+", '+'},         // plus,            token_type == 43
     {" +", TK_NOTYPE},    // spaces(空格串)
-    {"==", TK_EQ},        // equal
-    {"!=", TK_UNEQ},      // unequal
-    {"&&", TK_AND},        //and
-    {"-", TK_NEG},         //negative
-    {"\\*", TK_DEREF},       //指针解引用(dereference)
-    {"\\$[\\$]?[a-z0-9]+", TK_REG}
-    // {"$[a-z0-9$]{1,3}", TK_REG}
     //  {"\\$", '$'}
 };
 
@@ -499,7 +499,8 @@ static word_t eval(int start, int end)  //p=开始位置，q=结束位置
     //  printf("s = %s\n", s);
      word_t value = isa_reg_str2val(s, success);
       // printf("value = %#010lx\n", value);
-      // printf("读取到的value = 0x%lx \n", value);
+     printf("读取到的value = 0x%lx \n", value);
+
     //  return result = value;
       return value;
 

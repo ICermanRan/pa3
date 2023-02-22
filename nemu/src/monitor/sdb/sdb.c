@@ -55,7 +55,14 @@ static int cmd_c(char *args) {
 
 static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;   //优雅的退出NEMU标准答案
-  return -1;
+
+  return -1;//为什么cmd_q返回-1才能退出呢？
+            //因为-1是返回赋给 int (*handler) (char *)
+            //在sdb_mainloop()中，如果cmd_table[i].handler(args) < 0
+            //则表示执行函数后，返回给handler变量的整数值有问题，就会退出sdb_mainloop()
+            //返回到engine_start()，再直接返回到nemu的main函数，最后就执行return is_exit_status_bad();
+  //  return 0;
+
 }
 
 static int cmd_help(char *args);
@@ -223,6 +230,12 @@ static struct {
   const char *name;
   const char *description;
   int (*handler) (char *);
+  //handler是一个函数指针, *handler两侧的圆括号是必不可少的
+  //它将*和handler先结合，表示handler是一个指针变量
+  //然后(*handler)与其后的()结合，表示该指针变量可以指向一个"字符串指针形参，返回值为int类型"的函数
+  //所以，handler指向cmd_table中的cmd系列函数，
+  //这些函数的形参都是char *args,并得到一个int类型的返回值
+  //根据返回值的不同做不同的判断
 } cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },

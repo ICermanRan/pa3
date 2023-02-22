@@ -35,32 +35,86 @@ VM_PREFIX = Vysyx_22050078_npc
 VM_MODPREFIX = Vysyx_22050078_npc
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
+<<<<<<< HEAD
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
 	-ldl \
+=======
+	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/ \
+	-I/usr/include/SDL2 \
+	-I./obj_dir \
+	-I/usr/lib/llvm-14/include \
+	-std=c++14 \
+	-fno-exceptions \
+	-D_GNU_SOURCE \
+	-D__STDC_CONSTANT_MACROS \
+	-D__STDC_LIMIT_MACROS \
+	-fPIE \
+	-Ofast \
+	-fexceptions \
+
+# User LDLIBS (from -LDFLAGS on Verilator command line)
+VM_USER_LDLIBS = \
+	-lSDL2 \
+	-lreadline \
+	-ldl \
+	-lLLVM-14 \
+>>>>>>> test
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	cpu-exec \
+<<<<<<< HEAD
 	difftest \
 	dpic \
 	init \
 	main \
 	mem \
+=======
+	map \
+	mmio \
+	port-io \
+	timer \
+	difftest \
+	dpic \
+	hostcall \
+	init \
+	main \
+	mem \
+	paddr \
+	vaddr \
+>>>>>>> test
 	monitor \
 	expr \
 	sdb \
 	watchpoint \
 	reg \
 	sim_init \
+<<<<<<< HEAD
 	log \
+=======
+	disasm \
+	ftrace \
+	itrace \
+	log \
+	state \
+>>>>>>> test
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc \
+<<<<<<< HEAD
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor \
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/sdb \
+=======
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/device \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/device/io \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/memory \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/sdb \
+	/home/ran/ysyx/ysyx-workbench/npc/csrc/trace \
+>>>>>>> test
 	/home/ran/ysyx/ysyx-workbench/npc/csrc/utils \
 
 
@@ -75,15 +129,39 @@ VPATH += $(VM_USER_DIR)
 
 cpu-exec.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/cpu-exec.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+<<<<<<< HEAD
+=======
+map.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/map.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mmio.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/mmio.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+port-io.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/port-io.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+timer.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/timer.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+>>>>>>> test
 difftest.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/difftest.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 dpic.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/dpic.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+<<<<<<< HEAD
+=======
+hostcall.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/hostcall.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+>>>>>>> test
 init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/init.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+<<<<<<< HEAD
 mem.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/mem.cpp
+=======
+mem.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/memory/mem.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+paddr.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/memory/paddr.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+vaddr.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/memory/vaddr.cpp
+>>>>>>> test
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 monitor.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/monitor/monitor.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
@@ -97,8 +175,21 @@ reg.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/reg.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 sim_init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/sim_init.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+<<<<<<< HEAD
 log.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/log.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+=======
+disasm.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/trace/disasm.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+ftrace.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/trace/ftrace.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+itrace.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/trace/itrace.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+log.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/log.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+state.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/state.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+>>>>>>> test
 
 ### Link rules... (from --exe)
 Vysyx_22050078_npc: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)

@@ -62,11 +62,12 @@ module ysyx_22050078_LSU(
 
 
   //for sim:  ////////////////////////////////////////////////////////////////////////////////////////////
-  import "DPI-C" function void rtl_pmem_read(input longint raddr, output longint rdata, input bit ren);
+
+  import "DPI-C" function void rtl_lsu_pmem_read(input longint raddr, output longint rdata, input bit ren);
   import "DPI-C" function void rtl_pmem_write(input longint waddr, input longint wdata, input byte wmask);
 
   always @(*) begin
-    rtl_pmem_read(raddr, rdata, ren);
+    rtl_lsu_pmem_read(raddr, rdata, ren);
     rtl_pmem_write(waddr, wdata, wmask);    
   end
 

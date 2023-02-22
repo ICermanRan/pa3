@@ -35,8 +35,13 @@ extern char isa_logo[];
 void init_isa();
 
 // reg
+<<<<<<< HEAD
 extern CPU_state cpu;
 void isa_reg_display();
+=======
+// extern CPU_state cpu;
+// void isa_reg_display();
+>>>>>>> test
 word_t isa_reg_str2val(const char *name, bool *success);
 
 // exec

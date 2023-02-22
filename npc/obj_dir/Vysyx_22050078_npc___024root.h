@@ -31,8 +31,11 @@ VL_MODULE(Vysyx_22050078_npc___024root) {
     CData/*1:0*/ ysyx_22050078_npc__DOT__exu_src_sel_IDU2EXU;
     CData/*3:0*/ ysyx_22050078_npc__DOT__lsu_opt;
     CData/*2:0*/ ysyx_22050078_npc__DOT__s_id_err;
+<<<<<<< HEAD
     CData/*0:0*/ ysyx_22050078_npc__DOT__u_stdrst__DOT__rst_n_r1;
     CData/*0:0*/ ysyx_22050078_npc__DOT__u_stdrst__DOT__rst_n_r2;
+=======
+>>>>>>> test
     CData/*0:0*/ ysyx_22050078_npc__DOT__u_EXU__DOT__mux_src1__DOT__i0__DOT__hit;
     CData/*0:0*/ ysyx_22050078_npc__DOT__u_EXU__DOT__mux_src2__DOT__i0__DOT__hit;
     CData/*7:0*/ ysyx_22050078_npc__DOT__u_LSU__DOT__mask;
@@ -68,8 +71,13 @@ VL_MODULE(Vysyx_22050078_npc___024root) {
     VlWide<9>/*263:0*/ ysyx_22050078_npc__DOT__u_EXU__DOT____Vcellinp__mux_src2____pinNumber4;
     VlWide<5>/*135:0*/ ysyx_22050078_npc__DOT__u_LSU__DOT____Vcellout__u_stdreg__o_dout;
     QData/*63:0*/ __Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__3__rdata;
+<<<<<<< HEAD
     QData/*63:0*/ __Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_read__4__rdata;
     VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
+=======
+    QData/*63:0*/ __Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read__6__rdata;
+    VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
+>>>>>>> test
 
     // INTERNAL VARIABLES
     Vysyx_22050078_npc__Syms* vlSymsp;  // Symbol table

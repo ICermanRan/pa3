@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /***************************************************************************************
 * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
 *
@@ -17,6 +18,12 @@
 #define __SDB_H__
 
 #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
+=======
+#ifndef __SDB_H__
+#define __SDB_H__
+#include "common.h"
+
+>>>>>>> test
 
 word_t expr(char *e, bool *success);
 
@@ -30,6 +37,10 @@ word_t expr(char *e, bool *success);
 int test_change();
 void print_wp();
 
+<<<<<<< HEAD
+=======
+// 把监视点结构体定义放在了sdb.h中，方便各个.c文件调用
+>>>>>>> test
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
@@ -40,8 +51,17 @@ typedef struct watchpoint {
   /* TODO: Add more members if necessary */
 } WP;
 
+<<<<<<< HEAD
 WP* new_wp(); //函数定义
 int free_wp(int num);//函数定义
 
 
 #endif
+=======
+WP* new_wp(char *exp); //函数定义
+int free_wp(int num);//函数定义
+
+
+
+#endif
+>>>>>>> test

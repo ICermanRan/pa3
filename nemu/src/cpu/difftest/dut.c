@@ -73,9 +73,13 @@ void init_difftest(char *ref_so_file, long img_size, int port)
   assert(ref_so_file != NULL);
 
   void *handle;
+  //dlopen按指定的模式打开动态链接库文件，并返回句柄
   handle = dlopen(ref_so_file, RTLD_LAZY);
   assert(handle);
 
+  //dlsym函数的功能:
+  //可以从共享库（动态库）中获取符号（全局变量与函数符号）地址，
+  //通常用于获取函数符号地址，这样可用于对共享库中函数的包装
   ref_difftest_memcpy = dlsym(handle, "difftest_memcpy");
   assert(ref_difftest_memcpy);
 

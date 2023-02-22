@@ -84,6 +84,7 @@ module ysyx_22050078_npc
     );
 
     ysyx_22050078_IFU u_IFU(
+      .clk      (clk              ),
       .i_pc     (pc               ), //PCU to IFU
       .rst_n    (rst_n_sync       ),     
       .inst_out (inst_IFU2IDU     )               

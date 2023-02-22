@@ -19,8 +19,6 @@
 #include <locale.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
 #include </home/ran/ysyx/ysyx-workbench/nemu/include/cpu/ifetch.h>
-#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
-
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -71,7 +69,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
-  if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+  // if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+  if (g_print_step) { IFDEF(CONFIG_ITRACE, printf("%s\n",_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
 /*check watchpoint*/
@@ -104,6 +103,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);  //这里用于把pc:存入s->logbuf,并且去掉了最开始未定义的乱码pc
+
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;

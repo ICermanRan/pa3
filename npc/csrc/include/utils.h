@@ -1,8 +1,20 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+<<<<<<< HEAD
 #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
 #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/include.h"
+=======
+#include <stdint.h>
+#include <inttypes.h>
+#include <stdbool.h>
+#include <string.h>
+#include "common.h"
+#include "include.h"
+#include "debug.h"
+
+typedef uint64_t vaddr_t;
+>>>>>>> test
 
 // ----------- state -----------
 
@@ -39,6 +51,7 @@ uint64_t get_time();
 #define ANSI_BG_CYAN    "\33[1;46m"
 #define ANSI_BG_WHITE   "\33[1;47m"
 #define ANSI_NONE       "\33[0m"
+<<<<<<< HEAD
 
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 
@@ -58,6 +71,28 @@ uint64_t get_time();
 //     printf(__VA_ARGS__); \
 //     log_write(__VA_ARGS__); \
 //   } while (0)
+=======
+#define CONFIG_TARGET_NATIVE_ELF 1
+
+#define ANSI_FMT(str, fmt) fmt str ANSI_NONE
+
+#define log_write(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, \
+  do { \
+    extern FILE* log_fp; \
+    extern bool log_enable(); \
+    if (log_enable()) { \
+      fprintf(log_fp, __VA_ARGS__); \
+      fflush(log_fp); \
+    } \
+  } while (0) \
+)
+
+#define _Log(...) \
+  do { \
+    printf(__VA_ARGS__); \
+    log_write(__VA_ARGS__); \
+  } while (0)
+>>>>>>> test
 
 
 #endif
