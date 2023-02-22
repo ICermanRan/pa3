@@ -31,7 +31,7 @@ VERILATOR_FLAGS += --top ${TOP_MODULE}
 GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/ \
 										-I/usr/include/SDL2 \
 										-I${OBJ_DIR}
-
+CFLAGS += ${GCC_INCLUDE_PATH})
 CFLAGS += g
 CFLAGS += -lasan
 CFLAGS += $(filter-out -D__STDC_FORMAT_MACROS, $(shell llvm-config --cxxflags))
