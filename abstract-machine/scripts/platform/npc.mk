@@ -38,7 +38,7 @@ run: image
 	@echo run npc $(IMAGE).elf
 	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
 	@echo $(MAKE) -C $(NPC_HOME) run ARGS=$(NPCFLAGS)
-	@echo $(MAKE) -C $(NPC_HOME) run NPC_ELF=$(NPCELF)
+	@echo $(MAKE) -C $(NPC_HOME) run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
 	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
 
 
