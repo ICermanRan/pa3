@@ -6,11 +6,13 @@ LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
 			 --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 
-NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt -e $(IMAGE).elf
+#NPCLOG   += -l $(shell dirname $(IMAGE).elf)/npc-log.txt 
+#NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt 
 #DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
 #NPCFLAGS	+= --diff=${DIFFTEST}
-#NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt
+NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt -e $(IMAGE).elf
 #NPCFLAGS  += -e $(IMAGE).elf 
+#NPCELF  = -e $(IMAGE).elf 
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 
@@ -37,6 +39,6 @@ run: image
 	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
 	@echo $(MAKE) -C $(NPC_HOME) run ARGS=$(NPCFLAGS)
 	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run ARGS="$(NPCFLAGS)"
-
+	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF="$(NPCELF)" run NPC_LOG="$(NPCLOG)"
 
 
