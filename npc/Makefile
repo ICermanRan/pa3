@@ -33,8 +33,7 @@ GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/ \
 
 CFLAGS += g
 CFLAGS += -lasan
-CFLAGS += $(shell llvm-config --cxxflags) -fPIE
-
+CFLAGS += $(filter-out -D__STDC_FORMAT_MACROS, $(shell llvm-config --cxxflags))
 LDFLAGS += -ldl
 LDFLAGS += -lSDL2 -lSDL2_image
 LDFLAGS += $(shell llvm-config --libs)
