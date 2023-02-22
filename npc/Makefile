@@ -8,6 +8,7 @@ BUILD_DIR = /home/ran/ysyx/ysyx-workbench/npc/build
 OBJ_DIR := ./obj_dir
 DIFF_DIR = $(NPC_HOME)/diff-so
 NPC_LOG ?= $(BUILD_DIR)/npc-log.txt
+NPC_ELF ?=
 
  
 # 1.src:
