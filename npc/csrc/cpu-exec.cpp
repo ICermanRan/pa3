@@ -30,7 +30,7 @@ static void trace_and_difftest(char* logbuf, uint64_t pc) {
 #endif
   // if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
   if (g_print_step) { IFDEF(CONFIG_ITRACE, printf("0x%s\n",logbuf)); }
-//   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  IFDEF(CONFIG_DIFFTEST, difftest_step());
 
 /*check watchpoint*/
  #ifdef CONFIG_WATCHPOINT
@@ -57,8 +57,18 @@ static void exec_once() {
   top->clk = !top->clk; 
   step_and_dump_wave();
   printf("now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  
   itrace(npc_pc, npc_inst);
-  trace_and_difftest(logbuf, npc_pc);
+  if((top->clk == 0) && (top->rst_n == 1)) //上升沿且rst_n == 1
+  {
+    if(!difftest_check())
+    {
+      reg_display();
+    }
+    
+    trace_and_difftest(logbuf, npc_pc);
+  }
+  
 
   top->clk = !top->clk; 
   step_and_dump_wave();

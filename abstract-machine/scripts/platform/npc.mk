@@ -11,10 +11,10 @@ LDFLAGS   += --gc-sections -e _start
 #NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt 
 #DIFFTEST := ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
 #NPCFLAGS	+= --diff=${DIFFTEST}
-NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt -e $(IMAGE).elf 
+#NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-log.txt -e $(IMAGE).elf 
 #NPCFLAGS  += -e $(IMAGE).elf 
-#NPCLOG   += -l $(shell dirname $(IMAGE).elf)/npc-log.txt 
-#NPCELF  = -e $(IMAGE).elf 
+NPCLOG   += --log=$(shell dirname $(IMAGE).elf)/npc-log.txt 
+NPCELF   += --elf=$(IMAGE).elf 
 
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
@@ -38,13 +38,9 @@ image: $(IMAGE).elf
 #$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 的意义：切换到$(NPC_HOME)目录下执行makefile
 #以dummy为例：make -C /home/ran/ysyx/ysyx-workbench/npc run IMG=/home/ran/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
 run: image
-	@echo run npc $(IMAGE).elf
-	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 
-	@echo $(MAKE) -C $(NPC_HOME) run ARGS=$(NPCFLAGS)
-	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run ARGS="$(NPCFLAGS)"
-	@echo $(MAKE) -C $(NPC_HOME) run NPC_ELF=$(NPCELF)  NPC_LOG=$(NPCLOG)
-	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin  NPC_ELF=$(NPCELF)  NPC_LOG=$(NPCLOG)
-	@echo $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin  NPC_ELF=$(NPCELF)  NPC_LOG=$(NPCLOG)
-
+	@echo npc.mk: run npc $(IMAGE).elf
+	@echo npc.mk: pass to npc $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
+	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
+	
 
 

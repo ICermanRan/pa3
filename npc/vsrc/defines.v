@@ -10,7 +10,7 @@
 `define		  ysyx_22050078_zero_word		    64'h0
 
 
-
+/* opcode -> ins type: */
 //I-type inst
 `define  ysyx_22050078_INST_TYPE_I        7'b0010011  //I type for addi/slli/srli/srai/xori/ori/andi
 `define  ysyx_22050078_INST_TYPE_I_W      7'b0011011  //I type for addiw/slliw/srliw/sraiw
@@ -23,7 +23,7 @@
 `define  ysyx_22050078_INST_TYPE_R_W      7'b0111011  //R type for addw/subw/sllw/srlw/sraw/mulw/divw/divuw/remw/remuw 
 
 //B-type inst
-`define  ysyx_22050078_INST_TYPE_B        7'b1100011  //B type
+`define  ysyx_22050078_INST_TYPE_B        7'b1100011  //B type for beq/bne/bge/blt/bgeu
 
 //U-type inst
 `define  ysyx_22050078_INST_TYPE_U_AUIPC  7'b0010111  //U type for auipc
@@ -32,12 +32,21 @@
 //J-type inst
 `define  ysyx_22050078_INST_TYPE_J        7'b1101111  //J type for jal
 
+//S-type inst
+`define  ysyx_22050078_INST_TYPE_S        7'b0100011  //S type 
+
+/********************************************************************/
+
 // EXU source selection:
 `define EXU_SEL_WIDTH   2
-`define EXU_SEL_REG     2'b00
-`define EXU_SEL_IMM     2'b01
-`define EXU_SEL_PC4     2'b10
-`define EXU_SEL_PCI     2'b11
+//`define EXU_SEL_REG     2'b00
+//`define EXU_SEL_IMM 2'b01
+// `define EXU_SEL_PC4     2'b10
+//`define EXU_SEL_PCI     2'b11
+`define EXU_SEL_RS1_RS2 2'b00
+`define EXU_SEL_RS1_IMM 2'b01
+`define EXU_SEL_PC_4    2'b10
+`define EXU_SEL_PC_IMM  2'b11
 
 // EXU opreator:
 `define EXU_OPT_WIDTH   6
@@ -126,26 +135,40 @@
 
 
 //func3
-`define FUNC3_ADDI_ADDIW        3'b000        //ADDI ADDIW 
+`define FUNC3_ADDI              3'b000        //ADDI
+`define FUNC3_ADDIW             3'b000        //ADDIW  
 `define FUNC3_ADD_SUB_MUL       3'b000        //ADD SUB MUL
 `define FUNC3_ADDW_SUBW_MULW    3'b000        //ADDW SUBW MULW
 `define FUNC3_SUB_MUL           3'b000        //SUB MUL
-`define FUNC3_ADDW              3'b000        //ADDW             
-`define FUNC3_SLL_MULH          3'b001        //SLL MULH SLLI  
+`define FUNC3_ADDW              3'b000        //ADDW
+`define FUNC3_BEQ               3'b000        //BEQ   
+
+`define FUNC3_SLL_MULH          3'b001        //SLL MULH 
+`define FUNC3_SLLI              3'b001        //SLLI
 `define FUNC3_SLLIW             3'b001        //SLLIW
 `define FUNC3_SLLW              3'b001        //SLLW
+`define FUNC3_BNE               3'b001        //BNE
+
 `define FUNC3_SLTI              3'b010        //SLTI
 `define FUNC3_SLT_MULHSU        3'b010        //SLT MULHSU
 `define FUNC3_SLTU_MULHU        3'b011        //STLU STLUI MULHU
-`define FUNC3_XOR_DIV           3'b100        //XOR XORI DIV DIVW
+`define FUNC3_XOR_DIV           3'b100        //XOR DIV DIVW
 `define FUNC3_XORI              3'b100        //XORI 
 `define FUNC3_DIVW              3'b100        //DIVW
-`define FUNC3_SRL_SRA_DIVU      3'b101        //SRL SRLI SRA SRAI  DIVU 
+`define FUNC3_BLT               3'b100        //BLT
+
+`define FUNC3_SRLI_SRAI         3'b101        //SRLI SRAI
+`define FUNC3_SRL_SRA_DIVU      3'b101        //SRL SRA  DIVU 
 `define FUNC3_SRLIW_SRAIW       3'b101        //SRLIW SRAIW
 `define FUNC3_SRLW_SRAW_DIVUW   3'b101        //SRLW SRAW DIVUW
-`define FUNC3_OR_REM            3'b110        //OR  REM REMW
+`define FUNC3_BGE               3'b101        //BGE
+
+`define FUNC3_OR_REM            3'b110        //OR  REM 
 `define FUNC3_ORI               3'b110        //ORI
 `define FUNC3_REMW              3'b110        //REMW
+`define FUNC3_BLTU              3'b110        //BLTU
+
 `define FUNC3_ANDI              3'b111        //ANDI
 `define FUNC3_AND_REMU          3'b111        //AND  REMU 
 `define FUNC3_REMUW             3'b111        //REMUW
+`define FUNC3_BGEU              3'b111        //BGEU

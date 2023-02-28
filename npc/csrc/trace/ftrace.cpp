@@ -92,7 +92,7 @@ function_info* decode_elf(char* elf_file_name)
 {
   assert(elf_file_name != NULL);
   // Log("进入decode_elf\n");//会导致段错误(疑惑？？)
-  printf("%s\n", ANSI_FMT("进入 decode_elf", ANSI_FG_GREEN));
+  // printf("%s\n", ANSI_FMT("进入 decode_elf", ANSI_FG_GREEN));
 
   FILE *fp;
   // get elf size
@@ -187,7 +187,7 @@ function_info* decode_elf(char* elf_file_name)
       j++;
     }  
   }
-  printf("%s\n", ANSI_FMT("ELF_file decode ready!\n", ANSI_FG_GREEN));
+  // printf("%s\n", ANSI_FMT("ELF_file decode ready!\n", ANSI_FG_GREEN));
   return fc;
 }
 

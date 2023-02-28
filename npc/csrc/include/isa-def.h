@@ -18,11 +18,6 @@
 
 #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/common.h"
 
-typedef struct {
-  word_t gpr[32];
-  vaddr_t pc;
-} riscv64_CPU_state;
-
 // decode
 typedef struct {
   union {

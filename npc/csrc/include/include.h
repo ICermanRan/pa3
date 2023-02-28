@@ -31,6 +31,14 @@ typedef struct {
   uint64_t pc;
 } regfile;
 
+// typedef struct {
+//   uint64_t x[32];
+//   uint64_t pc;
+// } riscv64_CPU_state;
+
+typedef regfile riscv64_CPU_state;
+typedef riscv64_CPU_state CPU_state;
+extern CPU_state cpu;
 
 
 //vaddr.cpp

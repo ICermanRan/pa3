@@ -3,9 +3,9 @@
 #include "../include/expr-test.h"
 #include "isa/riscv64/local-include/reg.h"
 #include "../include/cpu/decode.h"
-#include "/home/ran/ysyx/ysyx-workbench/nemu/include/expr-test.h"
-#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
-#include </usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h>
+#include "expr-test.h"
+#include "/home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h"
+#include <stdbool.h>
 
 void expr_test()
 {

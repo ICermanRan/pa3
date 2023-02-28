@@ -14,13 +14,9 @@
 ***************************************************************************************/
 
 #include <common.h>
-<<<<<<< HEAD
-#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
-#include "/home/ran/ysyx/ysyx-workbench/nemu/include/expr-test.h"
-=======
-#include "/home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h"
+//#include "sdb.h"
 #include "expr-test.h"
->>>>>>> test
+
 
 void expr_test();
 void init_monitor(int, char *[]);

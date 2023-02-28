@@ -58,13 +58,13 @@ int main(int argc, char* argv[]) {
     //  printf("\n");
     top->clk = !top->clk;
     step_and_dump_wave();
-    printf("复位2 now time is  %ld, clk is %d\n", contextp->time(), top->clk);
+    printf("复位2 now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
     // top->eval();
     rst_time++;
   }
   
   top->rst_n = 1;
-  printf("初始化后，time is  %ld, rst_n = %d, clk = %d\n", contextp->time(), top->rst_n, top->clk);
+  printf("初始化后，time is  %ld, clk = %d, rst_n = %d\n", contextp->time(), top->clk, top->rst_n);
 ///////////////////////////////// init npc software: ////////////////////////////////   
   npc_init(argc, argv);
 

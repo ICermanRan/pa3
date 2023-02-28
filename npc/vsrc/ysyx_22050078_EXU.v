@@ -21,7 +21,7 @@ module ysyx_22050078_EXU
   output reg [`CPU_WIDTH-1:0] o_exu_res ,
     
   //to PCU
-  output                      o_zero
+  output  wire                o_zero
 );
 
   reg [`CPU_WIDTH-1:0] src1,src2;
@@ -41,10 +41,10 @@ module ysyx_22050078_EXU
   //          |
   //          |
   MuxKeyWithDefault #(4, `EXU_SEL_WIDTH, `CPU_WIDTH) mux_src1 (src1, i_src_sel, `CPU_WIDTH'b0, {
-    `EXU_SEL_REG, i_rs1_data,
-    `EXU_SEL_IMM, i_rs1_data,
-    `EXU_SEL_PC4, pc,
-    `EXU_SEL_PCI, pc
+    `EXU_SEL_RS1_RS2, i_rs1_data,
+    `EXU_SEL_RS1_IMM, i_rs1_data,
+    `EXU_SEL_PC_4   ,         pc,
+    `EXU_SEL_PC_IMM ,         pc
   });
          
   // always@(*) begin
@@ -61,19 +61,20 @@ module ysyx_22050078_EXU
   //          |
   //          |
   MuxKeyWithDefault #(4, `EXU_SEL_WIDTH, `CPU_WIDTH) mux_src2 (src2, i_src_sel, `CPU_WIDTH'b0, {
-    `EXU_SEL_REG, i_rs2_data,
-    `EXU_SEL_IMM, i_imm,
-    `EXU_SEL_PC4, `CPU_WIDTH'h4,
-    `EXU_SEL_PCI, i_imm
+    `EXU_SEL_RS1_RS2, i_rs2_data,
+    `EXU_SEL_RS1_IMM,      i_imm,
+    `EXU_SEL_PC_4,         64'h4,
+    `EXU_SEL_PC_IMM,       i_imm
 });
   
 
   // 请记住：硬件中不区分有符号和无符号，全部按照补码进行运算！
   // 所以 src1 - src2 得到是补码！
   // 如果src1和src2是有符号数，通过输出最高位就可以判断正负！
-    //以”1-2“为例，两个有符号数分别转换为 [1]补+[-2]补，规定位数的计算结果的最高位为1则表示src1 < src2，规定位数的最高位为0则表示src1 > src2；
+  //以”1-2“为例，两个有符号数分别转换为 [1]补+[-2]补，规定位数的计算结果的最高位为1则表示src1 < src2，规定位数的最高位为0则表示src1 > src2；
   // 如果src1和src2是无符号数，那么就在最高位补0，拓展为有符号数再减法，通过最高位判断正负！
-    //放在verilog里，则是申明为无符号数，然后直接计算，计算结果取补码;比如 1-2的结果就是 -1的补码，规定位数的最高位为1表示src1 < src2，反之，为0表示src1 > src2
+  //放在verilog里，则是申明为无符号数，然后直接计算，计算结果取补码;比如 1-2的结果就是 -1的补码，规定位数的最高位为1表示src1 < src2，反之，为0表示src1 > src2
+  /*ps:视为2的补码 == 转变为有符号数进行运算*/
 
   // 4.2 generate integer alu result: ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -115,8 +116,14 @@ module ysyx_22050078_EXU
       `EXU_DIVUW: begin exu_res_trans[31:0] = $unsigned(src1[31:0]) / $unsigned(src2[31:0]); o_exu_res[31:0] = exu_res_trans[31:0]; o_exu_res = {{32{o_exu_res[31]}}, o_exu_res[31:0]}; end
       `EXU_REMW:  begin o_exu_res[31:0] = {src1[31:0] % src2[31:0]}; o_exu_res = {{32{o_exu_res[31]}}, o_exu_res[31:0]}; end
       `EXU_REMUW: begin exu_res_trans[31:0] = $unsigned(src1[31:0]) % $unsigned(src2[31:0]); o_exu_res = {{32{exu_res_trans[31]}},exu_res_trans[31:0]}; end
-      `EXU_SLT:   begin exu_res_trans = ($signed(src1) - $signed(src2)); o_exu_res = {63'b0, exu_res_trans[63]}; end  //if src1 > src2, exu_res_trans[63] = 0; if src1 < src2, exu_res_trans[63] = 1;
+      `EXU_SLT:   begin exu_res_trans = ($signed(src1) - $signed(src2)); o_exu_res = {63'b0, exu_res_trans[63]};   end//if src1 > src2, exu_res_trans[63] = 0; if src1 < src2, exu_res_trans[63] = 1;
       `EXU_SLTU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, exu_res_trans[63]}; end//if src1 > src2, exu_res_trans[63] = 0; if src1 < src2, exu_res_trans[63] = 1;
+      `EXU_BEQ:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, ~(|exu_res_trans)};                       end//if src1 == src2,o_exu_res[0]  = 1; if src1 != src2, o_exu_res[0]  = 0;
+      `EXU_BNE:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, (|exu_res_trans)};                        end//if src1 == src2,o_exu_res[0]  = 0; if src1 != src2, o_exu_res[0]  = 1;
+      `EXU_BLT:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, exu_res_trans[63]};     end//if src1 > src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
+      `EXU_BGE:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};    end//if src1 > src2, o_exu_res[0]  = 1; if src1 < src2,  o_exu_res[0]  = 0;
+      `EXU_BLTU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, exu_res_trans[63]}; end//if src1 > src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
+      `EXU_BGEU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};end
       default: o_exu_res = `CPU_WIDTH'b0;
     endcase
   end

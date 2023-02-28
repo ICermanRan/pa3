@@ -89,6 +89,7 @@ void Vysyx_22050078_npc___024root___ctor_var_reset(Vysyx_22050078_npc___024root*
     for (int __Vi0=0; __Vi0<32; ++__Vi0) {
         vlSelf->ysyx_22050078_npc__DOT__u_regfile__DOT__regs[__Vi0] = VL_RAND_RESET_Q(64);
     }
+    vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__i_dnpc = VL_RAND_RESET_Q(64);
     vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst = VL_RAND_RESET_Q(64);
     vlSelf->ysyx_22050078_npc__DOT__u_IDU__DOT__I_imm = VL_RAND_RESET_Q(64);
     vlSelf->ysyx_22050078_npc__DOT__u_IDU__DOT__U_imm = VL_RAND_RESET_Q(64);

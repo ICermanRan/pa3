@@ -73,8 +73,11 @@ void init_difftest(char *ref_so_file, long img_size, int port)
   assert(ref_so_file != NULL);
 
   void *handle;
-  //dlopen按指定的模式打开动态链接库文件，并返回句柄
-  handle = dlopen(ref_so_file, RTLD_LAZY);
+  //dlopen:打开一个动态链接库,用来加载库中的符号
+  //按指定的模式打开指定的动态连接库文件，并返回一个句柄给调用进程
+  //返回值: 打开错误返回NULL；成功，返回库引用 
+  //编译时候要加入 -ldl (指定dl库)
+  handle = dlopen(ref_so_file, RTLD_LAZY);//RTLD_LAZY 暂缓决定，等有需要时再解出符号 
   assert(handle);
 
   //dlsym函数的功能:

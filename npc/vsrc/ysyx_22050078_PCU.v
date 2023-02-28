@@ -12,12 +12,14 @@ module ysyx_22050078_PCU(
   input                  i_zero,
   input [`CPU_WIDTH-1:0] i_rs1,
   input [`CPU_WIDTH-1:0] i_imm,
-  output[`CPU_WIDTH-1:0] o_pc
+  output[`CPU_WIDTH-1:0] o_pc,
+  output[`CPU_WIDTH-1:0] o_dnpc
 );
 
   wire [`CPU_WIDTH-1:0] pc_next;
 
   assign pc_next = (i_brch && ~i_zero || i_jal) ? (o_pc + i_imm) : (i_jalr ? (i_rs1 + i_imm) : (o_pc + 4) );
+  assign o_dnpc  = pc_next;
 
   stdreg #(
     .WIDTH     (`CPU_WIDTH),

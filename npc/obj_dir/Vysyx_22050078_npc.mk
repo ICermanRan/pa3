@@ -47,6 +47,7 @@ VM_USER_CFLAGS = \
 	-fPIE \
 	-Ofast \
 	-fexceptions \
+	-fsanitize=address \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
@@ -54,6 +55,7 @@ VM_USER_LDLIBS = \
 	-lreadline \
 	-ldl \
 	-lLLVM-14 \
+	-fsanitize=address \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
@@ -67,7 +69,6 @@ VM_USER_CLASSES = \
 	hostcall \
 	init \
 	main \
-	mem \
 	mem \
 	paddr \
 	vaddr \
@@ -123,8 +124,6 @@ hostcall.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/hostcall.cpp
 init.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/init.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/main.cpp
-	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-mem.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/mem.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 mem.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/memory/mem.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

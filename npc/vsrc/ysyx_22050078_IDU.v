@@ -75,7 +75,8 @@ module ysyx_22050078_IDU
     assign S_imm = { {52{inst_in[31]}}, inst_in[31:25], inst_in[11:7]};
 
 
-    //1.reg info, imm info:  ///////////////////////////////////////////////////////////////////////////
+  //1.reg info, imm info:  ///////////////////////////////////////////////////////////////////////////
+  //src1、src2的来源
     always@(*) begin
       o_imm      = 64'b0;
       o_rs1_addr = 5'b0;
@@ -83,83 +84,19 @@ module ysyx_22050078_IDU
       o_rd_addr  = 5'b0;
       o_rd_wen   = 1'b0;
         case(opcode)
-          `ysyx_22050078_INST_TYPE_R:
-            begin
-              o_rs1_addr = rs1_addr;
-              o_rs2_addr = rs2_addr;
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = 64'b0;
-            end
-
-          `ysyx_22050078_INST_TYPE_R_W:
-            begin
-              o_rs1_addr = rs1_addr;
-              o_rs2_addr = rs2_addr;
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = 64'b0;
-            end
-
-          `ysyx_22050078_INST_TYPE_I:
-            begin
-              o_rs1_addr = rs1_addr;
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = I_imm;
-            end
-
-          `ysyx_22050078_INST_TYPE_I_W:
-            begin
-              o_rs1_addr = rs1_addr;
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = I_imm;
-            end
-
-          `ysyx_22050078_INST_TYPE_I_LOAD:
-            begin
-              o_rs1_addr = rs1_addr;
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = I_imm;
-            end
-            
-          `ysyx_22050078_INST_TYPE_I_JALR:
-            begin
-              o_rs1_addr = rs1_addr;
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = I_imm;
-            end
-          
-          `ysyx_22050078_INST_TYPE_I_EBREAK:
-            begin
-              o_rs1_addr = rs1_addr;
-              o_rd_addr  = rd_addr;
-            end
-
-          `ysyx_22050078_INST_TYPE_U_AUIPC:
-            begin
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = U_imm;
-            end
-
-          `ysyx_22050078_INST_TYPE_U_LUI:
-            begin
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = U_imm;
-            end
-
-          `ysyx_22050078_INST_TYPE_J:
-            begin
-              o_rd_addr  = rd_addr;
-              o_rd_wen   = 1'b1;
-              o_imm      = J_imm;
-            end
-            default: ;
+          `ysyx_22050078_INST_TYPE_R:       begin o_rs1_addr = rs1_addr;  o_rs2_addr = rs2_addr;  o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = 64'b0;  end
+          `ysyx_22050078_INST_TYPE_R_W:     begin o_rs1_addr = rs1_addr;  o_rs2_addr = rs2_addr;  o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = 64'b0;  end
+          `ysyx_22050078_INST_TYPE_S:       begin o_rs1_addr = rs1_addr;  o_rs2_addr = rs2_addr;                                             o_imm = S_imm;  end
+          `ysyx_22050078_INST_TYPE_B:       begin o_rs1_addr = rs1_addr;  o_rs2_addr = rs2_addr;                                             o_imm = B_imm;  end
+          `ysyx_22050078_INST_TYPE_I:       begin o_rs1_addr = rs1_addr;                          o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = I_imm;  end
+          `ysyx_22050078_INST_TYPE_I_W:     begin o_rs1_addr = rs1_addr;                          o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = I_imm;  end
+          `ysyx_22050078_INST_TYPE_I_LOAD:  begin o_rs1_addr = rs1_addr;                          o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = I_imm;  end
+          `ysyx_22050078_INST_TYPE_I_JALR:  begin o_rs1_addr = rs1_addr;                          o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = I_imm;  end
+          `ysyx_22050078_INST_TYPE_I_EBREAK:begin o_rs1_addr = rs1_addr;                          o_rd_addr  = rd_addr;                      o_imm = I_imm;  end
+          `ysyx_22050078_INST_TYPE_U_LUI:   begin o_rs1_addr = 5'b0;                              o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = U_imm;  end
+          `ysyx_22050078_INST_TYPE_U_AUIPC: begin                                                 o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = U_imm;  end
+          `ysyx_22050078_INST_TYPE_J:       begin                                                 o_rd_addr  = rd_addr;  o_rd_wen   = 1'b1;  o_imm = J_imm;  end
+          default: ;
         endcase
 
     end
@@ -167,7 +104,7 @@ module ysyx_22050078_IDU
   //2.alu info:  /////////////////////////////////////////////////////////////////////////////////////
   always @(*) begin
     o_exu_opt     = `EXU_ADD;
-    o_exu_src_sel = `EXU_SEL_IMM;
+    o_exu_src_sel = `EXU_SEL_RS1_IMM;
     s_id_err      = 3'b0;
       case(opcode)
         `ysyx_22050078_INST_TYPE_I_EBREAK:
@@ -176,166 +113,196 @@ module ysyx_22050078_IDU
             
           end
 
+        `ysyx_22050078_INST_TYPE_S:
+        //M[rs1+imm] = rs2  
+          begin
+            o_exu_opt     = `EXU_ADD;
+            o_exu_src_sel = `EXU_SEL_RS1_IMM;
+          end
+
+
         `ysyx_22050078_INST_TYPE_I_LOAD:
         // x[rd] = M[rs1+imm]
           begin
             o_exu_opt     = `EXU_ADD;
-            o_exu_src_sel = `EXU_SEL_IMM;
+            o_exu_src_sel = `EXU_SEL_RS1_IMM;
           end
 
         `ysyx_22050078_INST_TYPE_I_JALR:
         // x[rd] = PC+4
+        // new pc = (rs1+imm) & (~1)
           begin
             o_exu_opt     = `EXU_ADD;
-            o_exu_src_sel = `EXU_SEL_PC4;
+            o_exu_src_sel = `EXU_SEL_PC_4;
           end
 
         `ysyx_22050078_INST_TYPE_J:
-        // x[rd] = PC+4  
+        // x[rd] = PC+4 
+        // new pc = (rs1+imm) 
           begin
             o_exu_opt     = `EXU_ADD;
-            o_exu_src_sel = `EXU_SEL_PC4;
+            o_exu_src_sel = `EXU_SEL_PC_4;
           end
 
         `ysyx_22050078_INST_TYPE_U_AUIPC:
         // x[rd] = pc + imm
           begin
             o_exu_opt     = `EXU_ADD;
-            o_exu_src_sel = `EXU_SEL_PCI;
+            o_exu_src_sel = `EXU_SEL_PC_IMM;
           end
 
         `ysyx_22050078_INST_TYPE_U_LUI:
-        // x[rd] = x0 + imm
+        // x[rd] = x1(5'b0) + imm
           begin
             o_exu_opt     = `EXU_ADD;
-            o_exu_src_sel = `EXU_SEL_IMM;
+            o_exu_src_sel = `EXU_SEL_RS1_IMM;
           end
 
-        `ysyx_22050078_INST_TYPE_I:
+        `ysyx_22050078_INST_TYPE_B://B type for beq/bne/bge/blt/bgeu
           begin
-            o_exu_src_sel = `EXU_SEL_IMM;
+            o_exu_src_sel = `EXU_SEL_RS1_RS2;
             case(func3)
-              `FUNC3_ADDI_ADDIW:     o_exu_opt = `EXU_ADD;
-              `FUNC3_SLLIW:          o_exu_opt = `EXU_SLL;
-              `FUNC3_SRL_SRA_DIVU:  
+              `FUNC3_BEQ:           o_exu_opt = `EXU_BEQ;//beq
+              `FUNC3_BNE:           o_exu_opt = `EXU_BNE;//bne
+              `FUNC3_BLT:           o_exu_opt = `EXU_BLT;//blt
+              `FUNC3_BGE:           o_exu_opt = `EXU_BGE;//bge
+              `FUNC3_BLTU:          o_exu_opt = `EXU_BLTU;//bltu
+              `FUNC3_BGEU:          o_exu_opt = `EXU_BGEU;//bgeu
+              default:              s_id_err[1] = 1'b1; //func3_err
+            endcase
+          end 
+
+        `ysyx_22050078_INST_TYPE_I://I type for addi/slli/srli/srai/xori/ori/andi/slti
+          begin
+            o_exu_src_sel = `EXU_SEL_RS1_IMM;
+            case(func3)
+              `FUNC3_ADDI:          o_exu_opt = `EXU_ADD;//addi
+              `FUNC3_SLLI:          o_exu_opt = `EXU_SLL;//slli
+              `FUNC3_SRLI_SRAI:  
                 case(func7[6:1]) 
-                  6'b000000:o_exu_opt    = `EXU_SRL;
-                  6'b010000:o_exu_opt    = `EXU_SRA;
-                  default:   s_id_err[2]  = 1'b1;
+                  6'b000000:        o_exu_opt = `EXU_SRL;//srli
+                  6'b010000:        o_exu_opt = `EXU_SRA;//srai
+                  default:          s_id_err[2]  = 1'b1;
                 endcase
-              `FUNC3_XORI:          o_exu_opt = `EXU_XOR;
-              `FUNC3_ORI:           o_exu_opt = `EXU_OR;
-              `FUNC3_ANDI:          o_exu_opt = `EXU_AND;
-              `FUNC3_SLTI:          o_exu_opt = `EXU_SLT;
+              `FUNC3_XORI:          o_exu_opt = `EXU_XOR;//xori
+              `FUNC3_ORI:           o_exu_opt = `EXU_OR; //ori
+              `FUNC3_ANDI:          o_exu_opt = `EXU_AND;//andi
+              `FUNC3_SLTI:          o_exu_opt = `EXU_SLT;//slti
               default:              s_id_err[1] = 1'b1; //func3_err
             endcase
           end
 
-        `ysyx_22050078_INST_TYPE_I_W:
+        `ysyx_22050078_INST_TYPE_I_W://I type for addiw/slliw/srliw/sraiw
           begin
-            o_exu_src_sel = `EXU_SEL_IMM;
+            o_exu_src_sel = `EXU_SEL_RS1_IMM;
             case(func3)
-              `FUNC3_ADDW_SUBW_MULW:o_exu_opt = `EXU_ADDW;
-              // `FUNC3_SLLW:          o_exu_opt = `EXU_SLLW;
+              `FUNC3_ADDIW:         o_exu_opt = `EXU_ADDW;//addiw
+              `FUNC3_SLLIW:         o_exu_opt = `EXU_SLLW;//slliw
               `FUNC3_SRLIW_SRAIW:
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_SRLW;
-                  7'b0100000:o_exu_opt = `EXU_SRAW;
-                  default:   s_id_err[2] = 1'b1;
+                  7'b0000000:       o_exu_opt = `EXU_SRLW;//srliw
+                  7'b0100000:       o_exu_opt = `EXU_SRAW;//sraiw
+                  default:          s_id_err[2] = 1'b1;   //func7_err;
                 endcase  
-              default:       s_id_err[1] = 1'b1; //func3_err;   
+              default:              s_id_err[1] = 1'b1; //func3_err;   
             endcase 
           end
 
-        `ysyx_22050078_INST_TYPE_R:
+        `ysyx_22050078_INST_TYPE_R://R type for add/sub/sll/srl/sra/mul/mulh/mulhsu/mulhu/div/divu/rem/remu
           begin
-            o_exu_src_sel = `EXU_SEL_REG;
+            o_exu_src_sel = `EXU_SEL_RS1_RS2;
             case(func3)
-              `FUNC3_ADD_SUB_MUL:
+              `FUNC3_ADD_SUB_MUL://3'b000
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_ADD;
-                  7'b0100000:o_exu_opt = `EXU_SUB;
-                  7'b0000001:o_exu_opt = `EXU_MUL;
+                  7'b0000000:o_exu_opt = `EXU_ADD;//add
+                  7'b0100000:o_exu_opt = `EXU_SUB;//sub
+                  7'b0000001:o_exu_opt = `EXU_MUL;//mul
                   default:   s_id_err[2] = 1'b1;
                 endcase
 
-              `FUNC3_SRL_SRA_DIVU:
+              `FUNC3_SRL_SRA_DIVU://3'b101
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_SRL;
-                  7'b0100000:o_exu_opt = `EXU_SRA;
-                  7'b0100001:o_exu_opt = `EXU_DIVU;
+                  7'b0000000:o_exu_opt = `EXU_SRL;//srl
+                  7'b0100000:o_exu_opt = `EXU_SRA;//sra
+                  7'b0000001:o_exu_opt = `EXU_DIVU;//divu
                   default:   s_id_err[2] = 1'b1;
                 endcase
 
-              `FUNC3_SLL_MULH:
+              `FUNC3_SLL_MULH://3'b001
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_SLL;
-                  7'b0000001:o_exu_opt = `EXU_MULH;
+                  7'b0000000:o_exu_opt = `EXU_SLL;//sll
+                  7'b0000001:o_exu_opt = `EXU_MULH;//mulh
                   default:   s_id_err[2] = 1'b1;
                 endcase
 
-              `FUNC3_XOR_DIV://100
+              `FUNC3_XOR_DIV://3'b100
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_XOR;
-                  7'b0000001:o_exu_opt = `EXU_DIV;
+                  7'b0000000:o_exu_opt = `EXU_XOR;//xor
+                  7'b0000001:o_exu_opt = `EXU_DIV;//div
                   default:   s_id_err[2] = 1'b1;
                 endcase
 
-              `FUNC3_OR_REM://110
+              `FUNC3_OR_REM://3'b110
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_OR;
-                  7'b0000001:o_exu_opt = `EXU_REM;
+                  7'b0000000:o_exu_opt = `EXU_OR;//or
+                  7'b0000001:o_exu_opt = `EXU_REM;//rem
                   default:   s_id_err[2] = 1'b1;
                 endcase
 
-              `FUNC3_AND_REMU://111
+              `FUNC3_AND_REMU://3'b111
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_AND;
-                  7'b0000001:o_exu_opt = `EXU_REMU;
+                  7'b0000000:o_exu_opt = `EXU_AND;//and
+                  7'b0000001:o_exu_opt = `EXU_REMU;//remu
                   default:   s_id_err[2] = 1'b1;
                 endcase
 
-              `FUNC3_SLT_MULHSU://010
+              `FUNC3_SLT_MULHSU://3'b010
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_SLT;
-                  7'b0000001:o_exu_opt = `EXU_MULHSU;
+                  7'b0000000:o_exu_opt = `EXU_SLT;//slt
+                  7'b0000001:o_exu_opt = `EXU_MULHSU;//mulhsu
                   default:   s_id_err[2] = 1'b1;
                 endcase
 
-              `FUNC3_SLTU_MULHU:
+              `FUNC3_SLTU_MULHU://3'b011
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_SLTU;
-                  7'b0000001:o_exu_opt = `EXU_MULHU;
+                  7'b0000000:o_exu_opt = `EXU_SLTU;//sltu
+                  7'b0000001:o_exu_opt = `EXU_MULHU;//mulhu
                   default:   s_id_err[2] = 1'b1;
                 endcase
+
               default:      s_id_err[1] = 1'b1; //func3_err
             endcase
           end
        
-        `ysyx_22050078_INST_TYPE_R_W:
+        `ysyx_22050078_INST_TYPE_R_W://R-W type for addw/subw/sllw/srlw/sraw/mulw/divw/divuw/remw/remuw 
           begin
-            o_exu_src_sel = `EXU_SEL_REG;
+            o_exu_src_sel = `EXU_SEL_RS1_RS2;
             case(func3)
-              `FUNC3_ADDW_SUBW_MULW:
+              `FUNC3_ADDW_SUBW_MULW://3'b000
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_ADDW;
-                  7'b0100000:o_exu_opt = `EXU_SUBW; 
-                  7'b0000001:o_exu_opt = `EXU_MULW;
+                  7'b0000000:o_exu_opt = `EXU_ADDW;//addw
+                  7'b0100000:o_exu_opt = `EXU_SUBW;//subw 
+                  7'b0000001:o_exu_opt = `EXU_MULW;//mulw
                   default:s_id_err[2] = 1'b1; 
                 endcase
 
-              `FUNC3_SRLW_SRAW_DIVUW:
+              `FUNC3_SRLW_SRAW_DIVUW://3b'101
                 case(func7)
-                  7'b0000000:o_exu_opt = `EXU_SRLW;
-                  7'b0100000:o_exu_opt = `EXU_SRAW; 
-                  7'b0000001:o_exu_opt = `EXU_DIVUW;
+                  7'b0000000:o_exu_opt = `EXU_SRLW;//srlw
+                  7'b0100000:o_exu_opt = `EXU_SRAW;//sraw 
+                  7'b0000001:o_exu_opt = `EXU_DIVUW;//divuw
                   default:s_id_err[2] = 1'b1; 
                 endcase
 
-              `FUNC3_DIVW:   o_exu_opt = `EXU_DIVW;
-              `FUNC3_REMW:   o_exu_opt = `EXU_REMW; 
-              `FUNC3_SLLW:   o_exu_opt = `EXU_SLLW; 
-              default:       s_id_err[1] = 1'b1; //func3_err
+              `FUNC3_DIVW://3'b100  
+                          o_exu_opt = `EXU_DIVW;//divw
+              `FUNC3_REMW://3'b110   
+                          o_exu_opt = `EXU_REMW;//remw
+              `FUNC3_REMUW://3'b111   
+                          o_exu_opt = `EXU_REMUW;//remuw
+              `FUNC3_SLLW://3'b001   
+                          o_exu_opt = `EXU_SLLW; //sllw
+              default:    s_id_err[1] = 1'b1; //func3_err
             endcase
           end
         default:  s_id_err[0] = 1'b1; //opc_err
@@ -346,6 +313,7 @@ module ysyx_22050078_IDU
   always @(*) begin
     case(opcode)
       `ysyx_22050078_INST_TYPE_I_LOAD: o_lsu_opt = {func3, 1'b0};
+      `ysyx_22050078_INST_TYPE_S:      o_lsu_opt = {func3, 1'b1};
       default:                         o_lsu_opt = `LSU_NOP;
     endcase
     

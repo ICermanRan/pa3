@@ -20,16 +20,17 @@ bool checkregs(regfile *ref_r, regfile *dut)
   {
     if(ref_r->x[i] != dut->x[i])
     {
-      printf("difftest error at nextpc = 0x%lx, ", dut->pc);
-      printf("reg %s is diff: ref = 0x%lx, dut = 0x%lx\n", regs[i], ref_r->x[i], dut->x[i]);
+      // printf("Difftest: error at nextpc = 0x%lx\n", dut->pc);
+      Log_red("Difftest: error at nextpc = 0x%lx\n", dut->pc);
+      Log_red("reg '%s' is different: ref(nemu) = 0x%lx, dut(npc) = 0x%lx\n", regs[i], ref_r->x[i], dut->x[i]);
       res = false;
     }
   }
 
   if(ref_r->pc != dut->pc)
   {
-     printf("difftest error: ");
-    printf("next reg pc is diff: ref = 0x%lx, dut = 0x%lx\n", ref_r->pc, dut->pc);
+    Log_red("difftest error: ");
+    Log_red("next reg pc is diff: ref = 0x%lx, dut = 0x%lx\n", ref_r->pc, dut->pc);
     res = false;
   }
 
@@ -51,13 +52,15 @@ void reg_display()
 
 regfile pack_dut_regfile(uint64_t *dut_reg, uint64_t pc)
 {
+  
+  // printf("成功进入pack_dut_regfile\n");
   regfile dut;
   for(int i = 0; i < 32; i++)
   {
     dut.x[i] = dut_reg[i];
   }
   
-  dut.pc = pc;
+  dut.pc = pc;//dut.pc = 0x80000000
   return dut;
 
 }

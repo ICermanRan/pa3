@@ -17,8 +17,8 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
-#include </home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h>
-#include </home/ran/ysyx/ysyx-workbench/nemu/include/cpu/ifetch.h>
+#include "/home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h"
+#include <cpu/ifetch.h>
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.

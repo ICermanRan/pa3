@@ -8,8 +8,9 @@ module ysyx_22050078_IFU
 
     input clk,
 
-    //from pc
+    //from PCU
     input  [`CPU_WIDTH - 1:0]   i_pc,
+    input  [`CPU_WIDTH - 1:0]   i_dnpc,
 
     input                       rst_n,
 

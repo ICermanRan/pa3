@@ -21,6 +21,8 @@ module ysyx_22050078_regfile #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64)
     
     //to EXU
     output reg  [`CPU_WIDTH - 1:0]  o_rs1_data, //src1
+    
+    //to EXU、LSU
     output reg  [`CPU_WIDTH - 1:0]  o_rs2_data, //src2
     output                          s_a0zero //use for sim, good trap or bad trap.
 );

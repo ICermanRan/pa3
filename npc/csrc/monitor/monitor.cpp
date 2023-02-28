@@ -2,6 +2,7 @@
 #include "isa.h"
 #include "itrace.h"
 #include "ftrace.h"
+#include "debug.h"
 #include <getopt.h>
 
 
@@ -76,30 +77,28 @@ static int parse_args(int argc, char *argv[]) {
     switch (o) {
       case 'i': 
                 {
-                  printf("先进入--img\n");
-                  img_file     = optarg; 
+                  img_file     = optarg;
+                  printf("%s\n", ANSI_FMT("IMG加载成功!", ANSI_FG_RED)); 
                   break;
                 }
       case 'd': 
-                printf("进入--diff\n");
-                diff_so_file = optarg; 
-                printf("diff_so_file = %s\n", diff_so_file);
+                diff_so_file = optarg;
+                printf("%s\n", ANSI_FMT("Difftest加载成功!", ANSI_FG_RED));
                 break;
       case 'l': 
                 {
                   log_file     = optarg; 
-                  printf("log_file = %s\n", log_file);
+                  printf("%s\n", ANSI_FMT("Logfile加载成功!", ANSI_FG_RED));
                   break;//表示成功识别了给npc输入的--log参数，npc-log.txt记录Log宏输出的信息
                 }
       case 'e':
                {
-               printf("进入--elf\n");
+              //  printf("进入--elf\n");
                ftrace_file = optarg;
-               printf("ftrace_file = %s\n", ftrace_file);
                #ifdef CONFIG_FTRACE
                char* elf_file;
                int img_name_size = strlen(ftrace_file);
-               printf("img_name_size = %d\n", img_name_size);
+              //  printf("img_name_size = %d\n", img_name_size);
                elf_file =(char*)malloc(img_name_size + 1);
                strcpy(elf_file, ftrace_file);
                 elf_file[img_name_size-3] = 'e';
@@ -108,6 +107,7 @@ static int parse_args(int argc, char *argv[]) {
                // decode elf
                extern function_info* fc;    //修饰符extern用在变量或者函数的声明前，用来说明“此变量/函数是在别处定义的，要在此处引用
                fc = decode_elf(elf_file);
+               printf("%s\n", ANSI_FMT("ELF加载成功!", ANSI_FG_RED));
                free(elf_file);
                // open ftrace log file
                extern char* ftrace_log;
@@ -143,11 +143,9 @@ void init_monitor(int argc, char *argv[])
   //init log.
   init_log(log_file);
 
-
   /* Load the image to memory. This will overwrite the built-in image. */
   // 加载命令行指定的镜像文件
   long img_size = load_img();
-
 
   #ifdef  DIFFTEST_ON
    /* Initialize differential testing. */
@@ -159,7 +157,6 @@ void init_monitor(int argc, char *argv[])
 
   // init_disasm() - 初始化LLVM提供的用于反汇编的库函数
   init_disasm("riscv64-pc-linux-gnu");
-
 
   // /* Display welcome message. */
   // // 输出欢迎信息以及trace的状态信息,还输出了编译的时间和日期
