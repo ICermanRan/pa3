@@ -54,27 +54,34 @@ extern char logbuf[100];
 /*模拟了cpu的工作方式*/
 static void exec_once() {
   
-  top->clk = !top->clk; 
+  top->clk = !top->clk;
+  // printf("0: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
   step_and_dump_wave();
-  printf("now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  // printf("1: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+
   
+  // printf("time is  %ld, clk is %d\n", contextp->time(), top->clk);
   itrace(npc_pc, npc_inst);
   if((top->clk == 0) && (top->rst_n == 1)) //上升沿且rst_n == 1
   {
+  #ifdef DIFFTEST_ON  
     if(!difftest_check())
     {
+      npc_state.state = NPC_ABORT;
+      npc_state.halt_pc = npc_pc;
       reg_display();
     }
     
     trace_and_difftest(logbuf, npc_pc);
+  #endif
   }
   
-
-  top->clk = !top->clk; 
+  
+  top->clk = !top->clk;
+  // printf("2:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   step_and_dump_wave();
-  // printf("now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
-  // itrace(npc_pc, npc_inst);
-  // trace_and_difftest(logbuf, npc_pc);
+  // printf("3:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  
   
 }
 
@@ -157,6 +164,7 @@ void cpu_exec(uint64_t n) {
            (npc_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           npc_state.halt_pc);
+      all_fail();
       // fall through
     case NPC_QUIT: statistic();
   }

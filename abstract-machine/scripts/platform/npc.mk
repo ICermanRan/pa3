@@ -15,7 +15,7 @@ LDFLAGS   += --gc-sections -e _start
 #NPCFLAGS  += -e $(IMAGE).elf 
 NPCLOG   += --log=$(shell dirname $(IMAGE).elf)/npc-log.txt 
 NPCELF   += --elf=$(IMAGE).elf 
-
+NPCBATCH += --b
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 
@@ -40,7 +40,7 @@ image: $(IMAGE).elf
 run: image
 	@echo npc.mk: run npc $(IMAGE).elf
 	@echo npc.mk: pass to npc $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
-	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
+	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG) run NPC_BATCH=$(NPCBATCH)
 	
 
 

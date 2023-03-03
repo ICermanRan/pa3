@@ -13,19 +13,21 @@ extern "C" {
 
 
     // DPI IMPORTS
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:151:32
+    extern void check_error();
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:150:31
     extern svBit check_finish(int finish_flag);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:149:32
     extern void check_rst(svBit rst_flag);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IFU.v:27:34
     extern void diff_read_pc(long long rtl_pc);
-    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_LSU.v:66:32
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_LSU.v:77:32
     extern void rtl_lsu_pmem_read(long long raddr, long long* rdata, svBit ren);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IFU.v:25:34
     extern void rtl_pmem_read(long long raddr, long long* rdata, svBit ren);
-    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_LSU.v:67:32
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_LSU.v:78:32
     extern void rtl_pmem_write(long long waddr, long long wdata, char wmask);
-    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IDU.v:304:32
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IDU.v:329:32
     extern void sdb_read_inst(int rtl_inst);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_regfile.v:53:32
     extern void set_reg_ptr(const svOpenArrayHandle a);

@@ -31,8 +31,16 @@ module ysyx_22050078_IFU
         rtl_pmem_read(i_pc, inst, rst_n);
         diff_read_pc(i_pc);
      end
-
     // always @(posedge clk) begin
+    //     rtl_pmem_read(i_pc, inst, rst_n);
+    //     diff_read_pc(i_pc);
+    //  end
+
+    //  always @(posedge clk) begin
+    //     rtl_pmem_read(i_pc, inst, rst_n);
+    //  end
+
+    // always @(*) begin
     //   $display("inst = %h", inst[31:0]);
     //   $display("pc = %h\n", i_pc);
       

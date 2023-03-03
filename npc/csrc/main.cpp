@@ -35,6 +35,14 @@ void step_and_dump_wave()
   tfp->dump(contextp->time());
 }
 
+void step_and_dump_wave_2()
+{
+  top->eval();
+  contextp->timeInc(1);//经过一个时间精度(控制的是波形中的时间精度，即多少时间单位翻转一次)
+  // contextp->timeInc(2);
+  tfp->dump(contextp->time());
+}
+
 
 //主函数
 int main(int argc, char* argv[]) {
@@ -54,7 +62,7 @@ int main(int argc, char* argv[]) {
   while(rst_time < RESET_TIME)
   {
     //时钟翻转
-    printf("复位1 now time is  %ld, clk is %d\n", contextp->time(), top->clk);
+    printf("复位1 now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
     //  printf("\n");
     top->clk = !top->clk;
     step_and_dump_wave();
@@ -64,6 +72,7 @@ int main(int argc, char* argv[]) {
   }
   
   top->rst_n = 1;
+  // step_and_dump_wave();
   printf("初始化后，time is  %ld, clk = %d, rst_n = %d\n", contextp->time(), top->clk, top->rst_n);
 ///////////////////////////////// init npc software: ////////////////////////////////   
   npc_init(argc, argv);

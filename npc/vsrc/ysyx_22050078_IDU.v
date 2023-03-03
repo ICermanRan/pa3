@@ -188,6 +188,7 @@ module ysyx_22050078_IDU
               `FUNC3_ORI:           o_exu_opt = `EXU_OR; //ori
               `FUNC3_ANDI:          o_exu_opt = `EXU_AND;//andi
               `FUNC3_SLTI:          o_exu_opt = `EXU_SLT;//slti
+              `FUNC3_SLTIU:         o_exu_opt = `EXU_SLTU;//sltiu
               default:              s_id_err[1] = 1'b1; //func3_err
             endcase
           end

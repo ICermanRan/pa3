@@ -17,10 +17,10 @@ void pmem_write(uint64_t addr, uint64_t data, int len)
    uint8_t * paddr = guest_to_host(addr);
    switch(len)
     {
-     case 1: *(uint8_t  *)addr = data; return;
-     case 2: *(uint16_t *)addr = data; return;
-     case 4: *(uint32_t *)addr = data; return;
-     case 8: *(uint64_t *)addr = data; return;
+     case 1: *(uint8_t  *)paddr = data; return;
+     case 2: *(uint16_t *)paddr = data; return;
+     case 4: *(uint32_t *)paddr = data; return;
+     case 8: *(uint64_t *)paddr = data; return;
     }
 }
 

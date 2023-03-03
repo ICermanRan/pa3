@@ -65,11 +65,13 @@ BIN := ${OBJ_DIR}/V${TOP_MODULE}
 IMG ?=
 NPC_LOG ?= --log=$(BUILD_DIR)/npc-log.txt
 NPC_ELF ?=
+NPC_BATCH ?=
 DIFFTEST ?= ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
 RUN_FLAGS := --img=${IMG} 
 RUN_FLAGS += --diff=${DIFFTEST}
 RUN_FLAGS += ${NPC_LOG}
 RUN_FLAGS += ${NPC_ELF}
+RUN_FLAGS += ${NPC_BATCH}
 
 
 .PHONY:sim wave clean
@@ -92,7 +94,7 @@ wave:
 clean:
 	rm -rf ${OBJ_DIR}
 	rm waveform.vcd
-	rm ${BUILD_DIR}/npc-log.txt
+	
 
 
 include ../Makefile

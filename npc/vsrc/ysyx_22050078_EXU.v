@@ -29,10 +29,10 @@ module ysyx_22050078_EXU
   
   // always@(*) begin
   //   case (i_src_sel)
-  //     `EXU_SEL_REG: src1 = i_rs1_data;
-  //     `EXU_SEL_IMM: src1 = i_rs1_data;
-  //     `EXU_SEL_PC4: src1 = pc;
-  //     `EXU_SEL_PCI: src1 = pc;
+  //     `EXU_SEL_RS1_RS2: src1 = i_rs1_data;
+  //     `EXU_SEL_RS1_IMM: src1 = i_rs1_data;
+  //     `EXU_SEL_PC_4: src1 = pc;
+  //     `EXU_SEL_PC_IMM: src1 = pc;
   //     default    :  src1 = 64'b0;
   //   endcase
   // end
@@ -49,10 +49,10 @@ module ysyx_22050078_EXU
          
   // always@(*) begin
   //   case (i_src_sel)
-  //     `EXU_SEL_REG: src2 = i_rs2_data;
-  //     `EXU_SEL_IMM: src2 = i_mm;
-  //     `EXU_SEL_PC4: src2 = 64'h4;
-  //     `EXU_SEL_PCI: src2 = imm;
+  //     `EXU_SEL_RS1_RS2: src2 = i_rs2_data;
+  //     `EXU_SEL_RS1_IMM: src2 = i_mm;
+  //     `EXU_SEL_PC_4: src2 = 64'h4;
+  //     `EXU_SEL_PC_IMM: src2 = imm;
   //     default    :  src2 = 64'b0;
   //   endcase
   // end
@@ -118,9 +118,11 @@ module ysyx_22050078_EXU
       `EXU_REMUW: begin exu_res_trans[31:0] = $unsigned(src1[31:0]) % $unsigned(src2[31:0]); o_exu_res = {{32{exu_res_trans[31]}},exu_res_trans[31:0]}; end
       `EXU_SLT:   begin exu_res_trans = ($signed(src1) - $signed(src2)); o_exu_res = {63'b0, exu_res_trans[63]};   end//if src1 > src2, exu_res_trans[63] = 0; if src1 < src2, exu_res_trans[63] = 1;
       `EXU_SLTU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, exu_res_trans[63]}; end//if src1 > src2, exu_res_trans[63] = 0; if src1 < src2, exu_res_trans[63] = 1;
+      
+      //B-type中无需担忧相等的情况，有o_zero来判断
       `EXU_BEQ:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, ~(|exu_res_trans)};                       end//if src1 == src2,o_exu_res[0]  = 1; if src1 != src2, o_exu_res[0]  = 0;
       `EXU_BNE:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, (|exu_res_trans)};                        end//if src1 == src2,o_exu_res[0]  = 0; if src1 != src2, o_exu_res[0]  = 1;
-      `EXU_BLT:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, exu_res_trans[63]};     end//if src1 > src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
+      `EXU_BLT:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, exu_res_trans[63]};     end//if src1 >=src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
       `EXU_BGE:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};    end//if src1 > src2, o_exu_res[0]  = 1; if src1 < src2,  o_exu_res[0]  = 0;
       `EXU_BLTU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, exu_res_trans[63]}; end//if src1 > src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
       `EXU_BGEU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};end
@@ -132,8 +134,8 @@ module ysyx_22050078_EXU
 
 
 
-  assign o_zero = ~(|o_exu_res);
-
+  assign o_zero = ~(|o_exu_res);//用于判断EXU的计算结果是否为0
+                                //若为0，则o_zero = 1;若不为0，则o_zero = 0
 
 
 

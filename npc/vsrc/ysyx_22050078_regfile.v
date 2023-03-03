@@ -8,14 +8,12 @@ module ysyx_22050078_regfile #(parameter ADDR_WIDTH = 5, DATA_WIDTH = 64)
 (
     input                           clk,
    
-
-    
     //from WBU
-    input       [`CPU_WIDTH - 1:0]  i_wdata,
+    input       [`CPU_WIDTH - 1:0]  i_wdata,    //from WBU-o_rd.可能是EXU的计算结果，也可能是LSU的取值结果
    
     //from IDU
-    input                           i_wen,      //from IDU-rd_wen
-    input       [`REG_ADDRW - 1:0]  i_waddr,    //from IDU-rd_addr
+    input                           i_wen,      //from IDU-o_rd_wen
+    input       [`REG_ADDRW - 1:0]  i_waddr,    //from IDU-o_rd_addr
     input       [`REG_ADDRW - 1:0]  i_rs1_addr, //源寄存器1(地址)
     input       [`REG_ADDRW - 1:0]  i_rs2_addr, //源寄存器2(地址)
     

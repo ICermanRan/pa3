@@ -76,6 +76,7 @@ void sim_init();
 
 //main.cpp
 void step_and_dump_wave();
+void step_and_dump_wave_2();
 
 
 //init.cpp

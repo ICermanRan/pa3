@@ -148,6 +148,7 @@ module ysyx_22050078_npc
   //3.sim:  ////////////////////////////////////////////////////////
   import "DPI-C" function void check_rst(input bit rst_flag);
   import "DPI-C" function bit check_finish(input int finish_flag);
+  import "DPI-C" function void check_error();
   always @(*) 
    begin
     check_rst(rst_n_sync);  
@@ -156,9 +157,21 @@ module ysyx_22050078_npc
       $display("\n----------EBREAK: HIT !!%s!! TRAP!!---------------\n",a0zero ? "GOOD":"BAD");
       $finish;
      end
-    if(rst_n_sync & |inst_IFU2IDU & s_id_err[0]) $display("\n----------inst decode error, pc = %x, opcode == %b---------------\n", pc, inst_IFU2IDU[ 6: 0] );
-    if(rst_n_sync & |inst_IFU2IDU & s_id_err[1]) $display("\n----------inst decode error, pc = %x, funct3 == %b---------------\n", pc, inst_IFU2IDU[14:12] );
-    if(rst_n_sync & |inst_IFU2IDU & s_id_err[2]) $display("\n----------inst decode error, pc = %x, funct7 == %b---------------\n", pc, inst_IFU2IDU[31: 25] );
+    if(rst_n_sync & |inst_IFU2IDU & s_id_err[0]) 
+      begin
+        $display("\n----------inst decode error, pc = %x, opcode == %b---------------\n", pc, inst_IFU2IDU[ 6: 0] );
+        check_error();
+      end
+    if(rst_n_sync & |inst_IFU2IDU & s_id_err[1]) 
+      begin
+        $display("\n----------inst decode error, pc = %x, funct3 == %b---------------\n", pc, inst_IFU2IDU[14:12] );
+        check_error();
+      end
+    if(rst_n_sync & |inst_IFU2IDU & s_id_err[2]) 
+      begin
+        $display("\n----------inst decode error, pc = %x, funct7 == %b---------------\n", pc, inst_IFU2IDU[31: 25] );
+        check_error();
+      end
    end
 
 

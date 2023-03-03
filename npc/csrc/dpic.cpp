@@ -25,7 +25,7 @@ extern "C" svBit check_finish(int inst)
 
 extern "C" void rtl_pmem_write(uint64_t waddr, uint64_t wdata, uint8_t wmask)
 {
-  // printf("waddr = 0x%lx,wdata = 0x%lx,wmask = 0x%x\n",waddr,wdata,wmask);
+  // printf("rtl_pmem_write:waddr = 0x%lx,wdata = 0x%lx,wmask = 0x%x\n",waddr,wdata,wmask);
   
   switch(wmask)
   {
@@ -80,7 +80,7 @@ extern "C" void set_reg_ptr(const svOpenArrayHandle r)
 extern "C" void diff_read_pc(uint64_t rtl_pc)
 {
   npc_pc = rtl_pc;
-  // printf("npc_pc = %lx\n", npc_pc);
+  // printf("diff_read_pc——>npc_pc = %lx\n", npc_pc);
 }
 
 //用于获取npc的指令inst,方便在sdb中调用
@@ -89,3 +89,8 @@ extern "C" void sdb_read_inst(uint32_t rtl_inst)
   npc_inst = rtl_inst;
 }
 
+extern "C" void check_error()
+{
+  npc_state.halt_pc = npc_pc;
+  npc_state.state = NPC_ABORT;
+}

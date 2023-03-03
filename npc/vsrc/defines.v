@@ -151,7 +151,8 @@
 
 `define FUNC3_SLTI              3'b010        //SLTI
 `define FUNC3_SLT_MULHSU        3'b010        //SLT MULHSU
-`define FUNC3_SLTU_MULHU        3'b011        //STLU STLUI MULHU
+`define FUNC3_SLTU_MULHU        3'b011        //STLU MULHU
+`define FUNC3_SLTIU             3'b011        //SLTIU
 `define FUNC3_XOR_DIV           3'b100        //XOR DIV DIVW
 `define FUNC3_XORI              3'b100        //XORI 
 `define FUNC3_DIVW              3'b100        //DIVW
