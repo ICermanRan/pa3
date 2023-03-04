@@ -53,11 +53,11 @@ extern char logbuf[100];
 /*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
 /*模拟了cpu的工作方式*/
 static void exec_once() {
-  
+    printf("0: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
   top->clk = !top->clk;
-  // printf("0: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
+    printf("1: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
   step_and_dump_wave();
-  // printf("1: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+    printf("2: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
 
   
   // printf("time is  %ld, clk is %d\n", contextp->time(), top->clk);
@@ -78,9 +78,9 @@ static void exec_once() {
   
   
   top->clk = !top->clk;
-  // printf("2:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+    printf("3:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   step_and_dump_wave();
-  // printf("3:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+    printf("4:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   
   
 }
@@ -144,6 +144,12 @@ void cpu_exec(uint64_t n) {
       all_fail();
     case NPC_END: 
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
+      Log("npc: %s at pc = " FMT_WORD,
+          (npc_state.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
+           (npc_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
+            ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
+          npc_state.halt_pc);
+      
       return;
     default: npc_state.state = NPC_RUNNING;
   }
@@ -158,12 +164,16 @@ void cpu_exec(uint64_t n) {
   switch (npc_state.state) {
     case NPC_RUNNING: npc_state.state = NPC_STOP; break;
     
-    case NPC_ABORT:  case NPC_END: 
+    case NPC_END:
+      printf("\033[1;35m Program execution has ended. To restart the program, exit NPC and run again. \033[0m\n");
       Log("npc: %s at pc = " FMT_WORD,
           (npc_state.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (npc_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           npc_state.halt_pc);
+      // break;
+      return;
+    case NPC_ABORT:  
       all_fail();
       // fall through
     case NPC_QUIT: statistic();

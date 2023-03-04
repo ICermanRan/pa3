@@ -3,19 +3,24 @@
 #include "itrace.h"
 
 char iring_buf[16][64];
-char logbuf[100];
+int now, tot;
+char logbuf[128];
 int  iring_tail = 0;
-#define IRINGBUF_SIZE (sizeof(iring_buf) / sizeof(iring_buf[0]))
+// #define IRINGBUF_SIZE (sizeof(iring_buf) / sizeof(iring_buf[0]))
+#define IRINGBUF_SIZE 16
+#define num_of_buf (sizeof(iring_buf) / sizeof(iring_buf[0])) 
 
 void show_iringbuf()
 {
   Log_red("-----------------iringbuf---------------\n");
-  for(int i = 0; i +1 != IRINGBUF_SIZE; i++) 
+  // for(int i = 0; i +1 != IRINGBUF_SIZE; i++) 
+  for(int i = 0; i <= tot; i++) 
   {
-    if(i == iring_tail)
-      printf("--> %s\n", iring_buf[i]);
+    // if(i == iring_tail)
+    if(i == now - 1)
+      printf("i=%d --> %s\n", i, iring_buf[i]);
     else 
-      printf("    %s\n", iring_buf[i]);
+      printf("i=%d    %s\n", i, iring_buf[i]);
   }
   Log_red("----------------------------------------\n");
 
@@ -34,7 +39,10 @@ void itrace(uint32_t pc, uint32_t inst)
     pc, (uint8_t *)&inst, 4);//仿照nemu中的写法
 
   //存入iring_buf(update iringbuf)
-  strcpy(iring_buf[iring_tail], logbuf);
+  strcpy(iring_buf[now], logbuf);
+  now = (now + 1) % num_of_buf;
+  printf("--------------->now = %d, 0x%s\n", now, logbuf);
+  if(now > tot) tot = now;
   iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
 
 }

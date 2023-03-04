@@ -28,6 +28,7 @@ module ysyx_22050078_IFU
 
 
     always @(i_pc) begin
+        $display("i_pc = %h", i_pc);
         rtl_pmem_read(i_pc, inst, rst_n);
         diff_read_pc(i_pc);
      end

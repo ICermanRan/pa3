@@ -39,6 +39,18 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc_
     check_error();
 }
 
+extern "C" void check_good_or_bad(svBit rst_flag, long long rtl_pc);
+
+VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__check_good_or_bad_TOP(CData/*0:0*/ rst_flag, QData/*63:0*/ rtl_pc) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__check_good_or_bad_TOP\n"); );
+    // Body
+    svBit rst_flag__Vcvt;
+    for (size_t rst_flag__Vidx = 0; rst_flag__Vidx < 1; ++rst_flag__Vidx) rst_flag__Vcvt = rst_flag;
+    long long rtl_pc__Vcvt;
+    for (size_t rtl_pc__Vidx = 0; rtl_pc__Vidx < 1; ++rtl_pc__Vidx) rtl_pc__Vcvt = rtl_pc;
+    check_good_or_bad(rst_flag__Vcvt, rtl_pc__Vcvt);
+}
+
 extern "C" void set_reg_ptr(const svOpenArrayHandle a);
 
 VL_INLINE_OPT void Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_regfile__DOT__set_reg_ptr__Vdpioc2_TOP(const VlUnpacked<QData/*63:0*/, 32> &a) {
@@ -178,9 +190,10 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_
     VlWide<3>/*95:0*/ __Vtemp5;
     VlWide<3>/*95:0*/ __Vtemp12;
     // Body
-    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__pc, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__6__rdata, (IData)(vlSelf->rst_n));
+    VL_WRITEF("i_pc = %x\n",64,vlSelf->ysyx_22050078_npc__DOT__pc);
+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__pc, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__7__rdata, (IData)(vlSelf->rst_n));
     vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst 
-        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__6__rdata;
+        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_IFU__DOT__rtl_pmem_read__7__rdata;
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IFU__DOT__diff_read_pc_TOP(vlSelf->ysyx_22050078_npc__DOT__pc);
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_IDU__DOT__sdb_read_inst_TOP((IData)(vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst));
     vlSelf->ysyx_22050078_npc__DOT__rd_addr_IDU2regs = 0U;
@@ -1514,12 +1527,16 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_
                                          << 0xcU))));
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__check_rst_TOP(vlSelf->rst_n);
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__check_finish_TOP((IData)(vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst), vlSelf->__Vfunc_ysyx_22050078_npc__DOT__check_finish__1__Vfuncout);
-    if (VL_UNLIKELY(vlSelf->__Vfunc_ysyx_22050078_npc__DOT__check_finish__1__Vfuncout)) {
-        VL_WRITEF("\n----------EBREAK: HIT !!%s!! TRAP!!---------------\n\n",
-                  32,(((0ULL == vlSelf->ysyx_22050078_npc__DOT__u_regfile__DOT__regs
-                        [0xaU]) ? 1U : 0U) ? 0x474f4f44U
-                       : 0x424144U));
-        VL_FINISH_MT("/home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v", 158, "");
+    if (vlSelf->__Vfunc_ysyx_22050078_npc__DOT__check_finish__1__Vfuncout) {
+        Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__check_good_or_bad_TOP(
+                                                                                (1U 
+                                                                                & (~ 
+                                                                                ((0ULL 
+                                                                                == 
+                                                                                vlSelf->ysyx_22050078_npc__DOT__u_regfile__DOT__regs
+                                                                                [0xaU])
+                                                                                 ? 1U
+                                                                                 : 0U))), vlSelf->ysyx_22050078_npc__DOT__pc);
     }
     if (VL_UNLIKELY((((IData)(vlSelf->rst_n) & (0U 
                                                 != (IData)(vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst))) 
@@ -2346,11 +2363,11 @@ VL_INLINE_OPT void Vysyx_22050078_npc___024root___settle__TOP__3(Vysyx_22050078_
                  ? 1U : 0U) ? (vlSelf->ysyx_22050078_npc__DOT__rs1_data 
                                + vlSelf->ysyx_22050078_npc__DOT__imm)
                 : (4ULL + vlSelf->ysyx_22050078_npc__DOT__pc)));
-    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__exu_res, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read__9__rdata, 
+    Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read_TOP(vlSelf->ysyx_22050078_npc__DOT__exu_res, vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read__10__rdata, 
                                                                                 (1U 
                                                                                 & (~ (IData)(vlSelf->ysyx_22050078_npc__DOT__lsu_opt))));
     vlSelf->ysyx_22050078_npc__DOT__u_LSU__DOT__rdata 
-        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read__9__rdata;
+        = vlSelf->__Vtask_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_lsu_pmem_read__10__rdata;
     Vysyx_22050078_npc___024root____Vdpiimwrap_ysyx_22050078_npc__DOT__u_LSU__DOT__rtl_pmem_write_TOP(
                                                                                 (((QData)((IData)(
                                                                                 vlSelf->ysyx_22050078_npc__DOT__u_LSU__DOT____Vcellout__u_stdreg__o_dout[4U])) 

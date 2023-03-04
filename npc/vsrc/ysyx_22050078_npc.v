@@ -149,13 +149,15 @@ module ysyx_22050078_npc
   import "DPI-C" function void check_rst(input bit rst_flag);
   import "DPI-C" function bit check_finish(input int finish_flag);
   import "DPI-C" function void check_error();
+  import "DPI-C" function void check_good_or_bad(input bit rst_flag, input longint rtl_pc);
   always @(*) 
    begin
     check_rst(rst_n_sync);  
     if(check_finish(inst_IFU2IDU)) //inst == ebreak
      begin
-      $display("\n----------EBREAK: HIT !!%s!! TRAP!!---------------\n",a0zero ? "GOOD":"BAD");
-      $finish;
+      // $display("\n----------EBREAK: HIT !!%s!! TRAP!!---------------\n",a0zero ? "GOOD":"BAD");
+      check_good_or_bad(~a0zero, pc);
+      // $finish;
      end
     if(rst_n_sync & |inst_IFU2IDU & s_id_err[0]) 
       begin

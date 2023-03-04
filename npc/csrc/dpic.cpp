@@ -7,7 +7,7 @@
 #include "verilated_dpi.h"
 
 extern bool rst_n_sync;
-extern "C" void check_rst(svBit rst_flag)
+extern "C" void check_rst(svBit rst_flag) //其实这个函数没起啥作用
 {
   if(rst_flag)
     rst_n_sync = true;
@@ -93,4 +93,13 @@ extern "C" void check_error()
 {
   npc_state.halt_pc = npc_pc;
   npc_state.state = NPC_ABORT;
+}
+
+extern "C" void check_good_or_bad(svBit a0zero, uint64_t rtl_pc)
+{
+  npc_state.halt_ret = a0zero;
+  npc_state.halt_pc = rtl_pc;
+  // printf("npc_state.halt_ret = %d\n", npc_state.halt_ret);
+  // printf("npc_state.halt_pc = %x\n", npc_state.halt_pc);
+  npc_state.state = NPC_END;
 }
