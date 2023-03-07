@@ -82,7 +82,7 @@ static void exec_once() {
   step_and_dump_wave();
     printf("4:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   
-  
+  top->en = !top->en;
 }
 
 

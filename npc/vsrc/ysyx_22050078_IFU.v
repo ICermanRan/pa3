@@ -5,7 +5,7 @@ description:取指模块(因为用c++写指令存储器，所以这里的取指�
 `include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/defines.v"
 module ysyx_22050078_IFU 
 (
-
+    input en,
     input clk,
 
     //from PCU
@@ -27,7 +27,7 @@ module ysyx_22050078_IFU
     import "DPI-C" function void diff_read_pc(input longint rtl_pc);
 
 
-    always @(i_pc) begin
+    always @(en) begin
         $display("i_pc = %h", i_pc);
         rtl_pmem_read(i_pc, inst, rst_n);
         diff_read_pc(i_pc);

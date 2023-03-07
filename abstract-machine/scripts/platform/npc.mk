@@ -15,7 +15,7 @@ LDFLAGS   += --gc-sections -e _start
 #NPCFLAGS  += -e $(IMAGE).elf 
 NPCLOG   += --log=$(shell dirname $(IMAGE).elf)/npc-log.txt 
 NPCELF   += --elf=$(IMAGE).elf 
-NPCBATCH += --b
+#NPCBATCH += --b
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 

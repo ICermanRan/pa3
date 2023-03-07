@@ -41,9 +41,9 @@ void itrace(uint32_t pc, uint32_t inst)
   //存入iring_buf(update iringbuf)
   strcpy(iring_buf[now], logbuf);
   now = (now + 1) % num_of_buf;
-  printf("--------------->now = %d, 0x%s\n", now, logbuf);
+  // printf("--------------->now = %d, 0x%s\n", now, logbuf);
   if(now > tot) tot = now;
-  iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
+  // iring_tail = (iring_tail + 1) % IRINGBUF_SIZE;
 
 }
 

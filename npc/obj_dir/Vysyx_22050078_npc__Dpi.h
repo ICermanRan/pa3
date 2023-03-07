@@ -13,13 +13,13 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:151:32
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:154:32
     extern void check_error();
-    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:150:31
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:153:31
     extern svBit check_finish(int finish_flag);
-    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:152:32
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:155:32
     extern void check_good_or_bad(svBit rst_flag, long long rtl_pc);
-    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:149:32
+    // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_npc.v:152:32
     extern void check_rst(svBit rst_flag);
     // DPI import at /home/ran/ysyx/ysyx-workbench/npc/vsrc/ysyx_22050078_IFU.v:27:34
     extern void diff_read_pc(long long rtl_pc);

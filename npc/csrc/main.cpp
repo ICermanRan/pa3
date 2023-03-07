@@ -56,6 +56,7 @@ int main(int argc, char* argv[]) {
   printf("连接前, time is %ld\n", contextp->time());
   top->rst_n = 0;
   top->clk = 0;
+  top->en = 0;
   step_and_dump_wave(); //init reg status,use for difftest_init.
   printf("连接后, time is %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   //复位
@@ -72,6 +73,7 @@ int main(int argc, char* argv[]) {
   }
   
   top->rst_n = 1;
+  top->en = 1;
   // step_and_dump_wave();
   printf("初始化后，time is  %ld, clk = %d, rst_n = %d\n", contextp->time(), top->clk, top->rst_n);
 ///////////////////////////////// init npc software: ////////////////////////////////   

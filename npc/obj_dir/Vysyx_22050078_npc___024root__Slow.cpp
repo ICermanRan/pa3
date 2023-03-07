@@ -72,6 +72,7 @@ void Vysyx_22050078_npc___024root___ctor_var_reset(Vysyx_22050078_npc___024root*
     // Body
     vlSelf->clk = VL_RAND_RESET_I(1);
     vlSelf->rst_n = VL_RAND_RESET_I(1);
+    vlSelf->en = VL_RAND_RESET_I(1);
     vlSelf->ysyx_22050078_npc__DOT__pc = VL_RAND_RESET_Q(64);
     vlSelf->ysyx_22050078_npc__DOT__rs1_addr_IDU2regs = VL_RAND_RESET_I(5);
     vlSelf->ysyx_22050078_npc__DOT__rs2_addr_IDU2regs = VL_RAND_RESET_I(5);

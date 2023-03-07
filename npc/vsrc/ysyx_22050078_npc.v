@@ -8,7 +8,9 @@ module ysyx_22050078_npc
             PC_WIDTH = 64)
 (
     input clk,
-    input rst_n
+    input rst_n,
+    input en
+
 );
 
 //1.rst: /////////////////////////////////////////////////
@@ -84,6 +86,7 @@ module ysyx_22050078_npc
     );
 
     ysyx_22050078_IFU u_IFU(
+      .en       (en               ),
       .clk      (clk              ),
       .i_pc     (pc               ), //PCU to IFU
       .rst_n    (rst_n_sync       ),     

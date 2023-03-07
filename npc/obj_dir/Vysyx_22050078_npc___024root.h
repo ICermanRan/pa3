@@ -21,6 +21,7 @@ VL_MODULE(Vysyx_22050078_npc___024root) {
     // PORTS
     VL_IN8(clk,0,0);
     VL_IN8(rst_n,0,0);
+    VL_IN8(en,0,0);
 
     // LOCAL SIGNALS
     CData/*4:0*/ ysyx_22050078_npc__DOT__rs1_addr_IDU2regs;

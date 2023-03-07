@@ -2480,5 +2480,7 @@ void Vysyx_22050078_npc___024root___eval_debug_assertions(Vysyx_22050078_npc___0
         Verilated::overWidthError("clk");}
     if (VL_UNLIKELY((vlSelf->rst_n & 0xfeU))) {
         Verilated::overWidthError("rst_n");}
+    if (VL_UNLIKELY((vlSelf->en & 0xfeU))) {
+        Verilated::overWidthError("en");}
 }
 #endif  // VL_DEBUG

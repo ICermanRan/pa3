@@ -256,7 +256,8 @@ void Vysyx_22050078_npc___024root__traceChgSub0(Vysyx_22050078_npc___024root* vl
         }
         tracep->chgBit(oldp+207,(vlSelf->clk));
         tracep->chgBit(oldp+208,(vlSelf->rst_n));
-        tracep->chgQData(oldp+209,(((1U & ((((0x63U 
+        tracep->chgBit(oldp+209,(vlSelf->en));
+        tracep->chgQData(oldp+210,(((1U & ((((0x63U 
                                               == (0x7fU 
                                                   & (IData)(vlSelf->ysyx_22050078_npc__DOT__u_IFU__DOT__inst)))
                                               ? 1U : 0U) 
