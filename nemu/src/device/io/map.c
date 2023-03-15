@@ -17,6 +17,7 @@
 #include <memory/host.h>
 #include <memory/vaddr.h>
 #include <device/map.h>
+/*实现映射的管理*/
 
 #define IO_SPACE_MAX (2 * 1024 * 1024)
 
@@ -52,6 +53,12 @@ void init_map() {
   p_space = io_space;
 }
 
+//map_read()和map_write()用于将地址addr映射到map所指示的目标空间, 并进行访问
+//访问时, 可能会触发相应的回调函数, 对设备和目标空间的状态进行更新
+
+//由于NEMU是单线程程序, 因此只能串行模拟整个计算机系统的工作, 每次进行I/O读写的时候, 才会调用设备提供的回调函数(callback). 
+//基于这两个API, 我们就可以很容易实现端口映射I/O和内存映射I/O的模拟了.
+
 word_t map_read(paddr_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
@@ -67,4 +74,9 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
+}
+
+void spcae_free()
+{
+  free(io_space);
 }

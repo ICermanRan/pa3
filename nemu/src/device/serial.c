@@ -12,6 +12,7 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
+/*串口*/
 
 #include <utils.h>
 #include <device/map.h>
@@ -48,4 +49,5 @@ void init_serial() {
   add_mmio_map("serial", CONFIG_SERIAL_MMIO, serial_base, 8, serial_io_handler);
 #endif
 
+  // free(serial_base);
 }

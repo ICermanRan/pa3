@@ -18,7 +18,9 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 #include "/home/ran/ysyx/ysyx-workbench/nemu/src/monitor/sdb/sdb.h"
+#include "/home/ran/ysyx/ysyx-workbench/nemu/include/device/map.h"
 #include <cpu/ifetch.h>
+#include <SDL2/SDL.h>
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -232,6 +234,7 @@ void cpu_exec(uint64_t n) {
 
   uint64_t timer_start = get_time();
 
+  //cpu_exec()在执行每条指令之后就会调用device_update()函数
   execute(n);
 
   uint64_t timer_end = get_time();

@@ -3,6 +3,8 @@
 
 // **MAY SUBJECT TO CHANGE IN THE FUTURE**
 
+//定义了常见设备的"抽象寄存器"编号和相应的结构.
+//这些定义是架构无关的, 每个架构在实现各自的IOE API时, 都需要遵循这些定义(约定).
 #define AM_DEVREG(id, reg, perm, ...) \
   enum { AM_##reg = (id) }; \
   typedef struct { __VA_ARGS__; } AM_##reg##_T;

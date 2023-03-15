@@ -12,6 +12,7 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
+/*mmio.c是对内存映射I/O的模拟*/
 
 #include <device/map.h>
 #include <memory/paddr.h>

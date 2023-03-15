@@ -46,6 +46,9 @@ static void *lut[128] = {
 
 static void fail(void *buf) { panic("access nonexist register"); }
 
+//NEMU作为一个平台, 设备的行为是与ISA无关的, 因此我们只需要在abstract-machine/am/src/platform/nemu/ioe/目录下实现一份IOE, 来供NEMU平台的架构共享
+
+//ioe.c中实现了三个IOE API,
 bool ioe_init() {
   for (int i = 0; i < LENGTH(lut); i++)
     if (!lut[i]) lut[i] = fail;
@@ -55,5 +58,7 @@ bool ioe_init() {
   return true;
 }
 
+//ioe_read()和ioe_write()都是通过抽象寄存器的编号索引到一个处理函数,
+//然后调用它. 处理函数的具体功能和寄存器编号相关
 void ioe_read (int reg, void *buf) { ((handler_t)lut[reg])(buf); }
 void ioe_write(int reg, void *buf) { ((handler_t)lut[reg])(buf); }

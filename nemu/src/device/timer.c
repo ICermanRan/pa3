@@ -17,15 +17,29 @@
 #include <device/alarm.h>
 #include <utils.h>
 
+/*nemu/src/device/timer.c模拟了i8253计时器的功能. 
+计时器的大部分功能都被简化, 只保留了"发起时钟中断"的功能,
+同时添加了一个自定义的时钟*/
+
+//i8253计时器初始化时会分别注册0x48处长度为8个字节的端口
+//以及0xa0000048处长度为8字节的MMIO空间,
+//它们都会映射到RTC寄存器. CPU可以访问这两个寄存器来获得当前时间.
+
+
 static uint32_t *rtc_port_base = NULL;
 
 static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
   assert(offset == 0 || offset == 4);
-  if (!is_write && offset == 4) {
+  if (!is_write && (offset == 4 || offset == 0) ) {
     uint64_t us = get_time();
     rtc_port_base[0] = (uint32_t)us;
     rtc_port_base[1] = us >> 32;
   }
+  // if (!is_write && offset == 0) {
+  //   uint64_t us = get_time();
+  //   rtc_port_base[0] = (uint32_t)us;
+  //   rtc_port_base[1] = us >> 32;
+  // }
 }
 
 #ifndef CONFIG_TARGET_AM

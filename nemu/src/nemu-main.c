@@ -14,6 +14,8 @@
 ***************************************************************************************/
 
 #include <common.h>
+#include <SDL2/SDL.h>
+#include "/home/ran/ysyx/ysyx-workbench/nemu/include/device/map.h"
 //#include "sdb.h"
 #include "expr-test.h"
 
@@ -42,6 +44,9 @@ int main(int argc, char *argv[]) {
   // engine_start() -> sdb_mainloop()
   // 其中会输出命令提示符, 提示用户输出SDB的命令
   engine_start();
+
+/*因为框架代码存在开启device后导致内存泄漏的问题，故调用自定义的destroy_screen函数，减少部分内存泄漏*/
+  // destroy_screen();
 
   return is_exit_status_bad();
 }
