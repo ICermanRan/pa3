@@ -62,6 +62,16 @@ void init_map() {
 word_t map_read(paddr_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
+
+  // #ifdef  CONFIG_DTRACE
+  //   char device_name [16];
+  //   //device_names:serial、keyboard
+  //   strcpy(device_name, "keyboard");//这里是可以改的，根据自己想追踪的设备而定！
+  //   int i = strcmp(device_name, map->name);
+    
+  //   if(i == 0)
+  //     printf("Dtrace:Read %s, addr = %x, len = %d\n", map->name, addr, len);
+  // #endif
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
@@ -71,6 +81,17 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
 void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
+
+  #ifdef  CONFIG_DTRACE
+    char device_name [16];
+    //device_names:serial、keyboard
+    strcpy(device_name, "keyboard");//这里是可以改的，根据自己想追踪的设备而定！
+    int i = strcmp(device_name, map->name);
+    
+    if(i == 0)
+      printf("Dtrace:Write %s, addr = %x, len = %d\n", map->name, addr, len);
+  #endif
+
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);

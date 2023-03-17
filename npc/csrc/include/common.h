@@ -57,6 +57,8 @@
 //difftest
 #define CONFIG_DIFFTEST 1
 
+//dtrace
+#define CONFIG_DTRACE 1
 
 #define CONFIG_RTOS 1
 #define CONFIG_SOC_SIMULATOR 1

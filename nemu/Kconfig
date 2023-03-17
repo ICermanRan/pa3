@@ -142,7 +142,7 @@ config TRACE_END
 
 config ITRACE
   depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-  bool "Enable instruction tracer"
+  bool " instruction tracer"
   default y
 
 config ITRACE_COND
@@ -169,6 +169,10 @@ config FTRACE_COND
   depends on FTRACE
   string "Only trace function when the condition is true"
   default "true"
+  
+config DTRACE
+  bool "Enable device tracing"
+  default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

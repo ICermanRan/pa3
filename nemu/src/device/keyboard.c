@@ -16,6 +16,13 @@
 #include <device/map.h>
 #include <utils.h>
 
+/*keyboard.c模拟了i8042通用设备接口芯片的功能. 其大部分功能也被简化, 只保留了键盘接口
+每当用户敲下/释放按键时, 将会把相应的键盘码放入数据寄存器, CPU可以访问数据寄存器, 获得键盘码;
+当无按键可获取时, 将会返回AM_KEY_NONE.
+
+*/
+
+
 #define KEYDOWN_MASK 0x8000
 
 #ifndef CONFIG_TARGET_AM

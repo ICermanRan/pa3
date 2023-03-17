@@ -586,7 +586,7 @@ int printf(const char *fmt, ...)
   printed = vsprintf(printf_buf, fmt, args);
   va_end(args);
 
-  puts(printf_buf);
+  putstr(printf_buf);
 
   return printed;
 }

@@ -13,7 +13,9 @@
 #define CONCAT(x, y)        _CONCAT(x, y)
 
 #define putstr(s) \
-  ({ for (const char *p = s; *p; p++) putch(*p); })
+  ({ for (const char *p = s; *p; p++) \
+  {putch(*p);}\
+  })
 
 //为了方便地对这些抽象寄存器进行访问，定义了io_read()和io_write()这两个宏
 //它们分别对ioe_read()和ioe_write()这两个API进行了进一步的封装.
