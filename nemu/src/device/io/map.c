@@ -28,7 +28,9 @@ uint8_t* new_space(int size) {
   uint8_t *p = p_space;
   // page aligned;
   size = (size + (PAGE_SIZE - 1)) & ~PAGE_MASK;
+  // printf("size = %d\n", size);
   p_space += size;
+  // printf("p_space = %x\n", p_space);
   assert(p_space - io_space < IO_SPACE_MAX);
   return p;
 }
@@ -82,6 +84,11 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
 
+  // if(addr >= 0xa0000100 && addr <=0xa0000107)
+  // {
+  //   printf("addr = %x, data = %ld, len = %d, name = %s\n", addr, data, len, map->name);
+  // }
+
   #ifdef  CONFIG_DTRACE
     char device_name [16];
     //device_names:serial、keyboard
@@ -93,6 +100,11 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   #endif
 
   paddr_t offset = addr - map->low;
+
+  //  if(addr >= 0xa0000100 && addr <=0xa0000107)
+  // {
+  //   printf("map->space + offset = %x\n", map->space + offset);
+  // }
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
 }

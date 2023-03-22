@@ -16,6 +16,8 @@
 #include <common.h>
 #include <device/map.h>
 
+/*nemu/src/device/vga.c模拟了VGA的功能*/
+
 #define SCREEN_W (MUXDEF(CONFIG_VGA_SIZE_800x600, 800, 400))
 #define SCREEN_H (MUXDEF(CONFIG_VGA_SIZE_800x600, 600, 300))
 
@@ -42,6 +44,9 @@ static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 SDL_Window *window = NULL;
 
+
+//代码只模拟了400x300x32的图形模式, 一个像素占32个bit的存储空间
+//R(red), G(green), B(blue), A(alpha)各占8 bit, 其中VGA不使用alpha的信息
 static void init_screen() {
   // SDL_Window *window = NULL;
   char title[128];
@@ -74,19 +79,28 @@ static inline void update_screen() {
 void vga_update_screen() {
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
+  if(vgactl_port_base[1] == 1)
+  {
+    update_screen();
+  }
+  vgactl_port_base[1] = 0;
 }
 
+//VGA初始化时注册了从0xa1000000开始的一段用于映射到video memory
+//(显存, 也叫frame buffer, 帧缓冲)的MMIO空间. 
 void init_vga() {
-  vgactl_port_base = (uint32_t *)new_space(8);
-  vgactl_port_base[0] = (screen_width() << 16) | screen_height();
+  vgactl_port_base = (uint32_t *)new_space(8);//vgactl_port_base指向申请内存的起始位置
+  vgactl_port_base[0] = (screen_width() << 16) | screen_height();//设备抽象寄存器[0]
+  // printf("vgactl_port_base[0] = %x\n", *vgactl_port_base);//打印出来是0x190012c,低16位正好是300=hight,高12位是400=width
 
 #ifdef CONFIG_HAS_PORT_IO
   add_pio_map ("vgactl", CONFIG_VGA_CTL_PORT, vgactl_port_base, 8, NULL);
 #else
   add_mmio_map("vgactl", CONFIG_VGA_CTL_MMIO, vgactl_port_base, 8, NULL);
+  //CONFIG_VGA_CTL_MMIO=0xa0000100
 #endif
 
-  vmem = new_space(screen_size());
+  vmem = new_space(screen_size());//vmem代表了像素数据
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
   IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
