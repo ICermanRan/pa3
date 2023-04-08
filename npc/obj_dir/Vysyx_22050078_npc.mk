@@ -36,6 +36,8 @@ VM_MODPREFIX = Vysyx_22050078_npc
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/ \
+	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/device/ \
+	-I/home/ran/ysyx/ysyx-workbench/npc/csrc/include/memory/ \
 	-I/usr/include/SDL2 \
 	-I./obj_dir \
 	-I/usr/lib/llvm-14/include \
@@ -60,10 +62,19 @@ VM_USER_LDLIBS = \
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	cpu-exec \
+	alarm \
+	audio \
+	device \
+	disk \
+	intr \
 	map \
 	mmio \
 	port-io \
-	timer \
+	keyboard \
+	rtc \
+	sdcard \
+	serial \
+	vga \
 	difftest \
 	dpic \
 	hostcall \
@@ -83,6 +94,7 @@ VM_USER_CLASSES = \
 	itrace \
 	log \
 	state \
+	timer \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
@@ -107,13 +119,31 @@ VPATH += $(VM_USER_DIR)
 
 cpu-exec.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/cpu-exec.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+alarm.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/alarm.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+audio.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/audio.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+device.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/device.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+disk.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/disk.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+intr.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/intr.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 map.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/map.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 mmio.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/mmio.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 port-io.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/io/port-io.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-timer.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/timer.cpp
+keyboard.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/keyboard.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+rtc.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/rtc.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+sdcard.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/sdcard.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+serial.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/serial.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+vga.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/device/vga.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 difftest.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/difftest.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
@@ -152,6 +182,8 @@ itrace.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/trace/itrace.cpp
 log.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/log.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 state.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/state.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+timer.o: /home/ran/ysyx/ysyx-workbench/npc/csrc/utils/timer.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)

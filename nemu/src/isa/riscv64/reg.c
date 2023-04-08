@@ -26,16 +26,23 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-	int i;
-	const char *temp = NULL;
+	// int i;
+	// const char *temp = NULL;
 
   printf("nemu pc = %lx\n", cpu.pc);
 
-	for(i = 0; i < 32; i++)
-	{
-		temp = regs[i];
-		printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
-	}
+	// for(i = 0; i < 32; i++)
+	// {
+	// 	temp = regs[i];
+	// 	printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
+	// }
+  for(int i = 0; i < 32; i = i+2)
+  {
+	// printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
+  printf("reg[%3d] \t%-3s = 0x%10lx or %10ld |", i, regs[i], cpu.gpr[i], cpu.gpr[i]);
+  printf("reg[%3d] \t%-3s = 0x%10lx or %10ld \n", i+1, regs[i+1], cpu.gpr[i+1], cpu.gpr[i+1]);
+
+  }
 
 }
 

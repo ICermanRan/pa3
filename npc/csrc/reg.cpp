@@ -5,6 +5,8 @@
 uint64_t *npc_reg = NULL;
 uint64_t npc_pc;
 
+uint64_t nemu_reg [32];
+uint64_t nemu_pc;
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -18,6 +20,8 @@ bool checkregs(regfile *ref_r, regfile *dut)
   bool res = true;
   for(int i = 0; i < 32; i++)
   {
+    nemu_reg[i] = ref_r->x[i];
+    // printf("nemu_reg[%d] = %lx\n", i, nemu_reg[i]);
     if(ref_r->x[i] != dut->x[i])
     {
       // printf("Difftest: error at nextpc = 0x%lx\n", dut->pc);
@@ -27,6 +31,7 @@ bool checkregs(regfile *ref_r, regfile *dut)
     }
   }
 
+  nemu_pc = ref_r->pc;
   if(ref_r->pc != dut->pc)
   {
     Log_red("difftest error: ");
@@ -48,6 +53,17 @@ void reg_display()
   printf("reg[%3d] \t%-3s = 0x%10lx or %10ld \n", i+1, regs[i+1], npc_reg[i+1], npc_reg[i+1]);
 
   }
+}
+
+void nemu_reg_display()
+{
+  printf("nemu pc = 0x%lx\n", nemu_pc);
+  for(int i = 0; i < 32; i = i+2)
+  {
+  printf("nemu_reg[%3d] \t%-3s = 0x%10lx or %10ld |", i, regs[i], nemu_reg[i], nemu_reg[i]);
+  printf("nemu_reg[%3d] \t%-3s = 0x%10lx or %10ld \n", i+1, regs[i+1], nemu_reg[i+1], nemu_reg[i+1]);
+  }
+  printf("---------------------------------------------------------------------------------------------------------------\n");
 }
 
 regfile pack_dut_regfile(uint64_t *dut_reg, uint64_t pc)

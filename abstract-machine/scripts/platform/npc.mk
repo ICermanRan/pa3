@@ -15,10 +15,10 @@ LDFLAGS   += --gc-sections -e _start
 #NPCFLAGS  += -e $(IMAGE).elf 
 NPCLOG   += --log=$(shell dirname $(IMAGE).elf)/npc-log.txt 
 NPCELF   += --elf=$(IMAGE).elf 
-#NPCBATCH += --b
+NPCBATCH += --b
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
-
+CFLAGS += -I$(AM_HOME)/am/src/riscv/npc/include
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c 
 
 #@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt 的意义

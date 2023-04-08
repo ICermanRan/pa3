@@ -84,6 +84,7 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
 
+  // printf("map_write addr = %x\n", addr);
   // if(addr >= 0xa0000100 && addr <=0xa0000107)
   // {
   //   printf("addr = %x, data = %ld, len = %d, name = %s\n", addr, data, len, map->name);

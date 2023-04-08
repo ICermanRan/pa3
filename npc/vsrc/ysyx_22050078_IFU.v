@@ -27,19 +27,27 @@ module ysyx_22050078_IFU
     import "DPI-C" function void diff_read_pc(input longint rtl_pc);
 
 
-    always @(en) begin
-        $display("i_pc = %h", i_pc);
+    always @(*) begin
+        // $display("i_pc = %h", i_pc);
         rtl_pmem_read(i_pc, inst, rst_n);
         diff_read_pc(i_pc);
      end
+
     // always @(posedge clk) begin
-    //     rtl_pmem_read(i_pc, inst, rst_n);
-    //     diff_read_pc(i_pc);
+    //   $display("IFU触发");
+    //   $display("i_pc = %h", i_pc);
+    //   $display("inst_out = %h", inst_out);
+    //   rtl_pmem_read(i_pc, inst, rst_n);
+    //   diff_read_pc(i_pc);
     //  end
 
-    //  always @(posedge clk) begin
+    //  always_latch @(clk) begin
+    //   //  $display("IFU触发");
+    //   if(!clk) begin
+    //     diff_read_pc(i_pc);
     //     rtl_pmem_read(i_pc, inst, rst_n);
-    //  end
+    //    end
+    // end
 
     // always @(*) begin
     //   $display("inst = %h", inst[31:0]);

@@ -110,6 +110,7 @@ module ysyx_22050078_npc
     );
 
     ysyx_22050078_EXU u_EXU(
+      .clk       (clk              ),
       .pc        (pc               ),
       .i_rs1_data(rs1_data         ),
       .i_rs2_data(rs2_data         ),
@@ -121,6 +122,7 @@ module ysyx_22050078_npc
     );
 
     ysyx_22050078_LSU u_LSU( 
+      .en        (en          ),
       .clk       (clk         ),
       .rst_n     (rst_n_sync  ),
       .i_opt     (lsu_opt     ),

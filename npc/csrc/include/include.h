@@ -19,7 +19,7 @@
 #define PMEM_END   0x87ffffff
 #define PMEM_MSIZE (PMEM_END+1-PMEM_START)
 
-#define DIFFTEST_ON  1
+// #define DIFFTEST_ON  1
 
 
 typedef uint64_t vaddr_t;
@@ -71,12 +71,12 @@ uint64_t lsu_pmem_read(uint64_t addr, int len);
 void pmem_write(uint64_t addr, uint64_t data, int len);
 
 //sim_init.cpp
-void sim_init();
+// void sim_init();
 
 
 //main.cpp
 void step_and_dump_wave();
-void step_and_dump_wave_2();
+// void step_and_dump_wave_2();
 
 
 //init.cpp
@@ -99,6 +99,7 @@ void cpu_exec(uint64_t n);
 
 // void print_regs();
 void reg_display();
+void nemu_reg_display();
 bool checkregs(regfile *ref, regfile *dut);
 regfile pack_dut_regfile(uint64_t *dut_reg,uint64_t pc);
 

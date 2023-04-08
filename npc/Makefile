@@ -10,6 +10,8 @@ OBJ_DIR := ./obj_dir
 
 #gcc flags
 GCC_INCLUDE_PATH := -I$(NPC_HOME)/csrc/include/ \
+										-I$(NPC_HOME)/csrc/include/device/ \
+										-I$(NPC_HOME)/csrc/include/memory/ \
 										-I/usr/include/SDL2 \
 										-I${OBJ_DIR}
 
@@ -46,7 +48,7 @@ VERILATOR_FLAGS += -Wno-INCABSPATH
 VERILATOR_FLAGS += -Wno-PINMISSING
 
 
-GCC_LIB = -lSDL2 -lreadline -ldl #-lSDL2_image
+GCC_LIB = -lSDL2 -lreadline -ldl #-lSDL2_image,-ldl for dynamic link(nemu difftest).
 GCC_LIB += ${LLVM_LIB}   
 GCC_SANITIZER = -fsanitize=address
 
@@ -62,7 +64,7 @@ GCC_FLAGS := ${GCC_CFLAGS} ${GCC_LDFLAGS}
 
 BIN := ${OBJ_DIR}/V${TOP_MODULE}
 #IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin #?= 是如果没有被赋值过就赋予等号后面的值,所以如果没有被赋予.bin文件，就会运行dummy.bin
-IMG ?=
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
 NPC_LOG ?= --log=$(BUILD_DIR)/npc-log.txt
 NPC_ELF ?=
 NPC_BATCH ?=

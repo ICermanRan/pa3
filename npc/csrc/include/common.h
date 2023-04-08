@@ -38,24 +38,29 @@
 #define CONFIG_TRACE_START 0
 #define CONFIG_TRACE_END 10000
 #define CONFIG_TRACE_EXECCOUNT 1
-#define CONFIG_ITRACE 1
-#define CONFIG_ITRACE_COND "true"
-#define ITRACE_COND "true"
 #define CONFIG_PC_RESET_OFFSET 0x0
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_PMEM_GARRAY 1
 #define CONFIG_MEM_RANDOM 1
 #define CONFIG_MBASE 0x80000000
 
+//debug info
+// #define DEBUG_INFO 1
+
+//itrace
+#define CONFIG_ITRACE 1
+#define CONFIG_ITRACE_COND "true"
+#define ITRACE_COND "true"
 
 //mtrace
-#define CONFIG_MTRACE 1
+// #define CONFIG_MTRACE 1
 
 //ftrace
-#define CONFIG_FTRACE 1
+// #define CONFIG_FTRACE 1
 
 //difftest
-#define CONFIG_DIFFTEST 1
+// #define CONFIG_DIFFTEST 1
+// #define DIFFTEST_ON  1
 
 //dtrace
 #define CONFIG_DTRACE 1

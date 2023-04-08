@@ -11,7 +11,10 @@ char *ftrace_file = NULL;
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 
+void init_device();
 void init_log(const char *log_file);
+static int parse_args(int argc, char *argv[]);
+static long load_img();
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -144,6 +147,9 @@ void init_monitor(int argc, char *argv[])
   /* Open the log file. */
   //init log.
   init_log(log_file);
+
+  // init device.
+  // init_device();
 
   /* Load the image to memory. This will overwrite the built-in image. */
   // 加载命令行指定的镜像文件

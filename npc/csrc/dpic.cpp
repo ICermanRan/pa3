@@ -5,6 +5,7 @@
 #include "common.h"
 #include "debug.h"
 #include "verilated_dpi.h"
+#include "utils.h"
 
 extern bool rst_n_sync;
 extern "C" void check_rst(svBit rst_flag) //其实这个函数没起啥作用
@@ -26,7 +27,12 @@ extern "C" svBit check_finish(int inst)
 extern "C" void rtl_pmem_write(uint64_t waddr, uint64_t wdata, uint8_t wmask)
 {
   // printf("rtl_pmem_write:waddr = 0x%lx,wdata = 0x%lx,wmask = 0x%x\n",waddr,wdata,wmask);
-  
+  if((waddr & ~0x7ull) == 0xa00003f8)
+  {
+    putchar(wdata);
+    return;
+  }
+      
   switch(wmask)
   {
     case 1:   pmem_write(waddr, wdata, 1); break; // 0000_0001, 1byte.
@@ -39,12 +45,27 @@ extern "C" void rtl_pmem_write(uint64_t waddr, uint64_t wdata, uint8_t wmask)
 
 extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
 {
+  // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
+ 
+  // if((raddr & ~0x7ull) == 0xa0000048 || (raddr & ~0x7ull) == 0xa000004c)
+    if(raddr == 0xa0000048)
+    {
+      // printf("raddr = %lx\n", raddr);
+      uint64_t us = get_time();
+      // printf("us = %ld\n", us);
+      *rdata = us;
+      // *(rdata+4) = us >> 32;
+      return ;
+    }
+
+  
+
+  
   if(ren && raddr >= PMEM_START && raddr<=PMEM_END)
   {
-    *rdata = pmem_read(raddr, 8);
-    // #ifdef CONFIG_MTRACE
-    // printf("MTRACE:addr = %lx, data = %lx\n", raddr, *rdata);   
-    // #endif
+    // if(raddr == 0xa0000048)
+    
+      *rdata = pmem_read(raddr, 8);
   }
   else //avoid latch.
    *rdata = 0;

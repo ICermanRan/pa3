@@ -13,6 +13,7 @@ void npc_init(int argc, char *argv[])
   /* Perform some global initialization(执行一些全局初始化). */
   init_monitor(argc,argv);
 
+  // init_device();
 }
 
 

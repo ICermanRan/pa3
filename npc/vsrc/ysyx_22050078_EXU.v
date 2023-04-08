@@ -6,6 +6,7 @@ description:执行模块
 
 module ysyx_22050078_EXU 
 (
+  input                       clk,
   input [`CPU_WIDTH-1:0]      pc,
 
   //from regs
@@ -82,7 +83,8 @@ module ysyx_22050078_EXU
 
   reg [`CPU_WIDTH-1:0] exu_res_trans;
 
-  always @(*) begin
+  always_latch @(clk) begin
+    if(!clk) begin
     o_exu_res = 64'b0;
     exu_res_trans = 64'b0;
     case(i_exopt)
@@ -128,6 +130,7 @@ module ysyx_22050078_EXU
       `EXU_BGEU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};end
       default: o_exu_res = `CPU_WIDTH'b0;
     endcase
+    end
   end
 
 

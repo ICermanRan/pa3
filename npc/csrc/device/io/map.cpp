@@ -13,12 +13,20 @@
 // * See the Mulan PSL v2 for more details.
 // ***************************************************************************************/
 
+// // #include "include/isa.h"
+// // #include "include/map.h"
+// // #include "memory/paddr.h"
+// // #include "memory/vaddr.h"
+// // #include "memory/host.h"
 // #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/isa.h"
 // #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/map.h"
-// #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/vaddr.h"
+// #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/memory/paddr.h"
+// #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/memory/vaddr.h"
+// #include "/home/ran/ysyx/ysyx-workbench/npc/csrc/include/memory/host.h"
 
 // #define IO_SPACE_MAX (2 * 1024 * 1024)
 
+// extern uint64_t dut_pc;
 // static uint8_t *io_space = NULL;
 // static uint8_t *p_space = NULL;
 
@@ -33,11 +41,11 @@
 
 // static void check_bound(IOMap *map, paddr_t addr) {
 //   if (map == NULL) {
-//     Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, cpu.pc);
+//     Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, dut_pc);
 //   } else {
 //     Assert(addr <= map->high && addr >= map->low,
 //         "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
-//         addr, map->name, map->low, map->high, cpu.pc);
+//         addr, map->name, map->low, map->high, dut_pc);
 //   }
 // }
 
@@ -46,7 +54,7 @@
 // }
 
 // void init_map() {
-//   io_space = malloc(IO_SPACE_MAX);
+//   io_space = (uint8_t *)malloc(IO_SPACE_MAX);
 //   assert(io_space);
 //   p_space = io_space;
 // }

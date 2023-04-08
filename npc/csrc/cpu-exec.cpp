@@ -53,15 +53,28 @@ extern char logbuf[100];
 /*exec_once()函数覆盖了指令周期的所有阶段: 取指, 译码, 执行, 更新PC*/
 /*模拟了cpu的工作方式*/
 static void exec_once() {
+  #ifdef DEBUG_INFO
     printf("0: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
-  top->clk = !top->clk;
-    printf("1: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
-  step_and_dump_wave();
-    printf("2: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  #endif
 
+  top->clk = !top->clk;
+
+  #ifdef DEBUG_INFO
+    printf("1: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
+  #endif
+  
+  step_and_dump_wave();
+
+  #ifdef DEBUG_INFO  
+    printf("2: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  #endif
   
   // printf("time is  %ld, clk is %d\n", contextp->time(), top->clk);
-  itrace(npc_pc, npc_inst);
+  
+  #ifdef CONFIG_ITRACE_COND
+    itrace(npc_pc, npc_inst);
+  #endif
+  
   if((top->clk == 0) && (top->rst_n == 1)) //上升沿且rst_n == 1
   {
   #ifdef DIFFTEST_ON  
@@ -69,19 +82,32 @@ static void exec_once() {
     {
       npc_state.state = NPC_ABORT;
       npc_state.halt_pc = npc_pc;
+      nemu_reg_display();
       reg_display();
+      // nemu_reg_display();
     }
     
-    trace_and_difftest(logbuf, npc_pc);
+    // trace_and_difftest(logbuf, npc_pc);
+  #endif
+
+  #ifdef CONFIG_ITRACE_COND
+   trace_and_difftest(logbuf, npc_pc);
   #endif
   }
   
   
   top->clk = !top->clk;
-    printf("3:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
-  step_and_dump_wave();
-    printf("4:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   
+  #ifdef DEBUG_INFO  
+    printf("3:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  #endif
+  
+  step_and_dump_wave();
+    
+  #ifdef DEBUG_INFO
+    printf("4:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  #endif
+
   top->en = !top->en;
 }
 
