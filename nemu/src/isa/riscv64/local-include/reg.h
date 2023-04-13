@@ -32,4 +32,10 @@ static inline const char* reg_name(int idx, int width) {
   return regs[check_reg_idx(idx)];
 }
 
+// #define mstatus 0x300 // 状态
+// #define mtvec   0x305 //异常入口地址
+// #define mepc    0x341 //异常pc 
+// #define mcause  0x342 //原因
+
+
 #endif

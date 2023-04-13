@@ -304,8 +304,12 @@ enum {
  两者的关系是*src1 == *(&src1) == src1(这里是译码函数中的变量)
  所以，下面的宏里，rs表示寄存器编号，宏R表示对应编号寄存器里的值赋给了译码函数中的变量
 */
-#define src1R() do { *src1 = R(rs1); } while (0)  //*src1 = cpu.gpr(rs1)
-#define src2R() do { *src2 = R(rs2); } while (0)  //*src2 = cpu.gpr(rs2)
+#define src1R(n) do { *src1 = R(n); } while (0)  //*src1 = cpu.gpr(rs1)
+#define src2R(n) do { *src2 = R(n); } while (0)  //*src2 = cpu.gpr(rs2)
+#define destR(n) do { *dest = n;    } while (0)
+#define src1I(i) do { *src1 = i;    } while (0)
+#define src2I(i) do { *src2 = i;    } while (0)
+#define destI(i) do { *dest = i;    } while (0)
 
 /*符号位扩展均扩展为64位，最后返回的结果都是以补码形式看值，因为抽取的立即数在符号位扩展时的扩展规则是不同的(详见宏内)*/
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)            //先12位立即数，再扩展为64位
@@ -345,16 +349,51 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
   */
   switch (type)
   {
-    case TYPE_I: src1R();          immI();  break; //printf("Itype imm = %ld\n",*imm); break;
-    case TYPE_U:                   immU();  break; //printf("Utype imm = %ld\n",*imm); break;
-    case TYPE_S: src1R(); src2R(); immS();  break; //printf("Stype imm = %ld\n",*imm); break;
-    case TYPE_J:                   immJ();  break; //printf("Jtype imm = %lx\n",*imm); break;
-    case TYPE_R: src1R(); src2R();          break;
-    case TYPE_B: src1R(); src2R(); immB();  break; //printf("Btype imm = %lx\n",*imm); break;
+    case TYPE_R: src1R(rs1);       src2R(rs2);                        break;
+    case TYPE_I: src1R(rs1);                            immI();       break; //printf("Itype imm = %ld\n",*imm); break;
+    case TYPE_U:                                        immU();       break; //printf("Utype imm = %ld\n",*imm); break;
+    case TYPE_S: src1R(rs1);       src2R(rs2);          immS();       break; //printf("Stype imm = %ld\n",*imm); break;
+    case TYPE_J:                                        immJ();       break; //printf("Jtype imm = %lx\n",*imm); break;
+    case TYPE_B: src1R(rs1);       src2R(rs2);          immB();       break; //printf("Btype imm = %lx\n",*imm); break;
   }
 }
+
+word_t read_csr(word_t csr_addr) {
+  // printf("read_csr csr addr = %lx\n", csr_addr);
+  switch(csr_addr){
+    case 0x305:   return cpu.mtvec;
+    case 0x341:   return cpu.mepc;
+    case 0x300:   return cpu.mstatus;
+    case 0x342:   return cpu.mcause;
+    default : Log("unknown csr read"); assert(0);
+  }
+}
+
+void write_csr(word_t csr_addr, word_t csr_wdata) {
+  // printf("write_cs: csr_addr = %lx\n", csr_addr);
+  // printf("csr_wdata = %lx\n", csr_wdata);
+  switch(csr_addr) {
+    case 0x305: cpu.mtvec   = csr_wdata; break;
+    case 0x341: cpu.mepc    = csr_wdata; break;
+    case 0x300: cpu.mstatus = csr_wdata; break;
+    case 0x342: cpu.mcause  = csr_wdata; break;
+    default : Log("unknown csr write"); assert(0);
+  }
+
+}
+
+
 /*译码(ID) + 执行(EX)*/
 static int decode_exec(Decode *s) {
+  if(s->pc == 0x80000654) {
+    Log("s->pc = %lx", s->pc);
+    Log("触发自陷!\n");
+    isa_reg_display();
+    Log("c->mcause = %lx", cpu.mcause);
+    Log("c->mstatus = %lx", cpu.mstatus);
+    Log("c->mepc = %lx", cpu.mepc);
+  }
+
   int dest = 0;
   unsigned int shamt = 0;
   // word_t read_addr = 0;
@@ -448,7 +487,14 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 101 ????? 00110 11", srliw  , I, shamt = BITS(s->isa.inst.val, 25, 20), R(dest) = SEXT( (BITS(src1, 31, 0) >> shamt) , 32)  );         //把寄存器 x[rs1]截为 32 位再右移 shamt 位，空出的位置填零，结果进行符号扩展后写入 x[rd];带w的是把64位寄存器当成32位看待，高位当成不存在，就变相模拟了32位寄存器
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, R(dest) = src1 | src2); 
   INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori    , I, R(dest) = src1 | imm);
-          
+
+  // rv64 Zicsr Standard Extension
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, word_t t = read_csr(imm); write_csr(imm, src1), R(dest) = t; );
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, word_t t = read_csr(imm); write_csr(imm, src1 | t), R(dest) = t; );
+
+  // trap and exception:
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0xb, s->pc); );  //根据riscv手册,ecall对应的mcause值为11 = 0xb
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = read_csr(0x341);            );  //s->dnpc = cpu.mepc
           //inv的规则, 表示"若前面所有的模式匹配规则都无法成功匹配, 则将该指令视为非法指令
           //指令执行错误时，也是这条语句！！！(它内部能修改nemu state)
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));

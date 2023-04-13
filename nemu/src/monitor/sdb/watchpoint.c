@@ -160,6 +160,7 @@ int test_change()
       if(p->new_value != p->old_value)
       {
         //表达式求的新值与旧值不相等
+        Log("old value = %lu\n", p->old_value);
         printf("old value = %lu\n", p->old_value);
         printf("new value = %lu\n", p->new_value);
         return 1;
