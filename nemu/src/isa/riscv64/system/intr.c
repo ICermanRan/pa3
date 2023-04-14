@@ -18,10 +18,14 @@
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
-   */
+   */ 
   cpu.mepc = epc;   // PC -> CSR[mepc];将当前PC值保存到mepc寄存器
   cpu.mcause = NO;  // NO -> CSR[mcause];在mcause寄存器中设置异常号
-  printf("异常入口地址 cpu.mtvec = %lx\n", cpu.mtvec);
+
+  #ifdef CONFIG_ETRACE
+    printf("ETRACE interrupt/exception: mepc==%lx, mcause==%lx, mtvec==%lx\n", cpu.mepc, cpu.mcause, cpu.mtvec);
+  #endif
+  // printf("异常入口地址 cpu.mtvec = %lx\n", cpu.mtvec);
   return cpu.mtvec; // CSR[mtvec] -> handler_addr;从mtvec寄存器中取出异常入口地址
 
 

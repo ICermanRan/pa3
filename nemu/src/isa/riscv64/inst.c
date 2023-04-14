@@ -385,14 +385,14 @@ void write_csr(word_t csr_addr, word_t csr_wdata) {
 
 /*译码(ID) + 执行(EX)*/
 static int decode_exec(Decode *s) {
-  if(s->pc == 0x80000654) {
-    Log("s->pc = %lx", s->pc);
-    Log("触发自陷!\n");
-    isa_reg_display();
-    Log("c->mcause = %lx", cpu.mcause);
-    Log("c->mstatus = %lx", cpu.mstatus);
-    Log("c->mepc = %lx", cpu.mepc);
-  }
+  // if(s->pc == 0x80000654) {
+  //   Log("s->pc = %lx", s->pc);
+  //   Log("触发自陷!\n");
+  //   isa_reg_display();
+  //   Log("c->mcause = %lx", cpu.mcause);
+  //   Log("c->mstatus = %lx", cpu.mstatus);
+  //   Log("c->mepc = %lx", cpu.mepc);
+  // }
 
   int dest = 0;
   unsigned int shamt = 0;
@@ -494,7 +494,7 @@ static int decode_exec(Decode *s) {
 
   // trap and exception:
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0xb, s->pc); );  //根据riscv手册,ecall对应的mcause值为11 = 0xb
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = read_csr(0x341);            );  //s->dnpc = cpu.mepc
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = read_csr(0x341);            );  //s->dnpc = cpu.mepc，从异常处理中恢复
           //inv的规则, 表示"若前面所有的模式匹配规则都无法成功匹配, 则将该指令视为非法指令
           //指令执行错误时，也是这条语句！！！(它内部能修改nemu state)
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));

@@ -142,7 +142,7 @@ config TRACE_END
 
 config ITRACE
   depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-  bool " instruction tracer"
+  bool "Enable instruction tracer(ITRACE)"
   default y
 
 config ITRACE_COND
@@ -152,7 +152,7 @@ config ITRACE_COND
 
 config MTRACE
   depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-  bool "Enable memory tracer"
+  bool "Enable memory tracer(MTRACE)"
   default y
  
 config MTRACE_COND
@@ -162,7 +162,7 @@ config MTRACE_COND
 
 config FTRACE
   depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-  bool "Enable function tracer"
+  bool "Enable function tracer(FTRACE)"
   default y
 
 config FTRACE_COND
@@ -171,7 +171,11 @@ config FTRACE_COND
   default "true"
   
 config DTRACE
-  bool "Enable device tracing"
+  bool "Enable device tracing(DTRACE)"
+  default n
+
+config ETRACE
+  bool "Enable exception/interrupt tracer(ETRACE)."
   default n
 
 config DIFFTEST
