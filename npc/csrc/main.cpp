@@ -32,7 +32,7 @@ void step_and_dump_wave()
 {
   top->eval();
   contextp->timeInc(1);//经过一个时间精度(控制的是波形中的时间精度，即多少时间单位翻转一次)
-  // tfp->dump(contextp->time());
+  tfp->dump(contextp->time());
 }
 
 // void step_and_dump_wave_2()
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
   // printf("连接前, time is %ld\n", contextp->time());
   top->rst_n = 0;
   top->clk = 0;
-  top->en = 0;
+  // top->en = 0;
   step_and_dump_wave(); //init reg status,use for difftest_init.
   // printf("连接后, time is %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   
@@ -74,12 +74,12 @@ int main(int argc, char* argv[]) {
     #ifdef DEBUG_INFO
     // printf("复位2 now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
     #endif
-    // top->eval();
+
     rst_time++;
   }
   
   top->rst_n = 1;
-  top->en = 1;
+  // top->en = 1;
   // step_and_dump_wave();
 
   #ifdef DEBUG_INFO

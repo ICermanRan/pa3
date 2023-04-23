@@ -2,7 +2,7 @@
 author:ran
 description:取指模块(因为用c++写指令存储器，所以这里的取指只关心pc)
 *************************/
-`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/defines.v"
+`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/core/defines.v"
 module ysyx_22050078_IFU 
 (
     input en,
@@ -24,13 +24,11 @@ module ysyx_22050078_IFU
 
     import "DPI-C" function void rtl_pmem_read(input longint raddr, output longint rdata, input bit ren);
 
-    import "DPI-C" function void diff_read_pc(input longint rtl_pc);
 
 
     always @(*) begin
         // $display("i_pc = %h", i_pc);
         rtl_pmem_read(i_pc, inst, rst_n);
-        diff_read_pc(i_pc);
      end
 
     // always @(posedge clk) begin

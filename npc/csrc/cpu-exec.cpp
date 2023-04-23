@@ -108,7 +108,7 @@ static void exec_once() {
     printf("4:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   #endif
 
-  top->en = !top->en;
+  // top->en = !top->en;
 }
 
 

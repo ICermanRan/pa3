@@ -2,14 +2,14 @@
 author:ran
 description:执行模块
 *************************/
-`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/defines.v"
+`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/core/defines.v"
 
 module ysyx_22050078_EXU 
 (
   input                       clk,
   input [`CPU_WIDTH-1:0]      pc,
 
-  //from regs
+  //from pipe_ID_EX(regfile -> bypass_logic -> pipe_ID_EX)
   input [`CPU_WIDTH-1:0]      i_rs1_data,  //源寄存器1数据
   input [`CPU_WIDTH-1:0]      i_rs2_data,  //源寄存器2数据
     
@@ -18,11 +18,12 @@ module ysyx_22050078_EXU
   input [`EXU_SEL_WIDTH-1:0]  i_src_sel ,
   input [`EXU_OPT_WIDTH-1:0]  i_exopt     ,
 
-  //to LSU
-  output reg [`CPU_WIDTH-1:0] o_exu_res ,
+  //to pipe_EX_LS
+  output reg [`CPU_WIDTH-1:0] o_exu_res 
     
   //to PCU
-  output  wire                o_zero
+  //现在B-type类型的指令计算结果由BRU完成，无需再进入EXU,所以这个output可以不用了
+  // output  wire                o_zero
 );
 
   reg [`CPU_WIDTH-1:0] src1,src2;
@@ -83,8 +84,8 @@ module ysyx_22050078_EXU
 
   reg [`CPU_WIDTH-1:0] exu_res_trans;
 
-  always_latch @(clk) begin
-    if(!clk) begin
+  always @(*) begin
+    // if(!clk) begin
     o_exu_res = 64'b0;
     exu_res_trans = 64'b0;
     case(i_exopt)
@@ -122,22 +123,22 @@ module ysyx_22050078_EXU
       `EXU_SLTU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, exu_res_trans[63]}; end//if src1 > src2, exu_res_trans[63] = 0; if src1 < src2, exu_res_trans[63] = 1;
       
       //B-type中无需担忧相等的情况，有o_zero来判断
-      `EXU_BEQ:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, ~(|exu_res_trans)};                       end//if src1 == src2,o_exu_res[0]  = 1; if src1 != src2, o_exu_res[0]  = 0;
-      `EXU_BNE:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, (|exu_res_trans)};                        end//if src1 == src2,o_exu_res[0]  = 0; if src1 != src2, o_exu_res[0]  = 1;
-      `EXU_BLT:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, exu_res_trans[63]};     end//if src1 >=src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
-      `EXU_BGE:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};    end//if src1 > src2, o_exu_res[0]  = 1; if src1 < src2,  o_exu_res[0]  = 0;
-      `EXU_BLTU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, exu_res_trans[63]}; end//if src1 > src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
-      `EXU_BGEU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};end
+      // `EXU_BEQ:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, ~(|exu_res_trans)};                       end//if src1 == src2,o_exu_res[0]  = 1; if src1 != src2, o_exu_res[0]  = 0;
+      // `EXU_BNE:   begin exu_res_trans = src1 - src2; o_exu_res = {63'b0, (|exu_res_trans)};                        end//if src1 == src2,o_exu_res[0]  = 0; if src1 != src2, o_exu_res[0]  = 1;
+      // `EXU_BLT:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, exu_res_trans[63]};     end//if src1 >=src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
+      // `EXU_BGE:   begin exu_res_trans = $signed(src1) - $signed(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};    end//if src1 > src2, o_exu_res[0]  = 1; if src1 < src2,  o_exu_res[0]  = 0;
+      // `EXU_BLTU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, exu_res_trans[63]}; end//if src1 > src2, o_exu_res[0]  = 0; if src1 < src2,  o_exu_res[0]  = 1;
+      // `EXU_BGEU:  begin exu_res_trans = $unsigned(src1) - $unsigned(src2); o_exu_res = {63'b0, ~exu_res_trans[63]};end
       default: o_exu_res = `CPU_WIDTH'b0;
     endcase
-    end
+    // end
   end
 
 
 
 
 
-  assign o_zero = ~(|o_exu_res);//用于判断EXU的计算结果是否为0
+  // assign o_zero = ~(|o_exu_res);//用于判断EXU的计算结果是否为0
                                 //若为0，则o_zero = 1;若不为0，则o_zero = 0
 
 

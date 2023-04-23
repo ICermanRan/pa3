@@ -173,3 +173,17 @@
 `define FUNC3_AND_REMU          3'b111        //AND  REMU 
 `define FUNC3_REMUW             3'b111        //REMUW
 `define FUNC3_BGEU              3'b111        //BGEU
+
+
+`define FUNC3_LB                3'b000
+`define FUNC3_LH                3'b001
+`define FUNC3_LW                3'b010
+`define FUNC3_LD                3'b011
+`define FUNC3_LBU               3'b100
+`define FUNC3_LHU               3'b101
+`define FUNC3_LWU               3'b110
+
+`define FUNC3_SB                3'b000
+`define FUNC3_SH                3'b001
+`define FUNC3_SW                3'b010
+`define FUNC3_SD                3'b011

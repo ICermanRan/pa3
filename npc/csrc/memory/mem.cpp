@@ -24,7 +24,7 @@ void pmem_write(uint64_t addr, uint64_t data, int len)
   //    case 8: *(uint64_t *)paddr = data; return;
   //   }
   #ifdef CONFIG_MTRACE
-    Log("MTRACE_write:addr = %lx, len = %d, data = %lu",addr,len,data);
+    Log("MTRACE_write:addr = %lx, len = %d, data = %lu",addr, len, data);
     // printf("waddr & ~0x7ull = %llx\n", addr & ~0x7ull);
   #endif
   host_write(guest_to_host(addr), len, data);

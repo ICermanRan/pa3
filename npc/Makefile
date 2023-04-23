@@ -67,7 +67,7 @@ BIN := ${OBJ_DIR}/V${TOP_MODULE}
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
 NPC_LOG ?= --log=$(BUILD_DIR)/npc-log.txt
 NPC_ELF ?=
-NPC_BATCH ?=
+NPC_BATCH ?= 
 DIFFTEST ?= ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
 RUN_FLAGS := --img=${IMG} 
 RUN_FLAGS += --diff=${DIFFTEST}

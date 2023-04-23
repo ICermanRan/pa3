@@ -2,7 +2,7 @@
 author:ran
 description:pc寄存器
 *************************/
-`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/defines.v"
+`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/core/defines.v"
 module ysyx_22050078_PCU(
   input                  clk,
   input                  rst_n,

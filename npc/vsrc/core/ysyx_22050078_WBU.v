@@ -2,19 +2,19 @@
 author:ran
 description:回写模块
 *************************/
-`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/defines.v"
+`include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/core/defines.v"
 module ysyx_22050078_WBU(
-  //from EXU
+  //from pipe_LS_WB
   input [`CPU_WIDTH-1:0] i_exu_res,
   
-  //from LSU(要存入x[rd]的内容)
+  //from pipe_LS_WB(要存入x[rd]的内容)
   input [`CPU_WIDTH-1:0] i_lsu_res,
 
-  //from IDU,等于~lsu_opt[0]
+  //from pipe_LS_WB
   input                  i_load_en,
   
-  //to regfile
-  output[`CPU_WIDTH-1:0] o_rd       
+  //to bypass
+  output wire [`CPU_WIDTH-1:0] o_rd       
 
 );
 
