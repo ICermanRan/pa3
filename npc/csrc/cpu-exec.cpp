@@ -45,7 +45,7 @@ static void trace_and_difftest(char* logbuf, uint64_t pc) {
  #endif
 }
 
-
+bool rst_n_sync = false; //read from rtl by dpi-c.
 extern uint64_t npc_pc;
 uint32_t npc_inst;
 extern char logbuf[100];
@@ -57,7 +57,7 @@ static void exec_once() {
     printf("0: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
   #endif
 
-  top->clk = !top->clk;
+  top->i_clk = !top->i_clk;
 
   #ifdef DEBUG_INFO
     printf("1: now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n); 
@@ -75,7 +75,8 @@ static void exec_once() {
     itrace(npc_pc, npc_inst);
   #endif
   
-  if((top->clk == 0) && (top->rst_n == 1)) //上升沿且rst_n == 1
+  // if((top->clk == 0) && (top->rst_n == 1)) //上升沿且rst_n == 1
+  if(top->i_clk && rst_n_sync)
   {
   #ifdef DIFFTEST_ON  
     if(!difftest_check())
@@ -96,19 +97,18 @@ static void exec_once() {
   }
   
   
-  top->clk = !top->clk;
+  // top->clk = !top->clk;
   
   #ifdef DEBUG_INFO  
     printf("3:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   #endif
   
-  step_and_dump_wave();
+  // step_and_dump_wave();
     
   #ifdef DEBUG_INFO
     printf("4:now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   #endif
 
-  // top->en = !top->en;
 }
 
 

@@ -49,7 +49,8 @@ VERILATOR_FLAGS += -Wno-PINMISSING
 
 
 GCC_LIB = -lSDL2 -lreadline -ldl #-lSDL2_image,-ldl for dynamic link(nemu difftest).
-GCC_LIB += ${LLVM_LIB}   
+GCC_LIB += ${LLVM_LIB}  
+#GCC_LIB += -g
 GCC_SANITIZER = -fsanitize=address
 
 
@@ -67,7 +68,7 @@ BIN := ${OBJ_DIR}/V${TOP_MODULE}
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
 NPC_LOG ?= --log=$(BUILD_DIR)/npc-log.txt
 NPC_ELF ?=
-NPC_BATCH ?= 
+NPC_BATCH ?= -b
 DIFFTEST ?= ${NEMU_HOME}/build/riscv64-nemu-interpreter-so
 RUN_FLAGS := --img=${IMG} 
 RUN_FLAGS += --diff=${DIFFTEST}

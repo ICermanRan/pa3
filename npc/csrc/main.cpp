@@ -23,7 +23,7 @@ static inline void all_fail();
 #define RESET_TIME 1
 #define MAX_INST_TO_PRINT 10
 
-bool rst_n_sync = false; //read from rtl by dpi-c.
+// bool rst_n_sync = false; //read from rtl by dpi-c.
 
 // vluint64_t sim_time = 0; // 用于计数时钟边沿
 vluint64_t rst_time = 0;
@@ -48,55 +48,80 @@ void step_and_dump_wave()
 int main(int argc, char* argv[]) {
     
 ///////////////////////////////// 初始化波形文件: //////////////////////////////// 
-  // contextp->traceEverOn(true);    //打开波形 
-  // top -> trace(tfp, 0);
-  // tfp -> open("waveform.vcd");
+  contextp->traceEverOn(true);    //打开波形 
+  top -> trace(tfp, 0);
+  tfp -> open("waveform.vcd");
 ///////////////////////////////// init npc hardware status: ////////////////////////////////    
   //对dut的连接,只连接input;init npc status:
   // printf("连接前, time is %ld\n", contextp->time());
-  top->rst_n = 0;
-  top->clk = 0;
-  // top->en = 0;
+  top->i_rst_n = !0;
+  top->i_clk = 0;
+
   step_and_dump_wave(); //init reg status,use for difftest_init.
   // printf("连接后, time is %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
   
-  //复位
-  while(rst_time < RESET_TIME)
-  {
-    //时钟翻转
-    #ifdef DEBUG_INFO
-    // printf("复位1 now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
-    #endif
-    //  printf("\n");
-    top->clk = !top->clk;
-    step_and_dump_wave();
-
-    #ifdef DEBUG_INFO
-    // printf("复位2 now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
-    #endif
-
-    rst_time++;
-  }
+///////////////////////////////// init npc software: ////////////////////////////////   
+  npc_init(argc, argv);
   
-  top->rst_n = 1;
-  // top->en = 1;
+  
+  //复位
+  // while(rst_time < RESET_TIME)
+  // {
+  //   //时钟翻转
+  //   #ifdef DEBUG_INFO
+  //   // printf("复位1 now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  //   #endif
+  //   //  printf("\n");
+  //   top->clk = !top->clk;
+  //   step_and_dump_wave();
+
+  //   #ifdef DEBUG_INFO
+  //   // printf("复位2 now time is  %ld, clk is %d, rst_n is %d\n", contextp->time(), top->clk, top->rst_n);
+  //   #endif
+
+  //   rst_time++;
+  // }
+  
+  // top->rst_n = 1;
   // step_and_dump_wave();
 
   #ifdef DEBUG_INFO
   printf("初始化后，time is  %ld, clk = %d, rst_n = %d\n", contextp->time(), top->clk, top->rst_n);
   #endif
-///////////////////////////////// init npc software: ////////////////////////////////   
-  npc_init(argc, argv);
+// ///////////////////////////////// init npc software: ////////////////////////////////   
+//   npc_init(argc, argv);
 
  /////////////////////////////////  /* Start engine. */ ////////////////////////////////    
   // engine_start() -> sdb_mainloop()
   // 其中会输出命令提示符, 提示用户输出SDB的命令
   engine_start();
 
+// ///////////////////////////////// verilator doing: ///////////////////////////////
+//   while (!contextp->gotFinish())
+//   {
+//     top->i_clk = !top->i_clk;                 // clk = ~clk;
+// #ifdef DIFFTEST_ON
+//     top->eval();                              // update rst_n_sync
+//     if(top->i_clk && rst_n_sync){
+//       //printf("pc = 0x%lx\n", dut_pc);
+//       if(dut_pc != 0 && dut_pc != 1){         // 0 means branch bubble, 1 means data bubble.
+//         if(!difftest_check()){                // check last cycle reg/mem.
+//           print_regs();
+//           break; 
+//         }
+//         difftest_step();                      // ref step and update regs/mem.
+//       }
+//     }
+// #endif
+//     step_and_dump_wave();
+//   }
+
+
+
   ///////////////////////////////// exit npc: /////////////////////////////////
   //退出仿真，保存波形文件
   step_and_dump_wave();
-  // tfp->close();
+  tfp->close();
   delete tfp;
   delete top;
   delete contextp;

@@ -23,13 +23,17 @@ module ysyx_22050078_WBU(
   //i_load_en = 0，inst type != I_LOAD or S-type,表示存入x[rd]的是来自EXU的数据(计算出来的)
   assign o_rd = i_load_en ? i_lsu_res : i_exu_res;
 
-
-
-
-
-
-
-
-
-
 endmodule
+
+
+// `include "/home/ran/ysyx/ysyx-workbench/npc/vsrc/core/defines.sv"
+// module ysyx_22050078_WBU (
+//   input         [`CPU_WIDTH-1:0]  i_exu_res,
+//   input         [`CPU_WIDTH-1:0]  i_lsu_res,
+//   input                           i_ldflag,
+//   output logic  [`CPU_WIDTH-1:0]  o_rd     
+// );
+  
+//   assign o_rd = i_ldflag ? i_lsu_res : i_exu_res;
+    
+// endmodule

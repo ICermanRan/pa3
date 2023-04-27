@@ -43,10 +43,12 @@ extern "C" void rtl_pmem_write(uint64_t waddr, uint64_t wdata, uint8_t wmask)
   }
 }
 
-extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, int ren)
+extern "C" void rtl_pmem_read(uint64_t raddr, uint64_t *rdata, svBit ren)
 {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
- 
+  // printf("pc = %llx\n", raddr);
+  // printf("ren = %d\n", ren);
+
   // if((raddr & ~0x7ull) == 0xa0000048 || (raddr & ~0x7ull) == 0xa000004c)
     if(raddr == 0xa0000048)
     {

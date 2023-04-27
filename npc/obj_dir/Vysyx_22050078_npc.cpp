@@ -11,8 +11,8 @@
 
 Vysyx_22050078_npc::Vysyx_22050078_npc(VerilatedContext* _vcontextp__, const char* _vcname__)
     : vlSymsp{new Vysyx_22050078_npc__Syms(_vcontextp__, _vcname__, this)}
-    , clk{vlSymsp->TOP.clk}
-    , rst_n{vlSymsp->TOP.rst_n}
+    , i_clk{vlSymsp->TOP.i_clk}
+    , i_rst_n{vlSymsp->TOP.i_rst_n}
     , rootp{&(vlSymsp->TOP)}
 {
 }
