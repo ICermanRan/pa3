@@ -65,7 +65,7 @@ GCC_FLAGS := ${GCC_CFLAGS} ${GCC_LDFLAGS}
 
 BIN := ${OBJ_DIR}/V${TOP_MODULE}
 #IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin #?= 是如果没有被赋值过就赋予等号后面的值,所以如果没有被赋予.bin文件，就会运行dummy.bin
-IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
+IMG ?= ../am-kernels/tests/cpu-tests/build/string-riscv64-npc.bin
 NPC_LOG ?= --log=$(BUILD_DIR)/npc-log.txt
 NPC_ELF ?=
 NPC_BATCH ?= -b
@@ -81,8 +81,8 @@ RUN_FLAGS += ${NPC_BATCH}
 
 
 com:$(CSRC) $(VSRC)
-	@echo npc Makefile: IMG=$(IMG) NPC_LOG=$(NPC_LOG) NPC_ELF=$(NPC_ELF)
-	@echo npc Makefile: RUN_FLAGS=${RUN_FLAGS}
+#	@echo npc Makefile: IMG=$(IMG) NPC_LOG=$(NPC_LOG) NPC_ELF=$(NPC_ELF)
+#	@echo npc Makefile: RUN_FLAGS=${RUN_FLAGS}
 	@verilator ${VERILATOR_FLAGS} ${CSRC} ${VSRC} ${GCC_FLAGS} 
 
 run: com

@@ -30,6 +30,8 @@ int main() {
 
   Log("Finish initialization");
 
+//因为init_irq()提前执行，所以异常入口地址已经通过cte_init准备好了
+//触发自陷操作只需要取出这个地址，然后跳转即可
 #ifdef HAS_CTE
   yield();
 #endif

@@ -4,20 +4,27 @@
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
+//_am_irq_handle()的代码会把执行流切换的原因打包成事件
+//然后调用在cte_init()中注册的事件处理回调函数——>user_handler
+//但在Nanos-lite中, 这一回调函数是nanos-lite/src/irq.c中的do_event()函数
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     // for(int i = 0; i < 32; i++) {
     //   printf("c->gpr[%d] = %lx\n", i, c->gpr[i]);
     // }
-    // printf("c->mcause = %lx\n", c->mcause);
-    // printf("c->mstatus = %lx\n", c->mstatus);
-    // printf("c->mepc = %lx\n", c->mepc);
+    printf("c->mcause = %lx\n", c->mcause);
+    printf("c->mstatus = %lx\n", c->mstatus);
+    printf("c->mepc = %lx\n", c->mepc);
     
     Event ev = {0};
     switch (c->mcause) {
-      case 0xb: ev.event = EVENT_YIELD;  
+      // case 0xb: ev.event = EVENT_YIELD;  
+      //           break;
+      case 0: ev.event = EVENT_YIELD;  
                 break;
-      default: ev.event = EVENT_ERROR; break;
+      default: ev.event = EVENT_ERROR; 
+               printf("event error!\n");
+                break;
     }
 
     c = user_handler(ev, c);

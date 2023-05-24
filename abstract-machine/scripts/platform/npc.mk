@@ -38,8 +38,8 @@ image: $(IMAGE).elf
 #$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin 的意义：切换到$(NPC_HOME)目录下执行makefile
 #以dummy为例：make -C /home/ran/ysyx/ysyx-workbench/npc run IMG=/home/ran/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv64-npc.bin
 run: image
-	@echo npc.mk: run npc $(IMAGE).elf
-	@echo npc.mk: pass to npc $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
+#	@echo npc.mk: run npc $(IMAGE).elf
+#	@echo npc.mk: pass to npc $(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG)
 	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin run NPC_ELF=$(NPCELF) run NPC_LOG=$(NPCLOG) run NPC_BATCH=$(NPCBATCH)
 	
 

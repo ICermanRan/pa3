@@ -27,7 +27,7 @@ module ysyx_22050078_BRU (
 );
 
 
-  // 1.generate branch:
+  // 1.generate branch:判断分支条件，缩短分支延迟
   reg  branch;
   wire jump;
   wire supersub_resbit;

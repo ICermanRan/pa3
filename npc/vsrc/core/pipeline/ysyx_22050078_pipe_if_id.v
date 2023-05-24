@@ -69,7 +69,7 @@ module ysyx_22050078_pipe_if_id (
   wire [`CPU_WIDTH-1:0] t_ifu_diffpc;
 
   assign t_ifu_pc     = i_ifu_pc;
-  assign t_ifu_ins    = i_bubble ? `INS_WIDTH'h13 : i_ifu_ins;  // 0x13 == ADDI x0,x0,0 == nop.
+  assign t_ifu_ins    = i_bubble ? `INST_WIDTH'h13 : i_ifu_ins;  // 0x13 == ADDI x0,x0,0 == nop.
   assign t_ifu_diffpc = i_bubble ? `CPU_WIDTH'b0  : i_ifu_pc;   // use for sim, branch bubble diffpc == 0;
 
   stl_reg #(
