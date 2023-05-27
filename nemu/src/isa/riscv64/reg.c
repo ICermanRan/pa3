@@ -17,6 +17,10 @@
 #include "local-include/reg.h"
 #define GET_ARRAY_LEN(array,len) {len = (sizeof(array) / sizeof(array[0]));}
 
+const char *csrs[] = {
+  "mstatus", "mtvec", "mepc", "mcause" 
+};
+
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
   "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
@@ -31,19 +35,19 @@ void isa_reg_display() {
 
   printf("nemu pc = %lx\n", cpu.pc);
 
-	// for(i = 0; i < 32; i++)
-	// {
-	// 	temp = regs[i];
-	// 	printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
-	// }
-  for(int i = 0; i < 32; i = i+2)
-  {
+  /*printf gpr*/
+  for(int i = 0; i < 32; i = i+2) {
 	// printf("reg %d: %s ,value = %ld or 0x%lx\n", i, temp, cpu.gpr[i], cpu.gpr[i]);
   printf("reg[%3d] \t%-3s = 0x%10lx or %10ld |", i, regs[i], cpu.gpr[i], cpu.gpr[i]);
   printf("reg[%3d] \t%-3s = 0x%10lx or %10ld \n", i+1, regs[i+1], cpu.gpr[i+1], cpu.gpr[i+1]);
 
   }
 
+  /*printf csr*/
+  for(int idx = 0; idx < ARRLEN(csrs); idx = idx + 2) {
+    printf("csr[%d] \t%-3s = 0x%10lx or %10ld |", idx ,csrs[idx], cpu.csr[idx], cpu.csr[idx]);
+    printf("csr[%d] \t%-3s = 0x%10lx or %10ld \n", idx+1, csrs[idx+1], cpu.csr[idx+1], cpu.csr[idx+1]);
+  }
 }
 
 static int find_string(const char *strs[], const char *str, int len)

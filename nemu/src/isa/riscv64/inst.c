@@ -357,29 +357,38 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
   }
 }
 
-// word_t read_csr(word_t csr_addr) {
-//   // printf("read_csr csr addr = %lx\n", csr_addr);
-//   switch(csr_addr){
-//     case 0x305:   return cpu.mtvec;
-//     case 0x341:   return cpu.mepc;
-//     case 0x300:   return cpu.mstatus;
-//     case 0x342:   return cpu.mcause;
-//     default : Log("unknown csr read"); assert(0);
-//   }
-// }
+word_t read_csr(word_t csr_addr) {
+  // printf("read_csr csr addr = %lx\n", csr_addr);
+  switch(csr_addr){
+    case 0x305:    return csr(mtvec);
+    case 0x341:    return csr(mepc);
+    case 0x300:    return csr(mstatus);
+    case 0x342:    return csr(mcause);
+    default : Log("unknown csr read"); assert(0);
+    // case 0x305:   printf("mtvec = %lx\n",  csr(mtvec));  return csr(mtvec);
+    // case 0x341:   printf("mepc = %lx\n",   csr(mepc));   return csr(mepc);
+    // case 0x300:   printf("mstatus = %lx\n",csr(mstatus));return csr(mstatus);
+    // case 0x342:   printf("mcause = %lx\n", csr(mcause)); return csr(mcause);
+    // default : Log("unknown csr read"); assert(0);
+  }
+}
 
-// void write_csr(word_t csr_addr, word_t csr_wdata) {
-//   // printf("write_cs: csr_addr = %lx\n", csr_addr);
-//   // printf("csr_wdata = %lx\n", csr_wdata);
-//   switch(csr_addr) {
-//     case 0x305: cpu.mtvec   = csr_wdata; break;
-//     case 0x341: cpu.mepc    = csr_wdata; break;
-//     case 0x300: cpu.mstatus = csr_wdata; break;
-//     case 0x342: cpu.mcause  = csr_wdata; break;
-//     default : Log("unknown csr write"); assert(0);
-//   }
+void write_csr(word_t csr_addr, word_t csr_wdata) {
+  // printf("write_cs: csr_addr = %lx\n", csr_addr);
+  // printf("csr_wdata = %lx\n", csr_wdata);
+  switch(csr_addr) {
+    // case 0x305: cpu.mtvec   = csr_wdata; break;
+    // case 0x341: cpu.mepc    = csr_wdata; break;
+    // case 0x300: cpu.mstatus = csr_wdata; break;
+    // case 0x342: cpu.mcause  = csr_wdata; break;
+    case 0x305: csr(mtvec)   = csr_wdata; break;
+    case 0x341: csr(mepc)    = csr_wdata; break;
+    case 0x300: csr(mstatus) = csr_wdata; break;
+    case 0x342: csr(mcause)  = csr_wdata; break;
+    default : Log("unknown csr write"); assert(0);
+  }
 
-// }
+}
 
 static void csr_rw(uint32_t insval,int type){
 
@@ -409,7 +418,9 @@ static void csr_rs(uint32_t insval,int type){
   word_t high63_5,low4_0;
 
   //read:
-  R(rdid) = csr(csrid);
+  R(rdid) = csr(csrid);//t = CSRs[csrid], x[rd] = t
+  printf("csr(csrid) = %lx\n", csr(csrid));
+  printf("csrid = %x\n", csrid);
   //write:
   if(rs1id != 0){
     switch (type)
@@ -546,20 +557,20 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori    , I, R(dest) = src1 | imm);
 
   // rv64 Zicsr Standard Extension
-  // INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, word_t t = read_csr(imm); write_csr(imm, src1), R(dest) = t; );
-  // INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, word_t t = read_csr(imm); write_csr(imm, src1 | t), R(dest) = t; );
-  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , C, csr_rw(s->isa.inst.val,TYPE_C ) );
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , C, csr_rs(s->isa.inst.val,TYPE_C ) );
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, word_t t = read_csr(imm); write_csr(imm, src1), R(dest) = t; );
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, word_t t = read_csr(imm); write_csr(imm, src1 | t), R(dest) = t; );
+  // INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , C, csr_rw(s->isa.inst.val,TYPE_C ) );
+  // INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , C, csr_rs(s->isa.inst.val,TYPE_C ) );
   INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , C, csr_rc(s->isa.inst.val,TYPE_C ));
   INSTPAT("??????? ????? ????? 101 ????? 11100 11", csrrwi , CI,csr_rw(s->isa.inst.val,TYPE_CI));
   INSTPAT("??????? ????? ????? 110 ????? 11100 11", csrrsi , CI,csr_rs(s->isa.inst.val,TYPE_CI));
   INSTPAT("??????? ????? ????? 111 ????? 11100 11", csrrci , CI,csr_rc(s->isa.inst.val,TYPE_CI));
 
   // trap and exception:
-  // INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0xb, s->pc); );  //根据riscv手册,ecall对应的mcause值为11 = 0xb
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0xb, s->pc); );  //根据riscv手册,ecall对应的mcause值为11 = 0xb
   // INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = read_csr(0x341);            );  //s->dnpc = cpu.mepc，从异常处理中恢复
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0, s->pc); );  //根据riscv手册,ecall对应的mcause值为11 = 0xb
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = csr(mepc));  //s->dnpc = cpu.mepc，从异常处理中恢复 
+  // INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(R(17), s->pc); );  // R(17) is $a7
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = csr(mepc));  //s->dnpc = cpu.mepc + 4，从异常处理中恢复 
           //inv的规则, 表示"若前面所有的模式匹配规则都无法成功匹配, 则将该指令视为非法指令
           //指令执行错误时，也是这条语句！！！(它内部能修改nemu state)
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));

@@ -8,7 +8,7 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 //然后调用在cte_init()中注册的事件处理回调函数——>user_handler
 //但在Nanos-lite中, 这一回调函数是nanos-lite/src/irq.c中的do_event()函数
 Context* __am_irq_handle(Context *c) {
-  if (user_handler) {
+  
     // for(int i = 0; i < 32; i++) {
     //   printf("c->gpr[%d] = %lx\n", i, c->gpr[i]);
     // }
@@ -16,16 +16,19 @@ Context* __am_irq_handle(Context *c) {
     printf("c->mstatus = %lx\n", c->mstatus);
     printf("c->mepc = %lx\n", c->mepc);
     
-    Event ev = {0};
-    switch (c->mcause) {
-      // case 0xb: ev.event = EVENT_YIELD;  
-      //           break;
-      case 0: ev.event = EVENT_YIELD;  
-                break;
-      default: ev.event = EVENT_ERROR; 
-               printf("event error!\n");
-                break;
-    }
+    if (user_handler) {
+      Event ev = {0};
+      if(c->mcause == 0xb) {
+        if(c->GPR1 >= SYS_exit && c->GPR1 <= SYS_gettimeofday) {
+          ev.event = EVENT_SYSCALL;
+        }
+        else if(c->GPR1 == -1) {
+          ev.event = EVENT_YIELD;
+        }
+      }
+      else {
+        ev.event = EVENT_ERROR;
+      }
 
     c = user_handler(ev, c);
     assert(c != NULL);

@@ -27,11 +27,11 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
   #ifdef CONFIG_ETRACE
     // printf("ETRACE interrupt/exception: mepc == %lx, mcause == %lx, mtvec == %lx\n", cpu.mepc, cpu.mcause, cpu.mtvec);
-    printf("ETRACE interrupt/exception: mepc == %lx, mcause == %lx, mtvec == %lx\n", csr(mepc), csr(mcause), csr(mtvec));  
+    Log_cyan("ETRACE interrupt/exception: mepc == %lx, mcause == %lx, mtvec == %lx, mstatus == %lx", csr(mepc), csr(mcause), csr(mtvec), csr(mstatus));  
   #endif
   // printf("异常入口地址 cpu.mtvec = %lx\n", cpu.mtvec);
   // return cpu.mtvec; // CSR[mtvec] -> handler_addr;从mtvec寄存器中取出异常入口地址
-  printf("异常入口地址 cpu.mtvec = %lx\n", csr(mtvec));
+  Log_cyan("异常入口地址 cpu.mtvec = %lx", csr(mtvec));
   return csr(mtvec);
 
 }

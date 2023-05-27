@@ -48,6 +48,12 @@ intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
   register intptr_t _gpr4 asm (GPR4) = a2;
   register intptr_t ret asm (GPRx);
   asm volatile (SYSCALL : "=r" (ret) : "r"(_gpr1), "r"(_gpr2), "r"(_gpr3), "r"(_gpr4));
+  // for riscv, GPR1 = a7, GPR2 = a0, GPR3 = a1, GPR4 = a2, GPRx = a0 
+  // it is:  asm volatile ("ecall" : "=r" (a0) : "r"(a7), "r"(a0), "r"(a1), "r"(a2));
+  
+  //经过CTE, 执行流会从do_syscall()一路返回到用户程序的_syscall_()函数中
+  //最后会从相应寄存器中(GPRx(a0))取出系统调用的返回值, 并返回给_syscall_()的调用者
+  //从而告知其系统调用执行的情况(如是否成功等).
   return ret;
 }
 

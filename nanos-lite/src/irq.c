@@ -1,14 +1,21 @@
 #include <common.h>
+#include "syscall.h"
+#include "am.h"
 
 //处理中断的响应服务由os提供，所以pc的变化也是os完成！
 static Context* do_event(Event e, Context* c) {
   printf("进入do_event!\n");
   switch (e.event) {
-    case EVENT_YIELD: //printf("yield happen!\n"); 
-                      Log("yield happen!");
-                      // c->mepc += 4;
+    // case EVENT_SYSCALL: do_syscall(c); break;
+    case EVENT_YIELD: Log("yield happen!");
+                      c->mepc = c->mepc + 4;
+                      // halt(1);
                       break;
-    case EVENT_ERROR: printf("irq event error.\n"); break;
+    case EVENT_SYSCALL: Log("syscall happen!"); 
+                        do_syscall(c);
+                        c->mepc = c->mepc + 4;
+                        break;
+    // case EVENT_ERROR: Log("irq event error!"); break;
     default: panic("Unhandled event ID = %d", e.event);
   }
 

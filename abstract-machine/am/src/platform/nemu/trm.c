@@ -15,9 +15,9 @@ void putch(char ch) {     //用于输出一个字符
 }
 
 void halt(int code) { //用于结束程序的运行
-  nemu_trap(code);  //nemu_trap()宏,这个宏展开之后是一条内联汇编语句
-                    //nemu_trap()宏还会把一个标识结束的结束码移动到通用寄存器中
-                    //通用寄存器中的值将会作为参数传给set_nemu_state(), 将halt()中的结束码设置到NEMU的monitor中,
+  nemu_trap(code);  //nemu_trap()宏,这个宏展开之后是一条内联汇编语句,执行ebreak指令，
+                    //ebreak指令调用NEMUTRAP这个宏，调用set_nemu_state函数，将code的值传递给nemu_state.halt_ret                   
+                    //只要monitor检测到nemu_state.halt_ret的值不为0，就会结束nemu的运行！
                     // monitor将会根据结束码来报告程序结束的原因
   // should not reach here
   while (1);
