@@ -1,7 +1,7 @@
 #include <proc.h>
 #include <elf.h>
 #include <stdio.h>
-// #include "fs.h"
+#include "fs.h"
 
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -25,11 +25,12 @@
 #endif
 
 
-size_t ramdisk_read(void *buf, size_t offset, size_t len);
-size_t get_ramdisk_size();
+
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
+/******************************** 第一种 ***************************************/
   // 1. read elf head:
+  printf("进入loader\n");
   Elf64_Ehdr *elf_head = (Elf_Ehdr*)malloc(sizeof(Elf_Ehdr));
   ramdisk_read(elf_head, 0, sizeof(Elf_Ehdr));//从磁盘中读取Elf64_Ehdr大小的字节内容到elf_head指针所指向的内存空间
 
@@ -74,7 +75,71 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
   return elf_head->e_entry;
 
+/******************************** 第二种 ***************************************/
+  // printf("进入loader\n");
+  // // printf("filename = %s\n", filename);
+  // // 1. open elf files, get file ID:
+  // int fd = fs_open(filename, 0, 0);
 
+  // // 2. read elf head:
+  // Elf64_Ehdr *elf_head = (Elf_Ehdr*)malloc(sizeof(Elf_Ehdr));
+  // if(fs_read(fd, elf_head, sizeof(Elf_Ehdr)) == -1) {//通过fs_read读取磁盘内elf文件内容到elf_head所指向空间 失败
+  //   assert(0);
+  // }
+
+  //   // 2.1 check magic number, make sure reading file is elf
+  //   assert(*(uint32_t *)elf_head->e_ident == 0x464c457f);
+
+  //   // 2.2 check ISA architecture
+  //   assert(elf_head->e_machine == EXPECT_TYPE);
+
+  // // 3. read program headers, pro_head is a struct pointer:
+  // Elf64_Phdr *pro_head = (Elf_Phdr*)malloc(sizeof(Elf_Phdr)*elf_head->e_phnum);//malloc申请的空间大小为 sizeof(Elf64_Phdr) * elf_head->e_phnum,这个星号代表乘以
+  // if(fs_read(fd, pro_head, sizeof(Elf_Phdr)*elf_head->e_phnum) == -1) {//通过fs_read读取磁盘内程序头表内容到pro_head所指向空间 失败
+  //   assert(0);
+  // }
+
+  // // 4. read text/rodata/data/bss segment to mem:
+  // for(Elf_Phdr *p = pro_head; p < (pro_head + elf_head->e_phnum); p++) {
+  //   //4.1 load text/rodata/data segmen into mem:
+  //   if(fs_lseek(fd, p->p_offset, SEEK_SET) == -1) {//通过fs_lseek设定从程序头起始位置偏移p->p_offset
+  //     assert(0);
+  //   }
+  //   if(fs_read(fd, (void*)p->p_vaddr, p->p_filesz)) {//通过fs_read将elf文件的内容读取到(void*)p->p_vaddr所指向缓冲区
+  //     assert(0);
+  //   }
+
+  //   // 4.2 init bss sement(set to zero):
+  //     //将指针(p->p_vaddr - p->p_filesz)所指向的前(p->p_memsz - p->p_filesz)字节的内存单元内容替换为0
+  //   memset((void *)(p->p_vaddr - p->p_filesz), 0, p->p_memsz - p->p_filesz);
+  // }
+
+  // return elf_head->e_entry;
+
+/******************************** 第三种 ***************************************/
+  // printf("进入loader\n");
+  // Elf_Ehdr elf_header;
+  // ramdisk_read(&elf_header, 0, sizeof(elf_header));
+
+  // assert(*(uint32_t *)elf_header.e_ident == 0x464C457f);
+  // assert(elf_header.e_machine == EXPECT_TYPE);
+
+  // Elf_Phdr elf_segment_arr[elf_header.e_phnum];
+  // ramdisk_read(elf_segment_arr,
+  //              elf_header.e_phoff,
+  //              sizeof(Elf_Phdr) * elf_header.e_phnum);
+  // for (int i = 0; i < elf_header.e_phnum; i++) {
+  //   if (elf_segment_arr[i].p_type == PT_LOAD) {
+  //     ramdisk_read((void *)elf_segment_arr[i].p_vaddr,
+  //                          elf_segment_arr[i].p_offset,
+  //                          elf_segment_arr[i].p_memsz);
+  //     memset((void *)(elf_segment_arr[i].p_vaddr + elf_segment_arr[i].p_filesz),
+  //            0,
+  //            elf_segment_arr[i].p_memsz - elf_segment_arr[i].p_filesz);
+  //   }
+  // }
+
+  // return elf_header.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
