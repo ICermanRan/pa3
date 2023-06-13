@@ -58,7 +58,7 @@ intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
 }
 
 void _exit(int status) {
-  _syscall_(SYS_exit, status, 0, 0);
+  _syscall_(SYS_exit, status, 0, 0);//status = a0/GPR2, 0 = a1/GPR3, 0 = a2/GPR4
   while (1);
 }
 
@@ -74,12 +74,25 @@ int _write(int fd, void *buf, size_t count) {
   // printf("fd = %d\n", fd);
   // _syscall_(SYS_write, fd, (intptr_t)buf, count);//fd = a0, buf = a1, count = a2
   // return 0;
-  return _syscall_(SYS_write, fd, (intptr_t)buf, count);//fd = a0, buf = a1, count = a2
+  return _syscall_(SYS_write, fd, (intptr_t)buf, count);//fd = a0/GPR2, buf = a1/GPR3, count = a2/GPR4
   // return _syscall_(4, fd, (intptr_t)buf, count);
 }
 
+extern char _end;
+intptr_t program_break = (intptr_t)(&_end);
 void *_sbrk(intptr_t increment) {
-  return (void *)-1;
+  // return (void *)-1;
+  intptr_t old_probrk = program_break;
+  intptr_t new_probrk = old_probrk + increment;
+  intptr_t ret = _syscall_(SYS_brk, new_probrk, 0, 0);//new_probrk = a0/GPR2, 0 = a1/GPR3, 0 = a2/GPR4
+
+  if(ret == 0) {
+    program_break = new_probrk;
+    return (void *)old_probrk;
+  }
+  else {
+    return (void *)-1;
+  }
 }
 
 int _read(int fd, void *buf, size_t count) {

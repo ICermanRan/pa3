@@ -10,6 +10,7 @@ void sys_exit(Context *c);
 void sys_write(Context *c);
 // void sys_read(Context *c);
 // void sys_lseek(Context *c);
+void sys_brk(Context *c);
 
 char* get_syscall_name(uintptr_t syscall_type);
 
@@ -39,7 +40,7 @@ void do_syscall(Context *c) {
     case SYS_getpid       :             break;
     case SYS_close        :             break;
     case SYS_lseek        :break;//sys_lseek(c);break;
-    case SYS_brk          :             break;
+    case SYS_brk          :sys_brk(c);  break;
     case SYS_fstat        :             break;
     case SYS_time         :             break;
     case SYS_signal       :             break;
@@ -108,6 +109,10 @@ void sys_write(Context *c) {
 //   c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
 // }
 
+void sys_brk(Context *c) {
+//  printf("new_probrk = %d\n", c->GPR2);
+ c->GPRx = 0;
+}
 
 #ifdef strace
 char* get_syscall_name(uintptr_t syscall_type) {
