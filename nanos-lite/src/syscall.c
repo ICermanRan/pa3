@@ -1,30 +1,25 @@
 #include <common.h> //nanos的include中的common.h已经包含了am的am.h,可以直接用am提供的一些接口，比如halt()
-//#include "syscall.h"
+#include "syscall.h"
 #include <fs.h>
 
 #define strace 1
 
 void sys_yiled(Context *c);
 void sys_exit(Context *c);
-// void sys_open(Context *c);
+void sys_open(Context *c);
+void sys_close(Context *c);
 void sys_write(Context *c);
-// void sys_read(Context *c);
-// void sys_lseek(Context *c);
+void sys_read(Context *c);
+void sys_lseek(Context *c);
 void sys_brk(Context *c);
 
 char* get_syscall_name(uintptr_t syscall_type);
 
 void do_syscall(Context *c) {
-  // uintptr_t a[4];
-  // a[0] = c->GPR1;
-
-  // switch (a[0]) {
-  //   default: panic("Unhandled syscall ID = %d", a[0]);
-  // }
   printf("进入do_syscall\n");
 
   uintptr_t syscall_type = c->GPR1;//RISC-V的系统调用号是a7
-  printf("syscall_type/a7 = %x\n", syscall_type);
+  // printf("syscall_type/a7 = %x\n", syscall_type);
   #ifdef strace
     uintptr_t a[3] = {c->GPR2, c->GPR3, c->GPR4};
   #endif
@@ -33,13 +28,13 @@ void do_syscall(Context *c) {
   switch (syscall_type) {
     case SYS_exit         :sys_exit(c); break;
     case SYS_yield        :sys_yiled(c);break;
-    case SYS_open         :break;//sys_open(c); break;    
-    case SYS_read         :break;//sys_read(c); break;
+    case SYS_open         :sys_open(c); break;    
+    case SYS_read         :sys_read(c); break;
     case SYS_write        :sys_write(c);break;
     case SYS_kill         :             break;
     case SYS_getpid       :             break;
-    case SYS_close        :             break;
-    case SYS_lseek        :break;//sys_lseek(c);break;
+    case SYS_close        :sys_close(c);break;
+    case SYS_lseek        :sys_lseek(c);break;
     case SYS_brk          :sys_brk(c);  break;
     case SYS_fstat        :             break;
     case SYS_time         :             break;
@@ -77,42 +72,51 @@ void sys_exit(Context *c) {
   halt(c->GPR2);
 }
 
-// void sys_open(Context *c) {
-//   printf("进入sys_open\n");
-//   c->GPRx = fs_open((const char *)c->GPR2, c->GPR3, c->GPR4);
-// }
-
-// void sys_read(Context *c) {
-//   printf("进入sys_read\n");
-//   c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);
-// }
-
-void sys_write(Context *c) {
-  // printf("进入sys_write\n");
-  // c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
-  uintptr_t fd = c->GPR2;
-  uint8_t *buf = (uint8_t*)c->GPR3;
-  uintptr_t len = c->GPR4;
-  if(fd == 1 || fd == 2){  //stdout, or stderr.
-    int i = 0;
-    for(i=0; i<len; i++){
-      putch(*(buf+i));
-    }
-    c->GPRx = i;
-  }
-  else{
-    c->GPRx = -1;
-  }
+void sys_open(Context *c) {
+  printf("进入sys_open\n");
+  c->GPRx = fs_open((const char *)c->GPR2, c->GPR3, c->GPR4);
 }
 
-// void sys_lseek(Context *c) {
-//   c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
-// }
+void sys_close(Context *c) {
+  printf("进入sys_close\n");
+  c->GPRx = fs_close(c->GPR2);
+}
+
+void sys_read(Context *c) {
+  printf("进入sys_read\n");
+  c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);
+}
+
+void sys_write(Context *c) {
+  printf("进入sys_write\n");
+  c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
+  // uintptr_t fd = c->GPR2;
+  // uint8_t *buf = (uint8_t*)c->GPR3;
+  // uintptr_t len = c->GPR4;
+  // if(fd == 1 || fd == 2){  //stdout, or stderr.
+  //   int i = 0;
+  //   for(i=0; i<len; i++){
+  //     putch(*(buf+i));
+  //   }
+  //   c->GPRx = i;
+  // }
+  // else{
+  //   c->GPRx = -1;
+  // }
+}
+
+void sys_lseek(Context *c) {
+  printf("进入sys_lseek\n");
+  c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
+}
 
 void sys_brk(Context *c) {
 //  printf("new_probrk = %d\n", c->GPR2);
- c->GPRx = 0;
+  printf("进入sys_brk\n");
+  c->GPRx = 0;
 }
+
+
 
 #ifdef strace
 char* get_syscall_name(uintptr_t syscall_type) {

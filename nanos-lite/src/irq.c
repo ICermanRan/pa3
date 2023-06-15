@@ -6,14 +6,15 @@ void do_syscall(Context *c);
 
 //处理中断的响应服务由os提供，所以pc的变化也是os完成！
 static Context* do_event(Event e, Context* c) {
-  printf("进入do_event!\n");
+  // printf("进入do_event!\n");
+  // printf("e.event = %d\n", e.event);
   switch (e.event) {
     // case EVENT_SYSCALL: do_syscall(c); break;
     case EVENT_YIELD: Log("yield happen!");
                       c->mepc = c->mepc + 4;
                       // halt(1);
                       break;
-    case EVENT_SYSCALL: Log("syscall happen!"); 
+    case EVENT_SYSCALL: //Log("syscall happen!"); 
                         do_syscall(c);
                         c->mepc = c->mepc + 4;
                         break;

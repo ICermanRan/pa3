@@ -1,6 +1,7 @@
 #include <am.h>
 #include <riscv/riscv.h>
 #include <klib.h>
+#include "syscall.h"
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
@@ -12,15 +13,19 @@ Context* __am_irq_handle(Context *c) {
     // for(int i = 0; i < 32; i++) {
     //   printf("c->gpr[%d] = %lx\n", i, c->gpr[i]);
     // }
-    printf("c->mcause = %lx\n", c->mcause);
-    printf("c->mstatus = %lx\n", c->mstatus);
-    printf("c->mepc = %lx\n", c->mepc);
-    printf("c->GPR1 = %d\n", c->GPR1);
+    // printf("c->mcause = %lx\n", c->mcause);
+    // printf("c->mstatus = %lx\n", c->mstatus);
+    // printf("c->mepc = %lx\n", c->mepc);
+    // printf("c->GPR1 = %d\n", c->GPR1);
     
     if (user_handler) {
       Event ev = {0};
       if(c->mcause == 0xb) {
-        if(c->GPR1 >= SYS_exit && c->GPR1 <= SYS_gettimeofday) {
+        // if(c->GPR1 >= SYS_exit && c->GPR1 <= SYS_gettimeofday) {
+        //   printf("成功判断了\n");
+        //   ev.event = EVENT_SYSCALL;
+        // }
+        if(c->GPR1 >= 0 && c->GPR1 <= 19) { //c->GPR1 >= SYS_exit && c->GPR1 <= SYS_gettimeofday
           ev.event = EVENT_SYSCALL;
         }
         else if(c->GPR1 == -1) {

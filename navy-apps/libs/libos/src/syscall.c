@@ -63,9 +63,9 @@ void _exit(int status) {
 }
 
 int _open(const char *path, int flags, mode_t mode) {
-  _exit(SYS_open);
-  return 0;
-  // return _syscall_(SYS_open, (intptr_t)path, flags, mode);//path = a0, flags = a1, mode = a2
+  // _exit(SYS_open);
+  // return 0;
+  return _syscall_(SYS_open, (intptr_t)path, flags, mode);//path = a0, flags = a1, mode = a2
 }
 
 int _write(int fd, void *buf, size_t count) {
@@ -75,7 +75,6 @@ int _write(int fd, void *buf, size_t count) {
   // _syscall_(SYS_write, fd, (intptr_t)buf, count);//fd = a0, buf = a1, count = a2
   // return 0;
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);//fd = a0/GPR2, buf = a1/GPR3, count = a2/GPR4
-  // return _syscall_(4, fd, (intptr_t)buf, count);
 }
 
 extern char _end;
@@ -96,19 +95,14 @@ void *_sbrk(intptr_t increment) {
 }
 
 int _read(int fd, void *buf, size_t count) {
-  _exit(SYS_read);
-  return 0;
-  // return _syscall_(SYS_read, fd, (intptr_t)buf, count);//fd = a0, buf = a1, count = a2
+  return _syscall_(SYS_read, fd, (intptr_t)buf, count);//fd = a0/GPR2, buf = a1, count = a2
 }
 
 int _close(int fd) {
-  _exit(SYS_close);
-  return 0;
+  return _syscall_(SYS_close, fd, 0, 0);//fd = a0/GPR2
 }
 
 off_t _lseek(int fd, off_t offset, int whence) {
-  // _exit(SYS_lseek);
-  // return 0;
   return _syscall_(SYS_lseek, fd, offset, whence);
 }
 

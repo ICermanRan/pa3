@@ -21,6 +21,10 @@ int main() {
     fprintf(fp, "%4d\n", i + 1 + 1000);
   }
 
+  // int a;
+  // fscanf(fp, "%d", &a);
+  // assert(a == 501);
+
   for (i = 500; i < 1000; i ++) {
     fscanf(fp, "%d", &n);
     assert(n == i + 1);
