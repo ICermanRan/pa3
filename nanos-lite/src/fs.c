@@ -11,8 +11,8 @@ typedef struct {
   char *name;         //文件名，例如 /bin/hello
   size_t size;        //文件大小
   size_t disk_offset; //文件在ramdisk中的偏移
-  ReadFn read;
-  WriteFn write;
+  ReadFn read;        //读函数指针，用于指向真正进行读的函数，并返回成功读的字节数
+  WriteFn write;      //写函数指针，用于指向真正进行写的函数，并返回成功写的字节数
   size_t open_offset; //当前的文件偏移量，一直在变化
 } Finfo;
 
@@ -40,8 +40,8 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 //文件记录表Finfo是一个数组，数组每个元素是由多个字段组成的结构体，这些字段包括文件名、大小以及读写操作的处理函数
 static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
-  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, invalid_write},
-  [FD_STDERR] = {"stderr", 0, 0, invalid_read, invalid_write},
+  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
+  [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
   //3个特殊的文件: stdin, stdout和stderr的占位表项,它们只是为了保证sfs和约定的标准输入输出的文件描述符保持一致, 
   //例如根据约定添加了三个占位表项之后,stdout的文件描述符fd是1, 文件记录表中的1号下标也就不会分配给其它的普通文件了.
 #include "files.h"
@@ -68,7 +68,7 @@ int fs_open(const char*pathname, int flags, int mode) {
   }
   
   if(fd == -1) {
-    assert(0);//should not reach here!
+    assert(0);//fs_open()没有找到pathname所指示的文件"属于异常情况,should not reach here!
   }
   return fd;  
 }
@@ -118,12 +118,17 @@ size_t fs_read(int fd, void *buf, size_t len) {
   // return len;
   if (fd == 0 || fd > 2) {
     Finfo *file = &file_table[fd];
-    if ((*file).open_offset + len > (*file).size) {
-      len = (*file).size - (*file).open_offset;
+    // if ((*file).open_offset + len > (*file).size) {
+    //   len = (*file).size - (*file).open_offset;
+    // }
+    // size_t offset = (*file).disk_offset + (*file).open_offset;
+    // size_t bytes = ramdisk_read(buf, offset, len);
+    // (*file).open_offset += bytes;
+    if (file->open_offset + len > file->size) {
+      len = file->size - file->open_offset;
     }
-    size_t offset = (*file).disk_offset + (*file).open_offset;
+    size_t offset = file->disk_offset + file->open_offset;
     size_t bytes = ramdisk_read(buf, offset, len);
-    (*file).open_offset += bytes;
     return bytes;
   }
   else {
@@ -152,46 +157,46 @@ size_t fs_write(int fd, void *buf, size_t len) {
   //   return len;//返回实际写入的字节数 len。
   // }
   /********************************************/
- size_t i = 0;
-  if (fd == 1 || fd == 2) {
-    for(; len > 0; len--) {
-      putch(((char*)buf)[i]);
-      i++;
-    }
-    return i;
-  }
-  else if (fd != 0) {
+//  size_t i = 0;
+//   if (fd == 1 || fd == 2) {
+//     for(; len > 0; len--) {
+//       putch(((char*)buf)[i]);
+//       i++;
+//     }
+//     return i;
+//   }
+//   else if (fd != 0) {
+//     Finfo *file = &file_table[fd];
+//     if ((*file).open_offset + len > (*file).size) {
+//       len = (*file).size - (*file).open_offset;
+//     }
+//     size_t offset = (*file).disk_offset + (*file).open_offset;
+//     size_t bytes = ramdisk_write(buf, offset, len);
+//     (*file).open_offset += bytes;
+//     return bytes;
+//   }
+//   else {
+//     return -1;
+//   }
+  /*********************************************/
+  if (fd != 0) {
     Finfo *file = &file_table[fd];
-    if ((*file).open_offset + len > (*file).size) {
-      len = (*file).size - (*file).open_offset;
+    if (file->write != NULL) { //非普通文件
+      return file->write(buf, 0, len);
     }
-    size_t offset = (*file).disk_offset + (*file).open_offset;
-    size_t bytes = ramdisk_write(buf, offset, len);
-    (*file).open_offset += bytes;
-    return bytes;
+    else {                     //普通文件
+      if (file->open_offset + len > file->size) {
+        len = file->size - file->open_offset;
+      }
+      size_t offset = file->disk_offset + file->open_offset;
+      size_t bytes = ramdisk_write(buf, offset, len);
+      file->open_offset += bytes;
+      return bytes;
+    }
   }
   else {
     return -1;
   }
-  /*********************************************/
-  // if (fd != 0) {
-  //   Finfo *file = &file_table[fd];
-  //   if (file->write != NULL) {
-  //     return file->write(buf, 0, len);
-  //   }
-  //   else {
-  //     if (file->open_offset + len > file->size) {
-  //       len = file->size - file->open_offset;
-  //     }
-  //     size_t offset = file->disk_offset + file->open_offset;
-  //     size_t bytes = ramdisk_write(buf, offset, len);
-  //     file->open_offset += bytes;
-  //     return bytes;
-  //   }
-  // }
-  // else {
-  //   return -1;
-  // }
 }
 
 
@@ -231,4 +236,6 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
   default:panic("check your input whence for lseek");
     break;
   }
+
+  
 }

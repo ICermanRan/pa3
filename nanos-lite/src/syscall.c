@@ -65,7 +65,7 @@ void sys_yiled(Context *c) {
 }
 
 void sys_exit(Context *c) {
-  printf("进入sys_exit\n");
+  // printf("进入sys_exit\n");
   // c->GPRx = 0;
   // halt(c->GPRx);
   c->GPRx = c->GPR2;
@@ -73,22 +73,22 @@ void sys_exit(Context *c) {
 }
 
 void sys_open(Context *c) {
-  printf("进入sys_open\n");
+  // printf("进入sys_open\n");
   c->GPRx = fs_open((const char *)c->GPR2, c->GPR3, c->GPR4);
 }
 
 void sys_close(Context *c) {
-  printf("进入sys_close\n");
+  // printf("进入sys_close\n");
   c->GPRx = fs_close(c->GPR2);
 }
 
 void sys_read(Context *c) {
-  printf("进入sys_read\n");
+  // printf("进入sys_read\n");
   c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);
 }
 
 void sys_write(Context *c) {
-  printf("进入sys_write\n");
+  // printf("进入sys_write\n");
   c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
   // uintptr_t fd = c->GPR2;
   // uint8_t *buf = (uint8_t*)c->GPR3;
@@ -106,13 +106,13 @@ void sys_write(Context *c) {
 }
 
 void sys_lseek(Context *c) {
-  printf("进入sys_lseek\n");
+  // printf("进入sys_lseek\n");
   c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
 }
 
 void sys_brk(Context *c) {
 //  printf("new_probrk = %d\n", c->GPR2);
-  printf("进入sys_brk\n");
+  // printf("进入sys_brk\n");
   c->GPRx = 0;
 }
 
