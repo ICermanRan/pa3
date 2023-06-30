@@ -1,8 +1,9 @@
+#include <sys/time.h>
 #include <common.h> //nanos的include中的common.h已经包含了am的am.h,可以直接用am提供的一些接口，比如halt()
 #include "syscall.h"
 #include <fs.h>
 
-#define strace 1
+// #define strace 1
 
 void sys_yiled(Context *c);
 void sys_exit(Context *c);
@@ -12,46 +13,49 @@ void sys_write(Context *c);
 void sys_read(Context *c);
 void sys_lseek(Context *c);
 void sys_brk(Context *c);
+intptr_t sys_gettimeofday(struct timeval *tv, struct timezone *tz);
 
 char* get_syscall_name(uintptr_t syscall_type);
 
 void do_syscall(Context *c) {
-  printf("进入do_syscall\n");
+  // printf("进入do_syscall\n");
+  uintptr_t a[4];
+  a[0] = c->GPR1;
+  a[1] = c->GPR2;
+  a[2] = c->GPR3;
+  a[3] = c->GPR4;
 
-  uintptr_t syscall_type = c->GPR1;//RISC-V的系统调用号是a7
+  uintptr_t syscall_type = a[0];//RISC-V的系统调用号是a7
   // printf("syscall_type/a7 = %x\n", syscall_type);
-  #ifdef strace
-    uintptr_t a[3] = {c->GPR2, c->GPR3, c->GPR4};
-  #endif
 
- 
   switch (syscall_type) {
-    case SYS_exit         :sys_exit(c); break;
-    case SYS_yield        :sys_yiled(c);break;
-    case SYS_open         :sys_open(c); break;    
-    case SYS_read         :sys_read(c); break;
-    case SYS_write        :sys_write(c);break;
-    case SYS_kill         :             break;
-    case SYS_getpid       :             break;
-    case SYS_close        :sys_close(c);break;
-    case SYS_lseek        :sys_lseek(c);break;
-    case SYS_brk          :sys_brk(c);  break;
-    case SYS_fstat        :             break;
-    case SYS_time         :             break;
-    case SYS_signal       :             break;
-    case SYS_execve       :             break;
-    case SYS_fork         :             break;
-    case SYS_link         :             break;
-    case SYS_unlink       :             break;
-    case SYS_times        :             break;
-    case SYS_gettimeofday :             break;
+    case SYS_exit         :sys_exit(c);                  break;
+    case SYS_yield        :sys_yiled(c);                 break;
+    case SYS_open         :sys_open(c);                  break;    
+    case SYS_read         :sys_read(c);                  break;
+    case SYS_write        :sys_write(c);                 break;
+    case SYS_kill         :                              break;
+    case SYS_getpid       :                              break;
+    case SYS_close        :sys_close(c);                 break;
+    case SYS_lseek        :sys_lseek(c);                 break;
+    case SYS_brk          :sys_brk(c);                   break;
+    case SYS_fstat        :                              break;
+    case SYS_time         :                              break;
+    case SYS_signal       :                              break;
+    case SYS_execve       :                              break;
+    case SYS_fork         :                              break;
+    case SYS_link         :                              break;
+    case SYS_unlink       :                              break;
+    case SYS_times        :                              break;
+    case SYS_gettimeofday :c->GPRx = sys_gettimeofday((struct timeval *)a[1], (struct timezone *)a[2]); 
+                           break;
     default: panic("Unhandled syscall ID = %d", syscall_type);
   }
   
 
   #ifdef strace
     Log_white("STRACE detect syscall:%s, ", get_syscall_name(syscall_type));
-    Log_white("input regs a0 = 0x%lx, a1 = 0x%lx, a2 = 0x%lx, return GPRx = 0x%lx", a[0], a[1], a[2], c->GPRx);
+    Log_white("input regs a0 = 0x%lx, a1 = 0x%lx, a2 = 0x%lx, return GPRx = 0x%lx", a[1], a[2], a[3], c->GPRx);
   #endif
 }
 
@@ -116,7 +120,18 @@ void sys_brk(Context *c) {
   c->GPRx = 0;
 }
 
-
+intptr_t sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
+  if(tz == NULL) {
+    AM_TIMER_UPTIME_T uptime = io_read(AM_TIMER_UPTIME);//通过am,调用io_read(AM_TIMER_UPTIME)就能获取到系统的时间 ,AM_TIMER_UPTIME表示AM系统启动时间, 可读出系统启动后的微秒数
+    // printf("通过io_read获得的时间 = %d\n", uptime.us);
+    tv->tv_sec = uptime.us / 1000000;//1000000us = 1s,所以由此获得sec
+    // tv->tv_sec = uptime.us / 500000;
+    return 0;//返回0表示获取时间成功
+  }
+  else {
+    return -1;//返回-1表示获取时间失败
+  }
+}
 
 #ifdef strace
 char* get_syscall_name(uintptr_t syscall_type) {

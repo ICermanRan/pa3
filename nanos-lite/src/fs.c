@@ -124,7 +124,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
     // size_t offset = (*file).disk_offset + (*file).open_offset;
     // size_t bytes = ramdisk_read(buf, offset, len);
     // (*file).open_offset += bytes;
-    if (file->open_offset + len > file->size) {
+    if ((file->open_offset + len) > file->size) {
       len = file->size - file->open_offset;
     }
     size_t offset = file->disk_offset + file->open_offset;
@@ -185,7 +185,7 @@ size_t fs_write(int fd, void *buf, size_t len) {
       return file->write(buf, 0, len);
     }
     else {                     //普通文件
-      if (file->open_offset + len > file->size) {
+      if ((file->open_offset + len) > file->size) {
         len = file->size - file->open_offset;
       }
       size_t offset = file->disk_offset + file->open_offset;

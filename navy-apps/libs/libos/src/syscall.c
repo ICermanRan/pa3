@@ -63,17 +63,10 @@ void _exit(int status) {
 }
 
 int _open(const char *path, int flags, mode_t mode) {
-  // _exit(SYS_open);
-  // return 0;
   return _syscall_(SYS_open, (intptr_t)path, flags, mode);//path = a0, flags = a1, mode = a2
 }
 
 int _write(int fd, void *buf, size_t count) {
-  // _exit(SYS_write);
-  // return 0;
-  // printf("fd = %d\n", fd);
-  // _syscall_(SYS_write, fd, (intptr_t)buf, count);//fd = a0, buf = a1, count = a2
-  // return 0;
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);//fd = a0/GPR2, buf = a1/GPR3, count = a2/GPR4
 }
 
@@ -107,8 +100,7 @@ off_t _lseek(int fd, off_t offset, int whence) {
 }
 
 int _gettimeofday(struct timeval *tv, struct timezone *tz) {
-  _exit(SYS_gettimeofday);
-  return 0;
+  return _syscall_(SYS_gettimeofday, (intptr_t )tv, (intptr_t)tz, 0);//c->GPR2 = tv, c->GPR3 = tz, c->GPR4 = 0
 }
 
 int _execve(const char *fname, char * const argv[], char *const envp[]) {
