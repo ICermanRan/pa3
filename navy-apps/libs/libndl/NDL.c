@@ -3,17 +3,37 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/time.h>
+#include <fcntl.h>  //使用其中的库函数open
 
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
 
+// 以毫秒为单位返回系统时间
 uint32_t NDL_GetTicks() {
-  return 0;
+  struct timeval timer;
+  uint32_t one_ms;
+  gettimeofday(&timer, NULL);
+  one_ms = timer.tv_sec * 1000;//1s = 1000ms
+  return one_ms;
 }
 
 int NDL_PollEvent(char *buf, int len) {
-  return 0;
+  int fd = open("/dev/events", 0, 0);
+  // printf("fd = %d\n", fd);
+  if (read(fd, buf, len)) {
+    // printf("读成功,返回1\n");
+    return 1;
+  }
+  else {
+    // printf("读失败,返回0\n");
+    return 0;
+  }
+  close(fd);
+  // int size = read(fd, buf, len);
+  // close(fd);
+  // return size != 0;
 }
 
 void NDL_OpenCanvas(int *w, int *h) {

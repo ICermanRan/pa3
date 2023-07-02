@@ -5,6 +5,22 @@
 
 //定义了常见设备的"抽象寄存器"编号和相应的结构.
 //这些定义是架构无关的, 每个架构在实现各自的IOE API时, 都需要遵循这些定义(约定).
+
+//宏AM_DEVREG 接受四个参数：id、reg、perm和...
+  //在宏定义的展开部分,首先使用 enum { AM_##reg = (id) }; 
+  //将 reg 参数作为枚举常量 AM_ 后缀的名称，并将 id 参数作为该枚举常量的值。这样，每个设备寄存器都会有一个唯一的枚举常量。
+
+  //然后,使用 typedef struct { __VA_ARGS__; } AM_##reg##_T; 
+  //定义了一个结构体，该结构体的名称是以 AM_ 为前缀，_T 为后缀，中间是 reg 参数的值。结构体的成员由 ... 参数表示，即结构体的成员是可变参数，可以根据实际使用情况进行定义。
+
+//多次调用 AM_DEVREG 宏，生成了一系列的设备寄存器的定义。每次调用都会生成一个枚举常量和一个对应的结构体类型。
+  /*
+  举例:
+  AM_DEVREG(1, UART_CONFIG, RD, bool present); 会生成以下定义：
+  一个枚举常量 AM_UART_CONFIG，其值为 1。
+  一个结构体类型 AM_UART_CONFIG_T，该结构体只有一个成员 bool present。
+  */
+
 #define AM_DEVREG(id, reg, perm, ...) \
   enum { AM_##reg = (id) }; \
   typedef struct { __VA_ARGS__; } AM_##reg##_T;
@@ -36,6 +52,8 @@ AM_DEVREG(24, NET_RX,       WR, Area buf);
 
 // Input
 
+//AM_KEYS(_)宏,展开一系列的'_'连接具体键名的宏调用
+  //这些具体键名通过宏展开后，将会作为 NAME 宏的参数，并且在 NAME 宏中被转换为字符串。
 #define AM_KEYS(_) \
   _(ESCAPE) _(F1) _(F2) _(F3) _(F4) _(F5) _(F6) _(F7) _(F8) _(F9) _(F10) _(F11) _(F12) \
   _(GRAVE) _(1) _(2) _(3) _(4) _(5) _(6) _(7) _(8) _(9) _(0) _(MINUS) _(EQUALS) _(BACKSPACE) \

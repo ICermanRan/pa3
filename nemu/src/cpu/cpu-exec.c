@@ -69,15 +69,15 @@ void show_iringbuf()
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
-#ifdef CONFIG_ITRACE_COND
-  char * filename = "/home/ran/ysyx/ysyx-workbench/nemu/build/inst.txt";
-  FILE * fp = fopen(filename, "a");
+// #ifdef CONFIG_ITRACE_COND
+//   char * filename = "/home/ran/ysyx/ysyx-workbench/nemu/build/inst.txt";
+//   FILE * fp = fopen(filename, "a");
 
-  if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
-  // printf("%s\n", _this->logbuf);
-  fprintf(fp, "%s\n", _this->logbuf);
-  fclose(fp);
-#endif
+//   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+//   // printf("%s\n", _this->logbuf);
+//   fprintf(fp, "%s\n", _this->logbuf);
+//   fclose(fp);
+// #endif
   // if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   if (g_print_step) { IFDEF(CONFIG_ITRACE, printf("%s\n",_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));

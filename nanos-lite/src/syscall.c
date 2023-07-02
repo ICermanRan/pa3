@@ -89,6 +89,7 @@ void sys_close(Context *c) {
 void sys_read(Context *c) {
   // printf("进入sys_read\n");
   c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);
+  // printf("c->GPRx= %d\n", c->GPRx);
 }
 
 void sys_write(Context *c) {

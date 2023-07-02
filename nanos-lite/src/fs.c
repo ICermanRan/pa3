@@ -1,7 +1,7 @@
 #include <fs.h>
 
 size_t serial_write(const void *buf, size_t offset, size_t len);
-
+size_t events_read(void *buf, size_t offset, size_t len);
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
@@ -13,14 +13,15 @@ typedef struct {
   size_t disk_offset; //文件在ramdisk中的偏移
   ReadFn read;        //读函数指针，用于指向真正进行读的函数，并返回成功读的字节数
   WriteFn write;      //写函数指针，用于指向真正进行写的函数，并返回成功写的字节数
-  size_t open_offset; //当前的文件偏移量，一直在变化
+  size_t open_offset; //当前的文件偏移量，一直在变化,初始为0
 } Finfo;
 
 //默认的文件描述符fd
 enum {FD_STDIN, //标准输入stdin
       FD_STDOUT,//标准输出stdout
       FD_STDERR,//标准错误stderr 
-      FD_FB
+      FD_FB,
+      FD_EVENTS
 };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
@@ -39,11 +40,18 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
     //即使在没有其他对该数组的引用的情况下。这样可以防止编译器在优化过程中将该数组识别为无用代码，并将其从最终的可执行文件中删除。
 //文件记录表Finfo是一个数组，数组每个元素是由多个字段组成的结构体，这些字段包括文件名、大小以及读写操作的处理函数
 static Finfo file_table[] __attribute__((used)) = {
+  // [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write, 0},
+  // [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write, 0},
+  // [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write, 0},
+  // //3个特殊的文件: stdin, stdout和stderr的占位表项,它们只是为了保证sfs和约定的标准输入输出的文件描述符保持一致, 
+  // //例如根据约定添加了三个占位表项之后,stdout的文件描述符fd是1, 文件记录表中的1号下标也就不会分配给其它的普通文件了.
+  // [FD_FB]     = {"/dev/fb",     0, 0, invalid_read, invalid_write, 0 },
+  // [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write, 0},
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
   [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
   [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
-  //3个特殊的文件: stdin, stdout和stderr的占位表项,它们只是为了保证sfs和约定的标准输入输出的文件描述符保持一致, 
-  //例如根据约定添加了三个占位表项之后,stdout的文件描述符fd是1, 文件记录表中的1号下标也就不会分配给其它的普通文件了.
+  [FD_FB]     = {"/dev/fb",     0, 0, invalid_read, invalid_write},
+  [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write},
 #include "files.h"
 };
 
@@ -106,30 +114,20 @@ size_t fs_read(int fd, void *buf, size_t len) {
   // return real_len;//返回成功读取的字节数real_len，表示读取操作成功。
   
 /*********************************************************************/  
-  // size_t f_size = file_table[fd].size;
-  // if(file_table[fd].open_offset >= f_size){
-  //   return -1;
-  // }
-  // if(file_table[fd].open_offset + len > f_size){
-  //   len = f_size - file_table[fd].open_offset;
-  // }
-  // ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-  // file_table[fd].open_offset = file_table[fd].open_offset + len;
-  // return len;
-  if (fd == 0 || fd > 2) {
+  if (fd != -1) {
     Finfo *file = &file_table[fd];
-    // if ((*file).open_offset + len > (*file).size) {
-    //   len = (*file).size - (*file).open_offset;
-    // }
-    // size_t offset = (*file).disk_offset + (*file).open_offset;
-    // size_t bytes = ramdisk_read(buf, offset, len);
-    // (*file).open_offset += bytes;
-    if ((file->open_offset + len) > file->size) {
-      len = file->size - file->open_offset;
+    if (file->read != NULL) {
+      return file->read(buf, 0, len);
     }
-    size_t offset = file->disk_offset + file->open_offset;
-    size_t bytes = ramdisk_read(buf, offset, len);
-    return bytes;
+    else {
+      if ((file->open_offset + len) > file->size) {
+        len = file->size - file->open_offset;
+      }
+      size_t offset = file->disk_offset + file->open_offset;
+      size_t bytes = ramdisk_read(buf, offset, len);
+      file->open_offset += bytes;
+      return bytes;
+    }
   }
   else {
     return -1;
