@@ -2,6 +2,8 @@
 
 size_t serial_write(const void *buf, size_t offset, size_t len);
 size_t events_read(void *buf, size_t offset, size_t len);
+size_t dispinfo_read(void *buf, size_t offset, size_t len);
+size_t fb_write(const void *buf, size_t offset, size_t len);
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
@@ -20,8 +22,9 @@ typedef struct {
 enum {FD_STDIN, //标准输入stdin
       FD_STDOUT,//标准输出stdout
       FD_STDERR,//标准错误stderr 
-      FD_FB,
-      FD_EVENTS
+      FD_EVENTS,
+      FD_DISPINFO,//画布
+      FD_FB
 };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
@@ -40,23 +43,21 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
     //即使在没有其他对该数组的引用的情况下。这样可以防止编译器在优化过程中将该数组识别为无用代码，并将其从最终的可执行文件中删除。
 //文件记录表Finfo是一个数组，数组每个元素是由多个字段组成的结构体，这些字段包括文件名、大小以及读写操作的处理函数
 static Finfo file_table[] __attribute__((used)) = {
-  // [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write, 0},
-  // [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write, 0},
-  // [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write, 0},
-  // //3个特殊的文件: stdin, stdout和stderr的占位表项,它们只是为了保证sfs和约定的标准输入输出的文件描述符保持一致, 
-  // //例如根据约定添加了三个占位表项之后,stdout的文件描述符fd是1, 文件记录表中的1号下标也就不会分配给其它的普通文件了.
-  // [FD_FB]     = {"/dev/fb",     0, 0, invalid_read, invalid_write, 0 },
-  // [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write, 0},
-  [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
-  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
-  [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
-  [FD_FB]     = {"/dev/fb",     0, 0, invalid_read, invalid_write},
-  [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write},
+  [FD_STDIN]    = {"stdin",          0, 0, invalid_read, invalid_write, 0},
+  [FD_STDOUT]   = {"stdout",         0, 0, invalid_read, serial_write, 0},
+  [FD_STDERR]   = {"stderr",         0, 0, invalid_read, serial_write, 0},
+  //3个特殊的文件: stdin, stdout和stderr的占位表项,它们只是为了保证sfs和约定的标准输入输出的文件描述符保持一致, 
+  //例如根据约定添加了三个占位表项之后,stdout的文件描述符fd是1, 文件记录表中的1号下标也就不会分配给其它的普通文件了.
+  [FD_EVENTS]   = {"/dev/events",    0, 0, events_read, invalid_write, 0},
+  [FD_DISPINFO] = {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write, 0},
+  [FD_FB]       = {"/dev/fb",        0, 0, invalid_read, fb_write, 0 },
 #include "files.h"
 };
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  AM_GPU_CONFIG_T cfg = io_read(AM_GPU_CONFIG);
+  file_table[FD_FB].size = cfg.width * cfg.height;
 }
 
 #define TABLE_LEN (int)(sizeof(file_table) / sizeof(Finfo))
@@ -117,7 +118,8 @@ size_t fs_read(int fd, void *buf, size_t len) {
   if (fd != -1) {
     Finfo *file = &file_table[fd];
     if (file->read != NULL) {
-      return file->read(buf, 0, len);
+      // return file->read(buf, 0, len);
+      return file->read(buf, file->open_offset, len);
     }
     else {
       if ((file->open_offset + len) > file->size) {
@@ -180,7 +182,8 @@ size_t fs_write(int fd, void *buf, size_t len) {
   if (fd != 0) {
     Finfo *file = &file_table[fd];
     if (file->write != NULL) { //非普通文件
-      return file->write(buf, 0, len);
+      // return file->write(buf, 0, len);
+      return file->write(buf, file->open_offset, len);
     }
     else {                     //普通文件
       if ((file->open_offset + len) > file->size) {

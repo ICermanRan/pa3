@@ -61,11 +61,39 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  return 0;
+  AM_GPU_CONFIG_T cfg = io_read(AM_GPU_CONFIG);
+  printf("屏幕大小-WIDTH:%d HEIGHT:%d\n", cfg.width, cfg.height);
+  snprintf((char *)buf, len, "WIDTH:%d\nHEIGHT:%d\n", cfg.width, cfg.height);
+  return 1;
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
+  AM_GPU_CONFIG_T dispinfo = io_read(AM_GPU_CONFIG);
+  AM_GPU_FBDRAW_T ctl;
+
+  printf("fb_write offset = %d\n", offset);
+  ctl.pixels = (void *)buf;
+  ctl.sync   = true;
+  ctl.x      = offset % dispinfo.width;//偏移量对屏幕的宽度取模可以得到列数
+  ctl.y      = offset / dispinfo.width;//因为每一行的字节数等于屏幕的宽度。所以 ctl.y = offset / dispinfo.width 表示偏移量所在的行数。
+  ctl.w      = len >> 32;
+  ctl.h      = len & 0x00000000FFFFFFFF;
+
+  printf("ctl.x: %d, ctl.y: %d, ctl.w: %d, ctl.h: %d\n", ctl.x, ctl.y, ctl.w, ctl.h);
+  io_write(AM_GPU_FBDRAW, ctl.x, ctl.y, ctl.pixels, ctl.w, ctl.h, ctl.sync);
+
   return 0;
+
+  /**************************************/
+  //  assert(offset % 4 == 0 && len % 4 == 0);
+  // int W = io_read(AM_GPU_CONFIG).width;
+  // int H = io_read(AM_GPU_CONFIG).height;
+  // int y = (offset / 4) / W;
+  // int x = (offset / 4) % W;
+  // assert((x + len) <= (4 * W));
+  // assert(offset <= (4 * W * H));
+  // io_write(AM_GPU_FBDRAW, x, y, (uint32_t*)buf, len / 4, 1, true);
+  // return len;
 }
 
 void init_device() {

@@ -15,13 +15,15 @@ void __am_gpu_init() {
   height = inw(VGACTL_ADDR);     //H=012c    300  // only support 400*300*32
   // printf("h = %x\n", h);    //(解16位指针获取的值也是16位,但printf出来高位补0了)
   width = inw(VGACTL_ADDR + 2); //加2是因为一个word=2byte,正好读取映射地址对应的W=0190    400  // only support 400*300*32
+  
+  // int w = width;
+  // int h = height;
   // uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;//FB_ADDR==0xa1000000,VGA注册的一段映射到显存的MMIO空间
   // // printf("fb = %x\n", fb);
   // // printf("*fb = %x\n", *fb);
-  // for (int i = 0; i < width * height; i ++) 
+  // for (int i = 0; i < w * h; i++) 
   // {
   //   fb[i] = i;
-  //   // printf("fb[%d] = %d, *fb = %d\n", i, fb[i], *(fb+i));
   // }
   // outl(SYNC_ADDR, 1);
 }
