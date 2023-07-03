@@ -92,6 +92,7 @@ typedef	__uint128_t fixedptud;
 #error "FIXEDPT_BITS must be equal to 32 or 64"
 #endif
 
+//FIXEDPT_WBITS:定义了定点数的整数部分位数，默认值为24。
 #ifndef FIXEDPT_WBITS
 #define FIXEDPT_WBITS	24
 #endif
@@ -102,15 +103,40 @@ typedef	__uint128_t fixedptud;
 
 #define FIXEDPT_VCSID "$Id$"
 
+//FIXEDPT_FBITS:定义了定点数数的小数部分位数，计算得出为8
 #define FIXEDPT_FBITS	(FIXEDPT_BITS - FIXEDPT_WBITS)
+
+//掩码:FIXEDPT_FMASK与定点数进行按位与运算,用于获取定点数小数部分
+  //其位数与定点数的小数部分相对应,其值等于0xff
 #define FIXEDPT_FMASK	(((fixedpt)1 << FIXEDPT_FBITS) - 1)
 
+//掩码:FIXEDPT_WMASK与定点数进行按位与运算,用于获取定点数整数部分
+  //其位数与定点数的整数数部分相对应,其值等于
+#define FIXEDPT_WMASK (((fixedpt)1 << FIXEDPT_WBITS) - 1) << FIXEDPT_FBITS
+
+//fixedpt_rconst:将浮点数常量R转换为定点数的宏
 #define fixedpt_rconst(R) ((fixedpt)((R) * FIXEDPT_ONE + ((R) >= 0 ? 0.5 : -0.5)))
+
+//fixedpt_fromint:将整数I转换为定点数的宏
+  //首先将整数的二进制表达式,左移FIXEDPT_FBITS,即左移8位
+  //这是因为24.8规定中,小数部分占低8位,
+//   31 30                         8 7         0
+// +----+---------------------------+----------+
+// |sign|          integer          | fraction |
+// +----+---------------------------+----------+
+  //整数左移8位,就把整数部分移到了30-8 bit范围,小数则位于7-0 bit范围
+  //然后因为整数I原本的数据类型可能并不支持这么多位,因为强转为fixedptd数据类型,以支持这个定点数规定
 #define fixedpt_fromint(I) ((fixedptd)(I) << FIXEDPT_FBITS)
+
 #define fixedpt_toint(F) ((F) >> FIXEDPT_FBITS)
 #define fixedpt_add(A,B) ((A) + (B))
 #define fixedpt_sub(A,B) ((A) - (B))
+
+//fixedpt_fracpart:获取定点数A的小数部分
 #define fixedpt_fracpart(A) ((fixedpt)(A) & FIXEDPT_FMASK)
+
+//fixedpt_intpart:获取定点数A的整数部分
+#define fixedpt_intpart(A) ((fixedpt)(A) & FIXEDPT_WMASK)
 
 #define FIXEDPT_ONE	((fixedpt)((fixedpt)1 << FIXEDPT_FBITS))
 #define FIXEDPT_ONE_HALF (FIXEDPT_ONE >> 1)
@@ -127,35 +153,59 @@ typedef	__uint128_t fixedptud;
 
 /* Multiplies a fixedpt number with an integer, returns the result. */
 static inline fixedpt fixedpt_muli(fixedpt A, int B) {
-	return 0;
+  return fixedpt_mul(A, fixedpt_fromint(B));
 }
 
 /* Divides a fixedpt number with an integer, returns the result. */
 static inline fixedpt fixedpt_divi(fixedpt A, int B) {
-	return 0;
+	return fixedpt_div(A, fixedpt_fromint(B));
 }
 
 /* Multiplies two fixedpt numbers, returns the result. */
 static inline fixedpt fixedpt_mul(fixedpt A, fixedpt B) {
-	return 0;
+  //在定点数运算中,为了保持足够的精度,将定点数扩展到更宽的整数类型进行计算
+  //fixedpt类型转换为更宽的fixedptd类型,可以提供更多的位数用于存储乘法运算的结果，从而减小精度损失
+	return (((fixedptd)A * (fixedptd)B) >> FIXEDPT_FBITS);
 }
 
 
 /* Divides two fixedpt numbers, returns the result. */
 static inline fixedpt fixedpt_div(fixedpt A, fixedpt B) {
-	return 0;
+  //在定点数运算中,为了保持足够的精度,将定点数扩展到更宽的整数类型进行计算
+  //fixedpt类型转换为更宽的fixedptd类型,可以提供更多的位数用于存储乘法运算的结果，从而减小精度损失
+	return (((fixedptd)A * (fixedptd)B) <<  FIXEDPT_FBITS);
 }
 
 static inline fixedpt fixedpt_abs(fixedpt A) {
-	return 0;
+	return ( A < 0 ? -A : A );
 }
 
 static inline fixedpt fixedpt_floor(fixedpt A) {
-	return 0;
+	//首先检查 A 的小数部分是否为零，或者 A 是否等于特定的边界值（0、最大正数、最小负数）,均用补码表示
+  //如果满足,则直接返回
+  if (fixedpt_fracpart(A) == 0 || A == 0 || A == 0x7fffffff || A == 0x80000001) {
+    return A;
+  }
+  else {
+  //如果 A 不满足上述条件，那么函数调用 fixedpt_intpart 宏，
+  //该宏提取固定点数 A 的整数部分。
+    return (fixedpt)fixedpt_toint(A); 
+  }
 }
 
 static inline fixedpt fixedpt_ceil(fixedpt A) {
-	return 0;
+	//首先检查 A 的小数部分是否为零，或者 A 是否等于特定的边界值（0、最大正数）,均用补码表示
+  //如果满足,则直接返回
+  if (fixedpt_fracpart(A) == 0 || A == 0 || A == 0x7fffffff) {
+    return A;
+  }
+  
+  if(A > 0 && A != 0x7fffffff) {
+    return (fixedpt)(fixedpt_intpart(A) + FIXEDPT_ONE);
+  }
+  else if(A < 0) {
+    return (fixedpt)fixedpt_intpart(A);
+  }
 }
 
 /*
