@@ -151,18 +151,11 @@ typedef	__uint128_t fixedptud;
  * Putting them only in macros will effectively make them optional. */
 #define fixedpt_tofloat(T) ((float) ((T)*((float)(1)/(float)(1L << FIXEDPT_FBITS))))
 
-/* Multiplies a fixedpt number with an integer, returns the result. */
-static inline fixedpt fixedpt_muli(fixedpt A, int B) {
-  return fixedpt_mul(A, fixedpt_fromint(B));
-}
-
-/* Divides a fixedpt number with an integer, returns the result. */
-static inline fixedpt fixedpt_divi(fixedpt A, int B) {
-	return fixedpt_div(A, fixedpt_fromint(B));
-}
+/*为了避免编译时对静态内联函数waring,把需要后续调用的函数放在前面声明*/
 
 /* Multiplies two fixedpt numbers, returns the result. */
 static inline fixedpt fixedpt_mul(fixedpt A, fixedpt B) {
+// fixedpt fixedpt_mul(fixedpt A, fixedpt B) {
   //在定点数运算中,为了保持足够的精度,将定点数扩展到更宽的整数类型进行计算
   //fixedpt类型转换为更宽的fixedptd类型,可以提供更多的位数用于存储乘法运算的结果，从而减小精度损失
 	return (((fixedptd)A * (fixedptd)B) >> FIXEDPT_FBITS);
@@ -173,8 +166,21 @@ static inline fixedpt fixedpt_mul(fixedpt A, fixedpt B) {
 static inline fixedpt fixedpt_div(fixedpt A, fixedpt B) {
   //在定点数运算中,为了保持足够的精度,将定点数扩展到更宽的整数类型进行计算
   //fixedpt类型转换为更宽的fixedptd类型,可以提供更多的位数用于存储乘法运算的结果，从而减小精度损失
-	return (((fixedptd)A * (fixedptd)B) <<  FIXEDPT_FBITS);
+	// return (((fixedptd)A / (fixedptd)B) <<  FIXEDPT_FBITS);
+  return (((fixedptd)A << FIXEDPT_FBITS) / (fixedptd)B);
 }
+
+/* Multiplies a fixedpt number with an integer, returns the result. */
+static inline fixedpt fixedpt_muli(fixedpt A, int B) {
+  return fixedpt_mul(A, fixedpt_fromint(B));
+}
+
+/* Divides a fixedpt number with an integer, returns the result. */
+static inline fixedpt fixedpt_divi(fixedpt A, int B) {
+	return fixedpt_div(A, fixedpt_fromint(B));
+}
+
+
 
 static inline fixedpt fixedpt_abs(fixedpt A) {
 	return ( A < 0 ? -A : A );
@@ -189,23 +195,30 @@ static inline fixedpt fixedpt_floor(fixedpt A) {
   else {
   //如果 A 不满足上述条件，那么函数调用 fixedpt_intpart 宏，
   //该宏提取固定点数 A 的整数部分。
-    return (fixedpt)fixedpt_toint(A); 
+    // return (fixedpt)fixedpt_toint(A); 
+    return fixedpt_intpart(A);
   }
 }
 
 static inline fixedpt fixedpt_ceil(fixedpt A) {
 	//首先检查 A 的小数部分是否为零，或者 A 是否等于特定的边界值（0、最大正数）,均用补码表示
   //如果满足,则直接返回
-  if (fixedpt_fracpart(A) == 0 || A == 0 || A == 0x7fffffff) {
-    return A;
-  }
+  // if (fixedpt_fracpart(A) == 0 || A == 0 || A == 0x7fffffff) {
+  //   return A;
+  // }
   
-  if(A > 0 && A != 0x7fffffff) {
-    return (fixedpt)(fixedpt_intpart(A) + FIXEDPT_ONE);
-  }
-  else if(A < 0) {
-    return (fixedpt)fixedpt_intpart(A);
-  }
+  // if(A > 0 && A != 0x7fffffff) {
+  //   return (fixedpt)(fixedpt_intpart(A) + FIXEDPT_ONE);
+  // }
+  // else if(A < 0) {
+  //   return (fixedpt)fixedpt_intpart(A);
+  // }
+  if (A == 0 || A == 0x7fffffff || A == 0x80000001 || fixedpt_fracpart(A)==0){	// -0, +0 || NaN || -NaN || integer.
+		return A;
+	}
+	else{																			// other real number.
+		return fixedpt_intpart(A) + FIXEDPT_ONE;
+	}
 }
 
 /*

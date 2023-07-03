@@ -9,6 +9,9 @@
  * be returned, meaning there will be invalid, bogus digits outside the
  * specified precisions.
  */
+//将一个定点数转换为十进制字符串时，可以通过max_dec参数来指定要保留的小数位数
+//将max_dec设置为-1，将使用默认的小数位数（对于32位fixedpt宽度为2，64位fixedpt宽度为10）。
+//如果将max_dec设置为-2，将返回所有数字，包括指定精度之外的无效数字。
 void fixedpt_str(fixedpt A, char *str, int max_dec) {
 	int ndec = 0, slen = 0;
 	char tmp[12] = {0};
