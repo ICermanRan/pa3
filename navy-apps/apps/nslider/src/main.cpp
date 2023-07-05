@@ -13,7 +13,7 @@
 
 // number of slides
 // const int N = 10;
-const int N = 1;
+const int N = 8;
 // slides path pattern (starts from 0)
 const char *path = "/share/slides/slides-%d.bmp";
 
@@ -26,12 +26,13 @@ void render() {
   }
   char fname[256];
   sprintf(fname, path, cur);
-  slide = SDL_LoadBMP(fname);
+  slide = SDL_LoadBMP(fname);//加载一张BMP格式的图片，并返回一个指向图片的Surface指针
   assert(slide);
   SDL_UpdateRect(slide, 0, 0, 0, 0);
 }
 
 void prev(int rep) {
+  // printf("prev: rep = %d, cur = %d\n", rep, cur);
   if (rep == 0) rep = 1;
   cur -= rep;
   if (cur < 0) cur = 0;
@@ -39,6 +40,7 @@ void prev(int rep) {
 }
 
 void next(int rep) {
+  // printf("next: rep = %d, cur = %d\n", rep, cur);
   if (rep == 0) rep = 1;
   cur += rep;
   if (cur >= N) cur = N - 1;

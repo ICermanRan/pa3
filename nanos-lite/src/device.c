@@ -33,11 +33,11 @@ size_t events_read(void *buf, size_t offset, size_t len) {
     if (keyboard.keydown) { //按键按下
       //通过snprintf将事件写入到buf中,包括换行符\n
       printf("kd %s\n", keyname[keyboard.keycode]);
-      snprintf((char *)buf, len, "kd %s\n", keyname[keyboard.keycode]);
+      snprintf((char *)buf, len, "kd %s", keyname[keyboard.keycode]);
     }
     else {                  //按键未按下
       //写入ku
-      snprintf((char *)buf, len, "ku %s\n", keyname[keyboard.keycode]);
+      snprintf((char *)buf, len, "ku %s", keyname[keyboard.keycode]);
     }
     
     return len; //在按键有效情况下,返回写入的实际长度

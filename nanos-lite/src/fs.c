@@ -67,6 +67,7 @@ void init_fs() {
 /*fs_open:用于打开文件*/
 int fs_open(const char*pathname, int flags, int mode) {
   int fd = -1;
+  // printf("pathname = %s\n", pathname);
   for(int i = 0; i < TABLE_LEN; i++) {
     // printf("pathname = %s\n", *pathname);
     if(strcmp(file_table[i].name, pathname) == 0) {//如果pathname所指向的字符串和file_table[i].name所指向的字符串 相同

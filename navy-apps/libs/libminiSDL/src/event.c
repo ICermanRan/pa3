@@ -1,8 +1,10 @@
 #include <NDL.h>
 #include <SDL.h>
+#include <string.h>
 
 #define keyname(k) #k,
 
+#define ARRLEN(arr) (int)((sizeof(arr)) / sizeof(arr[0]))
 static const char *keyname[] = {
   "NONE",
   _KEYS(keyname)
@@ -17,7 +19,29 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
+  char buf[100];
+
+  while(NDL_PollEvent(buf, ARRLEN(buf)) == 0)
+  printf("SDL_WaitEvent: get %s\n", buf);
+
+  if(strncmp(buf, "kd", 3) == 0) {//如果buf中获得的字符串为kd,表示按键按下
+    event->key.type = SDL_KEYDOWN;
+    // event->type = SDL_KEYDOWN;
+  }
+  else if(strncmp(buf, "ku", 3) == 0) {
+    event->key.type = SDL_KEYUP;
+    // event->type = SDL_KEYUP;
+  }
+  if(event->type == SDL_KEYDOWN || event->type == SDL_KEYUP) {
+    for(int i = 0; i < ARRLEN(keyname); i++) {
+      if(strcmp(buf + 3, keyname[i]) == 0) {
+        event->key.keysym.sym = i;
+      }
+    }
+  }
+
   return 1;
+
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
