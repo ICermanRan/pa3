@@ -45,10 +45,13 @@ struct MenuItem {
 static int page = 0;
 static int i_max = 0;
 
+//根据当前页数设置每页显示的最大菜单项索引
 static void set_i_max() {
   i_max = (page == MAX_PAGE ? MAX_IDX_LAST_PAGE : 9);
-  printf("page = %d, MAX_PAGE = %d, MAX_IDX_LAST_PAGE = %d\n", page, MAX_PAGE, MAX_IDX_LAST_PAGE);
+  printf("page = %d, MAX_PAGE = %ld, MAX_IDX_LAST_PAGE = %ld\n", page, MAX_PAGE, MAX_IDX_LAST_PAGE);
 }
+
+//切换到下一页菜单
 static void next() {
   if (page < MAX_PAGE) {
     page ++;
@@ -56,6 +59,7 @@ static void next() {
   }
 }
 
+//切换到上一页菜单
 static void prev() {
   if (page > 0) {
     page --;
@@ -63,6 +67,7 @@ static void prev() {
   }
 }
 
+//清空屏幕内容
 static void clear_display(void) {
   SDL_FillRect(screen, NULL, 0xffffff);
 }
@@ -77,15 +82,18 @@ int main(int argc, char *argv[], char *envp[]) {
   set_i_max();
 
   while (1) {
-    display_menu(i_max);
+    display_menu(i_max);//显示菜单，包括项目名称和页码等信息
 
     SDL_Event e;
     do {
       SDL_WaitEvent(&e);
-    } while (e.type != SDL_KEYDOWN);
+    } while (e.type != SDL_KEYDOWN);//等待用户按键事件
 
     int i = -1;
-    switch (e.key.keysym.sym) {
+    switch (e.key.keysym.sym) { //根据按键事件的类型进行相应的处理：
+                                //如果是数字键，根据数字选择对应的菜单项，并执行相关操作。
+                                //如果是左箭头键，切换到上一页菜单。
+                                //如果是右箭头键，切换到下一页菜单
       case SDLK_0: i = 0; break;
       case SDLK_1: i = 1; break;
       case SDLK_2: i = 2; break;
@@ -107,7 +115,7 @@ int main(int argc, char *argv[], char *envp[]) {
       exec_argv[0] = item->bin;
       exec_argv[1] = item->arg1;
       exec_argv[2] = NULL;
-      clear_display();
+      clear_display();  //调用该函数清空屏幕内容,主要是更改screen中pixels的值,让后面SDL_UpdateRect更新到屏幕上
       SDL_UpdateRect(screen, 0, 0, 0, 0);
       execve(exec_argv[0], (char**)exec_argv, (char**)envp);
       fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed.\n\n", exec_argv[0]);
@@ -118,6 +126,7 @@ int main(int argc, char *argv[], char *envp[]) {
   return -1;
 }
 
+//绘制单个字符到屏幕
 static void draw_ch(BDF_Font *font, int x, int y, char ch, uint32_t fg, uint32_t bg) {
   SDL_Surface *s = BDF_CreateSurface(font, ch, fg, bg);
   SDL_Rect dstrect = { .x = x, .y = y };
@@ -125,6 +134,7 @@ static void draw_ch(BDF_Font *font, int x, int y, char ch, uint32_t fg, uint32_t
   SDL_FreeSurface(s);
 }
 
+//绘制字符串到屏幕
 static void draw_str(BDF_Font *font, int x, int y, char *str, uint32_t fp, uint32_t bg) {
   while (*str) {
     draw_ch(font, x, y, *str, fp, bg);
@@ -133,12 +143,14 @@ static void draw_str(BDF_Font *font, int x, int y, char *str, uint32_t fp, uint3
   }
 }
 
+//绘制文本行到屏幕
 static void draw_text_row(char *s, int r) {
   r += 3;
   puts(s);
   draw_str(font, 0, r * font->h, s, 0x123456, 0xffffff);
 }
 
+//显示菜单
 static void display_menu(int n) {
   clear_display();
   SDL_Rect rect = { .x = screen->w - logo_sf->w, .y = 0 };

@@ -128,6 +128,18 @@ int NDL_Init(uint32_t flags) {
   if (getenv("NWM_APP")) {
     evtdev = 3;
   }
+  
+  // int fd = open("/proc/dispinfo", 0, 0);
+  // char buf[50];
+  // read(fd, buf, 64);
+  // int len = strlen(buf), flag = 0;
+
+  // for(int i = 0; i < len; i++) {
+  //   if ('0' <= buf[i] && buf[i] <= '9') {
+  //     if (!flag) screen_w = screen_w * 10 + buf[i] - '0';
+  //     else screen_h = screen_h * 10 + buf[i] - '0';
+  //   } else if (buf[i] == ':') flag ^= 1;
+  // }
   return 0;
 }
 
