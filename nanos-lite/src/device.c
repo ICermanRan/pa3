@@ -71,7 +71,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   AM_GPU_CONFIG_T dispinfo = io_read(AM_GPU_CONFIG);
   AM_GPU_FBDRAW_T ctl;
 
-  printf("fb_write offset = %d\n", offset);
+  // printf("fb_write offset = %d\n", offset);
   ctl.pixels = (void *)buf;
   ctl.sync   = true;
   ctl.x      = offset % dispinfo.width;//偏移量对屏幕的宽度取模可以得到列数
@@ -79,7 +79,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   ctl.w      = len >> 32;
   ctl.h      = len & 0x00000000FFFFFFFF;
 
-  printf("ctl.x: %d, ctl.y: %d, ctl.w: %d, ctl.h: %d\n", ctl.x, ctl.y, ctl.w, ctl.h);
+  // printf("ctl.x: %d, ctl.y: %d, ctl.w: %d, ctl.h: %d\n", ctl.x, ctl.y, ctl.w, ctl.h);
   io_write(AM_GPU_FBDRAW, ctl.x, ctl.y, ctl.pixels, ctl.w, ctl.h, ctl.sync);
 
   return 0;

@@ -17,7 +17,7 @@ uint32_t NDL_GetTicks() {
   struct timeval timer;
   uint32_t one_ms;
   gettimeofday(&timer, NULL);
-  one_ms = timer.tv_sec * 1000;//1s = 1000ms
+  one_ms = timer.tv_sec * 1000000;//1s = 1000ms
   return one_ms;
 }
 
@@ -86,7 +86,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   //获取画布/图片大小,方便后续绘制
   canvas_w = w;
   canvas_h = h;
-  printf("canvas_w = %d, canvas_h = %d\n", canvas_w, canvas_h);
+  // printf("canvas_w = %d, canvas_h = %d\n", canvas_w, canvas_h);
 
   int canvas_xmin = screen_w/2 - canvas_w/2;//画布最左横坐标
   int canvas_xmax = screen_w/2 + canvas_w/2;//画布最右横坐标

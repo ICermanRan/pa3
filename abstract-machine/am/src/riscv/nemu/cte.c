@@ -27,9 +27,11 @@ Context* __am_irq_handle(Context *c) {
         // }
         if(c->GPR1 >= 0 && c->GPR1 <= 19) { //c->GPR1 >= SYS_exit && c->GPR1 <= SYS_gettimeofday
           ev.event = EVENT_SYSCALL;
+          c->mepc +=4;
         }
         else if(c->GPR1 == -1) {
           ev.event = EVENT_YIELD;
+          c->mepc +=4;
         }
       }
       else {
