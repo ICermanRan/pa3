@@ -17,8 +17,10 @@ uint32_t NDL_GetTicks() {
   struct timeval timer;
   uint32_t one_ms;
   gettimeofday(&timer, NULL);
-  one_ms = timer.tv_sec * 1000000;//1s = 1000ms
-  return one_ms;
+  // one_ms = timer.tv_sec * 1000000;//1s = 1000ms
+  // return one_ms;
+  // return timer.tv_sec * 1000 + timer.tv_usec/1000;
+  return timer.tv_usec/1000;
 }
 
 int NDL_PollEvent(char *buf, int len) {
@@ -42,10 +44,10 @@ void NDL_OpenCanvas(int *w, int *h) {
     return ;
   }
 
-  printf("fd = %d,打开画布成功\n", fd);
+  // printf("fd = %d,打开画布成功\n", fd);
   char buf[64];
   if (read(fd, buf, sizeof(buf))) { //通过read->dispinfo_read,获取VGA屏幕大小
-    printf("read屏幕成功,width: %d, height: %d\n", screen_w, screen_h);
+    // printf("read屏幕成功,width: %d, height: %d\n", screen_w, screen_h);
     //通过sscanf将
     sscanf(buf, "WIDTH:%d\nHEIGHT:%d\n", &screen_w, &screen_h);//将buf中第一个%d的数值赋给screen_w, 第二个赋给screen_h
     assert(screen_w >= *w && screen_h >= *h);
@@ -93,21 +95,30 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   int canvas_ymin = screen_h/2 - canvas_h/2;//画布最上纵坐标
   int canvas_ymax = screen_h/2 + canvas_h/2;//画布最下纵坐标
 
+  // there 2 method to support gpu, check nanos_lite/src/device.c: fb_write() and nanos-lite/src/fs.c:init_fs() to match.
+#if defined(__ISA_NATIVE__) // for native, slow but support native.
+// method 1: only write w for one time, and use loop to finish all.
+  for(int j=0; j<h; j++) {
+    lseek(fd,((y+j)*screen_w+x)*4,SEEK_SET); // 4 for 32bits, 4bytes.
+    write(fd, pixels+w*j, 4*w);              // 4 for 32bits, 4bytes.
+  }
+#else // for nemu, fast but not support native.
+// method 2: use high 32bit to store w, low 32bit to store h. 
   //画布绘制起始点(x,y)初始为(0,0),位于屏幕左上角
   //而在下面将x,y的值这样修改的原因,是为了让起始点到达画布居中时的左上角
   //((screen_h - h) / 2)表示居中画布离屏幕上方的行数,再乘以screen_w,则表示这些行数所占的像素
   //因为画布是从下一行的canvas_xmin处开始绘制,所以要加上一个((screen_w - w) / 2)
   //如此一来, x * y就表示:偏移量 offset 从屏幕缓冲区起始位置开始到canvas_xmin的像素偏移量
-  x = 1;
-  y = screen_w * ((screen_h - h) / 2) + ((screen_w - w) / 2);
+  // x = 1;
+  // y = screen_w * ((screen_h - h) / 2) + ((screen_w - w) / 2);
 
   lseek(fd, x * y, SEEK_SET);//设置绘制坐标起始点
   //使用了一个技巧来存储矩形的宽度和高度,因为size_t是64位无符号数据类型
   //将屏幕宽度w存储在len的高32位, 将屏幕高度h存储在len的低32位
   //这样在fb_write就可以通过位运算获得屏幕大小信息
   write(fd, pixels, ((size_t)w << 32) | ((size_t)h & 0x00000000FFFFFFFF));
+#endif
 
-  close(fd);
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {

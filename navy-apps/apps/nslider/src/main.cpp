@@ -32,7 +32,7 @@ void render() {
 }
 
 void prev(int rep) {
-  // printf("prev: rep = %d, cur = %d\n", rep, cur);
+  printf("prev: rep = %d, cur = %d\n", rep, cur);
   if (rep == 0) rep = 1;
   cur -= rep;
   if (cur < 0) cur = 0;
@@ -40,7 +40,7 @@ void prev(int rep) {
 }
 
 void next(int rep) {
-  // printf("next: rep = %d, cur = %d\n", rep, cur);
+  printf("next: rep = %d, cur = %d\n", rep, cur);
   if (rep == 0) rep = 1;
   cur += rep;
   if (cur >= N) cur = N - 1;

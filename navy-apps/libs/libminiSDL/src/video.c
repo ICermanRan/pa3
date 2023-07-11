@@ -51,6 +51,25 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   
 }
 
+uint32_t* pixel8_to_pixel32(SDL_Surface *s) {
+  int w = s->w;
+  int h = s->h;
+  int size = w * h;
+  uint32_t* p = (uint32_t*)malloc(size * 4);
+  for(int i = 0; i < size; i++) {
+    uint32_t r = s->format->palette->colors[s->pixels[i]].r;
+    uint32_t g = s->format->palette->colors[s->pixels[i]].g;
+    uint32_t b = s->format->palette->colors[s->pixels[i]].b;
+    uint32_t a = s->format->palette->colors[s->pixels[i]].a;
+    uint32_t color = (r << 16) | (g << 8) | (b);
+    p[i] = color;
+  }
+  return p;
+}
+
+
+
+
 //SDL_FillRect(): 往画布的指定矩形区域中填充指定的颜色
 //                dst:要填充颜色的画布 dstrect:指定的矩形区域 color：要填充的颜色
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
@@ -85,12 +104,66 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 
 //SDL_UpdateRect():是将画布中的指定矩形区域同步到屏幕上.
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-  if(x== 0 && y == 0 && w == 0 && h == 0){
-    x = y = 0; 
-    w = s->w;
-    h = s->h;
+  // if(x == 0 && y == 0 && w == 0 && h == 0){
+  //   x = 0; y = 0; w= s->w; h = s->h;
+  // }
+
+  // //convert to 32bit pixel
+  // uint32_t* p;
+  // if(s->format->BitsPerPixel == 32) {
+  //   p = (uint32_t*)s->pixels;
+  // }
+  // else if(s->format->BitsPerPixel == 8) {
+  //   p = pixel8_to_pixel32(s);
+  // }
+
+  // // confirm rect size
+  // int rect_x = x;
+  // int rect_y = y;
+  // int rect_w = w; 
+  // int rect_h = h; 
+  // if(x== 0 && y == 0 && w == 0 && h == 0){
+  //   rect_w = s->w;
+  //   rect_h = s->h;
+  // }
+
+  // //select the rect region from whole pixel
+  // uint32_t* rect_p = (uint32_t*)malloc(rect_w * rect_h * 4);
+  // for(int j = 0; j < rect_h; j++) {
+  //   for(int i = 0; i < rect_w; i++) {
+  //     rect_p[j * rect_w + i] = p[(y + j) * s->w + (x + i)];
+  //   }
+  // }
+
+  // // update rect
+  // NDL_OpenCanvas(&(s->w), &(s->h));
+  // NDL_DrawRect(rect_p, rect_x, rect_y, rect_w, rect_h);
+  // if(s->format->BitsPerPixel == 8) free(p);
+  // free(rect_p);
+
+  /******************************/
+  if(x == 0 && y == 0 && w == 0 && h == 0){
+    x = 0; y = 0; w= s->w; h = s->h;
   }
-  NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+  
+  if (s->format->BitsPerPixel == 32){
+    NDL_DrawRect((uint32_t*)s->pixels,x,y,w,h);
+  }
+  else if (s->format->BitsPerPixel == 8)
+  {
+    int len = w * h;
+    uint32_t * pixels = (uint32_t *)malloc(4*len);
+    for(int i=0; i<len; i++){
+      SDL_Color pixel = s->format->palette->colors[s->pixels[i]];
+      pixels[i] = (uint32_t)pixel.a<<24 | (uint32_t)pixel.r<<16 | (uint32_t)pixel.g<<8 | (uint32_t)pixel.b;
+    }
+    NDL_DrawRect(pixels,x,y,w,h);
+    free(pixels);
+  }
+  else{
+    printf("SDL_UpdateRect: miniSDL do not support BitsPerPixel == %d.",s->format->BitsPerPixel);
+    assert(0);
+  }
 }
 
 // APIs below are already implemented.

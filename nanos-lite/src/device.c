@@ -28,41 +28,40 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-  AM_INPUT_KEYBRD_T keyboard = io_read(AM_INPUT_KEYBRD);
-  if (keyboard.keycode != 0) { //按键有效
-    if (keyboard.keydown) { //按键按下
-      //通过snprintf将事件写入到buf中,包括换行符\n
-      printf("kd %s\n", keyname[keyboard.keycode]);
-      snprintf((char *)buf, len, "kd %s", keyname[keyboard.keycode]);
-    }
-    else {                  //按键未按下
-      //写入ku
-      snprintf((char *)buf, len, "ku %s", keyname[keyboard.keycode]);
-    }
+  // AM_INPUT_KEYBRD_T keyboard = io_read(AM_INPUT_KEYBRD);
+  // if (keyboard.keycode != 0) { //按键有效
+  //   if (keyboard.keydown) { //按键按下
+  //     //通过snprintf将事件写入到buf中,包括换行符\n
+  //     printf("kd %s\n", keyname[keyboard.keycode]);
+  //     snprintf((char *)buf, len, "kd %s", keyname[keyboard.keycode]);
+  //   }
+  //   else {                  //按键未按下
+  //     //写入ku
+  //     snprintf((char *)buf, len, "ku %s", keyname[keyboard.keycode]);
+  //   }
     
-    return len; //在按键有效情况下,返回写入的实际长度
-  }
-  else {  //按键无效
+  //   return len; //在按键有效情况下,返回写入的实际长度
+  // }
+  // else {  //按键无效
+  //   return 0;
+  // }
+  AM_INPUT_KEYBRD_T keyboard = io_read(AM_INPUT_KEYBRD);
+  if(keyboard.keycode == 0) { // there is no key down or up.
     return 0;
   }
-    
-/***********************************************************/
-  // char cbuf[30];
-  // AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
-  // if (ev.keycode == AM_KEY_NONE) return 0;
-  // int size = sprintf(cbuf, "k%s %s\n", ev.keydown ? "d" : "u", keyname[ev.keycode]);
-  // int i;
-  // for(i = 0; i < 30 && i < len && i < (size + 1); i++){ //把\0也复制过去,所以要加1
-  //   *((char *)buf+i) = cbuf[i];
-  // }
-  // printf("------------%s--------%d\n", cbuf, size);
-  // printf("------------%d %d\n", cbuf[5], cbuf[6]);
-  // return i;
+  else {
+    switch(keyboard.keydown) {
+      case 0:  snprintf((char *)buf,len,"ku %2d %s\n", keyboard.keycode, keyname[keyboard.keycode]); break; 
+      case 1:  snprintf((char *)buf,len,"kd %2d %s\n", keyboard.keycode, keyname[keyboard.keycode]); break; 
+    }
+    return len;
+  } 
+
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   AM_GPU_CONFIG_T cfg = io_read(AM_GPU_CONFIG);
-  printf("屏幕大小-WIDTH:%d HEIGHT:%d\n", cfg.width, cfg.height);
+  // printf("屏幕大小-WIDTH:%d HEIGHT:%d\n", cfg.width, cfg.height);
   snprintf((char *)buf, len, "WIDTH:%d\nHEIGHT:%d\n", cfg.width, cfg.height);
   return 1;
 }
@@ -70,30 +69,28 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 size_t fb_write(const void *buf, size_t offset, size_t len) {
   AM_GPU_CONFIG_T dispinfo = io_read(AM_GPU_CONFIG);
   AM_GPU_FBDRAW_T ctl;
-
-  // printf("fb_write offset = %d\n", offset);
   ctl.pixels = (void *)buf;
   ctl.sync   = true;
+  // printf("fb_write offset = %d\n", offset);
+
+  // there 2 method to support gpu, check fs.c init_fs() and navy-apps/libs/libndl/NDL.c: NDL_DrawRect() to match.
+
+  // method 1: only write w for one time, and use loop to finish all, slow but support native.
+  // ctl.x = (offset/4) % dispinfo.width;
+  // ctl.y = (offset/4) / dispinfo.width;
+  // ctl.w = len/4;
+  // ctl.h = 1;
+
+  // method 2: use high 32bit to store w, low 32bit to store h. fast but not support native!
   ctl.x      = offset % dispinfo.width;//偏移量对屏幕的宽度取模可以得到列数
   ctl.y      = offset / dispinfo.width;//因为每一行的字节数等于屏幕的宽度。所以 ctl.y = offset / dispinfo.width 表示偏移量所在的行数。
-  ctl.w      = len >> 32;
-  ctl.h      = len & 0x00000000FFFFFFFF;
+  ctl.w      = len >> 32;                 // high 32bit.
+  ctl.h      = len & 0x00000000FFFFFFFF;  // low 32bit.
 
   // printf("ctl.x: %d, ctl.y: %d, ctl.w: %d, ctl.h: %d\n", ctl.x, ctl.y, ctl.w, ctl.h);
   io_write(AM_GPU_FBDRAW, ctl.x, ctl.y, ctl.pixels, ctl.w, ctl.h, ctl.sync);
-
   return 0;
 
-  /**************************************/
-  //  assert(offset % 4 == 0 && len % 4 == 0);
-  // int W = io_read(AM_GPU_CONFIG).width;
-  // int H = io_read(AM_GPU_CONFIG).height;
-  // int y = (offset / 4) / W;
-  // int x = (offset / 4) % W;
-  // assert((x + len) <= (4 * W));
-  // assert(offset <= (4 * W * H));
-  // io_write(AM_GPU_FBDRAW, x, y, (uint32_t*)buf, len / 4, 1, true);
-  // return len;
 }
 
 void init_device() {
